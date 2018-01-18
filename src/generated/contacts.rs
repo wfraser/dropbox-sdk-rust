@@ -11,7 +11,7 @@
 /// imported. New contacts will be added when you share.
 pub fn delete_manual_contacts(
     client: &dyn crate::client_trait::HttpClient,
-) -> crate::Result<Result<(), ()>> {
+) -> Result<Result<(), ()>, ::failure::Error> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -25,7 +25,7 @@ pub fn delete_manual_contacts(
 pub fn delete_manual_contacts_batch(
     client: &dyn crate::client_trait::HttpClient,
     arg: &DeleteManualContactsArg,
-) -> crate::Result<Result<(), DeleteManualContactsError>> {
+) -> Result<Result<(), DeleteManualContactsError>, ::failure::Error> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,

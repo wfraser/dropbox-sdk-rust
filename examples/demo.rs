@@ -165,7 +165,7 @@ fn main() {
 }
 
 fn list_directory<'a>(client: &'a dyn HttpClient, path: &str, recursive: bool)
-    -> dropbox_sdk::Result<Result<DirectoryIterator<'a>, files::ListFolderError>>
+    -> Result<Result<DirectoryIterator<'a>, files::ListFolderError>, ::failure::Error>
 {
     assert!(path.starts_with('/'), "path needs to be absolute (start with a '/')");
     match files::list_folder(
@@ -192,7 +192,7 @@ struct DirectoryIterator<'a> {
 }
 
 impl<'a> Iterator for DirectoryIterator<'a> {
-    type Item = dropbox_sdk::Result<Result<files::Metadata, files::ListFolderContinueError>>;
+    type Item = Result<Result<files::Metadata, files::ListFolderContinueError>, ::failure::Error>;
 
     fn next(&mut self) -> Option<Self::Item> {
         if let Some(entry) = self.buffer.pop_front() {

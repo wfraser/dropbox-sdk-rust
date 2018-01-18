@@ -3,8 +3,8 @@
 use std::io::{self, Read};
 use std::str;
 
-use crate::ErrorKind;
-use crate::client_trait::{Endpoint, Style, HttpClient, HttpRequestResultRaw};
+use failure::Error;
+use crate::client_trait::{Endpoint, HttpClient, HttpRequestResultRaw, Style};
 use hyper::{self, Url};
 use hyper::header::Headers;
 use hyper::header::{
@@ -36,7 +36,7 @@ impl HyperClient {
         client_secret: &str,
         authorization_code: &str,
         redirect_uri: Option<&str>,
-    ) -> super::Result<String> {
+    ) -> Result<String, Error> {
 
         let client = Self::http_client();
         let url = Url::parse("https://api.dropboxapi.com/oauth2/token").unwrap();
@@ -67,7 +67,11 @@ impl HyperClient {
                     let mut body = String::new();
                     resp.read_to_string(&mut body)?;
                     debug!("error body: {}", body);
-                    Err(ErrorKind::GeneralHttpError(code, status, body).into())
+                    Err(super::Error::GeneralHttpError {
+                        code,
+                        status,
+                        json: body,
+                    })?
                 } else {
                     let body = serde_json::from_reader(resp)?;
                     debug!("response: {:?}", body);
@@ -109,7 +113,7 @@ impl HttpClient for HyperClient {
         body: Option<&[u8]>,
         range_start: Option<u64>,
         range_end: Option<u64>,
-    ) -> super::Result<HttpRequestResultRaw> {
+    ) -> Result<HttpRequestResultRaw, Error> {
 
         let url = Url::parse(endpoint.url()).unwrap().join(function).expect("invalid request URL");
         debug!("request for {:?}", url);
@@ -180,7 +184,7 @@ impl HttpClient for HyperClient {
                 };
                 let mut json = String::new();
                 resp.read_to_string(&mut json)?;
-                return Err(ErrorKind::GeneralHttpError(code, status, json).into());
+                Err(super::Error::GeneralHttpError { code, status, json })?;
             }
 
             return match style {
@@ -201,7 +205,9 @@ impl HttpClient for HyperClient {
                             String::from_utf8(values[0].clone())?
                         },
                         None => {
-                            bail!(ErrorKind::UnexpectedError("missing Dropbox-API-Result header"));
+                            return Err(super::Error::UnexpectedError {
+                                reason: "missing Dropbox-API-Result header"
+                            }.into());
                         }
                     };
 

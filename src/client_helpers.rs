@@ -2,8 +2,8 @@
 
 use std::fmt::Debug;
 use std::marker::PhantomData;
-use crate::{Error, ErrorKind, ResultExt};
 use crate::client_trait::*;
+use failure::Fail;
 use serde::de::{self, Deserialize, DeserializeOwned, Deserializer, MapAccess, Visitor};
 use serde::ser::Serialize;
 use serde_json;
@@ -80,7 +80,7 @@ pub fn request_with_body<T: DeserializeOwned, E: DeserializeOwned + Debug, P: Se
     body: Option<&[u8]>,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> super::Result<Result<HttpRequestResult<T>, E>> {
+) -> Result<Result<HttpRequestResult<T>, E>, ::failure::Error> {
     let params_json = serde_json::to_string(params)?;
     let result = client.request(endpoint, style, function, params_json, body, range_start, range_end);
     match result {
@@ -94,11 +94,15 @@ pub fn request_with_body<T: DeserializeOwned, E: DeserializeOwned + Debug, P: Se
             }))
         },
         Err(e) => {
-            let innards = if let Error(ErrorKind::GeneralHttpError(
-                    ref code, ref status, ref response), _) = e {
-                Some((*code, status.clone(), response.clone()))
-            } else {
-                None
+            let innards = match e.downcast_ref::<super::Error>() {
+                Some(&super::Error::GeneralHttpError {
+                    code,
+                    ref status,
+                    json: ref response,
+                }) => {
+                    Some((code, status.clone(), response.clone()))
+                },
+                _ => None,
             };
 
             // Try to turn the error into a more specific one.
@@ -106,10 +110,14 @@ pub fn request_with_body<T: DeserializeOwned, E: DeserializeOwned + Debug, P: Se
                 error!("HTTP {} {}: {}", code, status, response);
                 return match code {
                     400 => {
-                        Err(e).chain_err(|| ErrorKind::BadRequest(response))
+                    Err(super::Error::BadRequest { message: response }
+                            .context(e)
+                            .into())
                     },
                     401 => {
-                        Err(e).chain_err(|| ErrorKind::InvalidToken(response))
+                        Err(super::Error::InvalidToken { message: response }
+                            .context(e)
+                            .into())
                     },
                     409 => {
                         // Response should be JSON-deseraializable into the strongly-typed
@@ -121,21 +129,25 @@ pub fn request_with_body<T: DeserializeOwned, E: DeserializeOwned + Debug, P: Se
                             },
                             Err(de_error) => {
                                 error!("Failed to deserialize JSON from API error: {}", de_error);
-                                Err(e).chain_err(|| ErrorKind::Json(de_error))
+                                Err(e.into())
                             }
                         }
                     },
                     429 => {
-                        Err(e).chain_err(|| ErrorKind::RateLimited(response))
+                        Err(super::Error::RateLimited { reason: response }
+                            .context(e)
+                            .into())
                     },
-                    500 ..= 599 => {
-                        Err(e).chain_err(|| ErrorKind::ServerError(response))
+                    500..=599 => {
+                        Err(super::Error::ServerError { message: response }
+                            .context(e)
+                            .into())
                     },
                     _ => {
                         Err(e)
                     }
                 }
-            } else if let Error(ErrorKind::Json(ref json_err), _) = e {
+            } else if let Some(ref json_err) = e.downcast_ref::<serde_json::Error>() {
                 error!("JSON deserialization error: {}", json_err);
             } else {
                 error!("HTTP request error: {}", e);
@@ -152,7 +164,8 @@ pub fn request<T: DeserializeOwned, E: DeserializeOwned + Debug, P: Serialize>(
     function: &str,
     params: &P,
     body: Option<&[u8]>,
-) -> super::Result<Result<T, E>> {
+) -> Result<Result<T, E>, ::failure::Error> {
     request_with_body(client, endpoint, style, function, params, body, None, None)
+        // unwrap the HttpRequestResult, discarding its `content_length` and `body` fields:
         .map(|result| result.map(|HttpRequestResult { result, .. }| result))
 }
