@@ -1,6 +1,6 @@
 #![warn(rust_2018_idioms)]
 
-use dropbox_sdk::{files, HyperClient, IntoConstrained, Oauth2AuthorizeUrlBuilder, Oauth2Type};
+use dropbox_sdk::{files, HyperClient, IntoConstrained, Oauth2AuthorizeUrlBuilder, Oauth2Type, RefConstrained};
 use dropbox_sdk::client_trait::HttpClient;
 
 use std::collections::VecDeque;
@@ -10,18 +10,24 @@ use std::io::{self, Read, Write};
 enum Operation {
     Usage,
     List,
-    Download { path: String },
+    Download { path: dropbox_sdk::files::ReadPath },
 }
 
 fn parse_args() -> Operation {
     match std::env::args().nth(1).as_ref().map(|s| s.as_str()) {
         None | Some("--help") | Some("-h") => Operation::Usage,
         Some("--list") => Operation::List,
-        Some(path) if path.starts_with('/') => Operation::Download { path: path.to_owned() },
-        Some(bogus) => {
-            eprintln!("Unrecognized option {:?}", bogus);
-            eprintln!();
-            Operation::Usage
+        Some(maybe_path) => {
+            match maybe_path.try_validate() {
+                Ok(path) => {
+                    Operation::Download { path: path.to_owned() }
+                }
+                Err(bogus) => {
+                    eprintln!("Unrecognized option {:?}", bogus);
+                    eprintln!();
+                    Operation::Usage
+                }
+            }
         }
     }
 }
@@ -90,7 +96,7 @@ fn main() {
         eprintln!("downloading file {}", path);
         eprintln!();
         let mut bytes_out = 0u64;
-        let download_arg = files::DownloadArg::new(path.validate());
+        let download_arg = files::DownloadArg::new(path);
         'download: loop {
             let result = files::download(&client, &download_arg, Some(bytes_out), None);
             match result {

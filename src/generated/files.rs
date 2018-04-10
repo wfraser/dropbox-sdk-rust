@@ -9,45 +9,33 @@
 
 //! This namespace contains endpoints and data types for basic file operations.
 
+pub struct IdValidator {}
+impl crate::StringValidator for IdValidator {
+    const NAME: &'static str = "files::Id";
+    const MIN_LENGTH: Option<usize> = Some(1);
+}
+
 pub struct PathValidator {}
-impl crate::Validator<String> for PathValidator {
-    fn is_valid(value: &String) -> bool {
-        if !::regex::Regex::new(r#"\A/(.|[\r\n])*\z"#).unwrap().is_match(value) {
-            return false;
-        }
-        true
-    }
+impl crate::StringValidator for PathValidator {
+    const NAME: &'static str = "files::Path";
+    const REGEX: Option<&'static str> = Some(r#"\A/(.|[\r\n])*\z"#);
 }
 
 pub struct ReadPathValidator {}
-impl crate::Validator<String> for ReadPathValidator {
-    fn is_valid(value: &String) -> bool {
-        if !::regex::Regex::new(r#"\A(/(.|[\r\n])*|id:.*)|(rev:[0-9a-f]{9,})|(ns:[0-9]+(/.*)?)\z"#).unwrap().is_match(value) {
-            return false;
-        }
-        true
-    }
-    fn assert_valid(value: &String) {
-        if !Self::is_valid(value) {
-            panic!("{:?} is not a valid ReadPath", value);
-        }
-    }
+impl crate::StringValidator for ReadPathValidator {
+    const NAME: &'static str = "files::ReadPath";
+    const REGEX: Option<&'static str> = Some(r#"\A(/(.|[\r\n])*|id:.*)|(rev:[0-9a-f]{9,})|(ns:[0-9]+(/.*)?)\z"#);
 }
 
 pub struct RevValidator {}
-impl crate::Validator<String> for RevValidator {
-    fn is_valid(value: &String) -> bool {
-        if value.len() < 9 { return false; }
-        if !::regex::Regex::new(r#"\A[0-9a-f]+\Z"#).unwrap().is_match(value) {
-            return false;
-        }
-        true
-    }
+impl crate::StringValidator for RevValidator {
+    const NAME: &'static str = "files::Rev";
+    const REGEX: Option<&'static str> = Some(r#"\A[0-9a-f]+\z"#);
 }
 
 pub type CopyBatchArg = RelocationBatchArgBase;
 pub type FileId = String;
-pub type Id = String;
+pub type Id = crate::Constrained<String, IdValidator>;
 pub type ListFolderCursor = String;
 pub type MalformedPathError = Option<String>;
 pub type Path = crate::Constrained<String, PathValidator>;
