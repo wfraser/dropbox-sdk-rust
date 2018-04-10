@@ -63,6 +63,9 @@ error_chain! {
     Oauth2Type,
 };
 
+mod constrained;
+pub use constrained::*;
+
 pub mod client_trait;
 pub(crate) mod client_helpers;
 

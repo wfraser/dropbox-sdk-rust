@@ -1,6 +1,6 @@
 #![warn(rust_2018_idioms)]
 
-use dropbox_sdk::{HyperClient, Oauth2AuthorizeUrlBuilder, Oauth2Type};
+use dropbox_sdk::{HyperClient, IntoConstrained, Oauth2AuthorizeUrlBuilder, Oauth2Type};
 use dropbox_sdk::files;
 
 use std::fs::File;
@@ -178,7 +178,7 @@ fn main() {
     // Figure out if destination is a folder or not and change the destination path accordingly.
     let dest_path = match files::get_metadata(
         &client,
-        &files::GetMetadataArg::new(args.dest_path.clone()))
+        &files::GetMetadataArg::new(args.dest_path.clone().validate()))
     {
         Ok(Ok(files::Metadata::File(_meta))) => {
             eprintln!("Error: \"{}\" already exists in Dropbox", args.dest_path);

@@ -9,17 +9,53 @@
 
 //! This namespace contains endpoints and data types for basic file operations.
 
+pub struct PathValidator {}
+impl crate::Validator<String> for PathValidator {
+    fn is_valid(value: &String) -> bool {
+        if !::regex::Regex::new(r#"\A/(.|[\r\n])*\z"#).unwrap().is_match(value) {
+            return false;
+        }
+        true
+    }
+}
+
+pub struct ReadPathValidator {}
+impl crate::Validator<String> for ReadPathValidator {
+    fn is_valid(value: &String) -> bool {
+        if !::regex::Regex::new(r#"\A(/(.|[\r\n])*|id:.*)|(rev:[0-9a-f]{9,})|(ns:[0-9]+(/.*)?)\z"#).unwrap().is_match(value) {
+            return false;
+        }
+        true
+    }
+    fn assert_valid(value: &String) {
+        if !Self::is_valid(value) {
+            panic!("{:?} is not a valid ReadPath", value);
+        }
+    }
+}
+
+pub struct RevValidator {}
+impl crate::Validator<String> for RevValidator {
+    fn is_valid(value: &String) -> bool {
+        if value.len() < 9 { return false; }
+        if !::regex::Regex::new(r#"\A[0-9a-f]+\Z"#).unwrap().is_match(value) {
+            return false;
+        }
+        true
+    }
+}
+
 pub type CopyBatchArg = RelocationBatchArgBase;
 pub type FileId = String;
 pub type Id = String;
 pub type ListFolderCursor = String;
 pub type MalformedPathError = Option<String>;
-pub type Path = String;
+pub type Path = crate::Constrained<String, PathValidator>;
 pub type PathOrId = String;
 pub type PathR = String;
 pub type PathROrId = String;
-pub type ReadPath = String;
-pub type Rev = String;
+pub type ReadPath = crate::Constrained<String, ReadPathValidator>;
+pub type Rev = crate::Constrained<String, RevValidator>;
 pub type Sha256HexHash = String;
 pub type SharedLinkUrl = String;
 pub type WritePath = String;

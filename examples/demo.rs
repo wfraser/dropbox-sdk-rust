@@ -1,6 +1,6 @@
 #![warn(rust_2018_idioms)]
 
-use dropbox_sdk::{files, HyperClient, Oauth2AuthorizeUrlBuilder, Oauth2Type};
+use dropbox_sdk::{files, HyperClient, IntoConstrained, Oauth2AuthorizeUrlBuilder, Oauth2Type};
 use dropbox_sdk::client_trait::HttpClient;
 
 use std::collections::VecDeque;
@@ -90,7 +90,7 @@ fn main() {
         eprintln!("downloading file {}", path);
         eprintln!();
         let mut bytes_out = 0u64;
-        let download_arg = files::DownloadArg::new(path);
+        let download_arg = files::DownloadArg::new(path.validate());
         'download: loop {
             let result = files::download(&client, &download_arg, Some(bytes_out), None);
             match result {
