@@ -1,8 +1,7 @@
 #![warn(rust_2018_idioms)]
 
-use dropbox_sdk::{files, HyperClient, Oauth2AuthorizeUrlBuilder, Oauth2Type};
+use dropbox_sdk::{files, APIErr, HyperClient, Oauth2AuthorizeUrlBuilder, Oauth2Type};
 use dropbox_sdk::client_trait::HttpClient;
-
 use std::collections::VecDeque;
 use std::env;
 use std::io::{self, Read, Write};
@@ -94,7 +93,7 @@ fn main() {
         'download: loop {
             let result = files::download(&client, &download_arg, Some(bytes_out), None);
             match result {
-                Ok(Ok(download_result)) => {
+                Ok(download_result) => {
                     let mut body = download_result.body.expect("no body received!");
                     let mut buf = [0u8; 1024 * 1024];
                     loop {
@@ -120,30 +119,32 @@ fn main() {
                         }
                     }
                 },
-                Ok(Err(download_error)) => {
+                Err(APIErr(download_error)) => {
                     eprintln!("Download error: {}", download_error);
+                    break;
                 },
                 Err(request_error) => {
                     eprintln!("Error: {}", request_error);
+                    break;
                 }
             }
         }
     } else {
         eprintln!("listing all files");
         match list_directory(&client, "/", true) {
-            Ok(Ok(iterator)) => {
+            Ok(iterator) => {
                 for entry_result in iterator {
                     match entry_result {
-                        Ok(Ok(files::Metadata::Folder(entry))) => {
+                        Ok(files::Metadata::Folder(entry)) => {
                             println!("Folder: {}", entry.path_display.unwrap_or(entry.name));
                         },
-                        Ok(Ok(files::Metadata::File(entry))) => {
+                        Ok(files::Metadata::File(entry)) => {
                             println!("File: {}", entry.path_display.unwrap_or(entry.name));
                         },
-                        Ok(Ok(files::Metadata::Deleted(entry))) => {
+                        Ok(files::Metadata::Deleted(entry)) => {
                             panic!("unexpected deleted entry: {:?}", entry);
                         },
-                        Ok(Err(e)) => {
+                        Err(APIErr(e)) => {
                             eprintln!("Error from files/list_folder_continue: {}", e);
                             break;
                         },
@@ -154,7 +155,7 @@ fn main() {
                     }
                 }
             },
-            Ok(Err(e)) => {
+            Err(APIErr(e)) => {
                 eprintln!("Error from files/list_folder: {}", e);
             },
             Err(e) => {
@@ -165,24 +166,20 @@ fn main() {
 }
 
 fn list_directory<'a>(client: &'a dyn HttpClient, path: &str, recursive: bool)
-    -> Result<Result<DirectoryIterator<'a>, files::ListFolderError>, ::failure::Error>
+    -> Result<DirectoryIterator<'a>, dropbox_sdk::Error<files::ListFolderError>>
 {
     assert!(path.starts_with('/'), "path needs to be absolute (start with a '/')");
-    match files::list_folder(
-        client,
-        &files::ListFolderArg::new((&path[1..]).to_owned())
-            .with_recursive(recursive))
-    {
-        Ok(Ok(result)) => {
-            Ok(Ok(DirectoryIterator {
+    let arg = files::ListFolderArg::new(if path == "/" { String::new() } else { path.to_owned() })
+        .with_recursive(recursive);
+
+    files::list_folder(client, &arg)
+        .map(|result| {
+            DirectoryIterator {
                 client,
                 buffer: result.entries.into(),
                 cursor: Some(result.cursor),
-            }))
-        },
-        Ok(Err(e)) => Ok(Err(e)),
-        Err(e) => Err(e),
-    }
+            }
+        })
 }
 
 struct DirectoryIterator<'a> {
@@ -192,22 +189,23 @@ struct DirectoryIterator<'a> {
 }
 
 impl<'a> Iterator for DirectoryIterator<'a> {
-    type Item = Result<Result<files::Metadata, files::ListFolderContinueError>, ::failure::Error>;
+    type Item = Result<files::Metadata, dropbox_sdk::Error<files::ListFolderContinueError>>;
 
     fn next(&mut self) -> Option<Self::Item> {
         if let Some(entry) = self.buffer.pop_front() {
-            Some(Ok(Ok(entry)))
+            Some(Ok(entry))
         } else if let Some(cursor) = self.cursor.take() {
             match files::list_folder_continue(self.client, &files::ListFolderContinueArg::new(cursor)) {
-                Ok(Ok(result)) => {
+                Ok(result) => {
                     self.buffer.extend(result.entries.into_iter());
                     if result.has_more {
                         self.cursor = Some(result.cursor);
                     }
-                    self.buffer.pop_front().map(|entry| Ok(Ok(entry)))
+                    self.buffer.pop_front().map(|entry| Ok(entry))
                 },
-                Ok(Err(e)) => Some(Ok(Err(e))),
-                Err(e) => Some(Err(e)),
+                Err(e) => {
+                    Some(Err(e))
+                }
             }
         } else {
             None

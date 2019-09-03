@@ -23,7 +23,7 @@ pub type TeamInfo = super::users::Team;
 pub fn add_file_member(
     client: &dyn crate::client_trait::HttpClient,
     arg: &AddFileMemberArgs,
-) -> Result<Result<Vec<FileMemberActionResult>, AddFileMemberError>, ::failure::Error> {
+) -> Result<Vec<FileMemberActionResult>, crate::Error<AddFileMemberError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -39,7 +39,7 @@ pub fn add_file_member(
 pub fn add_folder_member(
     client: &dyn crate::client_trait::HttpClient,
     arg: &AddFolderMemberArg,
-) -> Result<Result<(), AddFolderMemberError>, ::failure::Error> {
+) -> Result<(), crate::Error<AddFolderMemberError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -53,7 +53,7 @@ pub fn add_folder_member(
 pub fn change_file_member_access(
     client: &dyn crate::client_trait::HttpClient,
     arg: &ChangeFileMemberAccessArgs,
-) -> Result<Result<FileMemberActionResult, FileMemberActionError>, ::failure::Error> {
+) -> Result<FileMemberActionResult, crate::Error<FileMemberActionError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -67,7 +67,7 @@ pub fn change_file_member_access(
 pub fn check_job_status(
     client: &dyn crate::client_trait::HttpClient,
     arg: &super::dbx_async::PollArg,
-) -> Result<Result<JobStatus, super::dbx_async::PollError>, ::failure::Error> {
+) -> Result<JobStatus, crate::Error<super::dbx_async::PollError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -81,7 +81,7 @@ pub fn check_job_status(
 pub fn check_remove_member_job_status(
     client: &dyn crate::client_trait::HttpClient,
     arg: &super::dbx_async::PollArg,
-) -> Result<Result<RemoveMemberJobStatus, super::dbx_async::PollError>, ::failure::Error> {
+) -> Result<RemoveMemberJobStatus, crate::Error<super::dbx_async::PollError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -95,7 +95,7 @@ pub fn check_remove_member_job_status(
 pub fn check_share_job_status(
     client: &dyn crate::client_trait::HttpClient,
     arg: &super::dbx_async::PollArg,
-) -> Result<Result<ShareFolderJobStatus, super::dbx_async::PollError>, ::failure::Error> {
+) -> Result<ShareFolderJobStatus, crate::Error<super::dbx_async::PollError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -116,7 +116,7 @@ pub fn check_share_job_status(
 pub fn create_shared_link(
     client: &dyn crate::client_trait::HttpClient,
     arg: &CreateSharedLinkArg,
-) -> Result<Result<PathLinkMetadata, CreateSharedLinkError>, ::failure::Error> {
+) -> Result<PathLinkMetadata, crate::Error<CreateSharedLinkError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -132,7 +132,7 @@ pub fn create_shared_link(
 pub fn create_shared_link_with_settings(
     client: &dyn crate::client_trait::HttpClient,
     arg: &CreateSharedLinkWithSettingsArg,
-) -> Result<Result<SharedLinkMetadata, CreateSharedLinkWithSettingsError>, ::failure::Error> {
+) -> Result<SharedLinkMetadata, crate::Error<CreateSharedLinkWithSettingsError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -146,7 +146,7 @@ pub fn create_shared_link_with_settings(
 pub fn get_file_metadata(
     client: &dyn crate::client_trait::HttpClient,
     arg: &GetFileMetadataArg,
-) -> Result<Result<SharedFileMetadata, GetFileMetadataError>, ::failure::Error> {
+) -> Result<SharedFileMetadata, crate::Error<GetFileMetadataError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -160,7 +160,7 @@ pub fn get_file_metadata(
 pub fn get_file_metadata_batch(
     client: &dyn crate::client_trait::HttpClient,
     arg: &GetFileMetadataBatchArg,
-) -> Result<Result<Vec<GetFileMetadataBatchResult>, SharingUserError>, ::failure::Error> {
+) -> Result<Vec<GetFileMetadataBatchResult>, crate::Error<SharingUserError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -174,7 +174,7 @@ pub fn get_file_metadata_batch(
 pub fn get_folder_metadata(
     client: &dyn crate::client_trait::HttpClient,
     arg: &GetMetadataArgs,
-) -> Result<Result<SharedFolderMetadata, SharedFolderAccessError>, ::failure::Error> {
+) -> Result<SharedFolderMetadata, crate::Error<SharedFolderAccessError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -190,7 +190,7 @@ pub fn get_shared_link_file(
     arg: &GetSharedLinkFileArg,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> Result<Result<crate::client_trait::HttpRequestResult<SharedLinkMetadata>, GetSharedLinkFileError>, ::failure::Error> {
+) -> Result<crate::client_trait::HttpRequestResult<SharedLinkMetadata>, crate::Error<GetSharedLinkFileError>> {
     crate::client_helpers::request_with_body(
         client,
         crate::client_trait::Endpoint::Content,
@@ -206,7 +206,7 @@ pub fn get_shared_link_file(
 pub fn get_shared_link_metadata(
     client: &dyn crate::client_trait::HttpClient,
     arg: &GetSharedLinkMetadataArg,
-) -> Result<Result<SharedLinkMetadata, SharedLinkError>, ::failure::Error> {
+) -> Result<SharedLinkMetadata, crate::Error<SharedLinkError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -224,7 +224,7 @@ pub fn get_shared_link_metadata(
 pub fn get_shared_links(
     client: &dyn crate::client_trait::HttpClient,
     arg: &GetSharedLinksArg,
-) -> Result<Result<GetSharedLinksResult, GetSharedLinksError>, ::failure::Error> {
+) -> Result<GetSharedLinksResult, crate::Error<GetSharedLinksError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -239,7 +239,7 @@ pub fn get_shared_links(
 pub fn list_file_members(
     client: &dyn crate::client_trait::HttpClient,
     arg: &ListFileMembersArg,
-) -> Result<Result<SharedFileMembers, ListFileMembersError>, ::failure::Error> {
+) -> Result<SharedFileMembers, crate::Error<ListFileMembersError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -256,7 +256,7 @@ pub fn list_file_members(
 pub fn list_file_members_batch(
     client: &dyn crate::client_trait::HttpClient,
     arg: &ListFileMembersBatchArg,
-) -> Result<Result<Vec<ListFileMembersBatchResult>, SharingUserError>, ::failure::Error> {
+) -> Result<Vec<ListFileMembersBatchResult>, crate::Error<SharingUserError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -272,7 +272,7 @@ pub fn list_file_members_batch(
 pub fn list_file_members_continue(
     client: &dyn crate::client_trait::HttpClient,
     arg: &ListFileMembersContinueArg,
-) -> Result<Result<SharedFileMembers, ListFileMembersContinueError>, ::failure::Error> {
+) -> Result<SharedFileMembers, crate::Error<ListFileMembersContinueError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -286,7 +286,7 @@ pub fn list_file_members_continue(
 pub fn list_folder_members(
     client: &dyn crate::client_trait::HttpClient,
     arg: &ListFolderMembersArgs,
-) -> Result<Result<SharedFolderMembers, SharedFolderAccessError>, ::failure::Error> {
+) -> Result<SharedFolderMembers, crate::Error<SharedFolderAccessError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -301,7 +301,7 @@ pub fn list_folder_members(
 pub fn list_folder_members_continue(
     client: &dyn crate::client_trait::HttpClient,
     arg: &ListFolderMembersContinueArg,
-) -> Result<Result<SharedFolderMembers, ListFolderMembersContinueError>, ::failure::Error> {
+) -> Result<SharedFolderMembers, crate::Error<ListFolderMembersContinueError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -315,7 +315,7 @@ pub fn list_folder_members_continue(
 pub fn list_folders(
     client: &dyn crate::client_trait::HttpClient,
     arg: &ListFoldersArgs,
-) -> Result<Result<ListFoldersResult, ()>, ::failure::Error> {
+) -> Result<ListFoldersResult, crate::Error<()>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -331,7 +331,7 @@ pub fn list_folders(
 pub fn list_folders_continue(
     client: &dyn crate::client_trait::HttpClient,
     arg: &ListFoldersContinueArg,
-) -> Result<Result<ListFoldersResult, ListFoldersContinueError>, ::failure::Error> {
+) -> Result<ListFoldersResult, crate::Error<ListFoldersContinueError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -345,7 +345,7 @@ pub fn list_folders_continue(
 pub fn list_mountable_folders(
     client: &dyn crate::client_trait::HttpClient,
     arg: &ListFoldersArgs,
-) -> Result<Result<ListFoldersResult, ()>, ::failure::Error> {
+) -> Result<ListFoldersResult, crate::Error<()>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -362,7 +362,7 @@ pub fn list_mountable_folders(
 pub fn list_mountable_folders_continue(
     client: &dyn crate::client_trait::HttpClient,
     arg: &ListFoldersContinueArg,
-) -> Result<Result<ListFoldersResult, ListFoldersContinueError>, ::failure::Error> {
+) -> Result<ListFoldersResult, crate::Error<ListFoldersContinueError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -377,7 +377,7 @@ pub fn list_mountable_folders_continue(
 pub fn list_received_files(
     client: &dyn crate::client_trait::HttpClient,
     arg: &ListFilesArg,
-) -> Result<Result<ListFilesResult, SharingUserError>, ::failure::Error> {
+) -> Result<ListFilesResult, crate::Error<SharingUserError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -391,7 +391,7 @@ pub fn list_received_files(
 pub fn list_received_files_continue(
     client: &dyn crate::client_trait::HttpClient,
     arg: &ListFilesContinueArg,
-) -> Result<Result<ListFilesResult, ListFilesContinueError>, ::failure::Error> {
+) -> Result<ListFilesResult, crate::Error<ListFilesContinueError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -408,7 +408,7 @@ pub fn list_received_files_continue(
 pub fn list_shared_links(
     client: &dyn crate::client_trait::HttpClient,
     arg: &ListSharedLinksArg,
-) -> Result<Result<ListSharedLinksResult, ListSharedLinksError>, ::failure::Error> {
+) -> Result<ListSharedLinksResult, crate::Error<ListSharedLinksError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -427,7 +427,7 @@ pub fn list_shared_links(
 pub fn modify_shared_link_settings(
     client: &dyn crate::client_trait::HttpClient,
     arg: &ModifySharedLinkSettingsArgs,
-) -> Result<Result<SharedLinkMetadata, ModifySharedLinkSettingsError>, ::failure::Error> {
+) -> Result<SharedLinkMetadata, crate::Error<ModifySharedLinkSettingsError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -442,7 +442,7 @@ pub fn modify_shared_link_settings(
 pub fn mount_folder(
     client: &dyn crate::client_trait::HttpClient,
     arg: &MountFolderArg,
-) -> Result<Result<SharedFolderMetadata, MountFolderError>, ::failure::Error> {
+) -> Result<SharedFolderMetadata, crate::Error<MountFolderError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -457,7 +457,7 @@ pub fn mount_folder(
 pub fn relinquish_file_membership(
     client: &dyn crate::client_trait::HttpClient,
     arg: &RelinquishFileMembershipArg,
-) -> Result<Result<(), RelinquishFileMembershipError>, ::failure::Error> {
+) -> Result<(), crate::Error<RelinquishFileMembershipError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -474,7 +474,7 @@ pub fn relinquish_file_membership(
 pub fn relinquish_folder_membership(
     client: &dyn crate::client_trait::HttpClient,
     arg: &RelinquishFolderMembershipArg,
-) -> Result<Result<super::dbx_async::LaunchEmptyResult, RelinquishFolderMembershipError>, ::failure::Error> {
+) -> Result<super::dbx_async::LaunchEmptyResult, crate::Error<RelinquishFolderMembershipError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -488,7 +488,7 @@ pub fn relinquish_folder_membership(
 pub fn remove_file_member(
     client: &dyn crate::client_trait::HttpClient,
     arg: &RemoveFileMemberArg,
-) -> Result<Result<FileMemberActionIndividualResult, RemoveFileMemberError>, ::failure::Error> {
+) -> Result<FileMemberActionIndividualResult, crate::Error<RemoveFileMemberError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -502,7 +502,7 @@ pub fn remove_file_member(
 pub fn remove_file_member_2(
     client: &dyn crate::client_trait::HttpClient,
     arg: &RemoveFileMemberArg,
-) -> Result<Result<FileMemberRemoveActionResult, RemoveFileMemberError>, ::failure::Error> {
+) -> Result<FileMemberRemoveActionResult, crate::Error<RemoveFileMemberError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -517,7 +517,7 @@ pub fn remove_file_member_2(
 pub fn remove_folder_member(
     client: &dyn crate::client_trait::HttpClient,
     arg: &RemoveFolderMemberArg,
-) -> Result<Result<super::dbx_async::LaunchResultBase, RemoveFolderMemberError>, ::failure::Error> {
+) -> Result<super::dbx_async::LaunchResultBase, crate::Error<RemoveFolderMemberError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -535,7 +535,7 @@ pub fn remove_folder_member(
 pub fn revoke_shared_link(
     client: &dyn crate::client_trait::HttpClient,
     arg: &RevokeSharedLinkArg,
-) -> Result<Result<(), RevokeSharedLinkError>, ::failure::Error> {
+) -> Result<(), crate::Error<RevokeSharedLinkError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -552,7 +552,7 @@ pub fn revoke_shared_link(
 pub fn set_access_inheritance(
     client: &dyn crate::client_trait::HttpClient,
     arg: &SetAccessInheritanceArg,
-) -> Result<Result<ShareFolderLaunch, SetAccessInheritanceError>, ::failure::Error> {
+) -> Result<ShareFolderLaunch, crate::Error<SetAccessInheritanceError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -571,7 +571,7 @@ pub fn set_access_inheritance(
 pub fn share_folder(
     client: &dyn crate::client_trait::HttpClient,
     arg: &ShareFolderArg,
-) -> Result<Result<ShareFolderLaunch, ShareFolderError>, ::failure::Error> {
+) -> Result<ShareFolderLaunch, crate::Error<ShareFolderError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -586,7 +586,7 @@ pub fn share_folder(
 pub fn transfer_folder(
     client: &dyn crate::client_trait::HttpClient,
     arg: &TransferFolderArg,
-) -> Result<Result<(), TransferFolderError>, ::failure::Error> {
+) -> Result<(), crate::Error<TransferFolderError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -601,7 +601,7 @@ pub fn transfer_folder(
 pub fn unmount_folder(
     client: &dyn crate::client_trait::HttpClient,
     arg: &UnmountFolderArg,
-) -> Result<Result<(), UnmountFolderError>, ::failure::Error> {
+) -> Result<(), crate::Error<UnmountFolderError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -615,7 +615,7 @@ pub fn unmount_folder(
 pub fn unshare_file(
     client: &dyn crate::client_trait::HttpClient,
     arg: &UnshareFileArg,
-) -> Result<Result<(), UnshareFileError>, ::failure::Error> {
+) -> Result<(), crate::Error<UnshareFileError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -630,7 +630,7 @@ pub fn unshare_file(
 pub fn unshare_folder(
     client: &dyn crate::client_trait::HttpClient,
     arg: &UnshareFolderArg,
-) -> Result<Result<super::dbx_async::LaunchEmptyResult, UnshareFolderError>, ::failure::Error> {
+) -> Result<super::dbx_async::LaunchEmptyResult, crate::Error<UnshareFolderError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -644,7 +644,7 @@ pub fn unshare_folder(
 pub fn update_file_member(
     client: &dyn crate::client_trait::HttpClient,
     arg: &UpdateFileMemberArgs,
-) -> Result<Result<MemberAccessLevelResult, FileMemberActionError>, ::failure::Error> {
+) -> Result<MemberAccessLevelResult, crate::Error<FileMemberActionError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -658,7 +658,7 @@ pub fn update_file_member(
 pub fn update_folder_member(
     client: &dyn crate::client_trait::HttpClient,
     arg: &UpdateFolderMemberArg,
-) -> Result<Result<MemberAccessLevelResult, UpdateFolderMemberError>, ::failure::Error> {
+) -> Result<MemberAccessLevelResult, crate::Error<UpdateFolderMemberError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -673,7 +673,7 @@ pub fn update_folder_member(
 pub fn update_folder_policy(
     client: &dyn crate::client_trait::HttpClient,
     arg: &UpdateFolderPolicyArg,
-) -> Result<Result<SharedFolderMetadata, UpdateFolderPolicyError>, ::failure::Error> {
+) -> Result<SharedFolderMetadata, crate::Error<UpdateFolderPolicyError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,

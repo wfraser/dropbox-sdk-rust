@@ -4,6 +4,7 @@ use std::fmt::Debug;
 use std::marker::PhantomData;
 use crate::client_trait::*;
 use failure::Fail;
+use failure::ResultExt;
 use serde::de::{self, Deserialize, DeserializeOwned, Deserializer, MapAccess, Visitor};
 use serde::ser::Serialize;
 use serde_json;
@@ -71,7 +72,7 @@ impl<'de, T: DeserializeOwned> Deserialize<'de> for TopLevelError<T> {
 /// an error if the server returned one for the request, otherwise it has the deserialized JSON
 /// response and the body stream (if any).
 #[allow(clippy::too_many_arguments)]
-pub fn request_with_body<T: DeserializeOwned, E: DeserializeOwned + Debug, P: Serialize>(
+pub fn request_with_body<T: DeserializeOwned, E: DeserializeOwned + Debug + Sync + Send + 'static, P: Serialize>(
     client: &dyn HttpClient,
     endpoint: Endpoint,
     style: Style,
@@ -80,25 +81,25 @@ pub fn request_with_body<T: DeserializeOwned, E: DeserializeOwned + Debug, P: Se
     body: Option<&[u8]>,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> Result<Result<HttpRequestResult<T>, E>, ::failure::Error> {
-    let params_json = serde_json::to_string(params)?;
+) -> Result<HttpRequestResult<T>, crate::Error<E>> {
+    let params_json = serde_json::to_string(params).context("serialization error")?;
     let result = client.request(endpoint, style, function, params_json, body, range_start, range_end);
     match result {
         Ok(HttpRequestResultRaw { result_json, content_length, body }) => {
             debug!("json: {}", result_json);
-            let result_value: T = serde_json::from_str(&result_json)?;
-            Ok(Ok(HttpRequestResult {
+            let result_value: T = serde_json::from_str(&result_json).context("deserialization error")?;
+            Ok(HttpRequestResult {
                 result: result_value,
                 content_length,
                 body,
-            }))
+            })
         },
         Err(e) => {
-            let innards = match e.downcast_ref::<super::Error>() {
-                Some(&super::Error::GeneralHttpError {
+            let innards = match e.downcast_ref::<crate::RequestError>() {
+                Some(&crate::RequestError::GeneralHttpError {
                     code,
                     ref status,
-                    json: ref response,
+                    body: ref response,
                 }) => {
                     Some((code, status.clone(), response.clone()))
                 },
@@ -108,16 +109,14 @@ pub fn request_with_body<T: DeserializeOwned, E: DeserializeOwned + Debug, P: Se
             // Try to turn the error into a more specific one.
             if let Some((code, status, response)) = innards {
                 error!("HTTP {} {}: {}", code, status, response);
-                return match code {
+                match code {
                     400 => {
-                    Err(super::Error::BadRequest { message: response }
-                            .context(e)
-                            .into())
+                        Err(crate::RequestError::BadRequest { message: response }
+                            .context(e))?
                     },
                     401 => {
-                        Err(super::Error::InvalidToken { message: response }
-                            .context(e)
-                            .into())
+                        Err(crate::RequestError::InvalidToken { message: response }
+                            .context(e))?
                     },
                     409 => {
                         // Response should be JSON-deseraializable into the strongly-typed
@@ -125,47 +124,46 @@ pub fn request_with_body<T: DeserializeOwned, E: DeserializeOwned + Debug, P: Se
                         match serde_json::from_str::<TopLevelError<E>>(&response) {
                             Ok(deserialized) => {
                                 error!("API error: {:?}", deserialized);
-                                Ok(Err(deserialized.error))
+                                Err(crate::Error::API(deserialized.error))
                             },
                             Err(de_error) => {
                                 error!("Failed to deserialize JSON from API error: {}", de_error);
-                                Err(e.into())
+                                Err(e.context("failed to deserialize response from API error"))?
                             }
                         }
                     },
                     429 => {
-                        Err(super::Error::RateLimited { reason: response }
-                            .context(e)
-                            .into())
+                        Err(crate::RequestError::RateLimited { reason: response }
+                            .context(e))?
                     },
                     500..=599 => {
-                        Err(super::Error::ServerError { message: response }
-                            .context(e)
-                            .into())
+                        Err(crate::RequestError::ServerError { message: response }
+                            .context(e))?
                     },
                     _ => {
-                        Err(e)
+                        Err(e)?
                     }
                 }
             } else if let Some(ref json_err) = e.downcast_ref::<serde_json::Error>() {
                 error!("JSON deserialization error: {}", json_err);
+                Err(e)?
             } else {
                 error!("HTTP request error: {}", e);
+                Err(e)?
             }
-            Err(e)
         }
     }
 }
 
-pub fn request<T: DeserializeOwned, E: DeserializeOwned + Debug, P: Serialize>(
+pub fn request<T: DeserializeOwned, E: DeserializeOwned + Debug + Send + Sync + 'static, P: Serialize>(
     client: &dyn HttpClient,
     endpoint: Endpoint,
     style: Style,
     function: &str,
     params: &P,
     body: Option<&[u8]>,
-) -> Result<Result<T, E>, ::failure::Error> {
+) -> Result<T, crate::Error<E>> {
     request_with_body(client, endpoint, style, function, params, body, None, None)
         // unwrap the HttpRequestResult, discarding its `content_length` and `body` fields:
-        .map(|result| result.map(|HttpRequestResult { result, .. }| result))
+        .map(|HttpRequestResult { result, .. }| result)
 }

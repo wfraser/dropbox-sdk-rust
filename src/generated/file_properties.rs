@@ -50,7 +50,7 @@ pub type TemplateId = String;
 pub fn properties_add(
     client: &dyn crate::client_trait::HttpClient,
     arg: &AddPropertiesArg,
-) -> Result<Result<(), AddPropertiesError>, ::failure::Error> {
+) -> Result<(), crate::Error<AddPropertiesError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -68,7 +68,7 @@ pub fn properties_add(
 pub fn properties_overwrite(
     client: &dyn crate::client_trait::HttpClient,
     arg: &OverwritePropertyGroupArg,
-) -> Result<Result<(), InvalidPropertyGroupError>, ::failure::Error> {
+) -> Result<(), crate::Error<InvalidPropertyGroupError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -87,7 +87,7 @@ pub fn properties_overwrite(
 pub fn properties_remove(
     client: &dyn crate::client_trait::HttpClient,
     arg: &RemovePropertiesArg,
-) -> Result<Result<(), RemovePropertiesError>, ::failure::Error> {
+) -> Result<(), crate::Error<RemovePropertiesError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -101,7 +101,7 @@ pub fn properties_remove(
 pub fn properties_search(
     client: &dyn crate::client_trait::HttpClient,
     arg: &PropertiesSearchArg,
-) -> Result<Result<PropertiesSearchResult, PropertiesSearchError>, ::failure::Error> {
+) -> Result<PropertiesSearchResult, crate::Error<PropertiesSearchError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -116,7 +116,7 @@ pub fn properties_search(
 pub fn properties_search_continue(
     client: &dyn crate::client_trait::HttpClient,
     arg: &PropertiesSearchContinueArg,
-) -> Result<Result<PropertiesSearchResult, PropertiesSearchContinueError>, ::failure::Error> {
+) -> Result<PropertiesSearchResult, crate::Error<PropertiesSearchContinueError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -135,7 +135,7 @@ pub fn properties_search_continue(
 pub fn properties_update(
     client: &dyn crate::client_trait::HttpClient,
     arg: &UpdatePropertiesArg,
-) -> Result<Result<(), UpdatePropertiesError>, ::failure::Error> {
+) -> Result<(), crate::Error<UpdatePropertiesError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -150,7 +150,7 @@ pub fn properties_update(
 pub fn templates_add_for_team(
     client: &dyn crate::client_trait::HttpClient,
     arg: &AddTemplateArg,
-) -> Result<Result<AddTemplateResult, ModifyTemplateError>, ::failure::Error> {
+) -> Result<AddTemplateResult, crate::Error<ModifyTemplateError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -165,7 +165,7 @@ pub fn templates_add_for_team(
 pub fn templates_add_for_user(
     client: &dyn crate::client_trait::HttpClient,
     arg: &AddTemplateArg,
-) -> Result<Result<AddTemplateResult, ModifyTemplateError>, ::failure::Error> {
+) -> Result<AddTemplateResult, crate::Error<ModifyTemplateError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -179,7 +179,7 @@ pub fn templates_add_for_user(
 pub fn templates_get_for_team(
     client: &dyn crate::client_trait::HttpClient,
     arg: &GetTemplateArg,
-) -> Result<Result<GetTemplateResult, TemplateError>, ::failure::Error> {
+) -> Result<GetTemplateResult, crate::Error<TemplateError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -194,7 +194,7 @@ pub fn templates_get_for_team(
 pub fn templates_get_for_user(
     client: &dyn crate::client_trait::HttpClient,
     arg: &GetTemplateArg,
-) -> Result<Result<GetTemplateResult, TemplateError>, ::failure::Error> {
+) -> Result<GetTemplateResult, crate::Error<TemplateError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -208,7 +208,7 @@ pub fn templates_get_for_user(
 /// [`templates_get_for_team()`](templates_get_for_team).
 pub fn templates_list_for_team(
     client: &dyn crate::client_trait::HttpClient,
-) -> Result<Result<ListTemplateResult, TemplateError>, ::failure::Error> {
+) -> Result<ListTemplateResult, crate::Error<TemplateError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -223,7 +223,7 @@ pub fn templates_list_for_team(
 /// member or admin's behalf.
 pub fn templates_list_for_user(
     client: &dyn crate::client_trait::HttpClient,
-) -> Result<Result<ListTemplateResult, TemplateError>, ::failure::Error> {
+) -> Result<ListTemplateResult, crate::Error<TemplateError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -239,7 +239,7 @@ pub fn templates_list_for_user(
 pub fn templates_remove_for_team(
     client: &dyn crate::client_trait::HttpClient,
     arg: &RemoveTemplateArg,
-) -> Result<Result<(), TemplateError>, ::failure::Error> {
+) -> Result<(), crate::Error<TemplateError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -255,7 +255,7 @@ pub fn templates_remove_for_team(
 pub fn templates_remove_for_user(
     client: &dyn crate::client_trait::HttpClient,
     arg: &RemoveTemplateArg,
-) -> Result<Result<(), TemplateError>, ::failure::Error> {
+) -> Result<(), crate::Error<TemplateError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -270,7 +270,7 @@ pub fn templates_remove_for_user(
 pub fn templates_update_for_team(
     client: &dyn crate::client_trait::HttpClient,
     arg: &UpdateTemplateArg,
-) -> Result<Result<UpdateTemplateResult, ModifyTemplateError>, ::failure::Error> {
+) -> Result<UpdateTemplateResult, crate::Error<ModifyTemplateError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -286,7 +286,7 @@ pub fn templates_update_for_team(
 pub fn templates_update_for_user(
     client: &dyn crate::client_trait::HttpClient,
     arg: &UpdateTemplateArg,
-) -> Result<Result<UpdateTemplateResult, ModifyTemplateError>, ::failure::Error> {
+) -> Result<UpdateTemplateResult, crate::Error<ModifyTemplateError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,

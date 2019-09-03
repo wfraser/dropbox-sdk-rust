@@ -15,7 +15,7 @@ pub type GetAccountBatchResult = Vec<BasicAccount>;
 pub fn get_account(
     client: &dyn crate::client_trait::HttpClient,
     arg: &GetAccountArg,
-) -> Result<Result<BasicAccount, GetAccountError>, ::failure::Error> {
+) -> Result<BasicAccount, crate::Error<GetAccountError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -29,7 +29,7 @@ pub fn get_account(
 pub fn get_account_batch(
     client: &dyn crate::client_trait::HttpClient,
     arg: &GetAccountBatchArg,
-) -> Result<Result<GetAccountBatchResult, GetAccountBatchError>, ::failure::Error> {
+) -> Result<GetAccountBatchResult, crate::Error<GetAccountBatchError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -42,7 +42,7 @@ pub fn get_account_batch(
 /// Get information about the current user's account.
 pub fn get_current_account(
     client: &dyn crate::client_trait::HttpClient,
-) -> Result<Result<FullAccount, ()>, ::failure::Error> {
+) -> Result<FullAccount, crate::Error<()>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -55,7 +55,7 @@ pub fn get_current_account(
 /// Get the space usage information for the current user's account.
 pub fn get_space_usage(
     client: &dyn crate::client_trait::HttpClient,
-) -> Result<Result<SpaceUsage, ()>, ::failure::Error> {
+) -> Result<SpaceUsage, crate::Error<()>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,

@@ -30,7 +30,7 @@ pub type WritePathOrId = String;
 pub fn alpha_get_metadata(
     client: &dyn crate::client_trait::HttpClient,
     arg: &AlphaGetMetadataArg,
-) -> Result<Result<Metadata, AlphaGetMetadataError>, ::failure::Error> {
+) -> Result<Metadata, crate::Error<AlphaGetMetadataError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -48,7 +48,7 @@ pub fn alpha_upload(
     client: &dyn crate::client_trait::HttpClient,
     arg: &CommitInfoWithProperties,
     body: &[u8],
-) -> Result<Result<FileMetadata, UploadErrorWithProperties>, ::failure::Error> {
+) -> Result<FileMetadata, crate::Error<UploadErrorWithProperties>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Content,
@@ -63,7 +63,7 @@ pub fn alpha_upload(
 pub fn copy_v2(
     client: &dyn crate::client_trait::HttpClient,
     arg: &RelocationArg,
-) -> Result<Result<RelocationResult, RelocationError>, ::failure::Error> {
+) -> Result<RelocationResult, crate::Error<RelocationError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -78,7 +78,7 @@ pub fn copy_v2(
 pub fn copy(
     client: &dyn crate::client_trait::HttpClient,
     arg: &RelocationArg,
-) -> Result<Result<Metadata, RelocationError>, ::failure::Error> {
+) -> Result<Metadata, crate::Error<RelocationError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -96,7 +96,7 @@ pub fn copy(
 pub fn copy_batch_v2(
     client: &dyn crate::client_trait::HttpClient,
     arg: &CopyBatchArg,
-) -> Result<Result<RelocationBatchV2Launch, ()>, ::failure::Error> {
+) -> Result<RelocationBatchV2Launch, crate::Error<()>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -116,7 +116,7 @@ pub fn copy_batch_v2(
 pub fn copy_batch(
     client: &dyn crate::client_trait::HttpClient,
     arg: &RelocationBatchArg,
-) -> Result<Result<RelocationBatchLaunch, ()>, ::failure::Error> {
+) -> Result<RelocationBatchLaunch, crate::Error<()>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -131,7 +131,7 @@ pub fn copy_batch(
 pub fn copy_batch_check_v2(
     client: &dyn crate::client_trait::HttpClient,
     arg: &super::dbx_async::PollArg,
-) -> Result<Result<RelocationBatchV2JobStatus, super::dbx_async::PollError>, ::failure::Error> {
+) -> Result<RelocationBatchV2JobStatus, crate::Error<super::dbx_async::PollError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -146,7 +146,7 @@ pub fn copy_batch_check_v2(
 pub fn copy_batch_check(
     client: &dyn crate::client_trait::HttpClient,
     arg: &super::dbx_async::PollArg,
-) -> Result<Result<RelocationBatchJobStatus, super::dbx_async::PollError>, ::failure::Error> {
+) -> Result<RelocationBatchJobStatus, crate::Error<super::dbx_async::PollError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -162,7 +162,7 @@ pub fn copy_batch_check(
 pub fn copy_reference_get(
     client: &dyn crate::client_trait::HttpClient,
     arg: &GetCopyReferenceArg,
-) -> Result<Result<GetCopyReferenceResult, GetCopyReferenceError>, ::failure::Error> {
+) -> Result<GetCopyReferenceResult, crate::Error<GetCopyReferenceError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -177,7 +177,7 @@ pub fn copy_reference_get(
 pub fn copy_reference_save(
     client: &dyn crate::client_trait::HttpClient,
     arg: &SaveCopyReferenceArg,
-) -> Result<Result<SaveCopyReferenceResult, SaveCopyReferenceError>, ::failure::Error> {
+) -> Result<SaveCopyReferenceResult, crate::Error<SaveCopyReferenceError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -191,7 +191,7 @@ pub fn copy_reference_save(
 pub fn create_folder_v2(
     client: &dyn crate::client_trait::HttpClient,
     arg: &CreateFolderArg,
-) -> Result<Result<CreateFolderResult, CreateFolderError>, ::failure::Error> {
+) -> Result<CreateFolderResult, crate::Error<CreateFolderError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -205,7 +205,7 @@ pub fn create_folder_v2(
 pub fn create_folder(
     client: &dyn crate::client_trait::HttpClient,
     arg: &CreateFolderArg,
-) -> Result<Result<FolderMetadata, CreateFolderError>, ::failure::Error> {
+) -> Result<FolderMetadata, crate::Error<CreateFolderError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -223,7 +223,7 @@ pub fn create_folder(
 pub fn create_folder_batch(
     client: &dyn crate::client_trait::HttpClient,
     arg: &CreateFolderBatchArg,
-) -> Result<Result<CreateFolderBatchLaunch, ()>, ::failure::Error> {
+) -> Result<CreateFolderBatchLaunch, crate::Error<()>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -238,7 +238,7 @@ pub fn create_folder_batch(
 pub fn create_folder_batch_check(
     client: &dyn crate::client_trait::HttpClient,
     arg: &super::dbx_async::PollArg,
-) -> Result<Result<CreateFolderBatchJobStatus, super::dbx_async::PollError>, ::failure::Error> {
+) -> Result<CreateFolderBatchJobStatus, crate::Error<super::dbx_async::PollError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -256,7 +256,7 @@ pub fn create_folder_batch_check(
 pub fn delete_v2(
     client: &dyn crate::client_trait::HttpClient,
     arg: &DeleteArg,
-) -> Result<Result<DeleteResult, DeleteError>, ::failure::Error> {
+) -> Result<DeleteResult, crate::Error<DeleteError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -274,7 +274,7 @@ pub fn delete_v2(
 pub fn delete(
     client: &dyn crate::client_trait::HttpClient,
     arg: &DeleteArg,
-) -> Result<Result<Metadata, DeleteError>, ::failure::Error> {
+) -> Result<Metadata, crate::Error<DeleteError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -290,7 +290,7 @@ pub fn delete(
 pub fn delete_batch(
     client: &dyn crate::client_trait::HttpClient,
     arg: &DeleteBatchArg,
-) -> Result<Result<DeleteBatchLaunch, ()>, ::failure::Error> {
+) -> Result<DeleteBatchLaunch, crate::Error<()>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -305,7 +305,7 @@ pub fn delete_batch(
 pub fn delete_batch_check(
     client: &dyn crate::client_trait::HttpClient,
     arg: &super::dbx_async::PollArg,
-) -> Result<Result<DeleteBatchJobStatus, super::dbx_async::PollError>, ::failure::Error> {
+) -> Result<DeleteBatchJobStatus, crate::Error<super::dbx_async::PollError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -321,7 +321,7 @@ pub fn download(
     arg: &DownloadArg,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> Result<Result<crate::client_trait::HttpRequestResult<FileMetadata>, DownloadError>, ::failure::Error> {
+) -> Result<crate::client_trait::HttpRequestResult<FileMetadata>, crate::Error<DownloadError>> {
     crate::client_helpers::request_with_body(
         client,
         crate::client_trait::Endpoint::Content,
@@ -341,7 +341,7 @@ pub fn download_zip(
     arg: &DownloadZipArg,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> Result<Result<crate::client_trait::HttpRequestResult<DownloadZipResult>, DownloadZipError>, ::failure::Error> {
+) -> Result<crate::client_trait::HttpRequestResult<DownloadZipResult>, crate::Error<DownloadZipError>> {
     crate::client_helpers::request_with_body(
         client,
         crate::client_trait::Endpoint::Content,
@@ -361,7 +361,7 @@ pub fn export(
     arg: &ExportArg,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> Result<Result<crate::client_trait::HttpRequestResult<ExportResult>, ExportError>, ::failure::Error> {
+) -> Result<crate::client_trait::HttpRequestResult<ExportResult>, crate::Error<ExportError>> {
     crate::client_helpers::request_with_body(
         client,
         crate::client_trait::Endpoint::Content,
@@ -377,7 +377,7 @@ pub fn export(
 pub fn get_metadata(
     client: &dyn crate::client_trait::HttpClient,
     arg: &GetMetadataArg,
-) -> Result<Result<Metadata, GetMetadataError>, ::failure::Error> {
+) -> Result<Metadata, crate::Error<GetMetadataError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -397,7 +397,7 @@ pub fn get_preview(
     arg: &PreviewArg,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> Result<Result<crate::client_trait::HttpRequestResult<FileMetadata>, PreviewError>, ::failure::Error> {
+) -> Result<crate::client_trait::HttpRequestResult<FileMetadata>, crate::Error<PreviewError>> {
     crate::client_helpers::request_with_body(
         client,
         crate::client_trait::Endpoint::Content,
@@ -415,7 +415,7 @@ pub fn get_preview(
 pub fn get_temporary_link(
     client: &dyn crate::client_trait::HttpClient,
     arg: &GetTemporaryLinkArg,
-) -> Result<Result<GetTemporaryLinkResult, GetTemporaryLinkError>, ::failure::Error> {
+) -> Result<GetTemporaryLinkResult, crate::Error<GetTemporaryLinkError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -464,7 +464,7 @@ pub fn get_temporary_link(
 pub fn get_temporary_upload_link(
     client: &dyn crate::client_trait::HttpClient,
     arg: &GetTemporaryUploadLinkArg,
-) -> Result<Result<GetTemporaryUploadLinkResult, ()>, ::failure::Error> {
+) -> Result<GetTemporaryUploadLinkResult, crate::Error<()>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -482,7 +482,7 @@ pub fn get_thumbnail(
     arg: &ThumbnailArg,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> Result<Result<crate::client_trait::HttpRequestResult<FileMetadata>, ThumbnailError>, ::failure::Error> {
+) -> Result<crate::client_trait::HttpRequestResult<FileMetadata>, crate::Error<ThumbnailError>> {
     crate::client_helpers::request_with_body(
         client,
         crate::client_trait::Endpoint::Content,
@@ -500,7 +500,7 @@ pub fn get_thumbnail(
 pub fn get_thumbnail_batch(
     client: &dyn crate::client_trait::HttpClient,
     arg: &GetThumbnailBatchArg,
-) -> Result<Result<GetThumbnailBatchResult, GetThumbnailBatchError>, ::failure::Error> {
+) -> Result<GetThumbnailBatchResult, crate::Error<GetThumbnailBatchError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Content,
@@ -533,7 +533,7 @@ pub fn get_thumbnail_batch(
 pub fn list_folder(
     client: &dyn crate::client_trait::HttpClient,
     arg: &ListFolderArg,
-) -> Result<Result<ListFolderResult, ListFolderError>, ::failure::Error> {
+) -> Result<ListFolderResult, crate::Error<ListFolderError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -549,7 +549,7 @@ pub fn list_folder(
 pub fn list_folder_continue(
     client: &dyn crate::client_trait::HttpClient,
     arg: &ListFolderContinueArg,
-) -> Result<Result<ListFolderResult, ListFolderContinueError>, ::failure::Error> {
+) -> Result<ListFolderResult, crate::Error<ListFolderContinueError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -566,7 +566,7 @@ pub fn list_folder_continue(
 pub fn list_folder_get_latest_cursor(
     client: &dyn crate::client_trait::HttpClient,
     arg: &ListFolderArg,
-) -> Result<Result<ListFolderGetLatestCursorResult, ListFolderError>, ::failure::Error> {
+) -> Result<ListFolderGetLatestCursorResult, crate::Error<ListFolderError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -585,7 +585,7 @@ pub fn list_folder_get_latest_cursor(
 pub fn list_folder_longpoll(
     client: &dyn crate::client_trait::HttpClient,
     arg: &ListFolderLongpollArg,
-) -> Result<Result<ListFolderLongpollResult, ListFolderLongpollError>, ::failure::Error> {
+) -> Result<ListFolderLongpollResult, crate::Error<ListFolderLongpollError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Notify,
@@ -606,7 +606,7 @@ pub fn list_folder_longpoll(
 pub fn list_revisions(
     client: &dyn crate::client_trait::HttpClient,
     arg: &ListRevisionsArg,
-) -> Result<Result<ListRevisionsResult, ListRevisionsError>, ::failure::Error> {
+) -> Result<ListRevisionsResult, crate::Error<ListRevisionsError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -621,7 +621,7 @@ pub fn list_revisions(
 pub fn move_v2(
     client: &dyn crate::client_trait::HttpClient,
     arg: &RelocationArg,
-) -> Result<Result<RelocationResult, RelocationError>, ::failure::Error> {
+) -> Result<RelocationResult, crate::Error<RelocationError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -636,7 +636,7 @@ pub fn move_v2(
 pub fn do_move(
     client: &dyn crate::client_trait::HttpClient,
     arg: &RelocationArg,
-) -> Result<Result<Metadata, RelocationError>, ::failure::Error> {
+) -> Result<Metadata, crate::Error<RelocationError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -654,7 +654,7 @@ pub fn do_move(
 pub fn move_batch_v2(
     client: &dyn crate::client_trait::HttpClient,
     arg: &MoveBatchArg,
-) -> Result<Result<RelocationBatchV2Launch, ()>, ::failure::Error> {
+) -> Result<RelocationBatchV2Launch, crate::Error<()>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -671,7 +671,7 @@ pub fn move_batch_v2(
 pub fn move_batch(
     client: &dyn crate::client_trait::HttpClient,
     arg: &RelocationBatchArg,
-) -> Result<Result<RelocationBatchLaunch, ()>, ::failure::Error> {
+) -> Result<RelocationBatchLaunch, crate::Error<()>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -686,7 +686,7 @@ pub fn move_batch(
 pub fn move_batch_check_v2(
     client: &dyn crate::client_trait::HttpClient,
     arg: &super::dbx_async::PollArg,
-) -> Result<Result<RelocationBatchV2JobStatus, super::dbx_async::PollError>, ::failure::Error> {
+) -> Result<RelocationBatchV2JobStatus, crate::Error<super::dbx_async::PollError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -701,7 +701,7 @@ pub fn move_batch_check_v2(
 pub fn move_batch_check(
     client: &dyn crate::client_trait::HttpClient,
     arg: &super::dbx_async::PollArg,
-) -> Result<Result<RelocationBatchJobStatus, super::dbx_async::PollError>, ::failure::Error> {
+) -> Result<RelocationBatchJobStatus, crate::Error<super::dbx_async::PollError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -716,7 +716,7 @@ pub fn move_batch_check(
 pub fn permanently_delete(
     client: &dyn crate::client_trait::HttpClient,
     arg: &DeleteArg,
-) -> Result<Result<(), DeleteError>, ::failure::Error> {
+) -> Result<(), crate::Error<DeleteError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -729,7 +729,7 @@ pub fn permanently_delete(
 pub fn properties_add(
     client: &dyn crate::client_trait::HttpClient,
     arg: &super::file_properties::AddPropertiesArg,
-) -> Result<Result<(), super::file_properties::AddPropertiesError>, ::failure::Error> {
+) -> Result<(), crate::Error<super::file_properties::AddPropertiesError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -742,7 +742,7 @@ pub fn properties_add(
 pub fn properties_overwrite(
     client: &dyn crate::client_trait::HttpClient,
     arg: &super::file_properties::OverwritePropertyGroupArg,
-) -> Result<Result<(), super::file_properties::InvalidPropertyGroupError>, ::failure::Error> {
+) -> Result<(), crate::Error<super::file_properties::InvalidPropertyGroupError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -755,7 +755,7 @@ pub fn properties_overwrite(
 pub fn properties_remove(
     client: &dyn crate::client_trait::HttpClient,
     arg: &super::file_properties::RemovePropertiesArg,
-) -> Result<Result<(), super::file_properties::RemovePropertiesError>, ::failure::Error> {
+) -> Result<(), crate::Error<super::file_properties::RemovePropertiesError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -768,7 +768,7 @@ pub fn properties_remove(
 pub fn properties_template_get(
     client: &dyn crate::client_trait::HttpClient,
     arg: &super::file_properties::GetTemplateArg,
-) -> Result<Result<super::file_properties::GetTemplateResult, super::file_properties::TemplateError>, ::failure::Error> {
+) -> Result<super::file_properties::GetTemplateResult, crate::Error<super::file_properties::TemplateError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -780,7 +780,7 @@ pub fn properties_template_get(
 
 pub fn properties_template_list(
     client: &dyn crate::client_trait::HttpClient,
-) -> Result<Result<super::file_properties::ListTemplateResult, super::file_properties::TemplateError>, ::failure::Error> {
+) -> Result<super::file_properties::ListTemplateResult, crate::Error<super::file_properties::TemplateError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -793,7 +793,7 @@ pub fn properties_template_list(
 pub fn properties_update(
     client: &dyn crate::client_trait::HttpClient,
     arg: &super::file_properties::UpdatePropertiesArg,
-) -> Result<Result<(), super::file_properties::UpdatePropertiesError>, ::failure::Error> {
+) -> Result<(), crate::Error<super::file_properties::UpdatePropertiesError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -807,7 +807,7 @@ pub fn properties_update(
 pub fn restore(
     client: &dyn crate::client_trait::HttpClient,
     arg: &RestoreArg,
-) -> Result<Result<FileMetadata, RestoreError>, ::failure::Error> {
+) -> Result<FileMetadata, crate::Error<RestoreError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -824,7 +824,7 @@ pub fn restore(
 pub fn save_url(
     client: &dyn crate::client_trait::HttpClient,
     arg: &SaveUrlArg,
-) -> Result<Result<SaveUrlResult, SaveUrlError>, ::failure::Error> {
+) -> Result<SaveUrlResult, crate::Error<SaveUrlError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -838,7 +838,7 @@ pub fn save_url(
 pub fn save_url_check_job_status(
     client: &dyn crate::client_trait::HttpClient,
     arg: &super::dbx_async::PollArg,
-) -> Result<Result<SaveUrlJobStatus, super::dbx_async::PollError>, ::failure::Error> {
+) -> Result<SaveUrlJobStatus, crate::Error<super::dbx_async::PollError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -853,7 +853,7 @@ pub fn save_url_check_job_status(
 pub fn search(
     client: &dyn crate::client_trait::HttpClient,
     arg: &SearchArg,
-) -> Result<Result<SearchResult, SearchError>, ::failure::Error> {
+) -> Result<SearchResult, crate::Error<SearchError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -873,7 +873,7 @@ pub fn upload(
     client: &dyn crate::client_trait::HttpClient,
     arg: &CommitInfo,
     body: &[u8],
-) -> Result<Result<FileMetadata, UploadError>, ::failure::Error> {
+) -> Result<FileMetadata, crate::Error<UploadError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Content,
@@ -893,7 +893,7 @@ pub fn upload_session_append_v2(
     client: &dyn crate::client_trait::HttpClient,
     arg: &UploadSessionAppendArg,
     body: &[u8],
-) -> Result<Result<(), UploadSessionLookupError>, ::failure::Error> {
+) -> Result<(), crate::Error<UploadSessionLookupError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Content,
@@ -912,7 +912,7 @@ pub fn upload_session_append(
     client: &dyn crate::client_trait::HttpClient,
     arg: &UploadSessionCursor,
     body: &[u8],
-) -> Result<Result<(), UploadSessionLookupError>, ::failure::Error> {
+) -> Result<(), crate::Error<UploadSessionLookupError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Content,
@@ -932,7 +932,7 @@ pub fn upload_session_finish(
     client: &dyn crate::client_trait::HttpClient,
     arg: &UploadSessionFinishArg,
     body: &[u8],
-) -> Result<Result<FileMetadata, UploadSessionFinishError>, ::failure::Error> {
+) -> Result<FileMetadata, crate::Error<UploadSessionFinishError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Content,
@@ -963,7 +963,7 @@ pub fn upload_session_finish(
 pub fn upload_session_finish_batch(
     client: &dyn crate::client_trait::HttpClient,
     arg: &UploadSessionFinishBatchArg,
-) -> Result<Result<UploadSessionFinishBatchLaunch, ()>, ::failure::Error> {
+) -> Result<UploadSessionFinishBatchLaunch, crate::Error<()>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -979,7 +979,7 @@ pub fn upload_session_finish_batch(
 pub fn upload_session_finish_batch_check(
     client: &dyn crate::client_trait::HttpClient,
     arg: &super::dbx_async::PollArg,
-) -> Result<Result<UploadSessionFinishBatchJobStatus, super::dbx_async::PollError>, ::failure::Error> {
+) -> Result<UploadSessionFinishBatchJobStatus, crate::Error<super::dbx_async::PollError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -1006,7 +1006,7 @@ pub fn upload_session_start(
     client: &dyn crate::client_trait::HttpClient,
     arg: &UploadSessionStartArg,
     body: &[u8],
-) -> Result<Result<UploadSessionStartResult, ()>, ::failure::Error> {
+) -> Result<UploadSessionStartResult, crate::Error<()>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Content,

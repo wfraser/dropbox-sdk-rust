@@ -16,7 +16,7 @@ pub type UserQuota = u32;
 pub fn devices_list_member_devices(
     client: &dyn crate::client_trait::HttpClient,
     arg: &ListMemberDevicesArg,
-) -> Result<Result<ListMemberDevicesResult, ListMemberDevicesError>, ::failure::Error> {
+) -> Result<ListMemberDevicesResult, crate::Error<ListMemberDevicesError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -30,7 +30,7 @@ pub fn devices_list_member_devices(
 pub fn devices_list_members_devices(
     client: &dyn crate::client_trait::HttpClient,
     arg: &ListMembersDevicesArg,
-) -> Result<Result<ListMembersDevicesResult, ListMembersDevicesError>, ::failure::Error> {
+) -> Result<ListMembersDevicesResult, crate::Error<ListMembersDevicesError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -44,7 +44,7 @@ pub fn devices_list_members_devices(
 pub fn devices_list_team_devices(
     client: &dyn crate::client_trait::HttpClient,
     arg: &ListTeamDevicesArg,
-) -> Result<Result<ListTeamDevicesResult, ListTeamDevicesError>, ::failure::Error> {
+) -> Result<ListTeamDevicesResult, crate::Error<ListTeamDevicesError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -58,7 +58,7 @@ pub fn devices_list_team_devices(
 pub fn devices_revoke_device_session(
     client: &dyn crate::client_trait::HttpClient,
     arg: &RevokeDeviceSessionArg,
-) -> Result<Result<(), RevokeDeviceSessionError>, ::failure::Error> {
+) -> Result<(), crate::Error<RevokeDeviceSessionError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -72,7 +72,7 @@ pub fn devices_revoke_device_session(
 pub fn devices_revoke_device_session_batch(
     client: &dyn crate::client_trait::HttpClient,
     arg: &RevokeDeviceSessionBatchArg,
-) -> Result<Result<RevokeDeviceSessionBatchResult, RevokeDeviceSessionBatchError>, ::failure::Error> {
+) -> Result<RevokeDeviceSessionBatchResult, crate::Error<RevokeDeviceSessionBatchError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -88,7 +88,7 @@ pub fn devices_revoke_device_session_batch(
 pub fn features_get_values(
     client: &dyn crate::client_trait::HttpClient,
     arg: &FeaturesGetValuesBatchArg,
-) -> Result<Result<FeaturesGetValuesBatchResult, FeaturesGetValuesBatchError>, ::failure::Error> {
+) -> Result<FeaturesGetValuesBatchResult, crate::Error<FeaturesGetValuesBatchError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -101,7 +101,7 @@ pub fn features_get_values(
 /// Retrieves information about a team.
 pub fn get_info(
     client: &dyn crate::client_trait::HttpClient,
-) -> Result<Result<TeamGetInfoResult, ()>, ::failure::Error> {
+) -> Result<TeamGetInfoResult, crate::Error<()>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -115,7 +115,7 @@ pub fn get_info(
 pub fn groups_create(
     client: &dyn crate::client_trait::HttpClient,
     arg: &GroupCreateArg,
-) -> Result<Result<GroupFullInfo, GroupCreateError>, ::failure::Error> {
+) -> Result<GroupFullInfo, crate::Error<GroupCreateError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -131,7 +131,7 @@ pub fn groups_create(
 pub fn groups_delete(
     client: &dyn crate::client_trait::HttpClient,
     arg: &GroupSelector,
-) -> Result<Result<super::dbx_async::LaunchEmptyResult, GroupDeleteError>, ::failure::Error> {
+) -> Result<super::dbx_async::LaunchEmptyResult, crate::Error<GroupDeleteError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -147,7 +147,7 @@ pub fn groups_delete(
 pub fn groups_get_info(
     client: &dyn crate::client_trait::HttpClient,
     arg: &GroupsSelector,
-) -> Result<Result<GroupsGetInfoResult, GroupsGetInfoError>, ::failure::Error> {
+) -> Result<GroupsGetInfoResult, crate::Error<GroupsGetInfoError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -165,7 +165,7 @@ pub fn groups_get_info(
 pub fn groups_job_status_get(
     client: &dyn crate::client_trait::HttpClient,
     arg: &super::dbx_async::PollArg,
-) -> Result<Result<super::dbx_async::PollEmptyResult, GroupsPollError>, ::failure::Error> {
+) -> Result<super::dbx_async::PollEmptyResult, crate::Error<GroupsPollError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -179,7 +179,7 @@ pub fn groups_job_status_get(
 pub fn groups_list(
     client: &dyn crate::client_trait::HttpClient,
     arg: &GroupsListArg,
-) -> Result<Result<GroupsListResult, ()>, ::failure::Error> {
+) -> Result<GroupsListResult, crate::Error<()>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -194,7 +194,7 @@ pub fn groups_list(
 pub fn groups_list_continue(
     client: &dyn crate::client_trait::HttpClient,
     arg: &GroupsListContinueArg,
-) -> Result<Result<GroupsListResult, GroupsListContinueError>, ::failure::Error> {
+) -> Result<GroupsListResult, crate::Error<GroupsListContinueError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -210,7 +210,7 @@ pub fn groups_list_continue(
 pub fn groups_members_add(
     client: &dyn crate::client_trait::HttpClient,
     arg: &GroupMembersAddArg,
-) -> Result<Result<GroupMembersChangeResult, GroupMembersAddError>, ::failure::Error> {
+) -> Result<GroupMembersChangeResult, crate::Error<GroupMembersAddError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -224,7 +224,7 @@ pub fn groups_members_add(
 pub fn groups_members_list(
     client: &dyn crate::client_trait::HttpClient,
     arg: &GroupsMembersListArg,
-) -> Result<Result<GroupsMembersListResult, GroupSelectorError>, ::failure::Error> {
+) -> Result<GroupsMembersListResult, crate::Error<GroupSelectorError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -239,7 +239,7 @@ pub fn groups_members_list(
 pub fn groups_members_list_continue(
     client: &dyn crate::client_trait::HttpClient,
     arg: &GroupsMembersListContinueArg,
-) -> Result<Result<GroupsMembersListResult, GroupsMembersListContinueError>, ::failure::Error> {
+) -> Result<GroupsMembersListResult, crate::Error<GroupsMembersListContinueError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -257,7 +257,7 @@ pub fn groups_members_list_continue(
 pub fn groups_members_remove(
     client: &dyn crate::client_trait::HttpClient,
     arg: &GroupMembersRemoveArg,
-) -> Result<Result<GroupMembersChangeResult, GroupMembersRemoveError>, ::failure::Error> {
+) -> Result<GroupMembersChangeResult, crate::Error<GroupMembersRemoveError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -271,7 +271,7 @@ pub fn groups_members_remove(
 pub fn groups_members_set_access_type(
     client: &dyn crate::client_trait::HttpClient,
     arg: &GroupMembersSetAccessTypeArg,
-) -> Result<Result<GroupsGetInfoResult, GroupMemberSetAccessTypeError>, ::failure::Error> {
+) -> Result<GroupsGetInfoResult, crate::Error<GroupMemberSetAccessTypeError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -285,7 +285,7 @@ pub fn groups_members_set_access_type(
 pub fn groups_update(
     client: &dyn crate::client_trait::HttpClient,
     arg: &GroupUpdateArgs,
-) -> Result<Result<GroupFullInfo, GroupUpdateError>, ::failure::Error> {
+) -> Result<GroupFullInfo, crate::Error<GroupUpdateError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -300,7 +300,7 @@ pub fn groups_update(
 pub fn linked_apps_list_member_linked_apps(
     client: &dyn crate::client_trait::HttpClient,
     arg: &ListMemberAppsArg,
-) -> Result<Result<ListMemberAppsResult, ListMemberAppsError>, ::failure::Error> {
+) -> Result<ListMemberAppsResult, crate::Error<ListMemberAppsError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -315,7 +315,7 @@ pub fn linked_apps_list_member_linked_apps(
 pub fn linked_apps_list_members_linked_apps(
     client: &dyn crate::client_trait::HttpClient,
     arg: &ListMembersAppsArg,
-) -> Result<Result<ListMembersAppsResult, ListMembersAppsError>, ::failure::Error> {
+) -> Result<ListMembersAppsResult, crate::Error<ListMembersAppsError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -330,7 +330,7 @@ pub fn linked_apps_list_members_linked_apps(
 pub fn linked_apps_list_team_linked_apps(
     client: &dyn crate::client_trait::HttpClient,
     arg: &ListTeamAppsArg,
-) -> Result<Result<ListTeamAppsResult, ListTeamAppsError>, ::failure::Error> {
+) -> Result<ListTeamAppsResult, crate::Error<ListTeamAppsError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -344,7 +344,7 @@ pub fn linked_apps_list_team_linked_apps(
 pub fn linked_apps_revoke_linked_app(
     client: &dyn crate::client_trait::HttpClient,
     arg: &RevokeLinkedApiAppArg,
-) -> Result<Result<(), RevokeLinkedAppError>, ::failure::Error> {
+) -> Result<(), crate::Error<RevokeLinkedAppError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -358,7 +358,7 @@ pub fn linked_apps_revoke_linked_app(
 pub fn linked_apps_revoke_linked_app_batch(
     client: &dyn crate::client_trait::HttpClient,
     arg: &RevokeLinkedApiAppBatchArg,
-) -> Result<Result<RevokeLinkedAppBatchResult, RevokeLinkedAppBatchError>, ::failure::Error> {
+) -> Result<RevokeLinkedAppBatchResult, crate::Error<RevokeLinkedAppBatchError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -372,7 +372,7 @@ pub fn linked_apps_revoke_linked_app_batch(
 pub fn member_space_limits_excluded_users_add(
     client: &dyn crate::client_trait::HttpClient,
     arg: &ExcludedUsersUpdateArg,
-) -> Result<Result<ExcludedUsersUpdateResult, ExcludedUsersUpdateError>, ::failure::Error> {
+) -> Result<ExcludedUsersUpdateResult, crate::Error<ExcludedUsersUpdateError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -386,7 +386,7 @@ pub fn member_space_limits_excluded_users_add(
 pub fn member_space_limits_excluded_users_list(
     client: &dyn crate::client_trait::HttpClient,
     arg: &ExcludedUsersListArg,
-) -> Result<Result<ExcludedUsersListResult, ExcludedUsersListError>, ::failure::Error> {
+) -> Result<ExcludedUsersListResult, crate::Error<ExcludedUsersListError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -400,7 +400,7 @@ pub fn member_space_limits_excluded_users_list(
 pub fn member_space_limits_excluded_users_list_continue(
     client: &dyn crate::client_trait::HttpClient,
     arg: &ExcludedUsersListContinueArg,
-) -> Result<Result<ExcludedUsersListResult, ExcludedUsersListContinueError>, ::failure::Error> {
+) -> Result<ExcludedUsersListResult, crate::Error<ExcludedUsersListContinueError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -414,7 +414,7 @@ pub fn member_space_limits_excluded_users_list_continue(
 pub fn member_space_limits_excluded_users_remove(
     client: &dyn crate::client_trait::HttpClient,
     arg: &ExcludedUsersUpdateArg,
-) -> Result<Result<ExcludedUsersUpdateResult, ExcludedUsersUpdateError>, ::failure::Error> {
+) -> Result<ExcludedUsersUpdateResult, crate::Error<ExcludedUsersUpdateError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -429,7 +429,7 @@ pub fn member_space_limits_excluded_users_remove(
 pub fn member_space_limits_get_custom_quota(
     client: &dyn crate::client_trait::HttpClient,
     arg: &CustomQuotaUsersArg,
-) -> Result<Result<Vec<CustomQuotaResult>, CustomQuotaError>, ::failure::Error> {
+) -> Result<Vec<CustomQuotaResult>, crate::Error<CustomQuotaError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -443,7 +443,7 @@ pub fn member_space_limits_get_custom_quota(
 pub fn member_space_limits_remove_custom_quota(
     client: &dyn crate::client_trait::HttpClient,
     arg: &CustomQuotaUsersArg,
-) -> Result<Result<Vec<RemoveCustomQuotaResult>, CustomQuotaError>, ::failure::Error> {
+) -> Result<Vec<RemoveCustomQuotaResult>, crate::Error<CustomQuotaError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -458,7 +458,7 @@ pub fn member_space_limits_remove_custom_quota(
 pub fn member_space_limits_set_custom_quota(
     client: &dyn crate::client_trait::HttpClient,
     arg: &SetCustomQuotaArg,
-) -> Result<Result<Vec<CustomQuotaResult>, SetCustomQuotaError>, ::failure::Error> {
+) -> Result<Vec<CustomQuotaResult>, crate::Error<SetCustomQuotaError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -480,7 +480,7 @@ pub fn member_space_limits_set_custom_quota(
 pub fn members_add(
     client: &dyn crate::client_trait::HttpClient,
     arg: &MembersAddArg,
-) -> Result<Result<MembersAddLaunch, ()>, ::failure::Error> {
+) -> Result<MembersAddLaunch, crate::Error<()>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -495,7 +495,7 @@ pub fn members_add(
 pub fn members_add_job_status_get(
     client: &dyn crate::client_trait::HttpClient,
     arg: &super::dbx_async::PollArg,
-) -> Result<Result<MembersAddJobStatus, super::dbx_async::PollError>, ::failure::Error> {
+) -> Result<MembersAddJobStatus, crate::Error<super::dbx_async::PollError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -511,7 +511,7 @@ pub fn members_add_job_status_get(
 pub fn members_get_info(
     client: &dyn crate::client_trait::HttpClient,
     arg: &MembersGetInfoArgs,
-) -> Result<Result<MembersGetInfoResult, MembersGetInfoError>, ::failure::Error> {
+) -> Result<MembersGetInfoResult, crate::Error<MembersGetInfoError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -525,7 +525,7 @@ pub fn members_get_info(
 pub fn members_list(
     client: &dyn crate::client_trait::HttpClient,
     arg: &MembersListArg,
-) -> Result<Result<MembersListResult, MembersListError>, ::failure::Error> {
+) -> Result<MembersListResult, crate::Error<MembersListError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -540,7 +540,7 @@ pub fn members_list(
 pub fn members_list_continue(
     client: &dyn crate::client_trait::HttpClient,
     arg: &MembersListContinueArg,
-) -> Result<Result<MembersListResult, MembersListContinueError>, ::failure::Error> {
+) -> Result<MembersListResult, crate::Error<MembersListContinueError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -557,7 +557,7 @@ pub fn members_list_continue(
 pub fn members_move_former_member_files(
     client: &dyn crate::client_trait::HttpClient,
     arg: &MembersDataTransferArg,
-) -> Result<Result<super::dbx_async::LaunchEmptyResult, MembersTransferFormerMembersFilesError>, ::failure::Error> {
+) -> Result<super::dbx_async::LaunchEmptyResult, crate::Error<MembersTransferFormerMembersFilesError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -573,7 +573,7 @@ pub fn members_move_former_member_files(
 pub fn members_move_former_member_files_job_status_check(
     client: &dyn crate::client_trait::HttpClient,
     arg: &super::dbx_async::PollArg,
-) -> Result<Result<super::dbx_async::PollEmptyResult, super::dbx_async::PollError>, ::failure::Error> {
+) -> Result<super::dbx_async::PollEmptyResult, crate::Error<super::dbx_async::PollError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -588,7 +588,7 @@ pub fn members_move_former_member_files_job_status_check(
 pub fn members_recover(
     client: &dyn crate::client_trait::HttpClient,
     arg: &MembersRecoverArg,
-) -> Result<Result<(), MembersRecoverError>, ::failure::Error> {
+) -> Result<(), crate::Error<MembersRecoverError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -611,7 +611,7 @@ pub fn members_recover(
 pub fn members_remove(
     client: &dyn crate::client_trait::HttpClient,
     arg: &MembersRemoveArg,
-) -> Result<Result<super::dbx_async::LaunchEmptyResult, MembersRemoveError>, ::failure::Error> {
+) -> Result<super::dbx_async::LaunchEmptyResult, crate::Error<MembersRemoveError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -626,7 +626,7 @@ pub fn members_remove(
 pub fn members_remove_job_status_get(
     client: &dyn crate::client_trait::HttpClient,
     arg: &super::dbx_async::PollArg,
-) -> Result<Result<super::dbx_async::PollEmptyResult, super::dbx_async::PollError>, ::failure::Error> {
+) -> Result<super::dbx_async::PollEmptyResult, crate::Error<super::dbx_async::PollError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -642,7 +642,7 @@ pub fn members_remove_job_status_get(
 pub fn members_send_welcome_email(
     client: &dyn crate::client_trait::HttpClient,
     arg: &UserSelectorArg,
-) -> Result<Result<(), MembersSendWelcomeError>, ::failure::Error> {
+) -> Result<(), crate::Error<MembersSendWelcomeError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -656,7 +656,7 @@ pub fn members_send_welcome_email(
 pub fn members_set_admin_permissions(
     client: &dyn crate::client_trait::HttpClient,
     arg: &MembersSetPermissionsArg,
-) -> Result<Result<MembersSetPermissionsResult, MembersSetPermissionsError>, ::failure::Error> {
+) -> Result<MembersSetPermissionsResult, crate::Error<MembersSetPermissionsError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -670,7 +670,7 @@ pub fn members_set_admin_permissions(
 pub fn members_set_profile(
     client: &dyn crate::client_trait::HttpClient,
     arg: &MembersSetProfileArg,
-) -> Result<Result<TeamMemberInfo, MembersSetProfileError>, ::failure::Error> {
+) -> Result<TeamMemberInfo, crate::Error<MembersSetProfileError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -685,7 +685,7 @@ pub fn members_set_profile(
 pub fn members_suspend(
     client: &dyn crate::client_trait::HttpClient,
     arg: &MembersDeactivateArg,
-) -> Result<Result<(), MembersSuspendError>, ::failure::Error> {
+) -> Result<(), crate::Error<MembersSuspendError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -700,7 +700,7 @@ pub fn members_suspend(
 pub fn members_unsuspend(
     client: &dyn crate::client_trait::HttpClient,
     arg: &MembersUnsuspendArg,
-) -> Result<Result<(), MembersUnsuspendError>, ::failure::Error> {
+) -> Result<(), crate::Error<MembersUnsuspendError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -717,7 +717,7 @@ pub fn members_unsuspend(
 pub fn namespaces_list(
     client: &dyn crate::client_trait::HttpClient,
     arg: &TeamNamespacesListArg,
-) -> Result<Result<TeamNamespacesListResult, TeamNamespacesListError>, ::failure::Error> {
+) -> Result<TeamNamespacesListResult, crate::Error<TeamNamespacesListError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -732,7 +732,7 @@ pub fn namespaces_list(
 pub fn namespaces_list_continue(
     client: &dyn crate::client_trait::HttpClient,
     arg: &TeamNamespacesListContinueArg,
-) -> Result<Result<TeamNamespacesListResult, TeamNamespacesListContinueError>, ::failure::Error> {
+) -> Result<TeamNamespacesListResult, crate::Error<TeamNamespacesListContinueError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -746,7 +746,7 @@ pub fn namespaces_list_continue(
 pub fn properties_template_add(
     client: &dyn crate::client_trait::HttpClient,
     arg: &super::file_properties::AddTemplateArg,
-) -> Result<Result<super::file_properties::AddTemplateResult, super::file_properties::ModifyTemplateError>, ::failure::Error> {
+) -> Result<super::file_properties::AddTemplateResult, crate::Error<super::file_properties::ModifyTemplateError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -760,7 +760,7 @@ pub fn properties_template_add(
 pub fn properties_template_get(
     client: &dyn crate::client_trait::HttpClient,
     arg: &super::file_properties::GetTemplateArg,
-) -> Result<Result<super::file_properties::GetTemplateResult, super::file_properties::TemplateError>, ::failure::Error> {
+) -> Result<super::file_properties::GetTemplateResult, crate::Error<super::file_properties::TemplateError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -773,7 +773,7 @@ pub fn properties_template_get(
 /// Permission : Team member file access.
 pub fn properties_template_list(
     client: &dyn crate::client_trait::HttpClient,
-) -> Result<Result<super::file_properties::ListTemplateResult, super::file_properties::TemplateError>, ::failure::Error> {
+) -> Result<super::file_properties::ListTemplateResult, crate::Error<super::file_properties::TemplateError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -787,7 +787,7 @@ pub fn properties_template_list(
 pub fn properties_template_update(
     client: &dyn crate::client_trait::HttpClient,
     arg: &super::file_properties::UpdateTemplateArg,
-) -> Result<Result<super::file_properties::UpdateTemplateResult, super::file_properties::ModifyTemplateError>, ::failure::Error> {
+) -> Result<super::file_properties::UpdateTemplateResult, crate::Error<super::file_properties::ModifyTemplateError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -801,7 +801,7 @@ pub fn properties_template_update(
 pub fn reports_get_activity(
     client: &dyn crate::client_trait::HttpClient,
     arg: &DateRange,
-) -> Result<Result<GetActivityReport, DateRangeError>, ::failure::Error> {
+) -> Result<GetActivityReport, crate::Error<DateRangeError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -815,7 +815,7 @@ pub fn reports_get_activity(
 pub fn reports_get_devices(
     client: &dyn crate::client_trait::HttpClient,
     arg: &DateRange,
-) -> Result<Result<GetDevicesReport, DateRangeError>, ::failure::Error> {
+) -> Result<GetDevicesReport, crate::Error<DateRangeError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -829,7 +829,7 @@ pub fn reports_get_devices(
 pub fn reports_get_membership(
     client: &dyn crate::client_trait::HttpClient,
     arg: &DateRange,
-) -> Result<Result<GetMembershipReport, DateRangeError>, ::failure::Error> {
+) -> Result<GetMembershipReport, crate::Error<DateRangeError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -843,7 +843,7 @@ pub fn reports_get_membership(
 pub fn reports_get_storage(
     client: &dyn crate::client_trait::HttpClient,
     arg: &DateRange,
-) -> Result<Result<GetStorageReport, DateRangeError>, ::failure::Error> {
+) -> Result<GetStorageReport, crate::Error<DateRangeError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -857,7 +857,7 @@ pub fn reports_get_storage(
 pub fn team_folder_activate(
     client: &dyn crate::client_trait::HttpClient,
     arg: &TeamFolderIdArg,
-) -> Result<Result<TeamFolderMetadata, TeamFolderActivateError>, ::failure::Error> {
+) -> Result<TeamFolderMetadata, crate::Error<TeamFolderActivateError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -872,7 +872,7 @@ pub fn team_folder_activate(
 pub fn team_folder_archive(
     client: &dyn crate::client_trait::HttpClient,
     arg: &TeamFolderArchiveArg,
-) -> Result<Result<TeamFolderArchiveLaunch, TeamFolderArchiveError>, ::failure::Error> {
+) -> Result<TeamFolderArchiveLaunch, crate::Error<TeamFolderArchiveError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -887,7 +887,7 @@ pub fn team_folder_archive(
 pub fn team_folder_archive_check(
     client: &dyn crate::client_trait::HttpClient,
     arg: &super::dbx_async::PollArg,
-) -> Result<Result<TeamFolderArchiveJobStatus, super::dbx_async::PollError>, ::failure::Error> {
+) -> Result<TeamFolderArchiveJobStatus, crate::Error<super::dbx_async::PollError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -901,7 +901,7 @@ pub fn team_folder_archive_check(
 pub fn team_folder_create(
     client: &dyn crate::client_trait::HttpClient,
     arg: &TeamFolderCreateArg,
-) -> Result<Result<TeamFolderMetadata, TeamFolderCreateError>, ::failure::Error> {
+) -> Result<TeamFolderMetadata, crate::Error<TeamFolderCreateError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -915,7 +915,7 @@ pub fn team_folder_create(
 pub fn team_folder_get_info(
     client: &dyn crate::client_trait::HttpClient,
     arg: &TeamFolderIdListArg,
-) -> Result<Result<Vec<TeamFolderGetInfoItem>, ()>, ::failure::Error> {
+) -> Result<Vec<TeamFolderGetInfoItem>, crate::Error<()>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -929,7 +929,7 @@ pub fn team_folder_get_info(
 pub fn team_folder_list(
     client: &dyn crate::client_trait::HttpClient,
     arg: &TeamFolderListArg,
-) -> Result<Result<TeamFolderListResult, TeamFolderListError>, ::failure::Error> {
+) -> Result<TeamFolderListResult, crate::Error<TeamFolderListError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -944,7 +944,7 @@ pub fn team_folder_list(
 pub fn team_folder_list_continue(
     client: &dyn crate::client_trait::HttpClient,
     arg: &TeamFolderListContinueArg,
-) -> Result<Result<TeamFolderListResult, TeamFolderListContinueError>, ::failure::Error> {
+) -> Result<TeamFolderListResult, crate::Error<TeamFolderListContinueError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -958,7 +958,7 @@ pub fn team_folder_list_continue(
 pub fn team_folder_permanently_delete(
     client: &dyn crate::client_trait::HttpClient,
     arg: &TeamFolderIdArg,
-) -> Result<Result<(), TeamFolderPermanentlyDeleteError>, ::failure::Error> {
+) -> Result<(), crate::Error<TeamFolderPermanentlyDeleteError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -972,7 +972,7 @@ pub fn team_folder_permanently_delete(
 pub fn team_folder_rename(
     client: &dyn crate::client_trait::HttpClient,
     arg: &TeamFolderRenameArg,
-) -> Result<Result<TeamFolderMetadata, TeamFolderRenameError>, ::failure::Error> {
+) -> Result<TeamFolderMetadata, crate::Error<TeamFolderRenameError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -987,7 +987,7 @@ pub fn team_folder_rename(
 pub fn team_folder_update_sync_settings(
     client: &dyn crate::client_trait::HttpClient,
     arg: &TeamFolderUpdateSyncSettingsArg,
-) -> Result<Result<TeamFolderMetadata, TeamFolderUpdateSyncSettingsError>, ::failure::Error> {
+) -> Result<TeamFolderMetadata, crate::Error<TeamFolderUpdateSyncSettingsError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -1001,7 +1001,7 @@ pub fn team_folder_update_sync_settings(
 /// call.
 pub fn token_get_authenticated_admin(
     client: &dyn crate::client_trait::HttpClient,
-) -> Result<Result<TokenGetAuthenticatedAdminResult, TokenGetAuthenticatedAdminError>, ::failure::Error> {
+) -> Result<TokenGetAuthenticatedAdminResult, crate::Error<TokenGetAuthenticatedAdminError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,

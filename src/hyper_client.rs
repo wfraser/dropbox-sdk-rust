@@ -67,11 +67,11 @@ impl HyperClient {
                     let mut body = String::new();
                     resp.read_to_string(&mut body)?;
                     debug!("error body: {}", body);
-                    Err(super::Error::GeneralHttpError {
+                    Err(crate::RequestError::GeneralHttpError {
                         code,
                         status,
-                        json: body,
-                    })?
+                        body,
+                    }.into())
                 } else {
                     let body = serde_json::from_reader(resp)?;
                     debug!("response: {:?}", body);
@@ -182,9 +182,9 @@ impl HttpClient for HyperClient {
                     use std::ops::Deref;
                     (*code, status.deref().to_owned())
                 };
-                let mut json = String::new();
-                resp.read_to_string(&mut json)?;
-                Err(super::Error::GeneralHttpError { code, status, json })?;
+                let mut body = String::new();
+                resp.read_to_string(&mut body)?;
+                return Err(crate::RequestError::GeneralHttpError { code, status, body }.into());
             }
 
             return match style {
@@ -205,7 +205,7 @@ impl HttpClient for HyperClient {
                             String::from_utf8(values[0].clone())?
                         },
                         None => {
-                            return Err(super::Error::UnexpectedError {
+                            return Err(crate::RequestError::UnexpectedError {
                                 reason: "missing Dropbox-API-Result header"
                             }.into());
                         }

@@ -24,7 +24,7 @@ pub type TeamEventList = Vec<TeamEvent>;
 pub fn get_events(
     client: &dyn crate::client_trait::HttpClient,
     arg: &GetTeamEventsArg,
-) -> Result<Result<GetTeamEventsResult, GetTeamEventsError>, ::failure::Error> {
+) -> Result<GetTeamEventsResult, crate::Error<GetTeamEventsError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -39,7 +39,7 @@ pub fn get_events(
 pub fn get_events_continue(
     client: &dyn crate::client_trait::HttpClient,
     arg: &GetTeamEventsContinueArg,
-) -> Result<Result<GetTeamEventsResult, GetTeamEventsContinueError>, ::failure::Error> {
+) -> Result<GetTeamEventsResult, crate::Error<GetTeamEventsContinueError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,

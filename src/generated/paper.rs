@@ -16,7 +16,7 @@ pub type PaperDocId = String;
 pub fn docs_archive(
     client: &dyn crate::client_trait::HttpClient,
     arg: &RefPaperDoc,
-) -> Result<Result<(), DocLookupError>, ::failure::Error> {
+) -> Result<(), crate::Error<DocLookupError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -31,7 +31,7 @@ pub fn docs_create(
     client: &dyn crate::client_trait::HttpClient,
     arg: &PaperDocCreateArgs,
     body: &[u8],
-) -> Result<Result<PaperDocCreateUpdateResult, PaperDocCreateError>, ::failure::Error> {
+) -> Result<PaperDocCreateUpdateResult, crate::Error<PaperDocCreateError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -47,7 +47,7 @@ pub fn docs_download(
     arg: &PaperDocExport,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> Result<Result<crate::client_trait::HttpRequestResult<PaperDocExportResult>, DocLookupError>, ::failure::Error> {
+) -> Result<crate::client_trait::HttpRequestResult<PaperDocExportResult>, crate::Error<DocLookupError>> {
     crate::client_helpers::request_with_body(
         client,
         crate::client_trait::Endpoint::Api,
@@ -65,7 +65,7 @@ pub fn docs_download(
 pub fn docs_folder_users_list(
     client: &dyn crate::client_trait::HttpClient,
     arg: &ListUsersOnFolderArgs,
-) -> Result<Result<ListUsersOnFolderResponse, DocLookupError>, ::failure::Error> {
+) -> Result<ListUsersOnFolderResponse, crate::Error<DocLookupError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -80,7 +80,7 @@ pub fn docs_folder_users_list(
 pub fn docs_folder_users_list_continue(
     client: &dyn crate::client_trait::HttpClient,
     arg: &ListUsersOnFolderContinueArgs,
-) -> Result<Result<ListUsersOnFolderResponse, ListUsersCursorError>, ::failure::Error> {
+) -> Result<ListUsersOnFolderResponse, crate::Error<ListUsersCursorError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -99,7 +99,7 @@ pub fn docs_folder_users_list_continue(
 pub fn docs_get_folder_info(
     client: &dyn crate::client_trait::HttpClient,
     arg: &RefPaperDoc,
-) -> Result<Result<FoldersContainingPaperDoc, DocLookupError>, ::failure::Error> {
+) -> Result<FoldersContainingPaperDoc, crate::Error<DocLookupError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -114,7 +114,7 @@ pub fn docs_get_folder_info(
 pub fn docs_list(
     client: &dyn crate::client_trait::HttpClient,
     arg: &ListPaperDocsArgs,
-) -> Result<Result<ListPaperDocsResponse, ()>, ::failure::Error> {
+) -> Result<ListPaperDocsResponse, crate::Error<()>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -129,7 +129,7 @@ pub fn docs_list(
 pub fn docs_list_continue(
     client: &dyn crate::client_trait::HttpClient,
     arg: &ListPaperDocsContinueArgs,
-) -> Result<Result<ListPaperDocsResponse, ListDocsCursorError>, ::failure::Error> {
+) -> Result<ListPaperDocsResponse, crate::Error<ListDocsCursorError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -145,7 +145,7 @@ pub fn docs_list_continue(
 pub fn docs_permanently_delete(
     client: &dyn crate::client_trait::HttpClient,
     arg: &RefPaperDoc,
-) -> Result<Result<(), DocLookupError>, ::failure::Error> {
+) -> Result<(), crate::Error<DocLookupError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -159,7 +159,7 @@ pub fn docs_permanently_delete(
 pub fn docs_sharing_policy_get(
     client: &dyn crate::client_trait::HttpClient,
     arg: &RefPaperDoc,
-) -> Result<Result<SharingPolicy, DocLookupError>, ::failure::Error> {
+) -> Result<SharingPolicy, crate::Error<DocLookupError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -177,7 +177,7 @@ pub fn docs_sharing_policy_get(
 pub fn docs_sharing_policy_set(
     client: &dyn crate::client_trait::HttpClient,
     arg: &PaperDocSharingPolicy,
-) -> Result<Result<(), DocLookupError>, ::failure::Error> {
+) -> Result<(), crate::Error<DocLookupError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -192,7 +192,7 @@ pub fn docs_update(
     client: &dyn crate::client_trait::HttpClient,
     arg: &PaperDocUpdateArgs,
     body: &[u8],
-) -> Result<Result<PaperDocCreateUpdateResult, PaperDocUpdateError>, ::failure::Error> {
+) -> Result<PaperDocCreateUpdateResult, crate::Error<PaperDocUpdateError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -209,7 +209,7 @@ pub fn docs_update(
 pub fn docs_users_add(
     client: &dyn crate::client_trait::HttpClient,
     arg: &AddPaperDocUser,
-) -> Result<Result<Vec<AddPaperDocUserMemberResult>, DocLookupError>, ::failure::Error> {
+) -> Result<Vec<AddPaperDocUserMemberResult>, crate::Error<DocLookupError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -226,7 +226,7 @@ pub fn docs_users_add(
 pub fn docs_users_list(
     client: &dyn crate::client_trait::HttpClient,
     arg: &ListUsersOnPaperDocArgs,
-) -> Result<Result<ListUsersOnPaperDocResponse, DocLookupError>, ::failure::Error> {
+) -> Result<ListUsersOnPaperDocResponse, crate::Error<DocLookupError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -241,7 +241,7 @@ pub fn docs_users_list(
 pub fn docs_users_list_continue(
     client: &dyn crate::client_trait::HttpClient,
     arg: &ListUsersOnPaperDocContinueArgs,
-) -> Result<Result<ListUsersOnPaperDocResponse, ListUsersCursorError>, ::failure::Error> {
+) -> Result<ListUsersOnPaperDocResponse, crate::Error<ListUsersCursorError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -258,7 +258,7 @@ pub fn docs_users_list_continue(
 pub fn docs_users_remove(
     client: &dyn crate::client_trait::HttpClient,
     arg: &RemovePaperDocUser,
-) -> Result<Result<(), DocLookupError>, ::failure::Error> {
+) -> Result<(), crate::Error<DocLookupError>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,

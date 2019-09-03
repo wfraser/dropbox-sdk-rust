@@ -11,7 +11,7 @@
 pub fn token_from_oauth1(
     client: &dyn crate::client_trait::HttpClient,
     arg: &TokenFromOAuth1Arg,
-) -> Result<Result<TokenFromOAuth1Result, TokenFromOAuth1Error>, ::failure::Error> {
+) -> Result<TokenFromOAuth1Result, crate::Error<TokenFromOAuth1Error>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -22,9 +22,7 @@ pub fn token_from_oauth1(
 }
 
 /// Disables the access token used to authenticate the call.
-pub fn token_revoke(
-    client: &dyn crate::client_trait::HttpClient,
-) -> Result<Result<(), ()>, ::failure::Error> {
+pub fn token_revoke(client: &dyn crate::client_trait::HttpClient) -> Result<(), crate::Error<()>> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,

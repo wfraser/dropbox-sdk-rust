@@ -180,7 +180,7 @@ class RustBackend(RustHelperBackend):
                     [u'client: &dyn crate::client_trait::HttpClient']
                         + ([] if arg_void else
                             [u'arg: &{}'.format(self._rust_type(fn.arg_data_type))]),
-                    u'Result<Result<{}, {}>, ::failure::Error>'.format(
+                    u'Result<{}, crate::Error<{}>>'.format(
                         self._rust_type(fn.result_data_type),
                         self._rust_type(fn.error_data_type)),
                     access=u'pub'):
@@ -200,7 +200,7 @@ class RustBackend(RustHelperBackend):
                             [u'arg: &{}'.format(self._rust_type(fn.arg_data_type))])
                         + [u'range_start: Option<u64>']
                         + [u'range_end: Option<u64>'],
-                    u'Result<Result<crate::client_trait::HttpRequestResult<{}>, {}>, ::failure::Error>'.format(
+                    u'Result<crate::client_trait::HttpRequestResult<{}>, crate::Error<{}>>'.format(
                         self._rust_type(fn.result_data_type),
                         self._rust_type(fn.error_data_type)),
                     access=u'pub'):
@@ -221,7 +221,7 @@ class RustBackend(RustHelperBackend):
                         + ([] if arg_void else
                             [u'arg: &{}'.format(self._rust_type(fn.arg_data_type))])
                         + [u'body: &[u8]'],
-                    u'Result<Result<{}, {}>, ::failure::Error>'.format(
+                    u'Result<{}, crate::Error<{}>>'.format(
                         self._rust_type(fn.result_data_type),
                         self._rust_type(fn.error_data_type)),
                     access=u'pub'):
