@@ -111,12 +111,10 @@ pub fn request_with_body<T: DeserializeOwned, E: DeserializeOwned + Debug + Sync
                 error!("HTTP {} {}: {}", code, status, response);
                 match code {
                     400 => {
-                        Err(crate::RequestError::BadRequest { message: response }
-                            .context(e))?
+                        Err(crate::RequestError::BadRequest { message: response }.into())
                     },
                     401 => {
-                        Err(crate::RequestError::InvalidToken { message: response }
-                            .context(e))?
+                        Err(crate::RequestError::InvalidToken { message: response }.into())
                     },
                     409 => {
                         // Response should be JSON-deseraializable into the strongly-typed
@@ -127,29 +125,30 @@ pub fn request_with_body<T: DeserializeOwned, E: DeserializeOwned + Debug + Sync
                                 Err(crate::Error::API(deserialized.error))
                             },
                             Err(de_error) => {
-                                error!("Failed to deserialize JSON from API error: {}", de_error);
-                                Err(e.context("failed to deserialize response from API error"))?
+                                error!("Failed to deserialize response from API error: {}", de_error);
+                                let combined_err = e
+                                    .context(de_error)
+                                    .context("Failed to deserialize response from API error");
+                                Err(combined_err.into())
                             }
                         }
                     },
                     429 => {
-                        Err(crate::RequestError::RateLimited { reason: response }
-                            .context(e))?
+                        Err(crate::RequestError::RateLimited { reason: response }.into())
                     },
                     500..=599 => {
-                        Err(crate::RequestError::ServerError { message: response }
-                            .context(e))?
+                        Err(crate::RequestError::ServerError { message: response }.into())
                     },
                     _ => {
-                        Err(e)?
+                        Err(e.into())
                     }
                 }
             } else if let Some(ref json_err) = e.downcast_ref::<serde_json::Error>() {
                 error!("JSON deserialization error: {}", json_err);
-                Err(e)?
+                Err(e.into())
             } else {
                 error!("HTTP request error: {}", e);
-                Err(e)?
+                Err(e.into())
             }
         }
     }

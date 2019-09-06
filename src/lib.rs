@@ -13,10 +13,6 @@ pub enum Error<T: std::fmt::Debug + Send + Sync + 'static> {
     #[fail(display = "Dropbox API error: {:?}", _0)]
     API(T),
 
-    /// There was a problem with the API request in general.
-    #[fail(display = "Dropbox API request error: {}", _0)]
-    RequestError(#[cause] RequestError),
-
     /// Something else went wrong while making a request to the API.
     #[fail(display = "Dropbox API request error: {}", _0)]
     Other(#[cause] failure::Error),
@@ -26,7 +22,7 @@ pub enum Error<T: std::fmt::Debug + Send + Sync + 'static> {
 pub use Error::API as APIErr;
 
 /// The API request failed due to a general error (not route specific).
-#[derive(Debug, Fail)]
+#[derive(Debug, Fail, Clone)]
 pub enum RequestError {
     /// The response was malformed in some way.
     #[fail(display = "Dropbox unexpected API error: {}", reason)]
@@ -57,6 +53,10 @@ pub enum RequestError {
     },
 }
 
+// Conversions from various error types into Error::Other.
+// Unfortunately can't have a blanket conversion from `impl Fail` because Error also implements
+// that trait.
+
 impl<T> From<failure::Error> for Error<T>
     where T: std::fmt::Debug + Send + Sync + 'static,
 {
@@ -78,7 +78,7 @@ impl<T> From<RequestError> for Error<T>
     where T: std::fmt::Debug + Send + Sync + 'static,
 {
     fn from(e: RequestError) -> Self {
-        Self::RequestError(e)
+        Self::Other(e.into())
     }
 }
 
