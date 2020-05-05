@@ -16,7 +16,7 @@ pub type FileRequestValidationError = Option<String>;
 /// requests.
 pub fn count(
     client: &dyn crate::client_trait::HttpClient,
-) -> crate::Result<Result<CountFileRequestsResult, CountFileRequestsError>> {
+) -> crate::Result<CountFileRequestsResult, CountFileRequestsError> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -30,7 +30,7 @@ pub fn count(
 pub fn create(
     client: &dyn crate::client_trait::HttpClient,
     arg: &CreateFileRequestArgs,
-) -> crate::Result<Result<FileRequest, CreateFileRequestError>> {
+) -> crate::Result<FileRequest, CreateFileRequestError> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -44,7 +44,7 @@ pub fn create(
 pub fn delete(
     client: &dyn crate::client_trait::HttpClient,
     arg: &DeleteFileRequestArgs,
-) -> crate::Result<Result<DeleteFileRequestsResult, DeleteFileRequestError>> {
+) -> crate::Result<DeleteFileRequestsResult, DeleteFileRequestError> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -57,7 +57,7 @@ pub fn delete(
 /// Delete all closed file requests owned by this user.
 pub fn delete_all_closed(
     client: &dyn crate::client_trait::HttpClient,
-) -> crate::Result<Result<DeleteAllClosedFileRequestsResult, DeleteAllClosedFileRequestsError>> {
+) -> crate::Result<DeleteAllClosedFileRequestsResult, DeleteAllClosedFileRequestsError> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -71,7 +71,7 @@ pub fn delete_all_closed(
 pub fn get(
     client: &dyn crate::client_trait::HttpClient,
     arg: &GetFileRequestArgs,
-) -> crate::Result<Result<FileRequest, GetFileRequestError>> {
+) -> crate::Result<FileRequest, GetFileRequestError> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -86,7 +86,7 @@ pub fn get(
 pub fn list_v2(
     client: &dyn crate::client_trait::HttpClient,
     arg: &ListFileRequestsArg,
-) -> crate::Result<Result<ListFileRequestsV2Result, ListFileRequestsError>> {
+) -> crate::Result<ListFileRequestsV2Result, ListFileRequestsError> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -100,7 +100,7 @@ pub fn list_v2(
 /// this will only return file requests with destinations in the app folder.
 pub fn list(
     client: &dyn crate::client_trait::HttpClient,
-) -> crate::Result<Result<ListFileRequestsResult, ListFileRequestsError>> {
+) -> crate::Result<ListFileRequestsResult, ListFileRequestsError> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -116,7 +116,7 @@ pub fn list(
 pub fn list_continue(
     client: &dyn crate::client_trait::HttpClient,
     arg: &ListFileRequestsContinueArg,
-) -> crate::Result<Result<ListFileRequestsV2Result, ListFileRequestsContinueError>> {
+) -> crate::Result<ListFileRequestsV2Result, ListFileRequestsContinueError> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -130,7 +130,7 @@ pub fn list_continue(
 pub fn update(
     client: &dyn crate::client_trait::HttpClient,
     arg: &UpdateFileRequestArgs,
-) -> crate::Result<Result<FileRequest, UpdateFileRequestError>> {
+) -> crate::Result<FileRequest, UpdateFileRequestError> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,

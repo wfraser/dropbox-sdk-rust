@@ -96,7 +96,7 @@ fn main() {
         'download: loop {
             let result = files::download(&client, &download_arg, Some(bytes_out), None);
             match result {
-                Ok(Ok(download_result)) => {
+                Ok(download_result) => {
                     let mut body = download_result.body.expect("no body received!");
                     loop {
                         // limit read to 1 MiB per loop iteration so we can output progress
@@ -122,7 +122,7 @@ fn main() {
                         }
                     }
                 },
-                Ok(Err(download_error)) => {
+                Err(dropbox_sdk::Error::API(download_error)) => {
                     eprintln!("Download error: {}", download_error);
                 },
                 Err(request_error) => {
@@ -134,19 +134,19 @@ fn main() {
     } else {
         eprintln!("listing all files");
         match list_directory(&client, "/", true) {
-            Ok(Ok(iterator)) => {
+            Ok(iterator) => {
                 for entry_result in iterator {
                     match entry_result {
-                        Ok(Ok(files::Metadata::Folder(entry))) => {
+                        Ok(files::Metadata::Folder(entry)) => {
                             println!("Folder: {}", entry.path_display.unwrap_or(entry.name));
                         },
-                        Ok(Ok(files::Metadata::File(entry))) => {
+                        Ok(files::Metadata::File(entry)) => {
                             println!("File: {}", entry.path_display.unwrap_or(entry.name));
                         },
-                        Ok(Ok(files::Metadata::Deleted(entry))) => {
+                        Ok(files::Metadata::Deleted(entry)) => {
                             panic!("unexpected deleted entry: {:?}", entry);
                         },
-                        Ok(Err(e)) => {
+                        Err(dropbox_sdk::Error::API(e)) => {
                             eprintln!("Error from files/list_folder_continue: {}", e);
                             break;
                         },
@@ -157,7 +157,7 @@ fn main() {
                     }
                 }
             },
-            Ok(Err(e)) => {
+            Err(dropbox_sdk::Error::API(e)) => {
                 eprintln!("Error from files/list_folder: {}", e);
             },
             Err(e) => {
@@ -168,7 +168,7 @@ fn main() {
 }
 
 fn list_directory<'a>(client: &'a dyn HttpClient, path: &str, recursive: bool)
-    -> dropbox_sdk::Result<Result<DirectoryIterator<'a>, files::ListFolderError>>
+    -> dropbox_sdk::Result<DirectoryIterator<'a>, files::ListFolderError>
 {
     assert!(path.starts_with('/'), "path needs to be absolute (start with a '/')");
     let requested_path = if path == "/" {
@@ -182,20 +182,19 @@ fn list_directory<'a>(client: &'a dyn HttpClient, path: &str, recursive: bool)
         &files::ListFolderArg::new(requested_path)
             .with_recursive(recursive))
     {
-        Ok(Ok(result)) => {
+        Ok(result) => {
             let cursor = if result.has_more {
                 Some(result.cursor)
             } else {
                 None
             };
 
-            Ok(Ok(DirectoryIterator {
+            Ok(DirectoryIterator {
                 client,
                 cursor,
                 buffer: result.entries.into(),
-            }))
+            })
         },
-        Ok(Err(e)) => Ok(Err(e)),
         Err(e) => Err(e),
     }
 }
@@ -207,21 +206,20 @@ struct DirectoryIterator<'a> {
 }
 
 impl<'a> Iterator for DirectoryIterator<'a> {
-    type Item = dropbox_sdk::Result<Result<files::Metadata, files::ListFolderContinueError>>;
+    type Item = dropbox_sdk::Result<files::Metadata, files::ListFolderContinueError>;
 
     fn next(&mut self) -> Option<Self::Item> {
         if let Some(entry) = self.buffer.pop_front() {
-            Some(Ok(Ok(entry)))
+            Some(Ok(entry))
         } else if let Some(cursor) = self.cursor.take() {
             match files::list_folder_continue(self.client, &files::ListFolderContinueArg::new(cursor)) {
-                Ok(Ok(result)) => {
+                Ok(result) => {
                     self.buffer.extend(result.entries.into_iter());
                     if result.has_more {
                         self.cursor = Some(result.cursor);
                     }
-                    self.buffer.pop_front().map(|entry| Ok(Ok(entry)))
+                    self.buffer.pop_front().map(Ok)
                 },
-                Ok(Err(e)) => Some(Ok(Err(e))),
                 Err(e) => Some(Err(e)),
             }
         } else {

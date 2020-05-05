@@ -62,21 +62,19 @@ features = ["dbx_files", "dbx_users"]
 
 ## Result Types and Errors
 
-Routes return a nested result type: `Result<Result<T, E>, dropbox_sdk::Error>`.
-The outer `Result` is `Err` if something went wrong in the course of actually
-making the request, such as network I/O errors or failure to serialize or
-deserialize the request data. This `Result`'s `Ok` variant is another `Result`
-where the `Ok` value is the deserialized successful result of the call, and the
-`Err` value is the strongly-typed error returned by the API. This inner error
-indicates some problem with the request, such as file not found, lacking
-permissions, etc.
+Routes return a result type `Result<T, dropbox_sdk::Error<E>>`. The error type
+is an enum with a number of variants covering common issues such as
+serialization, network, and I/O errors, but the most important variant is
+`Error::API`, which is type-parameterized to hold the error returned by the API
+route you called. It indicates some problem with the request itself, such as
+file not found, lacking permissions, etc.
 
-The rationale for splitting the errors this way is that the former category
-usually can't be handled in any way other than by retrying the request, whereas
-the latter category indicate problems with the actual request itself and
-probably should not be retried. Since most callers can't handle I/O errors in
-any sensible way, this allows them to use the `?` syntax to pass it up the
-stack, while still handling errors returned by the server.
+Some routes are "infallible", in that they don't define any error type. These
+can still fail due to generic I/O errors, rate limiting, etc., but they don't
+have any specific error response defined. For example, `files::copy_batch()`
+will never return `Error::API`, though it might return one of the other error
+variants. In the future, when never-type (`!`) stabilizes, these may be
+represented with it, but for now they are represented using unit (`()`). 
 
 ## Tests
 

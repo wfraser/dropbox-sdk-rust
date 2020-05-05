@@ -15,7 +15,7 @@
 pub fn app(
     client: &dyn crate::client_trait::HttpClient,
     arg: &EchoArg,
-) -> crate::Result<Result<EchoResult, ()>> {
+) -> crate::Result<EchoResult, ()> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -32,7 +32,7 @@ pub fn app(
 pub fn user(
     client: &dyn crate::client_trait::HttpClient,
     arg: &EchoArg,
-) -> crate::Result<Result<EchoResult, ()>> {
+) -> crate::Result<EchoResult, ()> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,

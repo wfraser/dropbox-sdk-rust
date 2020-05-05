@@ -4,7 +4,7 @@ use std::io::{self, Read};
 use std::str;
 
 use crate::Error;
-use crate::client_trait::{Endpoint, Style, HttpClient, HttpRequestResultRaw};
+use crate::client_trait::{Endpoint, Style, HttpClient, HttpClientError, HttpRequestResultRaw};
 use hyper::{self, Url};
 use hyper::header::Headers;
 use hyper::header::{
@@ -34,7 +34,7 @@ impl HyperClient {
         client_secret: &str,
         authorization_code: &str,
         redirect_uri: Option<&str>,
-    ) -> crate::Result<String> {
+    ) -> crate::Result<String, void::Void> {
 
         let client = Self::http_client();
         let url = Url::parse("https://api.dropboxapi.com/oauth2/token").unwrap();
@@ -57,15 +57,11 @@ impl HyperClient {
         match client.post(url).headers(headers).body(body.as_bytes()).send() {
             Ok(mut resp) => {
                 if !resp.status.is_success() {
-                    let (code, status) = {
-                        let &hyper::http::RawStatus(ref code, ref status) = resp.status_raw();
-                        use std::ops::Deref;
-                        (*code, status.deref().to_owned())
-                    };
+                    let &hyper::http::RawStatus(code, _) = resp.status_raw();
                     let mut body = String::new();
                     resp.read_to_string(&mut body)?;
                     debug!("error body: {}", body);
-                    Err(Error::UnexpectedHttpError { code, status, json: body })
+                    Err(Error::UnexpectedHttpError { code, response_body: body })
                 } else {
                     let body = serde_json::from_reader(resp)?;
                     debug!("response: {:?}", body);
@@ -73,16 +69,16 @@ impl HyperClient {
                         serde_json::Value::Object(mut map) => {
                             match map.remove("access_token") {
                                 Some(serde_json::Value::String(token)) => Ok(token),
-                                _ => return Err(Error::UnexpectedResponse("no access token in response!")),
+                                _ => Err(Error::UnexpectedResponse("no access token in response!")),
                             }
                         },
-                        _ => return Err(Error::UnexpectedResponse("response is not a JSON object")),
+                        _ => Err(Error::UnexpectedResponse("response is not a JSON object")),
                     }
                 }
             },
             Err(e) => {
                 error!("error getting OAuth2 token: {}", e);
-                Err(e.into())
+                Err(Error::HttpClient(Box::new(e)))
             }
         }
     }
@@ -107,7 +103,7 @@ impl HttpClient for HyperClient {
         body: Option<&[u8]>,
         range_start: Option<u64>,
         range_end: Option<u64>,
-    ) -> crate::Result<HttpRequestResultRaw> {
+    ) -> Result<HttpRequestResultRaw, HttpClientError> {
 
         let url = Url::parse(endpoint.url()).unwrap().join(function).expect("invalid request URL");
         debug!("request for {:?}", url);
@@ -166,19 +162,15 @@ impl HttpClient for HyperClient {
                 },
                 Err(other) => {
                     error!("request failed: {}", other);
-                    return Err(other.into());
+                    return Err(HttpClientError::Other(Box::new(other)));
                 }
             };
 
             if !resp.status.is_success() {
-                let (code, status) = {
-                    let &hyper::http::RawStatus(ref code, ref status) = resp.status_raw();
-                    use std::ops::Deref;
-                    (*code, status.deref().to_owned())
-                };
-                let mut json = String::new();
-                resp.read_to_string(&mut json)?;
-                return Err(Error::UnexpectedHttpError { code, status, json });
+                let &hyper::http::RawStatus(code, _) = resp.status_raw();
+                let mut response_body = String::new();
+                resp.read_to_string(&mut response_body)?;
+                return Err(HttpClientError::HttpError { code, response_body });
             }
 
             return match style {
@@ -199,7 +191,7 @@ impl HttpClient for HyperClient {
                             String::from_utf8(values[0].clone())?
                         },
                         None => {
-                            return Err(Error::UnexpectedResponse("missing Dropbox-API-Result header"));
+                            return Err(HttpClientError::Other(Box::new(Error::<void::Void>::UnexpectedResponse("missing Dropbox-API-Result header"))));
                         }
                     };
 

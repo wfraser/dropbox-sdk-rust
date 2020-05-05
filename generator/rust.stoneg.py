@@ -35,7 +35,7 @@ class RustBackend(RustHelperBackend):
             with self.block(u'pub(crate) fn eat_json_fields<\'de, V>(map: &mut V)'
                             u' -> Result<(), V::Error>'
                             u' where V: ::serde::de::MapAccess<\'de>'):
-                with self.block(u'while let Some(_) = map.next_entry::<&str, ::serde_json::Value>()?'):
+                with self.block(u'while map.next_entry::<&str, ::serde_json::Value>()?.is_some()'):
                     self.emit(u'/* ignore */')
                 self.emit(u'Ok(())')
 
@@ -180,7 +180,7 @@ class RustBackend(RustHelperBackend):
                     [u'client: &dyn crate::client_trait::HttpClient']
                         + ([] if arg_void else
                             [u'arg: &{}'.format(self._rust_type(fn.arg_data_type))]),
-                    u'crate::Result<Result<{}, {}>>'.format(
+                    u'crate::Result<{}, {}>'.format(
                         self._rust_type(fn.result_data_type),
                         self._rust_type(fn.error_data_type)),
                     access=u'pub'):
@@ -200,7 +200,7 @@ class RustBackend(RustHelperBackend):
                             [u'arg: &{}'.format(self._rust_type(fn.arg_data_type))])
                         + [u'range_start: Option<u64>',
                             u'range_end: Option<u64>'],
-                    u'crate::Result<Result<crate::client_trait::HttpRequestResult<{}>, {}>>'.format(
+                    u'crate::Result<crate::client_trait::HttpRequestResult<{}>, {}>'.format(
                         self._rust_type(fn.result_data_type),
                         self._rust_type(fn.error_data_type)),
                     access=u'pub'):
@@ -221,7 +221,7 @@ class RustBackend(RustHelperBackend):
                         + ([] if arg_void else
                             [u'arg: &{}'.format(self._rust_type(fn.arg_data_type))])
                         + [u'body: &[u8]'],
-                    u'crate::Result<Result<{}, {}>>'.format(
+                    u'crate::Result<{}, {}>'.format(
                         self._rust_type(fn.result_data_type),
                         self._rust_type(fn.error_data_type)),
                     access=u'pub'):
