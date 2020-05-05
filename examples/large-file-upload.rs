@@ -180,11 +180,11 @@ fn main() {
         &client,
         &files::GetMetadataArg::new(args.dest_path.clone()))
     {
-        Ok(Ok(files::Metadata::File(_meta))) => {
+        Ok(files::Metadata::File(_meta)) => {
             eprintln!("Error: \"{}\" already exists in Dropbox", args.dest_path);
             std::process::exit(2);
         }
-        Ok(Ok(files::Metadata::Folder(_meta))) => {
+        Ok(files::Metadata::Folder(_meta)) => {
             eprintln!("Destination is a folder; appending filename.");
             let mut path = args.dest_path.split_off(0);
             path.push('/');
@@ -199,15 +199,15 @@ fn main() {
 
             // TODO: check for this file as well
         }
-        Ok(Ok(files::Metadata::Deleted(_))) => {
+        Ok(files::Metadata::Deleted(_)) => {
             panic!("unexpected deleted metadata received");
         }
-        Ok(Err(files::GetMetadataError::Path(files::LookupError::NotFound))) => {
+        Err(dropbox_sdk::Error::API(files::GetMetadataError::Path(files::LookupError::NotFound))) => {
             // File not found; totally okay.
             // TODO: make it not log to the console when this happens
             args.dest_path.split_off(0)
         }
-        Ok(Err(files::GetMetadataError::Path(e))) => {
+        Err(dropbox_sdk::Error::API(files::GetMetadataError::Path(e))) => {
             eprintln!("Error looking up destination: {}", e);
             std::process::exit(2);
         }
@@ -226,8 +226,7 @@ fn main() {
             match files::upload_session_start(
                 &client, &files::UploadSessionStartArg::default(), &[])
             {
-                Ok(Ok(result)) => result.session_id,
-                Ok(Err(())) => panic!(),
+                Ok(result) => result.session_id,
                 Err(e) => {
                     eprintln!("Starting upload session failed: {}", e);
                     std::process::exit(2);
@@ -288,20 +287,11 @@ fn main() {
         succeeded = false;
         let mut consecutive_errors = 0;
         while consecutive_errors < 3 {
-            match files::upload_session_append_v2(&client, &append_arg, &buf[0..nread]) {
-                Ok(Ok(())) => {}
-                Ok(Err(e)) => {
-                    eprintln!("Error appending data: {}", e);
-                    consecutive_errors += 1;
-                    std::thread::sleep(Duration::from_secs(1));
-                    continue;
-                }
-                Err(e) => {
-                    eprintln!("Error appending data: {}", e);
-                    consecutive_errors += 1;
-                    std::thread::sleep(Duration::from_secs(1));
-                    continue;
-                }
+            if let Err(e) = files::upload_session_append_v2(&client, &append_arg, &buf[0..nread]) {
+                eprintln!("Error appending data: {}", e);
+                consecutive_errors += 1;
+                std::thread::sleep(Duration::from_secs(1));
+                continue;
             }
 
             succeeded = true;
@@ -344,15 +334,9 @@ fn main() {
         succeeded = false;
         while retry < 3 {
             match files::upload_session_finish(&client, &finish, &[]) {
-                Ok(Ok(filemetadata)) => {
+                Ok(filemetadata) => {
                     println!("Upload succeeded!");
                     println!("{:#?}", filemetadata);
-                }
-                Ok(Err(e)) => {
-                    eprintln!("Error finishing upload: {}", e);
-                    retry += 1;
-                    std::thread::sleep(Duration::from_secs(1));
-                    continue;
                 }
                 Err(e) => {
                     eprintln!("Error finishing upload: {}", e);

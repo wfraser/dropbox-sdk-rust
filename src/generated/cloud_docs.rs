@@ -16,7 +16,7 @@ pub fn get_content(
     arg: &GetContentArg,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> crate::Result<Result<crate::client_trait::HttpRequestResult<()>, CloudDocsAccessError>> {
+) -> crate::Result<crate::client_trait::HttpRequestResult<()>, CloudDocsAccessError> {
     crate::client_helpers::request_with_body(
         client,
         crate::client_trait::Endpoint::Content,
@@ -33,7 +33,7 @@ pub fn get_content(
 pub fn get_metadata(
     client: &dyn crate::client_trait::HttpClient,
     arg: &GetMetadataArg,
-) -> crate::Result<Result<GetMetadataResult, GetMetadataError>> {
+) -> crate::Result<GetMetadataResult, GetMetadataError> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -48,7 +48,7 @@ pub fn get_metadata(
 pub fn lock(
     client: &dyn crate::client_trait::HttpClient,
     arg: &LockArg,
-) -> crate::Result<Result<LockResult, LockingError>> {
+) -> crate::Result<LockResult, LockingError> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -63,7 +63,7 @@ pub fn lock(
 pub fn rename(
     client: &dyn crate::client_trait::HttpClient,
     arg: &RenameArg,
-) -> crate::Result<Result<RenameResult, RenameError>> {
+) -> crate::Result<RenameResult, RenameError> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -78,7 +78,7 @@ pub fn rename(
 pub fn unlock(
     client: &dyn crate::client_trait::HttpClient,
     arg: &UnlockArg,
-) -> crate::Result<Result<UnlockResult, LockingError>> {
+) -> crate::Result<UnlockResult, LockingError> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
@@ -95,7 +95,7 @@ pub fn update_content(
     client: &dyn crate::client_trait::HttpClient,
     arg: &UpdateContentArg,
     body: &[u8],
-) -> crate::Result<Result<UpdateContentResult, UpdateContentError>> {
+) -> crate::Result<UpdateContentResult, UpdateContentError> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Content,
