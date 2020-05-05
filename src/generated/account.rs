@@ -11,7 +11,7 @@
 pub fn set_profile_photo(
     client: &dyn crate::client_trait::HttpClient,
     arg: &SetProfilePhotoArg,
-) -> crate::Result<Result<SetProfilePhotoResult, SetProfilePhotoError>> {
+) -> crate::Result<SetProfilePhotoResult, SetProfilePhotoError> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
