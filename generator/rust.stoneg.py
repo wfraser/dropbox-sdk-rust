@@ -238,12 +238,12 @@ class RustBackend(RustHelperBackend):
                     route_name,
                     [u'client: &impl {}'.format(auth_trait)]
                         + ([] if arg_void else
-                            [u'arg: &{}'.format(self._rust_type(fn.arg_data_type))]),
+                            [u'arg: {}'.format(self._rust_type(fn.arg_data_type))]),
                     u'crate::Result<Result<{}, {}>>'.format(
                         self._rust_type(fn.result_data_type),
                         error_type),
-                    access=u'pub'):
-                self.emit_rust_fn_call(
+                    access=u'pub async'):
+                self.emit_rust_fn_call_await(
                     u'crate::client_helpers::request',
                     [u'client',
                         endpoint,
@@ -256,14 +256,14 @@ class RustBackend(RustHelperBackend):
                     route_name,
                     [u'client: &impl {}'.format(auth_trait)]
                         + ([] if arg_void else
-                            [u'arg: &{}'.format(self._rust_type(fn.arg_data_type))])
+                            [u'arg: {}'.format(self._rust_type(fn.arg_data_type))])
                         + [u'range_start: Option<u64>',
                             u'range_end: Option<u64>'],
                     u'crate::Result<Result<crate::client_trait::HttpRequestResult<{}>, {}>>'.format(
                         self._rust_type(fn.result_data_type),
                         error_type),
-                    access=u'pub'):
-                self.emit_rust_fn_call(
+                    access=u'pub async'):
+                self.emit_rust_fn_call_await(
                     u'crate::client_helpers::request_with_body',
                     [u'client',
                         endpoint,
@@ -278,13 +278,13 @@ class RustBackend(RustHelperBackend):
                     route_name,
                     [u'client: &impl {}'.format(auth_trait)]
                         + ([] if arg_void else
-                            [u'arg: &{}'.format(self._rust_type(fn.arg_data_type))])
-                        + [u'body: &[u8]'],
+                            [u'arg: {}'.format(self._rust_type(fn.arg_data_type))])
+                        + [u'body: crate::client_trait::BodyStream'],
                     u'crate::Result<Result<{}, {}>>'.format(
                         self._rust_type(fn.result_data_type),
                         error_type),
-                    access=u'pub'):
-                self.emit_rust_fn_call(
+                    access=u'pub async'):
+                self.emit_rust_fn_call_await(
                     u'crate::client_helpers::request',
                     [u'client',
                         endpoint,

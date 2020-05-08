@@ -4,19 +4,25 @@
 //! files that would not fit in a single HTTP request, including allowing the user to resume
 //! interrupted uploads, and uploading blocks in parallel.
 
+use async_stream::try_stream;
+use bytes::{Bytes, BytesMut};
 use dropbox_sdk::files;
 use dropbox_sdk::default_client::{NoauthDefaultClient, UserAuthDefaultClient};
 use dropbox_sdk::oauth2::{oauth2_token_from_authorization_code, Oauth2AuthorizeUrlBuilder,
     Oauth2Type};
+use futures::{TryFutureExt, TryStreamExt};
 use std::collections::HashMap;
-use std::fs::File;
+use std::future;
 use std::path::{Path, PathBuf};
-use std::io::{self, Write, Seek, SeekFrom};
+use std::io::{self, Write, SeekFrom};
 use std::process::exit;
 use std::sync::{Arc, Mutex};
 use std::sync::atomic::{AtomicU64, Ordering::SeqCst};
+use std::pin::Pin;
 use std::thread::sleep;
 use std::time::{Duration, Instant, SystemTime};
+use tokio::fs::File;
+use tokio::io::AsyncReadExt;
 
 /// How many blocks to upload in parallel.
 const PARALLELISM: usize = 20;
@@ -107,34 +113,37 @@ fn parse_args() -> Operation {
     }
 }
 
-fn get_oauth2_token() -> String {
-    std::env::var("DBX_OAUTH_TOKEN").unwrap_or_else(|_| {
-        let client_id = prompt("Give me a Dropbox API app key");
-        let client_secret = prompt("Give me a Dropbox API app secret");
+async fn get_oauth2_token() -> String {
+    if let Ok(token) = std::env::var("DBX_OAUTH_TOKEN") {
+        return token;
+    }
 
-        let url = Oauth2AuthorizeUrlBuilder::new(&client_id, Oauth2Type::AuthorizationCode).build();
-        eprintln!("Open this URL in your browser:");
-        eprintln!("{}", url);
-        eprintln!();
-        let auth_code = prompt("Then paste the code here");
+    let client_id = prompt("Give me a Dropbox API app key");
+    let client_secret = prompt("Give me a Dropbox API app secret");
 
-        eprintln!("requesting OAuth2 token");
-        match oauth2_token_from_authorization_code(
-            NoauthDefaultClient::default(), &client_id, &client_secret, auth_code.trim(), None)
-        {
-            Ok(token) => {
-                eprintln!("got token: {}", token);
-                token
-            }
-            Err(e) => {
-                fatal!("Error getting OAuth2 token: {}", e);
-            }
+    let url = Oauth2AuthorizeUrlBuilder::new(&client_id, Oauth2Type::AuthorizationCode).build();
+    eprintln!("Open this URL in your browser:");
+    eprintln!("{}", url);
+    eprintln!();
+    let auth_code = prompt("Then paste the code here");
+
+    eprintln!("requesting OAuth2 token");
+    match oauth2_token_from_authorization_code(
+        NoauthDefaultClient::default(), &client_id, &client_secret, auth_code.trim(), None)
+        .await
+    {
+        Ok(token) => {
+            eprintln!("got token: {}", token);
+            token
         }
-    })
+        Err(e) => {
+            fatal!("Error getting OAuth2 token: {}", e);
+        }
+    }
 }
 
 /// Figure out if destination is a folder or not and change the destination path accordingly.
-fn get_destination_path(client: &UserAuthDefaultClient, given_path: &str, source_path: &Path)
+async fn get_destination_path(client: &UserAuthDefaultClient, given_path: &str, source_path: &Path)
     -> Result<String, String>
 {
     let filename = source_path.file_name()
@@ -149,7 +158,8 @@ fn get_destination_path(client: &UserAuthDefaultClient, given_path: &str, source
     }
 
     let meta_result = files::get_metadata(
-        client, &files::GetMetadataArg::new(given_path.to_owned()))
+        client, files::GetMetadataArg::new(given_path.to_owned()))
+        .await
         .map_err(|e| format!("Request error while looking up destination: {}", e))?;
 
     match meta_result {
@@ -189,13 +199,13 @@ struct UploadSession {
 
 impl UploadSession {
     /// Make a new upload session.
-    pub fn new(client: &UserAuthDefaultClient, file_size: u64) -> Result<Self, String> {
+    pub async fn new(client: &UserAuthDefaultClient, file_size: u64) -> Result<Self, String> {
         let session_id = match files::upload_session_start(
             client,
-            &files::UploadSessionStartArg::default()
+            files::UploadSessionStartArg::default()
                 .with_session_type(files::UploadSessionType::Concurrent),
-            &[],
-        ) {
+            Box::pin(futures::io::empty()),
+        ).await {
             Ok(Ok(result)) => result.session_id,
             error => return Err(format!("Starting upload session failed: {:?}", error)),
         };
@@ -300,72 +310,102 @@ impl CompletionTracker {
     }
 }
 
-fn get_file_mtime_and_size(f: &File) -> Result<(SystemTime, u64), String> {
-    let meta = f.metadata().map_err(|e| format!("Error getting source file metadata: {}", e))?;
-    let mtime = meta.modified().map_err(|e| format!("Error getting source file mtime: {}", e))?;
+async fn get_file_mtime_and_size(f: &File) -> Result<(SystemTime, u64), String> {
+    let meta = f.metadata()
+        .await
+        .map_err(|e| format!("Error getting source file metadata: {}", e))?;
+    let mtime = meta.modified()
+        .map_err(|e| format!("Error getting source file mtime: {}", e))?;
     Ok((mtime, meta.len()))
 }
 
+async fn large_read(source: Pin<&mut impl AsyncReadExt>, buffer: &mut BytesMut) -> io::Result<()> {
+    let mut reader = source.take(buffer.capacity() as u64);
+    while 0 != reader.read_buf(buffer).await? {}
+    Ok(())
+}
+
 /// This function does it all.
-fn upload_file(
+async fn upload_file(
     client: Arc<UserAuthDefaultClient>,
     mut source_file: File,
     dest_path: String,
     resume: Option<Resume>,
 ) -> Result<(), String> {
 
-    let (source_mtime, source_len) = get_file_mtime_and_size(&source_file)?;
+    let (source_mtime, source_len) = get_file_mtime_and_size(&source_file).await?;
 
     let session = Arc::new(if let Some(ref resume) = resume {
         source_file.seek(SeekFrom::Start(resume.start_offset))
+            .await
             .map_err(|e| format!("Seek error: {}", e))?;
         UploadSession::resume(resume.clone(), source_len)
     } else {
-        UploadSession::new(client.as_ref(), source_len)?
+        UploadSession::new(client.as_ref(), source_len)
+            .await?
     });
 
     eprintln!("upload session ID is {}", session.session_id);
 
     // Initially set to the end of the file and an empty block; if the file is an exact multiple of
     // BLOCK_SIZE, we'll need to upload an empty buffer when closing the session.
-    let last_block = Arc::new(Mutex::new((source_len, vec![])));
+    let last_block = Arc::new(Mutex::new((source_len, Bytes::new())));
 
     let start_time = Instant::now();
+    let mut block_offset = 0;
+    
     let upload_result = {
-        let client = client.clone();
-        let session = session.clone();
         let last_block = last_block.clone();
-        let resume = resume.clone();
-        parallel_reader::read_stream_and_process_chunks_in_parallel(
-            &mut source_file,
-            BLOCK_SIZE * BLOCKS_PER_REQUEST,
-            PARALLELISM,
-            Arc::new(move |block_offset, data: &[u8]| -> Result<(), String> {
-                let append_arg = session.append_arg(block_offset);
-                if data.len() != BLOCK_SIZE * BLOCKS_PER_REQUEST {
+        try_stream! {   // TryStream< Ok=(u64, BytesMut), Error=String >
+            loop {
+                let mut chunk = BytesMut::with_capacity(BLOCK_SIZE * BLOCKS_PER_REQUEST);
+                large_read(Pin::new(&mut source_file), &mut chunk)
+                    .await
+                    .map_err(|e| format!("File read error: {}", e))?;
+                let len = chunk.len();
+                if len == 0 {
+                    break;
+                } else if len % BLOCK_SIZE != 0 {
                     // This must be the last block. Only the last one is allowed to be not 4 MiB
                     // exactly. Save the block and offset so it can be uploaded after all the
                     // parallel uploads are done. This is because once the session is closed, we
                     // can't resume it.
                     let mut last_block = last_block.lock().unwrap();
-                    last_block.0 = block_offset + session.start_offset;
-                    last_block.1 = data.to_vec();
-                    return Ok(());
+                    last_block.0 = block_offset;
+                    last_block.1 = chunk.freeze();
+                    break;
                 }
+                yield (block_offset, chunk.freeze());
+                block_offset += len as u64;
+            }
+        }
+    }
+        .map_ok(|(block_offset, data)| { // -> TryStream< Ok=TryFuture< Ok=(), Error=String >, Error=String >
+            let client = client.clone();
+            let session = session.clone();
+            let resume = resume.clone();
+            let arg = session.append_arg(block_offset);
+            let len = data.len() as u64;
+            tokio::spawn(async move {
                 let result = upload_block_with_retry(
                     client.as_ref(),
-                    &append_arg,
+                    &arg,
                     data,
                     start_time,
                     session.as_ref(),
                     resume.as_ref(),
-                );
+                ).await;
                 if result.is_ok() {
-                    session.mark_block_uploaded(block_offset, data.len() as u64);
+                    session.mark_block_uploaded(block_offset, len);
                 }
                 result
-            }))
-    };
+            })
+            .map_err(|e| format!("spawn error: {}", e))
+        })
+        .try_buffer_unordered(PARALLELISM) // -> TryStream< Ok=Result<(), String>, Error=String >
+        .and_then(future::ready) // -> TryStream< Ok=TryFuture<Ok=(), Error=String>, Error=String >
+        .try_collect::<()>() // -> TryFuture<Ok=(), Error=String>
+        .await;
 
     if let Err(e) = upload_result {
         return Err(format!("{}. To resume, use --resume {},{}",
@@ -378,7 +418,8 @@ fn upload_file(
     let mut arg = session.append_arg(last_block_offset);
     arg.close = true;
     if let Err(e) = upload_block_with_retry(
-        client.as_ref(), &arg, &last_block_data, start_time, session.as_ref(), resume.as_ref())
+        client.as_ref(), &arg, last_block_data, start_time, session.as_ref(), resume.as_ref())
+        .await
     {
         eprintln!("failed to close session: {}", e);
         // But don't error out; try committing anyway. It could be we're resuming a file where we
@@ -388,9 +429,13 @@ fn upload_file(
     eprintln!("committing...");
     let finish = session.commit_arg(dest_path, source_mtime);
 
-    let mut retry = 0;
+    let mut retry = 0u8;
     while retry < 3 {
-        match files::upload_session_finish(client.as_ref(), &finish, &[]) {
+        match files::upload_session_finish(
+            client.as_ref(),
+            finish.clone(),
+            Box::pin(futures::io::empty()),
+        ).await {
             Ok(Ok(file_metadata)) => {
                 println!("Upload succeeded!");
                 println!("{:#?}", file_metadata);
@@ -411,10 +456,10 @@ fn upload_file(
 /// Upload a single block, retrying a few times if an error occurs.
 ///
 /// Prints progress and upload speed, and updates the UploadSession if successful.
-fn upload_block_with_retry(
+async fn upload_block_with_retry(
     client: &UserAuthDefaultClient,
     arg: &files::UploadSessionAppendArg,
-    buf: &[u8],
+    buf: Bytes,
     start_time: Instant,
     session: &UploadSession,
     resume: Option<&Resume>,
@@ -422,7 +467,9 @@ fn upload_block_with_retry(
     let block_start_time = Instant::now();
     let mut errors = 0;
     loop {
-        match files::upload_session_append_v2(client, arg, buf) {
+        // note: clone on Bytes doesn't actually copy any data, so this is cheap:
+        let readable = Box::pin(futures::io::Cursor::new(buf.clone()));
+        match files::upload_session_append_v2(client, arg.clone(), readable).await {
             Ok(Ok(())) => { break; }
             Err(dropbox_sdk::Error::RateLimited { reason, retry_after_seconds }) => {
                 eprintln!("rate-limited ({}), waiting {} seconds", reason, retry_after_seconds);
@@ -511,7 +558,8 @@ fn unwrap_arcmutex<T: std::fmt::Debug>(x: Arc<Mutex<T>>) -> T {
         .expect("failed to unwrap Mutex")
 }
 
-fn main() {
+#[tokio::main]
+async fn main() {
     env_logger::init();
 
     let args = match parse_args() {
@@ -523,13 +571,15 @@ fn main() {
     };
 
     let source_file = File::open(&args.source_path)
+        .await
         .unwrap_or_else(|e| {
             fatal!("Source file {:?} not found: {}", args.source_path, e);
         });
 
-    let client = Arc::new(UserAuthDefaultClient::new(get_oauth2_token()));
+    let client = Arc::new(UserAuthDefaultClient::new(get_oauth2_token().await));
 
     let dest_path = get_destination_path(client.as_ref(), &args.dest_path, &args.source_path)
+        .await
         .unwrap_or_else(|e| {
             fatal!("Error: {}", e);
         });
@@ -538,6 +588,7 @@ fn main() {
     eprintln!("dest   = {:?}", dest_path);
 
     upload_file(client, source_file, dest_path, args.resume)
+        .await
         .unwrap_or_else(|e| {
             fatal!("{}", e);
         });

@@ -23,9 +23,9 @@ pub type TeamMemberRoleId = String;
 pub type UserQuota = u32;
 
 /// List all device sessions of a team's member.
-pub fn devices_list_member_devices(
+pub async fn devices_list_member_devices(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &ListMemberDevicesArg,
+    arg: ListMemberDevicesArg,
 ) -> crate::Result<Result<ListMemberDevicesResult, ListMemberDevicesError>> {
     crate::client_helpers::request(
         client,
@@ -33,13 +33,15 @@ pub fn devices_list_member_devices(
         crate::client_trait::Style::Rpc,
         "team/devices/list_member_devices",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// List all device sessions of a team. Permission : Team member file access.
-pub fn devices_list_members_devices(
+pub async fn devices_list_members_devices(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &ListMembersDevicesArg,
+    arg: ListMembersDevicesArg,
 ) -> crate::Result<Result<ListMembersDevicesResult, ListMembersDevicesError>> {
     crate::client_helpers::request(
         client,
@@ -47,14 +49,16 @@ pub fn devices_list_members_devices(
         crate::client_trait::Style::Rpc,
         "team/devices/list_members_devices",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// List all device sessions of a team. Permission : Team member file access.
 #[deprecated(note = "replaced by devices_list_members_devices")]
-pub fn devices_list_team_devices(
+pub async fn devices_list_team_devices(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &ListTeamDevicesArg,
+    arg: ListTeamDevicesArg,
 ) -> crate::Result<Result<ListTeamDevicesResult, ListTeamDevicesError>> {
     crate::client_helpers::request(
         client,
@@ -62,13 +66,15 @@ pub fn devices_list_team_devices(
         crate::client_trait::Style::Rpc,
         "team/devices/list_team_devices",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Revoke a device session of a team's member.
-pub fn devices_revoke_device_session(
+pub async fn devices_revoke_device_session(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &RevokeDeviceSessionArg,
+    arg: RevokeDeviceSessionArg,
 ) -> crate::Result<Result<(), RevokeDeviceSessionError>> {
     crate::client_helpers::request(
         client,
@@ -76,13 +82,15 @@ pub fn devices_revoke_device_session(
         crate::client_trait::Style::Rpc,
         "team/devices/revoke_device_session",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Revoke a list of device sessions of team members.
-pub fn devices_revoke_device_session_batch(
+pub async fn devices_revoke_device_session_batch(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &RevokeDeviceSessionBatchArg,
+    arg: RevokeDeviceSessionBatchArg,
 ) -> crate::Result<Result<RevokeDeviceSessionBatchResult, RevokeDeviceSessionBatchError>> {
     crate::client_helpers::request(
         client,
@@ -90,15 +98,17 @@ pub fn devices_revoke_device_session_batch(
         crate::client_trait::Style::Rpc,
         "team/devices/revoke_device_session_batch",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Get the values for one or more featues. This route allows you to check your account's capability
 /// for what feature you can access or what value you have for certain features. Permission : Team
 /// information.
-pub fn features_get_values(
+pub async fn features_get_values(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &FeaturesGetValuesBatchArg,
+    arg: FeaturesGetValuesBatchArg,
 ) -> crate::Result<Result<FeaturesGetValuesBatchResult, FeaturesGetValuesBatchError>> {
     crate::client_helpers::request(
         client,
@@ -106,11 +116,13 @@ pub fn features_get_values(
         crate::client_trait::Style::Rpc,
         "team/features/get_values",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Retrieves information about a team.
-pub fn get_info(
+pub async fn get_info(
     client: &impl crate::client_trait::TeamAuthClient,
 ) -> crate::Result<Result<TeamGetInfoResult, crate::NoError>> {
     crate::client_helpers::request(
@@ -119,13 +131,15 @@ pub fn get_info(
         crate::client_trait::Style::Rpc,
         "team/get_info",
         &(),
-        None)
+        None,
+        )
+        .await
 }
 
 /// Creates a new, empty group, with a requested name. Permission : Team member management.
-pub fn groups_create(
+pub async fn groups_create(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &GroupCreateArg,
+    arg: GroupCreateArg,
 ) -> crate::Result<Result<GroupFullInfo, GroupCreateError>> {
     crate::client_helpers::request(
         client,
@@ -133,15 +147,17 @@ pub fn groups_create(
         crate::client_trait::Style::Rpc,
         "team/groups/create",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Deletes a group. The group is deleted immediately. However the revoking of group-owned resources
 /// may take additional time. Use the [`groups_job_status_get()`](groups_job_status_get) to
 /// determine whether this process has completed. Permission : Team member management.
-pub fn groups_delete(
+pub async fn groups_delete(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &GroupSelector,
+    arg: GroupSelector,
 ) -> crate::Result<Result<super::dbx_async::LaunchEmptyResult, GroupDeleteError>> {
     crate::client_helpers::request(
         client,
@@ -149,15 +165,17 @@ pub fn groups_delete(
         crate::client_trait::Style::Rpc,
         "team/groups/delete",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Retrieves information about one or more groups. Note that the optional field
 /// [`GroupFullInfo::members`](GroupFullInfo) is not returned for system-managed groups. Permission
 /// : Team Information.
-pub fn groups_get_info(
+pub async fn groups_get_info(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &GroupsSelector,
+    arg: GroupsSelector,
 ) -> crate::Result<Result<GroupsGetInfoResult, GroupsGetInfoError>> {
     crate::client_helpers::request(
         client,
@@ -165,7 +183,9 @@ pub fn groups_get_info(
         crate::client_trait::Style::Rpc,
         "team/groups/get_info",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Once an async_job_id is returned from [`groups_delete()`](groups_delete),
@@ -173,9 +193,9 @@ pub fn groups_get_info(
 /// [`groups_members_remove()`](groups_members_remove) use this method to poll the status of
 /// granting/revoking group members' access to group-owned resources. Permission : Team member
 /// management.
-pub fn groups_job_status_get(
+pub async fn groups_job_status_get(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &super::dbx_async::PollArg,
+    arg: super::dbx_async::PollArg,
 ) -> crate::Result<Result<super::dbx_async::PollEmptyResult, GroupsPollError>> {
     crate::client_helpers::request(
         client,
@@ -183,13 +203,15 @@ pub fn groups_job_status_get(
         crate::client_trait::Style::Rpc,
         "team/groups/job_status/get",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Lists groups on a team. Permission : Team Information.
-pub fn groups_list(
+pub async fn groups_list(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &GroupsListArg,
+    arg: GroupsListArg,
 ) -> crate::Result<Result<GroupsListResult, crate::NoError>> {
     crate::client_helpers::request(
         client,
@@ -197,14 +219,16 @@ pub fn groups_list(
         crate::client_trait::Style::Rpc,
         "team/groups/list",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Once a cursor has been retrieved from [`groups_list()`](groups_list), use this to paginate
 /// through all groups. Permission : Team Information.
-pub fn groups_list_continue(
+pub async fn groups_list_continue(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &GroupsListContinueArg,
+    arg: GroupsListContinueArg,
 ) -> crate::Result<Result<GroupsListResult, GroupsListContinueError>> {
     crate::client_helpers::request(
         client,
@@ -212,15 +236,17 @@ pub fn groups_list_continue(
         crate::client_trait::Style::Rpc,
         "team/groups/list/continue",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Adds members to a group. The members are added immediately. However the granting of group-owned
 /// resources may take additional time. Use the [`groups_job_status_get()`](groups_job_status_get)
 /// to determine whether this process has completed. Permission : Team member management.
-pub fn groups_members_add(
+pub async fn groups_members_add(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &GroupMembersAddArg,
+    arg: GroupMembersAddArg,
 ) -> crate::Result<Result<GroupMembersChangeResult, GroupMembersAddError>> {
     crate::client_helpers::request(
         client,
@@ -228,13 +254,15 @@ pub fn groups_members_add(
         crate::client_trait::Style::Rpc,
         "team/groups/members/add",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Lists members of a group. Permission : Team Information.
-pub fn groups_members_list(
+pub async fn groups_members_list(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &GroupsMembersListArg,
+    arg: GroupsMembersListArg,
 ) -> crate::Result<Result<GroupsMembersListResult, GroupSelectorError>> {
     crate::client_helpers::request(
         client,
@@ -242,14 +270,16 @@ pub fn groups_members_list(
         crate::client_trait::Style::Rpc,
         "team/groups/members/list",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Once a cursor has been retrieved from [`groups_members_list()`](groups_members_list), use this
 /// to paginate through all members of the group. Permission : Team information.
-pub fn groups_members_list_continue(
+pub async fn groups_members_list_continue(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &GroupsMembersListContinueArg,
+    arg: GroupsMembersListContinueArg,
 ) -> crate::Result<Result<GroupsMembersListResult, GroupsMembersListContinueError>> {
     crate::client_helpers::request(
         client,
@@ -257,7 +287,9 @@ pub fn groups_members_list_continue(
         crate::client_trait::Style::Rpc,
         "team/groups/members/list/continue",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Removes members from a group. The members are removed immediately. However the revoking of
@@ -265,9 +297,9 @@ pub fn groups_members_list_continue(
 /// [`groups_job_status_get()`](groups_job_status_get) to determine whether this process has
 /// completed. This method permits removing the only owner of a group, even in cases where this is
 /// not possible via the web client. Permission : Team member management.
-pub fn groups_members_remove(
+pub async fn groups_members_remove(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &GroupMembersRemoveArg,
+    arg: GroupMembersRemoveArg,
 ) -> crate::Result<Result<GroupMembersChangeResult, GroupMembersRemoveError>> {
     crate::client_helpers::request(
         client,
@@ -275,13 +307,15 @@ pub fn groups_members_remove(
         crate::client_trait::Style::Rpc,
         "team/groups/members/remove",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Sets a member's access type in a group. Permission : Team member management.
-pub fn groups_members_set_access_type(
+pub async fn groups_members_set_access_type(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &GroupMembersSetAccessTypeArg,
+    arg: GroupMembersSetAccessTypeArg,
 ) -> crate::Result<Result<GroupsGetInfoResult, GroupMemberSetAccessTypeError>> {
     crate::client_helpers::request(
         client,
@@ -289,13 +323,15 @@ pub fn groups_members_set_access_type(
         crate::client_trait::Style::Rpc,
         "team/groups/members/set_access_type",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Updates a group's name and/or external ID. Permission : Team member management.
-pub fn groups_update(
+pub async fn groups_update(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &GroupUpdateArgs,
+    arg: GroupUpdateArgs,
 ) -> crate::Result<Result<GroupFullInfo, GroupUpdateError>> {
     crate::client_helpers::request(
         client,
@@ -303,14 +339,16 @@ pub fn groups_update(
         crate::client_trait::Style::Rpc,
         "team/groups/update",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Creates new legal hold policy. Note: Legal Holds is a paid add-on. Not all teams have the
 /// feature. Permission : Team member file access.
-pub fn legal_holds_create_policy(
+pub async fn legal_holds_create_policy(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &LegalHoldsPolicyCreateArg,
+    arg: LegalHoldsPolicyCreateArg,
 ) -> crate::Result<Result<LegalHoldsPolicyCreateResult, LegalHoldsPolicyCreateError>> {
     crate::client_helpers::request(
         client,
@@ -318,14 +356,16 @@ pub fn legal_holds_create_policy(
         crate::client_trait::Style::Rpc,
         "team/legal_holds/create_policy",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Gets a legal hold by Id. Note: Legal Holds is a paid add-on. Not all teams have the feature.
 /// Permission : Team member file access.
-pub fn legal_holds_get_policy(
+pub async fn legal_holds_get_policy(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &LegalHoldsGetPolicyArg,
+    arg: LegalHoldsGetPolicyArg,
 ) -> crate::Result<Result<LegalHoldsGetPolicyResult, LegalHoldsGetPolicyError>> {
     crate::client_helpers::request(
         client,
@@ -333,14 +373,16 @@ pub fn legal_holds_get_policy(
         crate::client_trait::Style::Rpc,
         "team/legal_holds/get_policy",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// List the file metadata that's under the hold. Note: Legal Holds is a paid add-on. Not all teams
 /// have the feature. Permission : Team member file access.
-pub fn legal_holds_list_held_revisions(
+pub async fn legal_holds_list_held_revisions(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &LegalHoldsListHeldRevisionsArg,
+    arg: LegalHoldsListHeldRevisionsArg,
 ) -> crate::Result<Result<LegalHoldsListHeldRevisionResult, LegalHoldsListHeldRevisionsError>> {
     crate::client_helpers::request(
         client,
@@ -348,14 +390,16 @@ pub fn legal_holds_list_held_revisions(
         crate::client_trait::Style::Rpc,
         "team/legal_holds/list_held_revisions",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Continue listing the file metadata that's under the hold. Note: Legal Holds is a paid add-on.
 /// Not all teams have the feature. Permission : Team member file access.
-pub fn legal_holds_list_held_revisions_continue(
+pub async fn legal_holds_list_held_revisions_continue(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &LegalHoldsListHeldRevisionsContinueArg,
+    arg: LegalHoldsListHeldRevisionsContinueArg,
 ) -> crate::Result<Result<LegalHoldsListHeldRevisionResult, LegalHoldsListHeldRevisionsError>> {
     crate::client_helpers::request(
         client,
@@ -363,14 +407,16 @@ pub fn legal_holds_list_held_revisions_continue(
         crate::client_trait::Style::Rpc,
         "team/legal_holds/list_held_revisions_continue",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Lists legal holds on a team. Note: Legal Holds is a paid add-on. Not all teams have the feature.
 /// Permission : Team member file access.
-pub fn legal_holds_list_policies(
+pub async fn legal_holds_list_policies(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &LegalHoldsListPoliciesArg,
+    arg: LegalHoldsListPoliciesArg,
 ) -> crate::Result<Result<LegalHoldsListPoliciesResult, LegalHoldsListPoliciesError>> {
     crate::client_helpers::request(
         client,
@@ -378,14 +424,16 @@ pub fn legal_holds_list_policies(
         crate::client_trait::Style::Rpc,
         "team/legal_holds/list_policies",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Releases a legal hold by Id. Note: Legal Holds is a paid add-on. Not all teams have the feature.
 /// Permission : Team member file access.
-pub fn legal_holds_release_policy(
+pub async fn legal_holds_release_policy(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &LegalHoldsPolicyReleaseArg,
+    arg: LegalHoldsPolicyReleaseArg,
 ) -> crate::Result<Result<(), LegalHoldsPolicyReleaseError>> {
     crate::client_helpers::request(
         client,
@@ -393,14 +441,16 @@ pub fn legal_holds_release_policy(
         crate::client_trait::Style::Rpc,
         "team/legal_holds/release_policy",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Updates a legal hold. Note: Legal Holds is a paid add-on. Not all teams have the feature.
 /// Permission : Team member file access.
-pub fn legal_holds_update_policy(
+pub async fn legal_holds_update_policy(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &LegalHoldsPolicyUpdateArg,
+    arg: LegalHoldsPolicyUpdateArg,
 ) -> crate::Result<Result<LegalHoldsPolicyUpdateResult, LegalHoldsPolicyUpdateError>> {
     crate::client_helpers::request(
         client,
@@ -408,14 +458,16 @@ pub fn legal_holds_update_policy(
         crate::client_trait::Style::Rpc,
         "team/legal_holds/update_policy",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// List all linked applications of the team member. Note, this endpoint does not list any
 /// team-linked applications.
-pub fn linked_apps_list_member_linked_apps(
+pub async fn linked_apps_list_member_linked_apps(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &ListMemberAppsArg,
+    arg: ListMemberAppsArg,
 ) -> crate::Result<Result<ListMemberAppsResult, ListMemberAppsError>> {
     crate::client_helpers::request(
         client,
@@ -423,14 +475,16 @@ pub fn linked_apps_list_member_linked_apps(
         crate::client_trait::Style::Rpc,
         "team/linked_apps/list_member_linked_apps",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// List all applications linked to the team members' accounts. Note, this endpoint does not list
 /// any team-linked applications.
-pub fn linked_apps_list_members_linked_apps(
+pub async fn linked_apps_list_members_linked_apps(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &ListMembersAppsArg,
+    arg: ListMembersAppsArg,
 ) -> crate::Result<Result<ListMembersAppsResult, ListMembersAppsError>> {
     crate::client_helpers::request(
         client,
@@ -438,15 +492,17 @@ pub fn linked_apps_list_members_linked_apps(
         crate::client_trait::Style::Rpc,
         "team/linked_apps/list_members_linked_apps",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// List all applications linked to the team members' accounts. Note, this endpoint doesn't list any
 /// team-linked applications.
 #[deprecated(note = "replaced by linked_apps_list_members_linked_apps")]
-pub fn linked_apps_list_team_linked_apps(
+pub async fn linked_apps_list_team_linked_apps(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &ListTeamAppsArg,
+    arg: ListTeamAppsArg,
 ) -> crate::Result<Result<ListTeamAppsResult, ListTeamAppsError>> {
     crate::client_helpers::request(
         client,
@@ -454,13 +510,15 @@ pub fn linked_apps_list_team_linked_apps(
         crate::client_trait::Style::Rpc,
         "team/linked_apps/list_team_linked_apps",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Revoke a linked application of the team member.
-pub fn linked_apps_revoke_linked_app(
+pub async fn linked_apps_revoke_linked_app(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &RevokeLinkedApiAppArg,
+    arg: RevokeLinkedApiAppArg,
 ) -> crate::Result<Result<(), RevokeLinkedAppError>> {
     crate::client_helpers::request(
         client,
@@ -468,13 +526,15 @@ pub fn linked_apps_revoke_linked_app(
         crate::client_trait::Style::Rpc,
         "team/linked_apps/revoke_linked_app",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Revoke a list of linked applications of the team members.
-pub fn linked_apps_revoke_linked_app_batch(
+pub async fn linked_apps_revoke_linked_app_batch(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &RevokeLinkedApiAppBatchArg,
+    arg: RevokeLinkedApiAppBatchArg,
 ) -> crate::Result<Result<RevokeLinkedAppBatchResult, RevokeLinkedAppBatchError>> {
     crate::client_helpers::request(
         client,
@@ -482,13 +542,15 @@ pub fn linked_apps_revoke_linked_app_batch(
         crate::client_trait::Style::Rpc,
         "team/linked_apps/revoke_linked_app_batch",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Add users to member space limits excluded users list.
-pub fn member_space_limits_excluded_users_add(
+pub async fn member_space_limits_excluded_users_add(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &ExcludedUsersUpdateArg,
+    arg: ExcludedUsersUpdateArg,
 ) -> crate::Result<Result<ExcludedUsersUpdateResult, ExcludedUsersUpdateError>> {
     crate::client_helpers::request(
         client,
@@ -496,13 +558,15 @@ pub fn member_space_limits_excluded_users_add(
         crate::client_trait::Style::Rpc,
         "team/member_space_limits/excluded_users/add",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// List member space limits excluded users.
-pub fn member_space_limits_excluded_users_list(
+pub async fn member_space_limits_excluded_users_list(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &ExcludedUsersListArg,
+    arg: ExcludedUsersListArg,
 ) -> crate::Result<Result<ExcludedUsersListResult, ExcludedUsersListError>> {
     crate::client_helpers::request(
         client,
@@ -510,13 +574,15 @@ pub fn member_space_limits_excluded_users_list(
         crate::client_trait::Style::Rpc,
         "team/member_space_limits/excluded_users/list",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Continue listing member space limits excluded users.
-pub fn member_space_limits_excluded_users_list_continue(
+pub async fn member_space_limits_excluded_users_list_continue(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &ExcludedUsersListContinueArg,
+    arg: ExcludedUsersListContinueArg,
 ) -> crate::Result<Result<ExcludedUsersListResult, ExcludedUsersListContinueError>> {
     crate::client_helpers::request(
         client,
@@ -524,13 +590,15 @@ pub fn member_space_limits_excluded_users_list_continue(
         crate::client_trait::Style::Rpc,
         "team/member_space_limits/excluded_users/list/continue",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Remove users from member space limits excluded users list.
-pub fn member_space_limits_excluded_users_remove(
+pub async fn member_space_limits_excluded_users_remove(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &ExcludedUsersUpdateArg,
+    arg: ExcludedUsersUpdateArg,
 ) -> crate::Result<Result<ExcludedUsersUpdateResult, ExcludedUsersUpdateError>> {
     crate::client_helpers::request(
         client,
@@ -538,14 +606,16 @@ pub fn member_space_limits_excluded_users_remove(
         crate::client_trait::Style::Rpc,
         "team/member_space_limits/excluded_users/remove",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Get users custom quota. Returns none as the custom quota if none was set. A maximum of 1000
 /// members can be specified in a single call.
-pub fn member_space_limits_get_custom_quota(
+pub async fn member_space_limits_get_custom_quota(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &CustomQuotaUsersArg,
+    arg: CustomQuotaUsersArg,
 ) -> crate::Result<Result<Vec<CustomQuotaResult>, CustomQuotaError>> {
     crate::client_helpers::request(
         client,
@@ -553,13 +623,15 @@ pub fn member_space_limits_get_custom_quota(
         crate::client_trait::Style::Rpc,
         "team/member_space_limits/get_custom_quota",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Remove users custom quota. A maximum of 1000 members can be specified in a single call.
-pub fn member_space_limits_remove_custom_quota(
+pub async fn member_space_limits_remove_custom_quota(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &CustomQuotaUsersArg,
+    arg: CustomQuotaUsersArg,
 ) -> crate::Result<Result<Vec<RemoveCustomQuotaResult>, CustomQuotaError>> {
     crate::client_helpers::request(
         client,
@@ -567,14 +639,16 @@ pub fn member_space_limits_remove_custom_quota(
         crate::client_trait::Style::Rpc,
         "team/member_space_limits/remove_custom_quota",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Set users custom quota. Custom quota has to be at least 15GB. A maximum of 1000 members can be
 /// specified in a single call.
-pub fn member_space_limits_set_custom_quota(
+pub async fn member_space_limits_set_custom_quota(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &SetCustomQuotaArg,
+    arg: SetCustomQuotaArg,
 ) -> crate::Result<Result<Vec<CustomQuotaResult>, SetCustomQuotaError>> {
     crate::client_helpers::request(
         client,
@@ -582,7 +656,9 @@ pub fn member_space_limits_set_custom_quota(
         crate::client_trait::Style::Rpc,
         "team/member_space_limits/set_custom_quota",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Adds members to a team. Permission : Team member management A maximum of 20 members can be
@@ -594,9 +670,9 @@ pub fn member_space_limits_set_custom_quota(
 /// management apps are required to set an initial given_name and surname for a user to use in the
 /// team invitation and for 'Perform as team member' actions taken on the user before they become
 /// 'active'.
-pub fn members_add_v2(
+pub async fn members_add_v2(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &MembersAddV2Arg,
+    arg: MembersAddV2Arg,
 ) -> crate::Result<Result<MembersAddLaunchV2Result, crate::NoError>> {
     crate::client_helpers::request(
         client,
@@ -604,7 +680,9 @@ pub fn members_add_v2(
         crate::client_trait::Style::Rpc,
         "team/members/add_v2",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Adds members to a team. Permission : Team member management A maximum of 20 members can be
@@ -616,9 +694,9 @@ pub fn members_add_v2(
 /// management apps are required to set an initial given_name and surname for a user to use in the
 /// team invitation and for 'Perform as team member' actions taken on the user before they become
 /// 'active'.
-pub fn members_add(
+pub async fn members_add(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &MembersAddArg,
+    arg: MembersAddArg,
 ) -> crate::Result<Result<MembersAddLaunch, crate::NoError>> {
     crate::client_helpers::request(
         client,
@@ -626,14 +704,16 @@ pub fn members_add(
         crate::client_trait::Style::Rpc,
         "team/members/add",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Once an async_job_id is returned from [`members_add_v2()`](members_add_v2) , use this to poll
 /// the status of the asynchronous request. Permission : Team member management.
-pub fn members_add_job_status_get_v2(
+pub async fn members_add_job_status_get_v2(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &super::dbx_async::PollArg,
+    arg: super::dbx_async::PollArg,
 ) -> crate::Result<Result<MembersAddJobStatusV2Result, super::dbx_async::PollError>> {
     crate::client_helpers::request(
         client,
@@ -641,14 +721,16 @@ pub fn members_add_job_status_get_v2(
         crate::client_trait::Style::Rpc,
         "team/members/add/job_status/get_v2",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Once an async_job_id is returned from [`members_add()`](members_add) , use this to poll the
 /// status of the asynchronous request. Permission : Team member management.
-pub fn members_add_job_status_get(
+pub async fn members_add_job_status_get(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &super::dbx_async::PollArg,
+    arg: super::dbx_async::PollArg,
 ) -> crate::Result<Result<MembersAddJobStatus, super::dbx_async::PollError>> {
     crate::client_helpers::request(
         client,
@@ -656,13 +738,15 @@ pub fn members_add_job_status_get(
         crate::client_trait::Style::Rpc,
         "team/members/add/job_status/get",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Deletes a team member's profile photo. Permission : Team member management.
-pub fn members_delete_profile_photo_v2(
+pub async fn members_delete_profile_photo_v2(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &MembersDeleteProfilePhotoArg,
+    arg: MembersDeleteProfilePhotoArg,
 ) -> crate::Result<Result<TeamMemberInfoV2Result, MembersDeleteProfilePhotoError>> {
     crate::client_helpers::request(
         client,
@@ -670,13 +754,15 @@ pub fn members_delete_profile_photo_v2(
         crate::client_trait::Style::Rpc,
         "team/members/delete_profile_photo_v2",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Deletes a team member's profile photo. Permission : Team member management.
-pub fn members_delete_profile_photo(
+pub async fn members_delete_profile_photo(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &MembersDeleteProfilePhotoArg,
+    arg: MembersDeleteProfilePhotoArg,
 ) -> crate::Result<Result<TeamMemberInfo, MembersDeleteProfilePhotoError>> {
     crate::client_helpers::request(
         client,
@@ -684,13 +770,15 @@ pub fn members_delete_profile_photo(
         crate::client_trait::Style::Rpc,
         "team/members/delete_profile_photo",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Get available TeamMemberRoles for the connected team. To be used with
 /// [`members_set_admin_permissions_v2()`](members_set_admin_permissions_v2). Permission : Team
 /// member management.
-pub fn members_get_available_team_member_roles(
+pub async fn members_get_available_team_member_roles(
     client: &impl crate::client_trait::TeamAuthClient,
 ) -> crate::Result<Result<MembersGetAvailableTeamMemberRolesResult, crate::NoError>> {
     crate::client_helpers::request(
@@ -699,15 +787,17 @@ pub fn members_get_available_team_member_roles(
         crate::client_trait::Style::Rpc,
         "team/members/get_available_team_member_roles",
         &(),
-        None)
+        None,
+        )
+        .await
 }
 
 /// Returns information about multiple team members. Permission : Team information This endpoint
 /// will return [`MembersGetInfoItem::IdNotFound`](MembersGetInfoItem::IdNotFound), for IDs (or
 /// emails) that cannot be matched to a valid team member.
-pub fn members_get_info_v2(
+pub async fn members_get_info_v2(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &MembersGetInfoV2Arg,
+    arg: MembersGetInfoV2Arg,
 ) -> crate::Result<Result<MembersGetInfoV2Result, MembersGetInfoError>> {
     crate::client_helpers::request(
         client,
@@ -715,15 +805,17 @@ pub fn members_get_info_v2(
         crate::client_trait::Style::Rpc,
         "team/members/get_info_v2",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Returns information about multiple team members. Permission : Team information This endpoint
 /// will return [`MembersGetInfoItem::IdNotFound`](MembersGetInfoItem::IdNotFound), for IDs (or
 /// emails) that cannot be matched to a valid team member.
-pub fn members_get_info(
+pub async fn members_get_info(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &MembersGetInfoArgs,
+    arg: MembersGetInfoArgs,
 ) -> crate::Result<Result<MembersGetInfoResult, MembersGetInfoError>> {
     crate::client_helpers::request(
         client,
@@ -731,13 +823,15 @@ pub fn members_get_info(
         crate::client_trait::Style::Rpc,
         "team/members/get_info",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Lists members of a team. Permission : Team information.
-pub fn members_list_v2(
+pub async fn members_list_v2(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &MembersListArg,
+    arg: MembersListArg,
 ) -> crate::Result<Result<MembersListV2Result, MembersListError>> {
     crate::client_helpers::request(
         client,
@@ -745,13 +839,15 @@ pub fn members_list_v2(
         crate::client_trait::Style::Rpc,
         "team/members/list_v2",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Lists members of a team. Permission : Team information.
-pub fn members_list(
+pub async fn members_list(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &MembersListArg,
+    arg: MembersListArg,
 ) -> crate::Result<Result<MembersListResult, MembersListError>> {
     crate::client_helpers::request(
         client,
@@ -759,14 +855,16 @@ pub fn members_list(
         crate::client_trait::Style::Rpc,
         "team/members/list",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Once a cursor has been retrieved from [`members_list_v2()`](members_list_v2), use this to
 /// paginate through all team members. Permission : Team information.
-pub fn members_list_continue_v2(
+pub async fn members_list_continue_v2(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &MembersListContinueArg,
+    arg: MembersListContinueArg,
 ) -> crate::Result<Result<MembersListV2Result, MembersListContinueError>> {
     crate::client_helpers::request(
         client,
@@ -774,14 +872,16 @@ pub fn members_list_continue_v2(
         crate::client_trait::Style::Rpc,
         "team/members/list/continue_v2",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Once a cursor has been retrieved from [`members_list()`](members_list), use this to paginate
 /// through all team members. Permission : Team information.
-pub fn members_list_continue(
+pub async fn members_list_continue(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &MembersListContinueArg,
+    arg: MembersListContinueArg,
 ) -> crate::Result<Result<MembersListResult, MembersListContinueError>> {
     crate::client_helpers::request(
         client,
@@ -789,16 +889,18 @@ pub fn members_list_continue(
         crate::client_trait::Style::Rpc,
         "team/members/list/continue",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Moves removed member's files to a different member. This endpoint initiates an asynchronous job.
 /// To obtain the final result of the job, the client should periodically poll
 /// [`members_move_former_member_files_job_status_check()`](members_move_former_member_files_job_status_check).
 /// Permission : Team member management.
-pub fn members_move_former_member_files(
+pub async fn members_move_former_member_files(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &MembersDataTransferArg,
+    arg: MembersDataTransferArg,
 ) -> crate::Result<Result<super::dbx_async::LaunchEmptyResult, MembersTransferFormerMembersFilesError>> {
     crate::client_helpers::request(
         client,
@@ -806,15 +908,17 @@ pub fn members_move_former_member_files(
         crate::client_trait::Style::Rpc,
         "team/members/move_former_member_files",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Once an async_job_id is returned from
 /// [`members_move_former_member_files()`](members_move_former_member_files) , use this to poll the
 /// status of the asynchronous request. Permission : Team member management.
-pub fn members_move_former_member_files_job_status_check(
+pub async fn members_move_former_member_files_job_status_check(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &super::dbx_async::PollArg,
+    arg: super::dbx_async::PollArg,
 ) -> crate::Result<Result<super::dbx_async::PollEmptyResult, super::dbx_async::PollError>> {
     crate::client_helpers::request(
         client,
@@ -822,14 +926,16 @@ pub fn members_move_former_member_files_job_status_check(
         crate::client_trait::Style::Rpc,
         "team/members/move_former_member_files/job_status/check",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Recover a deleted member. Permission : Team member management Exactly one of team_member_id,
 /// email, or external_id must be provided to identify the user account.
-pub fn members_recover(
+pub async fn members_recover(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &MembersRecoverArg,
+    arg: MembersRecoverArg,
 ) -> crate::Result<Result<(), MembersRecoverError>> {
     crate::client_helpers::request(
         client,
@@ -837,7 +943,9 @@ pub fn members_recover(
         crate::client_trait::Style::Rpc,
         "team/members/recover",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Removes a member from a team. Permission : Team member management Exactly one of team_member_id,
@@ -850,9 +958,9 @@ pub fn members_recover(
 /// length associated with the team (180 days for most teams). This endpoint may initiate an
 /// asynchronous job. To obtain the final result of the job, the client should periodically poll
 /// [`members_remove_job_status_get()`](members_remove_job_status_get).
-pub fn members_remove(
+pub async fn members_remove(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &MembersRemoveArg,
+    arg: MembersRemoveArg,
 ) -> crate::Result<Result<super::dbx_async::LaunchEmptyResult, MembersRemoveError>> {
     crate::client_helpers::request(
         client,
@@ -860,14 +968,16 @@ pub fn members_remove(
         crate::client_trait::Style::Rpc,
         "team/members/remove",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Once an async_job_id is returned from [`members_remove()`](members_remove) , use this to poll
 /// the status of the asynchronous request. Permission : Team member management.
-pub fn members_remove_job_status_get(
+pub async fn members_remove_job_status_get(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &super::dbx_async::PollArg,
+    arg: super::dbx_async::PollArg,
 ) -> crate::Result<Result<super::dbx_async::PollEmptyResult, super::dbx_async::PollError>> {
     crate::client_helpers::request(
         client,
@@ -875,15 +985,17 @@ pub fn members_remove_job_status_get(
         crate::client_trait::Style::Rpc,
         "team/members/remove/job_status/get",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Add secondary emails to users. Permission : Team member management. Emails that are on verified
 /// domains will be verified automatically. For each email address not on a verified domain a
 /// verification email will be sent.
-pub fn members_secondary_emails_add(
+pub async fn members_secondary_emails_add(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &AddSecondaryEmailsArg,
+    arg: AddSecondaryEmailsArg,
 ) -> crate::Result<Result<AddSecondaryEmailsResult, AddSecondaryEmailsError>> {
     crate::client_helpers::request(
         client,
@@ -891,14 +1003,16 @@ pub fn members_secondary_emails_add(
         crate::client_trait::Style::Rpc,
         "team/members/secondary_emails/add",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Delete secondary emails from users Permission : Team member management. Users will be notified
 /// of deletions of verified secondary emails at both the secondary email and their primary email.
-pub fn members_secondary_emails_delete(
+pub async fn members_secondary_emails_delete(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &DeleteSecondaryEmailsArg,
+    arg: DeleteSecondaryEmailsArg,
 ) -> crate::Result<Result<DeleteSecondaryEmailsResult, crate::NoError>> {
     crate::client_helpers::request(
         client,
@@ -906,13 +1020,15 @@ pub fn members_secondary_emails_delete(
         crate::client_trait::Style::Rpc,
         "team/members/secondary_emails/delete",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Resend secondary email verification emails. Permission : Team member management.
-pub fn members_secondary_emails_resend_verification_emails(
+pub async fn members_secondary_emails_resend_verification_emails(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &ResendVerificationEmailArg,
+    arg: ResendVerificationEmailArg,
 ) -> crate::Result<Result<ResendVerificationEmailResult, crate::NoError>> {
     crate::client_helpers::request(
         client,
@@ -920,15 +1036,17 @@ pub fn members_secondary_emails_resend_verification_emails(
         crate::client_trait::Style::Rpc,
         "team/members/secondary_emails/resend_verification_emails",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Sends welcome email to pending team member. Permission : Team member management Exactly one of
 /// team_member_id, email, or external_id must be provided to identify the user account. No-op if
 /// team member is not pending.
-pub fn members_send_welcome_email(
+pub async fn members_send_welcome_email(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &UserSelectorArg,
+    arg: UserSelectorArg,
 ) -> crate::Result<Result<(), MembersSendWelcomeError>> {
     crate::client_helpers::request(
         client,
@@ -936,13 +1054,15 @@ pub fn members_send_welcome_email(
         crate::client_trait::Style::Rpc,
         "team/members/send_welcome_email",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Updates a team member's permissions. Permission : Team member management.
-pub fn members_set_admin_permissions_v2(
+pub async fn members_set_admin_permissions_v2(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &MembersSetPermissions2Arg,
+    arg: MembersSetPermissions2Arg,
 ) -> crate::Result<Result<MembersSetPermissions2Result, MembersSetPermissions2Error>> {
     crate::client_helpers::request(
         client,
@@ -950,13 +1070,15 @@ pub fn members_set_admin_permissions_v2(
         crate::client_trait::Style::Rpc,
         "team/members/set_admin_permissions_v2",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Updates a team member's permissions. Permission : Team member management.
-pub fn members_set_admin_permissions(
+pub async fn members_set_admin_permissions(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &MembersSetPermissionsArg,
+    arg: MembersSetPermissionsArg,
 ) -> crate::Result<Result<MembersSetPermissionsResult, MembersSetPermissionsError>> {
     crate::client_helpers::request(
         client,
@@ -964,13 +1086,15 @@ pub fn members_set_admin_permissions(
         crate::client_trait::Style::Rpc,
         "team/members/set_admin_permissions",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Updates a team member's profile. Permission : Team member management.
-pub fn members_set_profile_v2(
+pub async fn members_set_profile_v2(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &MembersSetProfileArg,
+    arg: MembersSetProfileArg,
 ) -> crate::Result<Result<TeamMemberInfoV2Result, MembersSetProfileError>> {
     crate::client_helpers::request(
         client,
@@ -978,13 +1102,15 @@ pub fn members_set_profile_v2(
         crate::client_trait::Style::Rpc,
         "team/members/set_profile_v2",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Updates a team member's profile. Permission : Team member management.
-pub fn members_set_profile(
+pub async fn members_set_profile(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &MembersSetProfileArg,
+    arg: MembersSetProfileArg,
 ) -> crate::Result<Result<TeamMemberInfo, MembersSetProfileError>> {
     crate::client_helpers::request(
         client,
@@ -992,13 +1118,15 @@ pub fn members_set_profile(
         crate::client_trait::Style::Rpc,
         "team/members/set_profile",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Updates a team member's profile photo. Permission : Team member management.
-pub fn members_set_profile_photo_v2(
+pub async fn members_set_profile_photo_v2(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &MembersSetProfilePhotoArg,
+    arg: MembersSetProfilePhotoArg,
 ) -> crate::Result<Result<TeamMemberInfoV2Result, MembersSetProfilePhotoError>> {
     crate::client_helpers::request(
         client,
@@ -1006,13 +1134,15 @@ pub fn members_set_profile_photo_v2(
         crate::client_trait::Style::Rpc,
         "team/members/set_profile_photo_v2",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Updates a team member's profile photo. Permission : Team member management.
-pub fn members_set_profile_photo(
+pub async fn members_set_profile_photo(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &MembersSetProfilePhotoArg,
+    arg: MembersSetProfilePhotoArg,
 ) -> crate::Result<Result<TeamMemberInfo, MembersSetProfilePhotoError>> {
     crate::client_helpers::request(
         client,
@@ -1020,14 +1150,16 @@ pub fn members_set_profile_photo(
         crate::client_trait::Style::Rpc,
         "team/members/set_profile_photo",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Suspend a member from a team. Permission : Team member management Exactly one of team_member_id,
 /// email, or external_id must be provided to identify the user account.
-pub fn members_suspend(
+pub async fn members_suspend(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &MembersDeactivateArg,
+    arg: MembersDeactivateArg,
 ) -> crate::Result<Result<(), MembersSuspendError>> {
     crate::client_helpers::request(
         client,
@@ -1035,14 +1167,16 @@ pub fn members_suspend(
         crate::client_trait::Style::Rpc,
         "team/members/suspend",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Unsuspend a member from a team. Permission : Team member management Exactly one of
 /// team_member_id, email, or external_id must be provided to identify the user account.
-pub fn members_unsuspend(
+pub async fn members_unsuspend(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &MembersUnsuspendArg,
+    arg: MembersUnsuspendArg,
 ) -> crate::Result<Result<(), MembersUnsuspendError>> {
     crate::client_helpers::request(
         client,
@@ -1050,16 +1184,18 @@ pub fn members_unsuspend(
         crate::client_trait::Style::Rpc,
         "team/members/unsuspend",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Returns a list of all team-accessible namespaces. This list includes team folders, shared
 /// folders containing team members, team members' home namespaces, and team members' app folders.
 /// Home namespaces and app folders are always owned by this team or members of the team, but shared
 /// folders may be owned by other users or other teams. Duplicates may occur in the list.
-pub fn namespaces_list(
+pub async fn namespaces_list(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &TeamNamespacesListArg,
+    arg: TeamNamespacesListArg,
 ) -> crate::Result<Result<TeamNamespacesListResult, TeamNamespacesListError>> {
     crate::client_helpers::request(
         client,
@@ -1067,14 +1203,16 @@ pub fn namespaces_list(
         crate::client_trait::Style::Rpc,
         "team/namespaces/list",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Once a cursor has been retrieved from [`namespaces_list()`](namespaces_list), use this to
 /// paginate through all team-accessible namespaces. Duplicates may occur in the list.
-pub fn namespaces_list_continue(
+pub async fn namespaces_list_continue(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &TeamNamespacesListContinueArg,
+    arg: TeamNamespacesListContinueArg,
 ) -> crate::Result<Result<TeamNamespacesListResult, TeamNamespacesListContinueError>> {
     crate::client_helpers::request(
         client,
@@ -1082,14 +1220,16 @@ pub fn namespaces_list_continue(
         crate::client_trait::Style::Rpc,
         "team/namespaces/list/continue",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Permission : Team member file access.
 #[deprecated]
-pub fn properties_template_add(
+pub async fn properties_template_add(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &super::file_properties::AddTemplateArg,
+    arg: super::file_properties::AddTemplateArg,
 ) -> crate::Result<Result<super::file_properties::AddTemplateResult, super::file_properties::ModifyTemplateError>> {
     crate::client_helpers::request(
         client,
@@ -1097,14 +1237,16 @@ pub fn properties_template_add(
         crate::client_trait::Style::Rpc,
         "team/properties/template/add",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Permission : Team member file access. The scope for the route is files.team_metadata.write.
 #[deprecated]
-pub fn properties_template_get(
+pub async fn properties_template_get(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &super::file_properties::GetTemplateArg,
+    arg: super::file_properties::GetTemplateArg,
 ) -> crate::Result<Result<super::file_properties::GetTemplateResult, super::file_properties::TemplateError>> {
     crate::client_helpers::request(
         client,
@@ -1112,12 +1254,14 @@ pub fn properties_template_get(
         crate::client_trait::Style::Rpc,
         "team/properties/template/get",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Permission : Team member file access. The scope for the route is files.team_metadata.write.
 #[deprecated]
-pub fn properties_template_list(
+pub async fn properties_template_list(
     client: &impl crate::client_trait::TeamAuthClient,
 ) -> crate::Result<Result<super::file_properties::ListTemplateResult, super::file_properties::TemplateError>> {
     crate::client_helpers::request(
@@ -1126,14 +1270,16 @@ pub fn properties_template_list(
         crate::client_trait::Style::Rpc,
         "team/properties/template/list",
         &(),
-        None)
+        None,
+        )
+        .await
 }
 
 /// Permission : Team member file access.
 #[deprecated]
-pub fn properties_template_update(
+pub async fn properties_template_update(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &super::file_properties::UpdateTemplateArg,
+    arg: super::file_properties::UpdateTemplateArg,
 ) -> crate::Result<Result<super::file_properties::UpdateTemplateResult, super::file_properties::ModifyTemplateError>> {
     crate::client_helpers::request(
         client,
@@ -1141,15 +1287,17 @@ pub fn properties_template_update(
         crate::client_trait::Style::Rpc,
         "team/properties/template/update",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Retrieves reporting data about a team's user activity. Deprecated: Will be removed on July 1st
 /// 2021.
 #[deprecated]
-pub fn reports_get_activity(
+pub async fn reports_get_activity(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &DateRange,
+    arg: DateRange,
 ) -> crate::Result<Result<GetActivityReport, DateRangeError>> {
     crate::client_helpers::request(
         client,
@@ -1157,15 +1305,17 @@ pub fn reports_get_activity(
         crate::client_trait::Style::Rpc,
         "team/reports/get_activity",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Retrieves reporting data about a team's linked devices. Deprecated: Will be removed on July 1st
 /// 2021.
 #[deprecated]
-pub fn reports_get_devices(
+pub async fn reports_get_devices(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &DateRange,
+    arg: DateRange,
 ) -> crate::Result<Result<GetDevicesReport, DateRangeError>> {
     crate::client_helpers::request(
         client,
@@ -1173,15 +1323,17 @@ pub fn reports_get_devices(
         crate::client_trait::Style::Rpc,
         "team/reports/get_devices",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Retrieves reporting data about a team's membership. Deprecated: Will be removed on July 1st
 /// 2021.
 #[deprecated]
-pub fn reports_get_membership(
+pub async fn reports_get_membership(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &DateRange,
+    arg: DateRange,
 ) -> crate::Result<Result<GetMembershipReport, DateRangeError>> {
     crate::client_helpers::request(
         client,
@@ -1189,15 +1341,17 @@ pub fn reports_get_membership(
         crate::client_trait::Style::Rpc,
         "team/reports/get_membership",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Retrieves reporting data about a team's storage usage. Deprecated: Will be removed on July 1st
 /// 2021.
 #[deprecated]
-pub fn reports_get_storage(
+pub async fn reports_get_storage(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &DateRange,
+    arg: DateRange,
 ) -> crate::Result<Result<GetStorageReport, DateRangeError>> {
     crate::client_helpers::request(
         client,
@@ -1205,13 +1359,15 @@ pub fn reports_get_storage(
         crate::client_trait::Style::Rpc,
         "team/reports/get_storage",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Sets an archived team folder's status to active. Permission : Team member file access.
-pub fn team_folder_activate(
+pub async fn team_folder_activate(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &TeamFolderIdArg,
+    arg: TeamFolderIdArg,
 ) -> crate::Result<Result<TeamFolderMetadata, TeamFolderActivateError>> {
     crate::client_helpers::request(
         client,
@@ -1219,14 +1375,16 @@ pub fn team_folder_activate(
         crate::client_trait::Style::Rpc,
         "team/team_folder/activate",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Sets an active team folder's status to archived and removes all folder and file members.
 /// Permission : Team member file access.
-pub fn team_folder_archive(
+pub async fn team_folder_archive(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &TeamFolderArchiveArg,
+    arg: TeamFolderArchiveArg,
 ) -> crate::Result<Result<TeamFolderArchiveLaunch, TeamFolderArchiveError>> {
     crate::client_helpers::request(
         client,
@@ -1234,14 +1392,16 @@ pub fn team_folder_archive(
         crate::client_trait::Style::Rpc,
         "team/team_folder/archive",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Returns the status of an asynchronous job for archiving a team folder. Permission : Team member
 /// file access.
-pub fn team_folder_archive_check(
+pub async fn team_folder_archive_check(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &super::dbx_async::PollArg,
+    arg: super::dbx_async::PollArg,
 ) -> crate::Result<Result<TeamFolderArchiveJobStatus, super::dbx_async::PollError>> {
     crate::client_helpers::request(
         client,
@@ -1249,13 +1409,15 @@ pub fn team_folder_archive_check(
         crate::client_trait::Style::Rpc,
         "team/team_folder/archive/check",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Creates a new, active, team folder with no members. Permission : Team member file access.
-pub fn team_folder_create(
+pub async fn team_folder_create(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &TeamFolderCreateArg,
+    arg: TeamFolderCreateArg,
 ) -> crate::Result<Result<TeamFolderMetadata, TeamFolderCreateError>> {
     crate::client_helpers::request(
         client,
@@ -1263,13 +1425,15 @@ pub fn team_folder_create(
         crate::client_trait::Style::Rpc,
         "team/team_folder/create",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Retrieves metadata for team folders. Permission : Team member file access.
-pub fn team_folder_get_info(
+pub async fn team_folder_get_info(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &TeamFolderIdListArg,
+    arg: TeamFolderIdListArg,
 ) -> crate::Result<Result<Vec<TeamFolderGetInfoItem>, crate::NoError>> {
     crate::client_helpers::request(
         client,
@@ -1277,13 +1441,15 @@ pub fn team_folder_get_info(
         crate::client_trait::Style::Rpc,
         "team/team_folder/get_info",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Lists all team folders. Permission : Team member file access.
-pub fn team_folder_list(
+pub async fn team_folder_list(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &TeamFolderListArg,
+    arg: TeamFolderListArg,
 ) -> crate::Result<Result<TeamFolderListResult, TeamFolderListError>> {
     crate::client_helpers::request(
         client,
@@ -1291,14 +1457,16 @@ pub fn team_folder_list(
         crate::client_trait::Style::Rpc,
         "team/team_folder/list",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Once a cursor has been retrieved from [`team_folder_list()`](team_folder_list), use this to
 /// paginate through all team folders. Permission : Team member file access.
-pub fn team_folder_list_continue(
+pub async fn team_folder_list_continue(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &TeamFolderListContinueArg,
+    arg: TeamFolderListContinueArg,
 ) -> crate::Result<Result<TeamFolderListResult, TeamFolderListContinueError>> {
     crate::client_helpers::request(
         client,
@@ -1306,13 +1474,15 @@ pub fn team_folder_list_continue(
         crate::client_trait::Style::Rpc,
         "team/team_folder/list/continue",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Permanently deletes an archived team folder. Permission : Team member file access.
-pub fn team_folder_permanently_delete(
+pub async fn team_folder_permanently_delete(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &TeamFolderIdArg,
+    arg: TeamFolderIdArg,
 ) -> crate::Result<Result<(), TeamFolderPermanentlyDeleteError>> {
     crate::client_helpers::request(
         client,
@@ -1320,13 +1490,15 @@ pub fn team_folder_permanently_delete(
         crate::client_trait::Style::Rpc,
         "team/team_folder/permanently_delete",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Changes an active team folder's name. Permission : Team member file access.
-pub fn team_folder_rename(
+pub async fn team_folder_rename(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &TeamFolderRenameArg,
+    arg: TeamFolderRenameArg,
 ) -> crate::Result<Result<TeamFolderMetadata, TeamFolderRenameError>> {
     crate::client_helpers::request(
         client,
@@ -1334,14 +1506,16 @@ pub fn team_folder_rename(
         crate::client_trait::Style::Rpc,
         "team/team_folder/rename",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Updates the sync settings on a team folder or its contents.  Use of this endpoint requires that
 /// the team has team selective sync enabled.
-pub fn team_folder_update_sync_settings(
+pub async fn team_folder_update_sync_settings(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &TeamFolderUpdateSyncSettingsArg,
+    arg: TeamFolderUpdateSyncSettingsArg,
 ) -> crate::Result<Result<TeamFolderMetadata, TeamFolderUpdateSyncSettingsError>> {
     crate::client_helpers::request(
         client,
@@ -1349,12 +1523,14 @@ pub fn team_folder_update_sync_settings(
         crate::client_trait::Style::Rpc,
         "team/team_folder/update_sync_settings",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Returns the member profile of the admin who generated the team access token used to make the
 /// call.
-pub fn token_get_authenticated_admin(
+pub async fn token_get_authenticated_admin(
     client: &impl crate::client_trait::TeamAuthClient,
 ) -> crate::Result<Result<TokenGetAuthenticatedAdminResult, TokenGetAuthenticatedAdminError>> {
     crate::client_helpers::request(
@@ -1363,7 +1539,9 @@ pub fn token_get_authenticated_admin(
         crate::client_trait::Style::Rpc,
         "team/token/get_authenticated_admin",
         &(),
-        None)
+        None,
+        )
+        .await
 }
 
 /// Information on active web sessions.

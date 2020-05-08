@@ -12,9 +12,9 @@
 /// It has no other effect. If you receive an HTTP 200 response with the supplied query, it
 /// indicates at least part of the Dropbox API infrastructure is working and that the app key and
 /// secret valid.
-pub fn app(
+pub async fn app(
     client: &impl crate::client_trait::AppAuthClient,
-    arg: &EchoArg,
+    arg: EchoArg,
 ) -> crate::Result<Result<EchoResult, crate::NoError>> {
     crate::client_helpers::request(
         client,
@@ -22,16 +22,18 @@ pub fn app(
         crate::client_trait::Style::Rpc,
         "check/app",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// This endpoint performs User Authentication, validating the supplied access token, and returns
 /// the supplied string, to allow you to test your code and connection to the Dropbox API. It has no
 /// other effect. If you receive an HTTP 200 response with the supplied query, it indicates at least
 /// part of the Dropbox API infrastructure is working and that the access token is valid.
-pub fn user(
+pub async fn user(
     client: &impl crate::client_trait::UserAuthClient,
-    arg: &EchoArg,
+    arg: EchoArg,
 ) -> crate::Result<Result<EchoResult, crate::NoError>> {
     crate::client_helpers::request(
         client,
@@ -39,7 +41,9 @@ pub fn user(
         crate::client_trait::Style::Rpc,
         "check/user",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// EchoArg contains the arguments to be sent to the Dropbox servers.

@@ -10,7 +10,7 @@ use url::Url;
 /// Given an authorization code, request an OAuth2 token from Dropbox API.
 /// Requires the App ID and secret, as well as the redirect URI used in the prior authorize
 /// request, if there was one.
-pub fn oauth2_token_from_authorization_code(
+pub async fn oauth2_token_from_authorization_code(
     client: impl NoauthClient,
     client_id: &str,
     client_secret: &str,
@@ -37,7 +37,16 @@ pub fn oauth2_token_from_authorization_code(
         None,
         None,
         None,
-    )?;
+    )
+        .await
+        .map_err(|e| match e {
+            HttpClientError::HttpError { code, response_body } => {
+                // Don't bother trying to match 409 or other codes and doing something fancy with
+                // it. Any error here is unexpected and fatal.
+                Error::UnexpectedHttpError { code, response_body }
+            }
+            HttpClientError::Other(e) => Error::HttpClient(e),
+        })?;
 
     let result_json = serde_json::from_str(&resp.result_json)?;
 

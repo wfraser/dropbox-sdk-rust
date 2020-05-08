@@ -8,9 +8,9 @@
 )]
 
 /// Creates an OAuth 2.0 access token from the supplied OAuth 1.0 access token.
-pub fn token_from_oauth1(
+pub async fn token_from_oauth1(
     client: &impl crate::client_trait::AppAuthClient,
-    arg: &TokenFromOAuth1Arg,
+    arg: TokenFromOAuth1Arg,
 ) -> crate::Result<Result<TokenFromOAuth1Result, TokenFromOAuth1Error>> {
     crate::client_helpers::request(
         client,
@@ -18,13 +18,15 @@ pub fn token_from_oauth1(
         crate::client_trait::Style::Rpc,
         "auth/token/from_oauth1",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Disables the access token used to authenticate the call. If there is a corresponding refresh
 /// token for the access token, this disables that refresh token, as well as any other access tokens
 /// for that refresh token.
-pub fn token_revoke(
+pub async fn token_revoke(
     client: &impl crate::client_trait::UserAuthClient,
 ) -> crate::Result<Result<(), crate::NoError>> {
     crate::client_helpers::request(
@@ -33,7 +35,9 @@ pub fn token_revoke(
         crate::client_trait::Style::Rpc,
         "auth/token/revoke",
         &(),
-        None)
+        None,
+        )
+        .await
 }
 
 /// Error occurred because the account doesn't have permission to access the resource.

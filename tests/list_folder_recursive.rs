@@ -1,13 +1,14 @@
 use dropbox_sdk::files;
 use dropbox_sdk::default_client::UserAuthDefaultClient;
+use futures::stream::{FuturesUnordered, TryStreamExt};
 use std::collections::HashSet;
 use std::sync::Arc;
 
 mod common;
 
-#[test]
+#[tokio::test]
 #[ignore] // very time-consuming to run; should be run separately
-fn list_folder_recursive() {
+async fn list_folder_recursive() {
     let token = std::env::var("DBX_OAUTH_TOKEN").expect("DBX_OAUTH_TOKEN must be set");
     let client = Arc::new(UserAuthDefaultClient::new(token));
 
@@ -16,11 +17,28 @@ fn list_folder_recursive() {
     const NUM_FILES: u32 = 30;
     const FILE_SIZE: usize = 100;
 
-    common::create_clean_folder(client.as_ref(), FOLDER);
-    common::create_clean_folder(client.as_ref(), FOLDER_INNER);
+    common::create_clean_folder(client.as_ref(), FOLDER).await;
+    common::create_clean_folder(client.as_ref(), FOLDER_INNER).await;
 
-    let (files_a, _) = common::create_files(client.clone(), FOLDER, NUM_FILES, FILE_SIZE);
-    let (files_b, _) = common::create_files(client.clone(), FOLDER_INNER, NUM_FILES, FILE_SIZE);
+    let common::CreateResult { file_tasks: file_tasks_a, path_generator: files_a, .. }
+        = common::create_files(client.clone(), FOLDER, NUM_FILES, FILE_SIZE);
+    let common::CreateResult { file_tasks: file_tasks_b, path_generator: files_b, .. }
+        = common::create_files(client.clone(), FOLDER_INNER, NUM_FILES, FILE_SIZE);
+
+    file_tasks_a
+        .into_iter()
+        .chain(file_tasks_b)
+        .map(|fut| async move {
+            match fut.await {
+                (_, Ok(Ok(()))) => Ok(()),
+                (name, Ok(Err(e))) => Err(format!("failed to create {}: {}", name, e)),
+                (name, Err(e)) => Err(format!("failed to create {}: {}", name, e)),
+            }
+        })
+        .collect::<FuturesUnordered<_>>()
+        .try_collect::<()>()
+        .await
+        .expect("failed to create all files");
 
     let mut files = HashSet::new();
     for i in 0 .. NUM_FILES {
@@ -49,10 +67,10 @@ fn list_folder_recursive() {
     println!("list_folder");
     let (mut cursor, mut has_more) = match files::list_folder(
         client.as_ref(),
-        &files::ListFolderArg::new(FOLDER.to_owned())
+        files::ListFolderArg::new(FOLDER.to_owned())
             .with_recursive(true)
-            .with_limit(10))
-    {
+            .with_limit(10),
+    ).await {
         Ok(Ok(files::ListFolderResult { entries, cursor, has_more, .. })) => {
             println!("{} entries", entries.len());
             process_entries(entries);
@@ -65,8 +83,9 @@ fn list_folder_recursive() {
     while has_more {
         println!("list_folder_continue");
         let next = match files::list_folder_continue(
-            client.as_ref(), &files::ListFolderContinueArg::new(cursor.clone()))
-        {
+            client.as_ref(),
+            files::ListFolderContinueArg::new(cursor.clone()),
+        ).await {
             Ok(Ok(files::ListFolderResult { entries, cursor, has_more, .. })) => {
                 println!("{} entries", entries.len());
                 process_entries(entries);

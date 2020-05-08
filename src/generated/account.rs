@@ -8,9 +8,9 @@
 )]
 
 /// Sets a user's profile photo.
-pub fn set_profile_photo(
+pub async fn set_profile_photo(
     client: &impl crate::client_trait::UserAuthClient,
-    arg: &SetProfilePhotoArg,
+    arg: SetProfilePhotoArg,
 ) -> crate::Result<Result<SetProfilePhotoResult, SetProfilePhotoError>> {
     crate::client_helpers::request(
         client,
@@ -18,7 +18,9 @@ pub fn set_profile_photo(
         crate::client_trait::Style::Rpc,
         "account/set_profile_photo",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 #[derive(Debug, Clone, PartialEq)]

@@ -2,23 +2,60 @@
 
 //! Everything needed to implement your HTTP client.
 
-use std::io::Read;
+use async_trait::async_trait;
+use futures::io::AsyncBufRead;
+use std::pin::Pin;
 
 /// The base HTTP client trait.
+#[async_trait]
 pub trait HttpClient {
     /// Make a HTTP request.
     #[allow(clippy::too_many_arguments)]
-    fn request(
+    async fn request(
         &self,
         endpoint: Endpoint,
         style: Style,
-        function: &str,
+        function: &'static str,
         params: String,
         params_type: ParamsType,
-        body: Option<&[u8]>,
+        body: Option<BodyStream>,
         range_start: Option<u64>,
         range_end: Option<u64>,
-    ) -> crate::Result<HttpRequestResultRaw>;
+    ) -> Result<HttpRequestResultRaw, HttpClientError>;
+}
+
+/// A body stream, either for requests (uploads) or reading responses (downloads).
+pub type BodyStream = Pin<Box<dyn AsyncBufRead + Send + Sync>>;
+
+/// An error returned by the HTTP client.
+#[derive(Debug)]
+pub enum HttpClientError {
+    /// The server responded something other than HTTP 200.
+    HttpError {
+        /// HTTP status code returned.
+        code: u16,
+
+        /// The response body text.
+        response_body: String,
+    },
+
+    /// Some other error occurred in the course of making the HTTP request.
+    Other(Box<dyn std::error::Error + Send + Sync + 'static>),
+}
+
+impl<E: std::error::Error + Send + Sync + 'static> From<E> for HttpClientError {
+    fn from(e: E) -> Self {
+        HttpClientError::Other(Box::new(e))
+    }
+}
+
+impl std::fmt::Display for HttpClientError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            HttpClientError::HttpError { code, .. } => write!(f, "HTTP {}", code),
+            HttpClientError::Other(e) => write!(f, "{}", e),
+        }
+    }
 }
 
 /// Marker trait to indicate that a HTTP client supports unauthenticated routes.
@@ -50,7 +87,7 @@ pub struct HttpRequestResultRaw {
 
     /// The response body stream, if any. Only expected to not be `None` for [`Style::Download`]
     /// endpoints.
-    pub body: Option<Box<dyn Read>>,
+    pub body: Option<BodyStream>,
 }
 
 /// The response from the server, parsed into a given type, including a body stream if it is from
@@ -65,7 +102,7 @@ pub struct HttpRequestResult<T> {
 
     /// The response body stream, if any. Only expected to not be `None` for [`Style::Download`]
     /// endpoints.
-    pub body: Option<Box<dyn Read>>,
+    pub body: Option<BodyStream>,
 }
 
 /// The API base endpoint for a request. Determines which hostname the request should go to.

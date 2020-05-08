@@ -11,26 +11,41 @@
 //!
 //! This code (and its dependencies) are only built if you use the `default_client` Cargo feature.
 
-use crate::Error;
-use crate::client_trait::*;
+use async_trait::async_trait;
+use bytes::{Buf, BufMut, Bytes, BytesMut};
+use crate::client_trait::{BodyStream, Endpoint, Style, HttpClient, HttpClientError,
+    HttpRequestResultRaw, NoauthClient, ParamsType, TeamAuthClient, TeamSelect, UserAuthClient};
+use futures::io::{AsyncRead, AsyncBufRead};
+use futures::stream::{Stream, StreamExt};
+use hyper::{Body, Request, Uri};
+use hyper::header::{self, HeaderValue};
+use pin_project::pin_project;
+use std::convert::TryFrom;
+use std::str;
+use std::pin::Pin;
+use std::task::{Context, Poll};
 
 const USER_AGENT: &str = concat!("Dropbox-APIv2-Rust/", env!("CARGO_PKG_VERSION"));
 
 macro_rules! forward_request {
-    ($self:ident, $inner:expr, $token:expr, $path_root:expr, $team_select:expr) => {
-        fn request(
-            &$self,
-            endpoint: Endpoint,
-            style: Style,
-            function: &str,
-            params: String,
-            params_type: ParamsType,
-            body: Option<&[u8]>,
-            range_start: Option<u64>,
-            range_end: Option<u64>,
-        ) -> crate::Result<HttpRequestResultRaw> {
-            $inner.request(endpoint, style, function, params, params_type, body, range_start,
-                range_end, $token, $path_root, $team_select)
+    ($ty:ty, $self:ident, $inner:expr, $token:expr, $path_root:expr, $team_select:expr) => {
+        #[async_trait]
+        impl HttpClient for $ty {
+            async fn request(
+                &$self,
+                endpoint: Endpoint,
+                style: Style,
+                function: &'static str,
+                params: String,
+                params_type: ParamsType,
+                body: Option<BodyStream>,
+                range_start: Option<u64>,
+                range_end: Option<u64>,
+            ) -> Result<HttpRequestResultRaw, HttpClientError> {
+                $inner.request(endpoint, style, function, params, params_type, body, range_start,
+                    range_end, $token, $path_root, $team_select)
+                    .await
+            }
         }
     }
 }
@@ -53,9 +68,20 @@ macro_rules! impl_set_path_root {
     }
 }
 
+/// Default HTTP client for unauthenticated API calls.
+#[derive(Default)]
+pub struct NoauthDefaultClient {
+    inner: HyperClient,
+    path_root: Option<String>,
+}
+
+forward_request! { NoauthDefaultClient, self, self.inner, None, self.path_root.clone(), None }
+
+impl NoauthClient for NoauthDefaultClient {}
+
 /// Default HTTP client using User authorization.
 pub struct UserAuthDefaultClient {
-    inner: UreqClient,
+    inner: HyperClient,
     token: String,
     path_root: Option<String>, // a serialized PathRoot enum
 }
@@ -64,7 +90,7 @@ impl UserAuthDefaultClient {
     /// Create a new client using the given OAuth2 token.
     pub fn new(token: String) -> Self {
         Self {
-            inner: UreqClient::default(),
+            inner: HyperClient::default(),
             token,
             path_root: None,
         }
@@ -73,15 +99,13 @@ impl UserAuthDefaultClient {
     impl_set_path_root!(self);
 }
 
-impl HttpClient for UserAuthDefaultClient {
-    forward_request! { self, self.inner, Some(&self.token), self.path_root.as_deref(), None }
-}
+forward_request! { UserAuthDefaultClient, self, self.inner, Some(self.token.clone()), self.path_root.clone(), None }
 
 impl UserAuthClient for UserAuthDefaultClient {}
 
 /// Default HTTP client using Team authorization.
 pub struct TeamAuthDefaultClient {
-    inner: UreqClient,
+    inner: HyperClient,
     token: String,
     path_root: Option<String>, // a serialized PathRoot enum
     team_select: Option<TeamSelect>,
@@ -91,7 +115,7 @@ impl TeamAuthDefaultClient {
     /// Create a new client using the given OAuth2 token, with no user/admin context selected.
     pub fn new(token: String) -> Self {
         Self {
-            inner: UreqClient::default(),
+            inner: HyperClient::default(),
             token,
             path_root: None,
             team_select: None,
@@ -106,208 +130,360 @@ impl TeamAuthDefaultClient {
     impl_set_path_root!(self);
 }
 
-impl HttpClient for TeamAuthDefaultClient {
-    forward_request! { self, self.inner, Some(&self.token), self.path_root.as_deref(), self.team_select.as_ref() }
-}
+forward_request! { TeamAuthDefaultClient, self, self.inner, Some(self.token.clone()), self.path_root.clone(), self.team_select.clone() }
 
 impl TeamAuthClient for TeamAuthDefaultClient {}
 
-/// Default HTTP client for unauthenticated API calls.
-#[derive(Debug, Default)]
-pub struct NoauthDefaultClient {
-    inner: UreqClient,
-    path_root: Option<String>,
+/// Errors from the HTTP client encountered in the course of making a request.
+#[derive(thiserror::Error, Debug)]
+pub enum DefaultHttpClientError {
+    /// The HTTP client encountered invalid UTF-8 data.
+    #[error("Invalid UTF-8 string")]
+    Utf8(#[from] std::string::FromUtf8Error),
+
+    /// The HTTP client encountered some I/O error.
+    #[error("I/O error: {0}")]
+    IO(#[from] std::io::Error),
+
+    /// Some other error from the HTTP client implementation.
+    #[error(transparent)]
+    Hyper(#[from] hyper::Error),
+
+    /// THe response is missing the Dropbox-API-Result header.
+    #[error("missing Dropbox-API-Result header")]
+    MissingHeader,
 }
 
-impl NoauthDefaultClient {
-    impl_set_path_root!(self);
+// Implement From for some errors so that they get wrapped in a DefaultHttpClientError and then
+// propogated via Error::HttpClient. Note that this only works for types that don't already have a
+// variant in the crate Error type, because doing so would produce a conflicting impl.
+macro_rules! hyper_error {
+    ($e:ty) => {
+        impl From<$e> for crate::Error {
+            fn from(e: $e) -> Self {
+                Self::HttpClient(Box::new(DefaultHttpClientError::from(e)))
+            }
+        }
+    }
 }
 
-impl HttpClient for NoauthDefaultClient {
-    forward_request! { self, self.inner, None, self.path_root.as_deref(), None }
+hyper_error!(std::io::Error);
+hyper_error!(std::string::FromUtf8Error);
+hyper_error!(hyper::Error);
+
+// Common HTTP client:
+
+type Client = hyper::client::Client<hyper_tls::HttpsConnector<hyper::client::HttpConnector>>;
+
+fn http_client() -> Client {
+    let https = hyper_tls::HttpsConnector::new();
+    hyper::client::Client::builder()
+        .build::<_, hyper::Body>(https)
 }
 
-impl NoauthClient for NoauthDefaultClient {}
+struct HyperClient {
+    client: Client,
+}
 
-#[derive(Debug, Default)]
-struct UreqClient {}
+impl Default for HyperClient {
+    fn default() -> Self {
+        Self {
+            client: http_client(),
+        }
+    }
+}
 
-impl UreqClient {
+impl HyperClient {
     #[allow(clippy::too_many_arguments)]
-    fn request(
+    pub async fn request(
         &self,
         endpoint: Endpoint,
         style: Style,
-        function: &str,
+        function: &'static str,
         params: String,
         params_type: ParamsType,
-        body: Option<&[u8]>,
+        body: Option<BodyStream>,
         range_start: Option<u64>,
         range_end: Option<u64>,
-        token: Option<&str>,
-        path_root: Option<&str>,
-        team_select: Option<&TeamSelect>,
-    ) -> crate::Result<HttpRequestResultRaw> {
+        token: Option<String>,
+        path_root: Option<String>,
+        team_select: Option<TeamSelect>,
+    ) -> Result<HttpRequestResultRaw, HttpClientError> {
 
-        let url = endpoint.url().to_owned() + function;
-        debug!("request for {:?}", url);
+        let uri = Uri::try_from(endpoint.url().to_owned() + function)
+            .expect("invalid request URL");
+        debug!("request for {:?}", uri);
 
-        let mut req = ureq::post(&url)
-            .set("User-Agent", USER_AGENT);
+        let mut builder = Request::builder()
+            .method("POST")
+            .uri(uri)
+            .header(header::USER_AGENT, USER_AGENT)
+            .header(header::CONNECTION, "keep-alive");
 
         if let Some(token) = token {
-            req = req.set("Authorization", &format!("Bearer {}", token));
+            builder = builder.header(header::AUTHORIZATION, format!("Bearer {}", token));
+        }
+        if let Some(team_select) = team_select {
+            let name = team_select.header_name();
+            let value = match team_select {
+                TeamSelect::User(id) => id,
+                TeamSelect::Admin(id) => id,
+            };
+            builder = builder.header(name, HeaderValue::try_from(value).unwrap());
         }
 
         if let Some(path_root) = path_root {
-            req = req.set("Dropbox-API-Path-Root", path_root);
+            builder = builder.header("Dropbox-API-Path-Root", HeaderValue::try_from(path_root).unwrap());
         }
 
-        if let Some(team_select) = team_select {
-            req = match team_select {
-                TeamSelect::User(id) => req.set("Dropbox-API-Select-User", id),
-                TeamSelect::Admin(id) => req.set("Dropbox-API-Select-Admin", id),
+        let request = {
+            #[allow(clippy::manual_map)]
+            let range = if let Some(start) = range_start {
+                if let Some(end) = range_end {
+                    Some(format!("bytes={}-{}", start, end))
+                } else {
+                    Some(format!("bytes={}-", start))
+                }
+            } else if let Some(end) = range_end {
+                Some(format!("bytes=-{}", end))
+            } else {
+                None
             };
-        }
 
-        req = match (range_start, range_end) {
-            (Some(start), Some(end)) => req.set("Range", &format!("bytes={}-{}", start, end)),
-            (Some(start), None) => req.set("Range", &format!("bytes={}-", start)),
-            (None, Some(end)) => req.set("Range", &format!("bytes=-{}", end)),
-            (None, None) => req,
-        };
+            if let Some(range) = range {
+                builder = builder.header(header::RANGE, HeaderValue::try_from(range).unwrap());
+            }
 
-        // If the params are totally empty, don't send any arg header or body.
-        let result = if params.is_empty() {
-            req.call()
-        } else {
-            match style {
+            let request_body = match style {
                 Style::Rpc => {
                     // Send params in the body.
-                    req = req.set("Content-Type", params_type.content_type());
-                    req.send_string(&params)
+                    assert!(body.is_none());
+                    if !params.is_empty() {
+                        builder = builder.header(header::CONTENT_TYPE, params_type.content_type());
+                        Body::from(params)
+                    } else {
+                        Body::empty()
+                    }
                 }
                 Style::Upload | Style::Download => {
                     // Send params in a header.
-                    req = req.set("Dropbox-API-Arg", &params);
+                    if !params.is_empty() {
+                        builder = builder.header("Dropbox-API-Arg", params);
+                    }
                     if style == Style::Upload {
-                        req = req.set("Content-Type", "application/octet-stream");
-                        if let Some(body) = body {
-                            req.send_bytes(body)
-                        } else {
-                            req.send_bytes(&[])
+                        builder = builder.header(header::CONTENT_TYPE, "application/octet-stream");
+                        match body {
+                            Some(body) => Body::wrap_stream(HyperBody(body)),
+                            None => Body::empty(),
                         }
                     } else {
-                        assert!(body.is_none(), "body can only be set for Style::Upload request");
-                        req.call()
+                        assert!(body.is_none());
+                        Body::empty()
                     }
                 }
+            };
+
+            builder.body(request_body).map_err(|e| {
+                error!("failed to construct HTTP request: {}", e);
+                HttpClientError::Other(Box::new(e))
+            })?
+        };
+
+        let response = match self.client.request(request).await {
+            Ok(resp) => resp,
+            Err(e) => {
+                error!("HTTP request failed: {}", e);
+                return Err(HttpClientError::Other(Box::new(e)));
             }
         };
 
-        let resp = match result {
-            Ok(resp) => resp,
-            Err(e @ ureq::Error::Transport(_)) => {
-                error!("request failed: {}", e);
-                return Err(RequestError { inner: e }.into());
-            }
-            Err(ureq::Error::Status(code, resp)) => {
-                let status = resp.status_text().to_owned();
-                let json = resp.into_string()?;
-                return Err(Error::UnexpectedHttpError {
-                    code,
-                    status,
-                    json,
-                });
-            }
-        };
+        if !response.status().is_success() {
+            let code = response.status().as_u16();
+            let response_body = response_body_to_string(response)
+                .await
+                .map_err(HttpClientError::Other)?;
+            return Err(HttpClientError::HttpError { code, response_body });
+        }
 
         match style {
             Style::Rpc | Style::Upload => {
                 // Get the response from the body; return no body stream.
-                let result_json = resp.into_string()?;
+                let result_json = response_body_to_string(response)
+                    .await
+                    .map_err(HttpClientError::Other)?;
                 Ok(HttpRequestResultRaw {
                     result_json,
                     content_length: None,
                     body: None,
                 })
-            }
+            },
             Style::Download => {
                 // Get the response from a header; return the body stream.
-                let result_json = resp.header("Dropbox-API-Result")
-                    .ok_or(Error::UnexpectedResponse("missing Dropbox-API-Result header"))?
-                    .to_owned();
-
-                let content_length = match resp.header("Content-Length") {
-                    Some(s) => Some(s.parse()
-                        .map_err(|_| Error::UnexpectedResponse("invalid Content-Length header"))?),
-                    None => None,
+                let s = match response.headers().get("Dropbox-API-Result") {
+                    Some(value) => {
+                        String::from_utf8(value.as_bytes().to_vec())?
+                    },
+                    None => {
+                        return Err(HttpClientError::Other(Box::new(
+                                DefaultHttpClientError::MissingHeader)));
+                    }
                 };
 
+                let len = response.headers().get(header::CONTENT_LENGTH)
+                    .and_then(|val| val.to_str().ok())
+                    .and_then(|val| val.parse::<u64>().ok());
+
+                let response_body = Box::pin(
+                    BytesStreamToAsyncRead::new(response.into_body().fuse())
+                    );
+
                 Ok(HttpRequestResultRaw {
-                    result_json,
-                    content_length,
-                    body: Some(Box::new(resp.into_reader())),
+                    result_json: s,
+                    content_length: len,
+                    body: Some(response_body),
                 })
             }
         }
     }
 }
 
-/// Errors from the HTTP client encountered in the course of making a request.
-#[derive(thiserror::Error, Debug)]
-#[allow(clippy::large_enum_variant)] // it's always boxed
-pub enum DefaultClientError {
-    /// The HTTP client encountered invalid UTF-8 data.
-    #[error("invalid UTF-8 string")]
-    Utf8(#[from] std::string::FromUtf8Error),
+/// Adapts a futures::io::AsyncRead to work with hyper::Body by implementing a Stream of Bytes.
+#[pin_project]
+#[must_use]
+struct HyperBody<R>(#[pin] R);
 
-    /// The HTTP client encountered some I/O error.
-    #[error("I/O error: {0}")]
-    #[allow(clippy::upper_case_acronyms)]
-    IO(#[from] std::io::Error),
+impl<R: AsyncRead> Stream for HyperBody<R> {
+    type Item = Result<Bytes, futures::io::Error>;
 
-    /// Some other error from the HTTP client implementation.
-    #[error(transparent)]
-    Request(#[from] RequestError),
+    fn poll_next(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
+        use std::mem::MaybeUninit;
+        let mut inner = self.as_mut().project().0;
+        let mut buf = BytesMut::with_capacity(16384);
+
+        // This is basically tokio::io::AsyncRead methods prepare_uninitialized_buffer() and
+        // poll_read_buf() put together.
+        unsafe {
+            let n = {
+                let b = buf.bytes_mut();
+                for x in b.iter_mut() {
+                    *x = MaybeUninit::new(0);
+                }
+
+                let b = &mut *(b as *mut [MaybeUninit<u8>] as *mut [u8]);
+
+                let n = match Pin::new(&mut inner).poll_read(cx, b) {
+                    Poll::Ready(Ok(0)) => { return Poll::Ready(None); }
+                    Poll::Ready(Ok(n)) => n,
+                    Poll::Ready(Err(e)) => { return Poll::Ready(Some(Err(e))); }
+                    Poll::Pending => { return Poll::Pending; }
+                };
+
+                assert!(n <= b.len(), "AsyncRead returned more bytes than there is space for");
+                n
+            };
+
+            buf.advance_mut(n);
+        }
+
+        Poll::Ready(Some(Ok(buf.freeze())))
+    }
 }
 
-macro_rules! wrap_error {
-    ($e:ty) => {
-        impl From<$e> for crate::Error {
-            fn from(e: $e) -> Self {
-                Self::HttpClient(Box::new(DefaultClientError::from(e)))
-            }
+/// Adapts a Hyper body (a stream of Bytes buffers) into an AsyncRead and AsyncBufRead.
+/// The AsyncBufRead implementation does not require any copying and should be used if possible.
+#[must_use]
+struct BytesStreamToAsyncRead<S> {
+    stream: S,
+    buf: Bytes,
+}
+
+impl<S> Unpin for BytesStreamToAsyncRead<S> {}
+
+impl<S> BytesStreamToAsyncRead<S> {
+    pub fn new(stream: S) -> Self {
+        Self {
+            stream,
+            buf: Bytes::new(),
         }
     }
 }
 
-wrap_error!(std::io::Error);
-wrap_error!(std::string::FromUtf8Error);
-wrap_error!(RequestError);
+impl<S> AsyncRead for BytesStreamToAsyncRead<S>
+    where S: Stream<Item = Result<Bytes, hyper::Error>> + Unpin
+{
+    fn poll_read(mut self: Pin<&mut Self>, cx: &mut Context<'_>, buf_out: &mut [u8])
+        -> Poll<Result<usize, futures::io::Error>>
+    {
+        let result = match Pin::new(&mut self).poll_fill_buf(cx) {
+            Poll::Ready(Ok(buf_in)) => {
+                // Copy the returned buffer into the caller's buffer.
+                let len = std::cmp::min(buf_in.len(), buf_out.len());
+                (&mut buf_out[0..len]).copy_from_slice(&buf_in[0..len]);
+                Poll::Ready(Ok(len))
+            }
+            Poll::Ready(Err(e)) => Poll::Ready(Err(e)),
+            Poll::Pending => Poll::Pending,
+        };
 
-/// Something went wrong making the request, or the server returned a response we didn't expect.
-/// Use the `Display` or `Debug` impls to see more details.
-/// Note that this type is intentionally vague about the details beyond these string
-/// representations, to allow implementation changes in the future.
-pub struct RequestError {
-    inner: ureq::Error,
-}
+        if let Poll::Ready(Ok(len)) = result {
+            self.consume(len);
+        }
 
-impl std::fmt::Display for RequestError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        <ureq::Error as std::fmt::Display>::fmt(&self.inner, f)
+        result
     }
 }
 
-impl std::fmt::Debug for RequestError {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        <ureq::Error as std::fmt::Debug>::fmt(&self.inner, f)
+impl<S> AsyncBufRead for BytesStreamToAsyncRead<S>
+    where S: Stream<Item = Result<Bytes, hyper::Error>> + Unpin
+{
+    fn poll_fill_buf<'a>(mut self: Pin<&'a mut Self>, cx: &mut Context<'_>)
+        -> Poll<Result<&'a [u8], futures::io::Error>>
+    {
+        if self.buf.is_empty() {
+            // Attempt to fill the buffer.
+            match Pin::new(&mut self.stream).poll_next(cx) {
+                Poll::Ready(Some(Ok(new_buf))) => {
+                    // Take over the returned buffer.
+                    self.buf = new_buf;
+                }
+                Poll::Ready(Some(Err(e))) => {
+                    // TODO: map the error better
+                    return Poll::Ready(Err(futures::io::Error::new(
+                                futures::io::ErrorKind::Other,
+                                e)));
+                }
+                Poll::Ready(None) => return Poll::Ready(Ok(&[])),
+                Poll::Pending => return Poll::Pending,
+            }
+        }
+
+        // Return the buffer as a byte slice.
+        Poll::Ready(Ok(&self.into_ref().get_ref().buf))
+    }
+
+    fn consume(mut self: Pin<&mut Self>, amt: usize) {
+        self.buf.advance(amt);
     }
 }
 
-impl std::error::Error for RequestError {
-    fn cause(&self) -> Option<&dyn std::error::Error> {
-        Some(&self.inner)
+// Read a full Hyper body into a String.
+async fn response_body_to_string(response: hyper::Response<hyper::Body>)
+    -> Result<String, Box<dyn std::error::Error + Send + Sync + 'static>>
+{
+    let mut bytes = vec![];
+    let mut stream = response.into_body();
+    while let Some(result) = stream.next().await {
+        match result {
+            Ok(buf) => {
+                bytes.extend(buf);
+            }
+            Err(e) => {
+                return Err(Box::new(e));
+            }
+        }
+    }
+    match String::from_utf8(bytes) {
+        Ok(body) => Ok(body),
+        Err(e) => Err(Box::new(e)),
     }
 }
