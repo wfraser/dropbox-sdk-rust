@@ -1,10 +1,10 @@
 #![deny(rust_2018_idioms)]
 
 use dropbox_sdk::{files, HyperClient, Oauth2AuthorizeUrlBuilder, Oauth2Type};
-use dropbox_sdk::client_trait::HttpClient;
-
+use dropbox_sdk::client_trait::{HttpClient, HttpResult};
 use std::collections::VecDeque;
 use std::env;
+use std::future::Future;
 use std::io::{self, Read, Write};
 
 enum Operation {
@@ -34,7 +34,8 @@ fn prompt(msg: &str) -> String {
     input.trim().to_owned()
 }
 
-fn main() {
+#[tokio::main]
+async fn main() {
     env_logger::init();
 
     let download_path = match parse_args() {
@@ -94,7 +95,7 @@ fn main() {
         let stdout = io::stdout();
         let mut stdout_lock = stdout.lock();
         'download: loop {
-            let result = files::download(&client, &download_arg, Some(bytes_out), None);
+            let result = files::download(&client, &download_arg, Some(bytes_out), None).await;
             match result {
                 Ok(Ok(download_result)) => {
                     let mut body = download_result.body.expect("no body received!");
@@ -133,9 +134,9 @@ fn main() {
         }
     } else {
         eprintln!("listing all files");
-        match list_directory(&client, "/", true) {
-            Ok(Ok(iterator)) => {
-                for entry_result in iterator {
+        match list_directory(&client, "/", true).await {
+            Ok(Ok(mut iterator)) => {
+                while let Some(entry_result) = iterator.next().await {
                     match entry_result {
                         Ok(Ok(files::Metadata::Folder(entry))) => {
                             println!("Folder: {}", entry.path_display.unwrap_or(entry.name));
@@ -167,8 +168,9 @@ fn main() {
     }
 }
 
-fn list_directory<'a>(client: &'a dyn HttpClient, path: &str, recursive: bool)
-    -> dropbox_sdk::Result<Result<DirectoryIterator<'a>, files::ListFolderError>>
+async fn list_directory<'a, F>(client: &'a dyn HttpClient<F>, path: &str, recursive: bool)
+    -> dropbox_sdk::Result<Result<DirectoryIterator<'a, F>, files::ListFolderError>>
+    where F: Future<Output=HttpResult>
 {
     assert!(path.starts_with('/'), "path needs to be absolute (start with a '/')");
     let requested_path = if path == "/" {
@@ -181,6 +183,7 @@ fn list_directory<'a>(client: &'a dyn HttpClient, path: &str, recursive: bool)
         client,
         &files::ListFolderArg::new(requested_path)
             .with_recursive(recursive))
+        .await
     {
         Ok(Ok(result)) => {
             let cursor = if result.has_more {
@@ -200,20 +203,18 @@ fn list_directory<'a>(client: &'a dyn HttpClient, path: &str, recursive: bool)
     }
 }
 
-struct DirectoryIterator<'a> {
-    client: &'a dyn HttpClient,
+struct DirectoryIterator<'a, F> {
+    client: &'a dyn HttpClient<F>,
     buffer: VecDeque<files::Metadata>,
     cursor: Option<String>,
 }
 
-impl<'a> Iterator for DirectoryIterator<'a> {
-    type Item = dropbox_sdk::Result<Result<files::Metadata, files::ListFolderContinueError>>;
-
-    fn next(&mut self) -> Option<Self::Item> {
+impl<'a, F: Future<Output=HttpResult>> DirectoryIterator<'a, F> {
+    pub async fn next(&mut self) -> Option<dropbox_sdk::Result<Result<files::Metadata, files::ListFolderContinueError>>> {
         if let Some(entry) = self.buffer.pop_front() {
             Some(Ok(Ok(entry)))
         } else if let Some(cursor) = self.cursor.take() {
-            match files::list_folder_continue(self.client, &files::ListFolderContinueArg::new(cursor)) {
+            match files::list_folder_continue(self.client, &files::ListFolderContinueArg::new(cursor)).await {
                 Ok(Ok(result)) => {
                     self.buffer.extend(result.entries.into_iter());
                     if result.has_more {

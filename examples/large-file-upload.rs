@@ -124,7 +124,8 @@ fn large_read(source: &mut impl Read, buffer: &mut [u8]) -> io::Result<usize> {
     }
 }
 
-fn main() {
+#[tokio::main]
+async fn main() {
     env_logger::init();
 
     let mut args = match parse_args() {
@@ -177,8 +178,8 @@ fn main() {
 
     // Figure out if destination is a folder or not and change the destination path accordingly.
     let dest_path = match files::get_metadata(
-        &client,
-        &files::GetMetadataArg::new(args.dest_path.clone()))
+        &client, &files::GetMetadataArg::new(args.dest_path.clone()))
+        .await
     {
         Ok(Ok(files::Metadata::File(_meta))) => {
             eprintln!("Error: \"{}\" already exists in Dropbox", args.dest_path);
@@ -225,6 +226,7 @@ fn main() {
         None => {
             match files::upload_session_start(
                 &client, &files::UploadSessionStartArg::default(), &[])
+                .await
             {
                 Ok(Ok(result)) => result.session_id,
                 Ok(Err(())) => panic!(),
@@ -287,7 +289,7 @@ fn main() {
         succeeded = false;
         let mut consecutive_errors = 0;
         while consecutive_errors < 3 {
-            match files::upload_session_append_v2(&client, &append_arg, &buf[0..nread]) {
+            match files::upload_session_append_v2(&client, &append_arg, &buf[0..nread]).await {
                 Ok(Ok(())) => {}
                 Ok(Err(e)) => {
                     eprintln!("Error appending data: {}", e);
@@ -342,7 +344,7 @@ fn main() {
         let mut retry = 0;
         succeeded = false;
         while retry < 3 {
-            match files::upload_session_finish(&client, &finish, &[]) {
+            match files::upload_session_finish(&client, &finish, &[]).await {
                 Ok(Ok(filemetadata)) => {
                     println!("Upload succeeded!");
                     println!("{:#?}", filemetadata);

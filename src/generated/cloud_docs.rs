@@ -11,8 +11,8 @@
 
 /// Fetch the binary content of the requested document. This route requires Cloud Docs auth. Please
 /// make a request to cloud_docs/authorize and supply that token in the Authorization header.
-pub fn get_content(
-    client: &dyn crate::client_trait::HttpClient,
+pub async fn get_content(
+    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
     arg: &GetContentArg,
     range_start: Option<u64>,
     range_end: Option<u64>,
@@ -25,13 +25,15 @@ pub fn get_content(
         arg,
         None,
         range_start,
-        range_end)
+        range_end,
+        )
+        .await
 }
 
 /// Fetches metadata associated with a Cloud Doc and user. This route requires Cloud Docs auth.
 /// Please make a request to cloud_docs/authorize and supply that token in the Authorization header.
-pub fn get_metadata(
-    client: &dyn crate::client_trait::HttpClient,
+pub async fn get_metadata(
+    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
     arg: &GetMetadataArg,
 ) -> crate::Result<Result<GetMetadataResult, GetMetadataError>> {
     crate::client_helpers::request(
@@ -40,13 +42,15 @@ pub fn get_metadata(
         crate::client_trait::Style::Rpc,
         "cloud_docs/get_metadata",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Lock a Cloud Doc. This route requires Cloud Docs auth. Please make a request to
 /// cloud_docs/authorize and supply that token in the Authorization header.
-pub fn lock(
-    client: &dyn crate::client_trait::HttpClient,
+pub async fn lock(
+    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
     arg: &LockArg,
 ) -> crate::Result<Result<LockResult, LockingError>> {
     crate::client_helpers::request(
@@ -55,13 +59,15 @@ pub fn lock(
         crate::client_trait::Style::Rpc,
         "cloud_docs/lock",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Update the title of a Cloud Doc. This route requires Cloud Docs auth. Please make a request to
 /// cloud_docs/authorize and supply that token in the Authorization header.
-pub fn rename(
-    client: &dyn crate::client_trait::HttpClient,
+pub async fn rename(
+    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
     arg: &RenameArg,
 ) -> crate::Result<Result<RenameResult, RenameError>> {
     crate::client_helpers::request(
@@ -70,13 +76,15 @@ pub fn rename(
         crate::client_trait::Style::Rpc,
         "cloud_docs/rename",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Unlock a Cloud Doc. This route requires Cloud Docs auth. Please make a request to
 /// cloud_docs/authorize and supply that token in the Authorization header.
-pub fn unlock(
-    client: &dyn crate::client_trait::HttpClient,
+pub async fn unlock(
+    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
     arg: &UnlockArg,
 ) -> crate::Result<Result<UnlockResult, LockingError>> {
     crate::client_helpers::request(
@@ -85,14 +93,16 @@ pub fn unlock(
         crate::client_trait::Style::Rpc,
         "cloud_docs/unlock",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Update the contents of a Cloud Doc. This should be called for files with a max size of 150MB.
 /// This route requires Cloud Docs auth. Please make a request to cloud_docs/authorize and supply
 /// that token in the Authorization header.
-pub fn update_content(
-    client: &dyn crate::client_trait::HttpClient,
+pub async fn update_content(
+    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
     arg: &UpdateContentArg,
     body: &[u8],
 ) -> crate::Result<Result<UpdateContentResult, UpdateContentError>> {
@@ -102,7 +112,9 @@ pub fn update_content(
         crate::client_trait::Style::Upload,
         "cloud_docs/update_content",
         arg,
-        Some(body))
+        Some(body),
+        )
+        .await
 }
 
 #[derive(Debug)]

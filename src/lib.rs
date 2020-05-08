@@ -29,11 +29,10 @@ pub enum Error {
     #[error("Dropbox API had an internal server error: {0}")]
     ServerError(String),
 
-    #[error("Dropbox API returned HTTP {code} {status} - {json}")]
+    #[error("Dropbox API returned HTTP {code} - {response_body}")]
     UnexpectedHttpError {
         code: u16,
-        status: String,
-        json: String,
+        response_body: String,
     },
 }
 

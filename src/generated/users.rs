@@ -12,8 +12,8 @@
 pub type GetAccountBatchResult = Vec<BasicAccount>;
 
 /// Get a list of feature values that may be configured for the current account.
-pub fn features_get_values(
-    client: &dyn crate::client_trait::HttpClient,
+pub async fn features_get_values(
+    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
     arg: &UserFeaturesGetValuesBatchArg,
 ) -> crate::Result<Result<UserFeaturesGetValuesBatchResult, UserFeaturesGetValuesBatchError>> {
     crate::client_helpers::request(
@@ -22,12 +22,14 @@ pub fn features_get_values(
         crate::client_trait::Style::Rpc,
         "users/features/get_values",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Get information about a user's account.
-pub fn get_account(
-    client: &dyn crate::client_trait::HttpClient,
+pub async fn get_account(
+    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
     arg: &GetAccountArg,
 ) -> crate::Result<Result<BasicAccount, GetAccountError>> {
     crate::client_helpers::request(
@@ -36,12 +38,14 @@ pub fn get_account(
         crate::client_trait::Style::Rpc,
         "users/get_account",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Get information about multiple user accounts.  At most 300 accounts may be queried per request.
-pub fn get_account_batch(
-    client: &dyn crate::client_trait::HttpClient,
+pub async fn get_account_batch(
+    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
     arg: &GetAccountBatchArg,
 ) -> crate::Result<Result<GetAccountBatchResult, GetAccountBatchError>> {
     crate::client_helpers::request(
@@ -50,12 +54,14 @@ pub fn get_account_batch(
         crate::client_trait::Style::Rpc,
         "users/get_account_batch",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Get information about the current user's account.
-pub fn get_current_account(
-    client: &dyn crate::client_trait::HttpClient,
+pub async fn get_current_account(
+    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
 ) -> crate::Result<Result<FullAccount, ()>> {
     crate::client_helpers::request(
         client,
@@ -63,12 +69,14 @@ pub fn get_current_account(
         crate::client_trait::Style::Rpc,
         "users/get_current_account",
         &(),
-        None)
+        None,
+        )
+        .await
 }
 
 /// Get the space usage information for the current user's account.
-pub fn get_space_usage(
-    client: &dyn crate::client_trait::HttpClient,
+pub async fn get_space_usage(
+    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
 ) -> crate::Result<Result<SpaceUsage, ()>> {
     crate::client_helpers::request(
         client,
@@ -76,7 +84,9 @@ pub fn get_space_usage(
         crate::client_trait::Style::Rpc,
         "users/get_space_usage",
         &(),
-        None)
+        None,
+        )
+        .await
 }
 
 /// The amount of detail revealed about an account depends on the user being queried and the user

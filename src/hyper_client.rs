@@ -4,7 +4,8 @@ use std::io::{self, Read};
 use std::str;
 
 use crate::Error;
-use crate::client_trait::{Endpoint, Style, HttpClient, HttpRequestResultRaw};
+use crate::client_trait::{Endpoint, Style, HttpClient, HttpClientError, HttpRequestResultRaw, HttpResult};
+use futures::future::{ready, Ready};
 use hyper::{self, Url};
 use hyper::header::Headers;
 use hyper::header::{
@@ -28,6 +29,9 @@ pub enum HyperClientError {
 
     #[error(transparent)]
     Hyper(#[from] hyper::Error),
+
+    #[error("missing Dropbox-API-Result header")]
+    MissingHeader,
 }
 
 // Implement From for some errors so that they get wrapped in a HyperClientError and then
@@ -58,6 +62,7 @@ impl HyperClient {
     /// Given an authorization code, request an OAuth2 token from Dropbox API.
     /// Requires the App ID and secret, as well as the redirect URI used in the prior authorize
     /// request, if there was one.
+    /// TODO(wfraser) make this async
     pub fn oauth2_token_from_authorization_code(
         client_id: &str,
         client_secret: &str,
@@ -86,15 +91,14 @@ impl HyperClient {
         match client.post(url).headers(headers).body(body.as_bytes()).send() {
             Ok(mut resp) => {
                 if !resp.status.is_success() {
-                    let (code, status) = {
-                        let &hyper::http::RawStatus(ref code, ref status) = resp.status_raw();
-                        use std::ops::Deref;
-                        (*code, status.deref().to_owned())
+                    let code = {
+                        let hyper::http::RawStatus(code, _status) = resp.status_raw();
+                        *code
                     };
-                    let mut body = String::new();
-                    resp.read_to_string(&mut body)?;
-                    debug!("error body: {}", body);
-                    Err(Error::UnexpectedHttpError { code, status, json: body })
+                    let mut response_body = String::new();
+                    resp.read_to_string(&mut response_body)?;
+                    debug!("error body: {}", response_body);
+                    Err(Error::UnexpectedHttpError { code, response_body })
                 } else {
                     let body = serde_json::from_reader(resp)?;
                     debug!("response: {:?}", body);
@@ -126,7 +130,12 @@ impl HyperClient {
     }
 }
 
-impl HttpClient for HyperClient {
+// TODO(wfraser) upgrade hyper and make this properly async
+// We're gonna go commit a greivous sin and do a blocking request and return a ready "future".
+// This is just for proof-of-concept purposes.
+type F = Ready<HttpResult>;
+
+impl HttpClient<F> for HyperClient {
     fn request(
         &self,
         endpoint: Endpoint,
@@ -136,7 +145,22 @@ impl HttpClient for HyperClient {
         body: Option<&[u8]>,
         range_start: Option<u64>,
         range_end: Option<u64>,
-    ) -> crate::Result<HttpRequestResultRaw> {
+    ) -> F {
+        ready(self.blocking_request(endpoint, style, function, params_json, body, range_start, range_end))
+    }
+}
+
+impl HyperClient {
+    fn blocking_request(
+        &self,
+        endpoint: Endpoint,
+        style: Style,
+        function: &str,
+        params_json: String,
+        body: Option<&[u8]>,
+        range_start: Option<u64>,
+        range_end: Option<u64>,
+    ) -> HttpResult {
 
         let url = Url::parse(endpoint.url()).unwrap().join(function).expect("invalid request URL");
         debug!("request for {:?}", url);
@@ -200,14 +224,13 @@ impl HttpClient for HyperClient {
             };
 
             if !resp.status.is_success() {
-                let (code, status) = {
-                    let &hyper::http::RawStatus(ref code, ref status) = resp.status_raw();
-                    use std::ops::Deref;
-                    (*code, status.deref().to_owned())
+                let code = {
+                    let hyper::http::RawStatus(code, _status) = resp.status_raw();
+                    *code
                 };
-                let mut json = String::new();
-                resp.read_to_string(&mut json)?;
-                return Err(Error::UnexpectedHttpError { code, status, json });
+                let mut response_body = String::new();
+                resp.read_to_string(&mut response_body)?;
+                return Err(HttpClientError::HttpError { code, response_body });
             }
 
             return match style {
@@ -228,7 +251,8 @@ impl HttpClient for HyperClient {
                             String::from_utf8(values[0].clone())?
                         },
                         None => {
-                            return Err(Error::UnexpectedResponse("missing Dropbox-API-Result header"));
+                            return Err(HttpClientError::Other(Box::new(
+                                        HyperClientError::MissingHeader)));
                         }
                     };
 
