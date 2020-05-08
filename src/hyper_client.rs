@@ -4,7 +4,8 @@ use std::io::{self, Read};
 use std::str;
 
 use crate::Error;
-use crate::client_trait::{Endpoint, Style, HttpClient, HttpClientError, HttpRequestResultRaw};
+use crate::client_trait::{Endpoint, Style, HttpClient, HttpClientError, HttpRequestResultRaw, HttpResult};
+use futures::future::{ready, Ready};
 use hyper::{self, Url};
 use hyper::header::Headers;
 use hyper::header::{
@@ -29,6 +30,7 @@ impl HyperClient {
     /// Given an authorization code, request an OAuth2 token from Dropbox API.
     /// Requires the App ID and secret, as well as the redirect URI used in the prior authorize
     /// request, if there was one.
+    /// TODO(wfraser) make this async
     pub fn oauth2_token_from_authorization_code(
         client_id: &str,
         client_secret: &str,
@@ -93,7 +95,12 @@ impl HyperClient {
     }
 }
 
-impl HttpClient for HyperClient {
+// TODO(wfraser) upgrade hyper and make this properly async
+// We're gonna go commit a greivous sin and do a blocking request and return a ready "future".
+// This is just for proof-of-concept purposes.
+type F = Ready<HttpResult>;
+
+impl HttpClient<F> for HyperClient {
     fn request(
         &self,
         endpoint: Endpoint,
@@ -103,7 +110,22 @@ impl HttpClient for HyperClient {
         body: Option<&[u8]>,
         range_start: Option<u64>,
         range_end: Option<u64>,
-    ) -> Result<HttpRequestResultRaw, HttpClientError> {
+    ) -> F {
+        ready(self.blocking_request(endpoint, style, function, params_json, body, range_start, range_end))
+    }
+}
+
+impl HyperClient {
+    fn blocking_request(
+        &self,
+        endpoint: Endpoint,
+        style: Style,
+        function: &str,
+        params_json: String,
+        body: Option<&[u8]>,
+        range_start: Option<u64>,
+        range_end: Option<u64>,
+    ) -> HttpResult {
 
         let url = Url::parse(endpoint.url()).unwrap().join(function).expect("invalid request URL");
         debug!("request for {:?}", url);

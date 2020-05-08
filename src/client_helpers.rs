@@ -70,8 +70,8 @@ impl<'de, T: DeserializeOwned> Deserialize<'de> for TopLevelError<T> {
 /// an error if the server returned one for the request, otherwise it has the deserialized JSON
 /// response and the body stream (if any).
 #[allow(clippy::too_many_arguments)]
-pub fn request_with_body<T: DeserializeOwned, E: DeserializeOwned + Debug + Send + Sync + 'static, P: Serialize>(
-    client: &dyn HttpClient,
+pub async fn request_with_body<T, E, P, F>(
+    client: &dyn HttpClient<F>,
     endpoint: Endpoint,
     style: Style,
     function: &str,
@@ -79,9 +79,16 @@ pub fn request_with_body<T: DeserializeOwned, E: DeserializeOwned + Debug + Send
     body: Option<&[u8]>,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> crate::Result<HttpRequestResult<T>, E> {
+) -> crate::Result<HttpRequestResult<T>, E>
+    where T: DeserializeOwned,
+          E: DeserializeOwned + Debug + Send + Sync + 'static,
+          P: Serialize,
+          F: std::future::Future<Output=HttpResult>,
+{
     let params_json = serde_json::to_string(params)?;
-    let result = client.request(endpoint, style, function, params_json, body, range_start, range_end);
+    let result = client.request(
+        endpoint, style, function, params_json, body, range_start, range_end)
+        .await;
     match result {
         Ok(HttpRequestResultRaw { result_json, content_length, body }) => {
             debug!("json: {}", result_json);
@@ -133,14 +140,20 @@ pub fn request_with_body<T: DeserializeOwned, E: DeserializeOwned + Debug + Send
     }
 }
 
-pub fn request<T: DeserializeOwned, E: DeserializeOwned + Debug + Send + Sync + 'static, P: Serialize>(
-    client: &dyn HttpClient,
+pub async fn request<T, E, P, F>(
+    client: &dyn HttpClient<F>,
     endpoint: Endpoint,
     style: Style,
     function: &str,
     params: &P,
     body: Option<&[u8]>,
-) -> crate::Result<T, E> {
+) -> crate::Result<T, E>
+    where T: DeserializeOwned,
+          E: DeserializeOwned + Debug + Send + Sync + 'static,
+          P: Serialize,
+          F: std::future::Future<Output=HttpResult>,
+{
     request_with_body(client, endpoint, style, function, params, body, None, None)
+        .await
         .map(|HttpRequestResult { result, .. }| result)
 }

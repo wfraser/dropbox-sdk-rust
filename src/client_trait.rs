@@ -2,9 +2,12 @@
 
 //! Everything needed to implement your HTTP client.
 
+use std::future::Future;
 use std::io::Read;
 
-pub trait HttpClient {
+pub type HttpResult = Result<HttpRequestResultRaw, HttpClientError>;
+
+pub trait HttpClient<F: Future<Output=HttpResult>> {
     #[allow(clippy::too_many_arguments)]
     fn request(
         &self,
@@ -15,7 +18,7 @@ pub trait HttpClient {
         body: Option<&[u8]>,
         range_start: Option<u64>,
         range_end: Option<u64>,
-    ) -> Result<HttpRequestResultRaw, HttpClientError>;
+    ) -> F;
 }
 
 /// An error returned by the HTTP client.

@@ -8,8 +8,8 @@
 )]
 
 /// Creates an OAuth 2.0 access token from the supplied OAuth 1.0 access token.
-pub fn token_from_oauth1(
-    client: &dyn crate::client_trait::HttpClient,
+pub async fn token_from_oauth1(
+    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
     arg: &TokenFromOAuth1Arg,
 ) -> crate::Result<TokenFromOAuth1Result, TokenFromOAuth1Error> {
     crate::client_helpers::request(
@@ -18,18 +18,24 @@ pub fn token_from_oauth1(
         crate::client_trait::Style::Rpc,
         "auth/token/from_oauth1",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Disables the access token used to authenticate the call.
-pub fn token_revoke(client: &dyn crate::client_trait::HttpClient) -> crate::Result<(), ()> {
+pub async fn token_revoke(
+    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+) -> crate::Result<(), ()> {
     crate::client_helpers::request(
         client,
         crate::client_trait::Endpoint::Api,
         crate::client_trait::Style::Rpc,
         "auth/token/revoke",
         &(),
-        None)
+        None,
+        )
+        .await
 }
 
 /// Error occurred because the account doesn't have permission to access the resource.

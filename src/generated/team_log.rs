@@ -24,8 +24,8 @@ pub type TeamEventList = Vec<TeamEvent>;
 /// [plans](/business/plans-comparison). Use
 /// [features/get_values](/developers/documentation/http/teams#team-features-get_values) to check
 /// for this feature. Permission : Team Auditing.
-pub fn get_events(
-    client: &dyn crate::client_trait::HttpClient,
+pub async fn get_events(
+    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
     arg: &GetTeamEventsArg,
 ) -> crate::Result<GetTeamEventsResult, GetTeamEventsError> {
     crate::client_helpers::request(
@@ -34,13 +34,15 @@ pub fn get_events(
         crate::client_trait::Style::Rpc,
         "team_log/get_events",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Once a cursor has been retrieved from [`get_events()`](get_events), use this to paginate through
 /// all events. Permission : Team Auditing.
-pub fn get_events_continue(
-    client: &dyn crate::client_trait::HttpClient,
+pub async fn get_events_continue(
+    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
     arg: &GetTeamEventsContinueArg,
 ) -> crate::Result<GetTeamEventsResult, GetTeamEventsContinueError> {
     crate::client_helpers::request(
@@ -49,7 +51,9 @@ pub fn get_events_continue(
         crate::client_trait::Style::Rpc,
         "team_log/get_events/continue",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Indicates the method in which the action was performed.

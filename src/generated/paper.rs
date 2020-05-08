@@ -22,8 +22,8 @@ pub type PaperDocId = String;
 /// the new version of Paper. This endpoint will be retired in September 2020. Refer to the [Paper
 /// Migration Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for more
 /// information.
-pub fn docs_archive(
-    client: &dyn crate::client_trait::HttpClient,
+pub async fn docs_archive(
+    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
     arg: &RefPaperDoc,
 ) -> crate::Result<(), DocLookupError> {
     crate::client_helpers::request(
@@ -32,7 +32,9 @@ pub fn docs_archive(
         crate::client_trait::Style::Rpc,
         "paper/docs/archive",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Creates a new Paper doc with the provided content. Note that this endpoint will continue to work
@@ -42,8 +44,8 @@ pub fn docs_archive(
 /// to the [Paper Migration
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for more
 /// information.
-pub fn docs_create(
-    client: &dyn crate::client_trait::HttpClient,
+pub async fn docs_create(
+    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
     arg: &PaperDocCreateArgs,
     body: &[u8],
 ) -> crate::Result<PaperDocCreateUpdateResult, PaperDocCreateError> {
@@ -53,7 +55,9 @@ pub fn docs_create(
         crate::client_trait::Style::Upload,
         "paper/docs/create",
         arg,
-        Some(body))
+        Some(body),
+        )
+        .await
 }
 
 /// Exports and downloads Paper doc either as HTML or markdown. Note that this endpoint will
@@ -62,8 +66,8 @@ pub fn docs_create(
 /// enabled, then the user is running the new version of Paper. Refer to the [Paper Migration
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for migration
 /// information.
-pub fn docs_download(
-    client: &dyn crate::client_trait::HttpClient,
+pub async fn docs_download(
+    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
     arg: &PaperDocExport,
     range_start: Option<u64>,
     range_end: Option<u64>,
@@ -76,7 +80,9 @@ pub fn docs_download(
         arg,
         None,
         range_start,
-        range_end)
+        range_end,
+        )
+        .await
 }
 
 /// Lists the users who are explicitly invited to the Paper folder in which the Paper doc is
@@ -87,8 +93,8 @@ pub fn docs_download(
 /// enabled, then the user is running the new version of Paper. Refer to the [Paper Migration
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for migration
 /// information.
-pub fn docs_folder_users_list(
-    client: &dyn crate::client_trait::HttpClient,
+pub async fn docs_folder_users_list(
+    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
     arg: &ListUsersOnFolderArgs,
 ) -> crate::Result<ListUsersOnFolderResponse, DocLookupError> {
     crate::client_helpers::request(
@@ -97,7 +103,9 @@ pub fn docs_folder_users_list(
         crate::client_trait::Style::Rpc,
         "paper/docs/folder_users/list",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Once a cursor has been retrieved from [`docs_folder_users_list()`](docs_folder_users_list), use
@@ -107,8 +115,8 @@ pub fn docs_folder_users_list(
 /// user is running the new version of Paper. Refer to the [Paper Migration
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for migration
 /// information.
-pub fn docs_folder_users_list_continue(
-    client: &dyn crate::client_trait::HttpClient,
+pub async fn docs_folder_users_list_continue(
+    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
     arg: &ListUsersOnFolderContinueArgs,
 ) -> crate::Result<ListUsersOnFolderResponse, ListUsersCursorError> {
     crate::client_helpers::request(
@@ -117,7 +125,9 @@ pub fn docs_folder_users_list_continue(
         crate::client_trait::Style::Rpc,
         "paper/docs/folder_users/list/continue",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Retrieves folder information for the given Paper doc. This includes:   - folder sharing policy;
@@ -131,8 +141,8 @@ pub fn docs_folder_users_list_continue(
 /// feature is enabled, then the user is running the new version of Paper. Refer to the [Paper
 /// Migration Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for
 /// migration information.
-pub fn docs_get_folder_info(
-    client: &dyn crate::client_trait::HttpClient,
+pub async fn docs_get_folder_info(
+    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
     arg: &RefPaperDoc,
 ) -> crate::Result<FoldersContainingPaperDoc, DocLookupError> {
     crate::client_helpers::request(
@@ -141,7 +151,9 @@ pub fn docs_get_folder_info(
         crate::client_trait::Style::Rpc,
         "paper/docs/get_folder_info",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Return the list of all Paper docs according to the argument specifications. To iterate over
@@ -152,8 +164,8 @@ pub fn docs_get_folder_info(
 /// the [Paper Migration
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for migration
 /// information.
-pub fn docs_list(
-    client: &dyn crate::client_trait::HttpClient,
+pub async fn docs_list(
+    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
     arg: &ListPaperDocsArgs,
 ) -> crate::Result<ListPaperDocsResponse, ()> {
     crate::client_helpers::request(
@@ -162,7 +174,9 @@ pub fn docs_list(
         crate::client_trait::Style::Rpc,
         "paper/docs/list",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Once a cursor has been retrieved from [`docs_list()`](docs_list), use this to paginate through
@@ -172,8 +186,8 @@ pub fn docs_list(
 /// the new version of Paper. Refer to the [Paper Migration
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for migration
 /// information.
-pub fn docs_list_continue(
-    client: &dyn crate::client_trait::HttpClient,
+pub async fn docs_list_continue(
+    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
     arg: &ListPaperDocsContinueArgs,
 ) -> crate::Result<ListPaperDocsResponse, ListDocsCursorError> {
     crate::client_helpers::request(
@@ -182,7 +196,9 @@ pub fn docs_list_continue(
         crate::client_trait::Style::Rpc,
         "paper/docs/list/continue",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Permanently deletes the given Paper doc. This operation is final as the doc cannot be recovered.
@@ -192,8 +208,8 @@ pub fn docs_list_continue(
 /// user is running the new version of Paper. Refer to the [Paper Migration
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for migration
 /// information.
-pub fn docs_permanently_delete(
-    client: &dyn crate::client_trait::HttpClient,
+pub async fn docs_permanently_delete(
+    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
     arg: &RefPaperDoc,
 ) -> crate::Result<(), DocLookupError> {
     crate::client_helpers::request(
@@ -202,7 +218,9 @@ pub fn docs_permanently_delete(
         crate::client_trait::Style::Rpc,
         "paper/docs/permanently_delete",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Gets the default sharing policy for the given Paper doc. Note that this endpoint will continue
@@ -211,8 +229,8 @@ pub fn docs_permanently_delete(
 /// then the user is running the new version of Paper. Refer to the [Paper Migration
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for migration
 /// information.
-pub fn docs_sharing_policy_get(
-    client: &dyn crate::client_trait::HttpClient,
+pub async fn docs_sharing_policy_get(
+    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
     arg: &RefPaperDoc,
 ) -> crate::Result<SharingPolicy, DocLookupError> {
     crate::client_helpers::request(
@@ -221,7 +239,9 @@ pub fn docs_sharing_policy_get(
         crate::client_trait::Style::Rpc,
         "paper/docs/sharing_policy/get",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Sets the default sharing policy for the given Paper doc. The default 'team_sharing_policy' can
@@ -233,8 +253,8 @@ pub fn docs_sharing_policy_get(
 /// the new version of Paper. Refer to the [Paper Migration
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for migration
 /// information.
-pub fn docs_sharing_policy_set(
-    client: &dyn crate::client_trait::HttpClient,
+pub async fn docs_sharing_policy_set(
+    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
     arg: &PaperDocSharingPolicy,
 ) -> crate::Result<(), DocLookupError> {
     crate::client_helpers::request(
@@ -243,7 +263,9 @@ pub fn docs_sharing_policy_set(
         crate::client_trait::Style::Rpc,
         "paper/docs/sharing_policy/set",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Updates an existing Paper doc with the provided content. Note that this endpoint will continue
@@ -253,8 +275,8 @@ pub fn docs_sharing_policy_set(
 /// 2020. Refer to the [Paper Migration
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for more
 /// information.
-pub fn docs_update(
-    client: &dyn crate::client_trait::HttpClient,
+pub async fn docs_update(
+    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
     arg: &PaperDocUpdateArgs,
     body: &[u8],
 ) -> crate::Result<PaperDocCreateUpdateResult, PaperDocUpdateError> {
@@ -264,7 +286,9 @@ pub fn docs_update(
         crate::client_trait::Style::Upload,
         "paper/docs/update",
         arg,
-        Some(body))
+        Some(body),
+        )
+        .await
 }
 
 /// Allows an owner or editor to add users to a Paper doc or change their permissions using their
@@ -275,8 +299,8 @@ pub fn docs_update(
 /// the [Paper Migration
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for migration
 /// information.
-pub fn docs_users_add(
-    client: &dyn crate::client_trait::HttpClient,
+pub async fn docs_users_add(
+    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
     arg: &AddPaperDocUser,
 ) -> crate::Result<Vec<AddPaperDocUserMemberResult>, DocLookupError> {
     crate::client_helpers::request(
@@ -285,7 +309,9 @@ pub fn docs_users_add(
         crate::client_trait::Style::Rpc,
         "paper/docs/users/add",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Lists all users who visited the Paper doc or users with explicit access. This call excludes
@@ -297,8 +323,8 @@ pub fn docs_users_add(
 /// the new version of Paper. Refer to the [Paper Migration
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for migration
 /// information.
-pub fn docs_users_list(
-    client: &dyn crate::client_trait::HttpClient,
+pub async fn docs_users_list(
+    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
     arg: &ListUsersOnPaperDocArgs,
 ) -> crate::Result<ListUsersOnPaperDocResponse, DocLookupError> {
     crate::client_helpers::request(
@@ -307,7 +333,9 @@ pub fn docs_users_list(
         crate::client_trait::Style::Rpc,
         "paper/docs/users/list",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Once a cursor has been retrieved from [`docs_users_list()`](docs_users_list), use this to
@@ -317,8 +345,8 @@ pub fn docs_users_list(
 /// is running the new version of Paper. Refer to the [Paper Migration
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for migration
 /// information.
-pub fn docs_users_list_continue(
-    client: &dyn crate::client_trait::HttpClient,
+pub async fn docs_users_list_continue(
+    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
     arg: &ListUsersOnPaperDocContinueArgs,
 ) -> crate::Result<ListUsersOnPaperDocResponse, ListUsersCursorError> {
     crate::client_helpers::request(
@@ -327,7 +355,9 @@ pub fn docs_users_list_continue(
         crate::client_trait::Style::Rpc,
         "paper/docs/users/list/continue",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Allows an owner or editor to remove users from a Paper doc using their email address or Dropbox
@@ -337,8 +367,8 @@ pub fn docs_users_list_continue(
 /// is running the new version of Paper. Refer to the [Paper Migration
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for migration
 /// information.
-pub fn docs_users_remove(
-    client: &dyn crate::client_trait::HttpClient,
+pub async fn docs_users_remove(
+    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
     arg: &RemovePaperDocUser,
 ) -> crate::Result<(), DocLookupError> {
     crate::client_helpers::request(
@@ -347,7 +377,9 @@ pub fn docs_users_remove(
         crate::client_trait::Style::Rpc,
         "paper/docs/users/remove",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Create a new Paper folder with the provided info. Note that this endpoint will continue to work
@@ -356,8 +388,8 @@ pub fn docs_users_remove(
 /// user is running the new version of Paper. Refer to the [Paper Migration
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for migration
 /// information.
-pub fn folders_create(
-    client: &dyn crate::client_trait::HttpClient,
+pub async fn folders_create(
+    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
     arg: &PaperFolderCreateArg,
 ) -> crate::Result<PaperFolderCreateResult, PaperFolderCreateError> {
     crate::client_helpers::request(
@@ -366,7 +398,9 @@ pub fn folders_create(
         crate::client_trait::Style::Rpc,
         "paper/folders/create",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 #[derive(Debug)]
