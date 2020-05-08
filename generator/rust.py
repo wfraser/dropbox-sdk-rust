@@ -71,24 +71,24 @@ class RustHelperBackend(CodeBackend):
             yield
         self.emit(u'}')
 
-    def emit_rust_fn_call(self, func_name, args, end=None):
+    def emit_rust_fn_call_await(self, func_name, args):
         """
-        Emit a Rust function call. Wraps arguments to multiple lines if it gets too long.
-        If `end` is None, the call ends without any semicolon.
+        Emit a Rust function call, followed by `.await`. Wraps arguments to
+        multiple lines if it gets too long.  The call ends without any
+        semicolon.
         """
-        if end is None:
-            end = u''
-        one_line = u'{}({}){}'.format(
-            func_name,
-            self._arg_list(args),
-            end)
+        one_line = u'{}({})'.format(func_name, self._arg_list(args))
         if self._dent_len() + len(one_line) < 100:
             self.emit(one_line)
+            with self.indent():
+                self.emit(u'.await')
         else:
             self.emit(func_name + u'(')
             with self.indent():
                 for i, arg in enumerate(args):
-                    self.emit(arg + (',' if i+1 < len(args) else (')' + end)))
+                    self.emit(arg + ',')
+                self.emit(u')')
+                self.emit(u'.await')
 
     def is_enum_type(self, typ):
         return isinstance(typ, ir.Union) or \

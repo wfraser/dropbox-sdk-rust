@@ -14,7 +14,7 @@ pub type FileRequestValidationError = Option<String>;
 
 /// Returns the total number of file requests owned by this user. Includes both open and closed file
 /// requests.
-pub fn count(
+pub async fn count(
     client: &impl crate::client_trait::UserAuthClient,
 ) -> crate::Result<Result<CountFileRequestsResult, CountFileRequestsError>> {
     crate::client_helpers::request(
@@ -23,13 +23,15 @@ pub fn count(
         crate::client_trait::Style::Rpc,
         "file_requests/count",
         &(),
-        None)
+        None,
+        )
+        .await
 }
 
 /// Creates a file request for this user.
-pub fn create(
+pub async fn create(
     client: &impl crate::client_trait::UserAuthClient,
-    arg: &CreateFileRequestArgs,
+    arg: CreateFileRequestArgs,
 ) -> crate::Result<Result<FileRequest, CreateFileRequestError>> {
     crate::client_helpers::request(
         client,
@@ -37,13 +39,15 @@ pub fn create(
         crate::client_trait::Style::Rpc,
         "file_requests/create",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Delete a batch of closed file requests.
-pub fn delete(
+pub async fn delete(
     client: &impl crate::client_trait::UserAuthClient,
-    arg: &DeleteFileRequestArgs,
+    arg: DeleteFileRequestArgs,
 ) -> crate::Result<Result<DeleteFileRequestsResult, DeleteFileRequestError>> {
     crate::client_helpers::request(
         client,
@@ -51,11 +55,13 @@ pub fn delete(
         crate::client_trait::Style::Rpc,
         "file_requests/delete",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Delete all closed file requests owned by this user.
-pub fn delete_all_closed(
+pub async fn delete_all_closed(
     client: &impl crate::client_trait::UserAuthClient,
 ) -> crate::Result<Result<DeleteAllClosedFileRequestsResult, DeleteAllClosedFileRequestsError>> {
     crate::client_helpers::request(
@@ -64,13 +70,15 @@ pub fn delete_all_closed(
         crate::client_trait::Style::Rpc,
         "file_requests/delete_all_closed",
         &(),
-        None)
+        None,
+        )
+        .await
 }
 
 /// Returns the specified file request.
-pub fn get(
+pub async fn get(
     client: &impl crate::client_trait::UserAuthClient,
-    arg: &GetFileRequestArgs,
+    arg: GetFileRequestArgs,
 ) -> crate::Result<Result<FileRequest, GetFileRequestError>> {
     crate::client_helpers::request(
         client,
@@ -78,14 +86,16 @@ pub fn get(
         crate::client_trait::Style::Rpc,
         "file_requests/get",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Returns a list of file requests owned by this user. For apps with the app folder permission,
 /// this will only return file requests with destinations in the app folder.
-pub fn list_v2(
+pub async fn list_v2(
     client: &impl crate::client_trait::UserAuthClient,
-    arg: &ListFileRequestsArg,
+    arg: ListFileRequestsArg,
 ) -> crate::Result<Result<ListFileRequestsV2Result, ListFileRequestsError>> {
     crate::client_helpers::request(
         client,
@@ -93,12 +103,14 @@ pub fn list_v2(
         crate::client_trait::Style::Rpc,
         "file_requests/list_v2",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Returns a list of file requests owned by this user. For apps with the app folder permission,
 /// this will only return file requests with destinations in the app folder.
-pub fn list(
+pub async fn list(
     client: &impl crate::client_trait::UserAuthClient,
 ) -> crate::Result<Result<ListFileRequestsResult, ListFileRequestsError>> {
     crate::client_helpers::request(
@@ -107,15 +119,17 @@ pub fn list(
         crate::client_trait::Style::Rpc,
         "file_requests/list",
         &(),
-        None)
+        None,
+        )
+        .await
 }
 
 /// Once a cursor has been retrieved from [`list_v2()`](list_v2), use this to paginate through all
 /// file requests. The cursor must come from a previous call to [`list_v2()`](list_v2) or
 /// [`list_continue()`](list_continue).
-pub fn list_continue(
+pub async fn list_continue(
     client: &impl crate::client_trait::UserAuthClient,
-    arg: &ListFileRequestsContinueArg,
+    arg: ListFileRequestsContinueArg,
 ) -> crate::Result<Result<ListFileRequestsV2Result, ListFileRequestsContinueError>> {
     crate::client_helpers::request(
         client,
@@ -123,13 +137,15 @@ pub fn list_continue(
         crate::client_trait::Style::Rpc,
         "file_requests/list/continue",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Update a file request.
-pub fn update(
+pub async fn update(
     client: &impl crate::client_trait::UserAuthClient,
-    arg: &UpdateFileRequestArgs,
+    arg: UpdateFileRequestArgs,
 ) -> crate::Result<Result<FileRequest, UpdateFileRequestError>> {
     crate::client_helpers::request(
         client,
@@ -137,11 +153,13 @@ pub fn update(
         crate::client_trait::Style::Rpc,
         "file_requests/update",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// There was an error counting the file requests.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum CountFileRequestsError {
     /// This user's Dropbox Business team doesn't allow file requests.
     DisabledForTeam,
@@ -212,7 +230,7 @@ impl ::std::fmt::Display for CountFileRequestsError {
 }
 
 /// Result for [`count()`](count).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct CountFileRequestsResult {
     /// The number file requests owner by this user.
     pub file_request_count: u64,
@@ -303,7 +321,7 @@ impl ::serde::ser::Serialize for CountFileRequestsResult {
 }
 
 /// Arguments for [`create()`](create).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct CreateFileRequestArgs {
     /// The title of the file request. Must not be empty.
     pub title: String,
@@ -464,7 +482,7 @@ impl ::serde::ser::Serialize for CreateFileRequestArgs {
 }
 
 /// There was an error creating the file request.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum CreateFileRequestError {
     /// This user's Dropbox Business team doesn't allow file requests.
     DisabledForTeam,
@@ -644,7 +662,7 @@ impl ::std::fmt::Display for CreateFileRequestError {
 }
 
 /// There was an error deleting all closed file requests.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum DeleteAllClosedFileRequestsError {
     /// This user's Dropbox Business team doesn't allow file requests.
     DisabledForTeam,
@@ -797,7 +815,7 @@ impl ::std::fmt::Display for DeleteAllClosedFileRequestsError {
 }
 
 /// Result for [`delete_all_closed()`](delete_all_closed).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeleteAllClosedFileRequestsResult {
     /// The file requests deleted for this user.
     pub file_requests: Vec<FileRequest>,
@@ -888,7 +906,7 @@ impl ::serde::ser::Serialize for DeleteAllClosedFileRequestsResult {
 }
 
 /// Arguments for [`delete()`](delete).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeleteFileRequestArgs {
     /// List IDs of the file requests to delete.
     pub ids: Vec<FileRequestId>,
@@ -979,7 +997,7 @@ impl ::serde::ser::Serialize for DeleteFileRequestArgs {
 }
 
 /// There was an error deleting these file requests.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum DeleteFileRequestError {
     /// This user's Dropbox Business team doesn't allow file requests.
     DisabledForTeam,
@@ -1145,7 +1163,7 @@ impl ::std::fmt::Display for DeleteFileRequestError {
 }
 
 /// Result for [`delete()`](delete).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeleteFileRequestsResult {
     /// The file requests deleted by the request.
     pub file_requests: Vec<FileRequest>,
@@ -1237,7 +1255,7 @@ impl ::serde::ser::Serialize for DeleteFileRequestsResult {
 
 /// A [file request](https://www.dropbox.com/help/9090) for receiving files into the user's Dropbox
 /// account.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileRequest {
     /// The ID of the file request.
     pub id: FileRequestId,
@@ -1456,7 +1474,7 @@ impl ::serde::ser::Serialize for FileRequest {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileRequestDeadline {
     /// The deadline for this file request.
     pub deadline: super::common::DropboxTimestamp,
@@ -1566,7 +1584,7 @@ impl ::serde::ser::Serialize for FileRequestDeadline {
 }
 
 /// There is an error with the file request.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum FileRequestError {
     /// This user's Dropbox Business team doesn't allow file requests.
     DisabledForTeam,
@@ -1719,7 +1737,7 @@ impl ::std::fmt::Display for FileRequestError {
 }
 
 /// There is an error accessing the file requests functionality.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum GeneralFileRequestsError {
     /// This user's Dropbox Business team doesn't allow file requests.
     DisabledForTeam,
@@ -1790,7 +1808,7 @@ impl ::std::fmt::Display for GeneralFileRequestsError {
 }
 
 /// Arguments for [`get()`](get).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GetFileRequestArgs {
     /// The ID of the file request to retrieve.
     pub id: FileRequestId,
@@ -1881,7 +1899,7 @@ impl ::serde::ser::Serialize for GetFileRequestArgs {
 }
 
 /// There was an error retrieving the specified file request.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum GetFileRequestError {
     /// This user's Dropbox Business team doesn't allow file requests.
     DisabledForTeam,
@@ -2033,7 +2051,7 @@ impl ::std::fmt::Display for GetFileRequestError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum GracePeriod {
     OneDay,
     TwoDays,
@@ -2139,7 +2157,7 @@ impl ::serde::ser::Serialize for GracePeriod {
 }
 
 /// Arguments for [`list_v2()`](list_v2).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListFileRequestsArg {
     /// The maximum number of file requests that should be returned per request.
     pub limit: u64,
@@ -2217,7 +2235,7 @@ impl ::serde::ser::Serialize for ListFileRequestsArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListFileRequestsContinueArg {
     /// The cursor returned by the previous API call specified in the endpoint description.
     pub cursor: String,
@@ -2308,7 +2326,7 @@ impl ::serde::ser::Serialize for ListFileRequestsContinueArg {
 }
 
 /// There was an error retrieving the file requests.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ListFileRequestsContinueError {
     /// This user's Dropbox Business team doesn't allow file requests.
     DisabledForTeam,
@@ -2392,7 +2410,7 @@ impl ::std::fmt::Display for ListFileRequestsContinueError {
 }
 
 /// There was an error retrieving the file requests.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ListFileRequestsError {
     /// This user's Dropbox Business team doesn't allow file requests.
     DisabledForTeam,
@@ -2463,7 +2481,7 @@ impl ::std::fmt::Display for ListFileRequestsError {
 }
 
 /// Result for [`list()`](list).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListFileRequestsResult {
     /// The file requests owned by this user. Apps with the app folder permission will only see file
     /// requests in their app folder.
@@ -2555,7 +2573,7 @@ impl ::serde::ser::Serialize for ListFileRequestsResult {
 }
 
 /// Result for [`list_v2()`](list_v2) and [`list_continue()`](list_continue).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListFileRequestsV2Result {
     /// The file requests owned by this user. Apps with the app folder permission will only see file
     /// requests in their app folder.
@@ -2674,7 +2692,7 @@ impl ::serde::ser::Serialize for ListFileRequestsV2Result {
 }
 
 /// Arguments for [`update()`](update).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UpdateFileRequestArgs {
     /// The ID of the file request to update.
     pub id: FileRequestId,
@@ -2856,7 +2874,7 @@ impl ::serde::ser::Serialize for UpdateFileRequestArgs {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum UpdateFileRequestDeadline {
     /// Do not change the file request's deadline.
     NoUpdate,
@@ -2929,7 +2947,7 @@ impl ::serde::ser::Serialize for UpdateFileRequestDeadline {
 }
 
 /// There is an error updating the file request.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum UpdateFileRequestError {
     /// This user's Dropbox Business team doesn't allow file requests.
     DisabledForTeam,

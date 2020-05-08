@@ -15,7 +15,7 @@ pub type TeamId = String;
 pub type TeamMemberId = String;
 
 /// The group type determines how a group is managed.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum GroupManagementType {
     /// A group which is managed by selected users.
     UserManaged,
@@ -100,7 +100,7 @@ impl ::serde::ser::Serialize for GroupManagementType {
 }
 
 /// Information about a group.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupSummary {
     pub group_name: String,
     pub group_id: GroupId,
@@ -255,7 +255,7 @@ impl ::serde::ser::Serialize for GroupSummary {
 }
 
 /// The group type determines how a group is created and managed.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum GroupType {
     /// A group to which team members are automatically added. Applicable to [team
     /// folders](https://www.dropbox.com/help/986) only.
@@ -328,7 +328,7 @@ impl ::serde::ser::Serialize for GroupType {
 }
 
 /// The type of the space limit imposed on a team member.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum MemberSpaceLimitType {
     /// The team member does not have imposed space limit.
     Off,
@@ -415,7 +415,7 @@ impl ::serde::ser::Serialize for MemberSpaceLimitType {
 }
 
 /// Time range.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TimeRange {
     /// Optional starting time (inclusive).
     pub start_time: Option<super::common::DropboxTimestamp>,

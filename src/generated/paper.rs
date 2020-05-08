@@ -22,9 +22,9 @@ pub type PaperDocId = String;
 /// the new version of Paper. This endpoint will be retired in September 2020. Refer to the [Paper
 /// Migration Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for more
 /// information.
-pub fn docs_archive(
+pub async fn docs_archive(
     client: &impl crate::client_trait::UserAuthClient,
-    arg: &RefPaperDoc,
+    arg: RefPaperDoc,
 ) -> crate::Result<Result<(), DocLookupError>> {
     crate::client_helpers::request(
         client,
@@ -32,7 +32,9 @@ pub fn docs_archive(
         crate::client_trait::Style::Rpc,
         "paper/docs/archive",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Creates a new Paper doc with the provided content. Note that this endpoint will continue to work
@@ -42,10 +44,10 @@ pub fn docs_archive(
 /// to the [Paper Migration
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for more
 /// information.
-pub fn docs_create(
+pub async fn docs_create(
     client: &impl crate::client_trait::UserAuthClient,
-    arg: &PaperDocCreateArgs,
-    body: &[u8],
+    arg: PaperDocCreateArgs,
+    body: crate::client_trait::BodyStream,
 ) -> crate::Result<Result<PaperDocCreateUpdateResult, PaperDocCreateError>> {
     crate::client_helpers::request(
         client,
@@ -53,7 +55,9 @@ pub fn docs_create(
         crate::client_trait::Style::Upload,
         "paper/docs/create",
         arg,
-        Some(body))
+        Some(body),
+        )
+        .await
 }
 
 /// Exports and downloads Paper doc either as HTML or markdown. Note that this endpoint will
@@ -62,9 +66,9 @@ pub fn docs_create(
 /// enabled, then the user is running the new version of Paper. Refer to the [Paper Migration
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for migration
 /// information.
-pub fn docs_download(
+pub async fn docs_download(
     client: &impl crate::client_trait::UserAuthClient,
-    arg: &PaperDocExport,
+    arg: PaperDocExport,
     range_start: Option<u64>,
     range_end: Option<u64>,
 ) -> crate::Result<Result<crate::client_trait::HttpRequestResult<PaperDocExportResult>, DocLookupError>> {
@@ -76,7 +80,9 @@ pub fn docs_download(
         arg,
         None,
         range_start,
-        range_end)
+        range_end,
+        )
+        .await
 }
 
 /// Lists the users who are explicitly invited to the Paper folder in which the Paper doc is
@@ -87,9 +93,9 @@ pub fn docs_download(
 /// enabled, then the user is running the new version of Paper. Refer to the [Paper Migration
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for migration
 /// information.
-pub fn docs_folder_users_list(
+pub async fn docs_folder_users_list(
     client: &impl crate::client_trait::UserAuthClient,
-    arg: &ListUsersOnFolderArgs,
+    arg: ListUsersOnFolderArgs,
 ) -> crate::Result<Result<ListUsersOnFolderResponse, DocLookupError>> {
     crate::client_helpers::request(
         client,
@@ -97,7 +103,9 @@ pub fn docs_folder_users_list(
         crate::client_trait::Style::Rpc,
         "paper/docs/folder_users/list",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Once a cursor has been retrieved from [`docs_folder_users_list()`](docs_folder_users_list), use
@@ -107,9 +115,9 @@ pub fn docs_folder_users_list(
 /// user is running the new version of Paper. Refer to the [Paper Migration
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for migration
 /// information.
-pub fn docs_folder_users_list_continue(
+pub async fn docs_folder_users_list_continue(
     client: &impl crate::client_trait::UserAuthClient,
-    arg: &ListUsersOnFolderContinueArgs,
+    arg: ListUsersOnFolderContinueArgs,
 ) -> crate::Result<Result<ListUsersOnFolderResponse, ListUsersCursorError>> {
     crate::client_helpers::request(
         client,
@@ -117,7 +125,9 @@ pub fn docs_folder_users_list_continue(
         crate::client_trait::Style::Rpc,
         "paper/docs/folder_users/list/continue",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Retrieves folder information for the given Paper doc. This includes:   - folder sharing policy;
@@ -131,9 +141,9 @@ pub fn docs_folder_users_list_continue(
 /// feature is enabled, then the user is running the new version of Paper. Refer to the [Paper
 /// Migration Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for
 /// migration information.
-pub fn docs_get_folder_info(
+pub async fn docs_get_folder_info(
     client: &impl crate::client_trait::UserAuthClient,
-    arg: &RefPaperDoc,
+    arg: RefPaperDoc,
 ) -> crate::Result<Result<FoldersContainingPaperDoc, DocLookupError>> {
     crate::client_helpers::request(
         client,
@@ -141,7 +151,9 @@ pub fn docs_get_folder_info(
         crate::client_trait::Style::Rpc,
         "paper/docs/get_folder_info",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Return the list of all Paper docs according to the argument specifications. To iterate over
@@ -152,9 +164,9 @@ pub fn docs_get_folder_info(
 /// the [Paper Migration
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for migration
 /// information.
-pub fn docs_list(
+pub async fn docs_list(
     client: &impl crate::client_trait::UserAuthClient,
-    arg: &ListPaperDocsArgs,
+    arg: ListPaperDocsArgs,
 ) -> crate::Result<Result<ListPaperDocsResponse, ()>> {
     crate::client_helpers::request(
         client,
@@ -162,7 +174,9 @@ pub fn docs_list(
         crate::client_trait::Style::Rpc,
         "paper/docs/list",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Once a cursor has been retrieved from [`docs_list()`](docs_list), use this to paginate through
@@ -172,9 +186,9 @@ pub fn docs_list(
 /// the new version of Paper. Refer to the [Paper Migration
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for migration
 /// information.
-pub fn docs_list_continue(
+pub async fn docs_list_continue(
     client: &impl crate::client_trait::UserAuthClient,
-    arg: &ListPaperDocsContinueArgs,
+    arg: ListPaperDocsContinueArgs,
 ) -> crate::Result<Result<ListPaperDocsResponse, ListDocsCursorError>> {
     crate::client_helpers::request(
         client,
@@ -182,7 +196,9 @@ pub fn docs_list_continue(
         crate::client_trait::Style::Rpc,
         "paper/docs/list/continue",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Permanently deletes the given Paper doc. This operation is final as the doc cannot be recovered.
@@ -192,9 +208,9 @@ pub fn docs_list_continue(
 /// user is running the new version of Paper. Refer to the [Paper Migration
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for migration
 /// information.
-pub fn docs_permanently_delete(
+pub async fn docs_permanently_delete(
     client: &impl crate::client_trait::UserAuthClient,
-    arg: &RefPaperDoc,
+    arg: RefPaperDoc,
 ) -> crate::Result<Result<(), DocLookupError>> {
     crate::client_helpers::request(
         client,
@@ -202,7 +218,9 @@ pub fn docs_permanently_delete(
         crate::client_trait::Style::Rpc,
         "paper/docs/permanently_delete",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Gets the default sharing policy for the given Paper doc. Note that this endpoint will continue
@@ -211,9 +229,9 @@ pub fn docs_permanently_delete(
 /// then the user is running the new version of Paper. Refer to the [Paper Migration
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for migration
 /// information.
-pub fn docs_sharing_policy_get(
+pub async fn docs_sharing_policy_get(
     client: &impl crate::client_trait::UserAuthClient,
-    arg: &RefPaperDoc,
+    arg: RefPaperDoc,
 ) -> crate::Result<Result<SharingPolicy, DocLookupError>> {
     crate::client_helpers::request(
         client,
@@ -221,7 +239,9 @@ pub fn docs_sharing_policy_get(
         crate::client_trait::Style::Rpc,
         "paper/docs/sharing_policy/get",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Sets the default sharing policy for the given Paper doc. The default 'team_sharing_policy' can
@@ -233,9 +253,9 @@ pub fn docs_sharing_policy_get(
 /// the new version of Paper. Refer to the [Paper Migration
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for migration
 /// information.
-pub fn docs_sharing_policy_set(
+pub async fn docs_sharing_policy_set(
     client: &impl crate::client_trait::UserAuthClient,
-    arg: &PaperDocSharingPolicy,
+    arg: PaperDocSharingPolicy,
 ) -> crate::Result<Result<(), DocLookupError>> {
     crate::client_helpers::request(
         client,
@@ -243,7 +263,9 @@ pub fn docs_sharing_policy_set(
         crate::client_trait::Style::Rpc,
         "paper/docs/sharing_policy/set",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Updates an existing Paper doc with the provided content. Note that this endpoint will continue
@@ -253,10 +275,10 @@ pub fn docs_sharing_policy_set(
 /// 2020. Refer to the [Paper Migration
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for more
 /// information.
-pub fn docs_update(
+pub async fn docs_update(
     client: &impl crate::client_trait::UserAuthClient,
-    arg: &PaperDocUpdateArgs,
-    body: &[u8],
+    arg: PaperDocUpdateArgs,
+    body: crate::client_trait::BodyStream,
 ) -> crate::Result<Result<PaperDocCreateUpdateResult, PaperDocUpdateError>> {
     crate::client_helpers::request(
         client,
@@ -264,7 +286,9 @@ pub fn docs_update(
         crate::client_trait::Style::Upload,
         "paper/docs/update",
         arg,
-        Some(body))
+        Some(body),
+        )
+        .await
 }
 
 /// Allows an owner or editor to add users to a Paper doc or change their permissions using their
@@ -275,9 +299,9 @@ pub fn docs_update(
 /// the [Paper Migration
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for migration
 /// information.
-pub fn docs_users_add(
+pub async fn docs_users_add(
     client: &impl crate::client_trait::UserAuthClient,
-    arg: &AddPaperDocUser,
+    arg: AddPaperDocUser,
 ) -> crate::Result<Result<Vec<AddPaperDocUserMemberResult>, DocLookupError>> {
     crate::client_helpers::request(
         client,
@@ -285,7 +309,9 @@ pub fn docs_users_add(
         crate::client_trait::Style::Rpc,
         "paper/docs/users/add",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Lists all users who visited the Paper doc or users with explicit access. This call excludes
@@ -297,9 +323,9 @@ pub fn docs_users_add(
 /// the new version of Paper. Refer to the [Paper Migration
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for migration
 /// information.
-pub fn docs_users_list(
+pub async fn docs_users_list(
     client: &impl crate::client_trait::UserAuthClient,
-    arg: &ListUsersOnPaperDocArgs,
+    arg: ListUsersOnPaperDocArgs,
 ) -> crate::Result<Result<ListUsersOnPaperDocResponse, DocLookupError>> {
     crate::client_helpers::request(
         client,
@@ -307,7 +333,9 @@ pub fn docs_users_list(
         crate::client_trait::Style::Rpc,
         "paper/docs/users/list",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Once a cursor has been retrieved from [`docs_users_list()`](docs_users_list), use this to
@@ -317,9 +345,9 @@ pub fn docs_users_list(
 /// is running the new version of Paper. Refer to the [Paper Migration
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for migration
 /// information.
-pub fn docs_users_list_continue(
+pub async fn docs_users_list_continue(
     client: &impl crate::client_trait::UserAuthClient,
-    arg: &ListUsersOnPaperDocContinueArgs,
+    arg: ListUsersOnPaperDocContinueArgs,
 ) -> crate::Result<Result<ListUsersOnPaperDocResponse, ListUsersCursorError>> {
     crate::client_helpers::request(
         client,
@@ -327,7 +355,9 @@ pub fn docs_users_list_continue(
         crate::client_trait::Style::Rpc,
         "paper/docs/users/list/continue",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Allows an owner or editor to remove users from a Paper doc using their email address or Dropbox
@@ -337,9 +367,9 @@ pub fn docs_users_list_continue(
 /// is running the new version of Paper. Refer to the [Paper Migration
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for migration
 /// information.
-pub fn docs_users_remove(
+pub async fn docs_users_remove(
     client: &impl crate::client_trait::UserAuthClient,
-    arg: &RemovePaperDocUser,
+    arg: RemovePaperDocUser,
 ) -> crate::Result<Result<(), DocLookupError>> {
     crate::client_helpers::request(
         client,
@@ -347,7 +377,9 @@ pub fn docs_users_remove(
         crate::client_trait::Style::Rpc,
         "paper/docs/users/remove",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
 /// Create a new Paper folder with the provided info. Note that this endpoint will continue to work
@@ -356,9 +388,9 @@ pub fn docs_users_remove(
 /// user is running the new version of Paper. Refer to the [Paper Migration
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for migration
 /// information.
-pub fn folders_create(
+pub async fn folders_create(
     client: &impl crate::client_trait::UserAuthClient,
-    arg: &PaperFolderCreateArg,
+    arg: PaperFolderCreateArg,
 ) -> crate::Result<Result<PaperFolderCreateResult, PaperFolderCreateError>> {
     crate::client_helpers::request(
         client,
@@ -366,10 +398,12 @@ pub fn folders_create(
         crate::client_trait::Style::Rpc,
         "paper/folders/create",
         arg,
-        None)
+        None,
+        )
+        .await
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AddMember {
     /// User which should be added to the Paper doc. Specify only email address or Dropbox account
     /// ID.
@@ -478,7 +512,7 @@ impl ::serde::ser::Serialize for AddMember {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AddPaperDocUser {
     /// The Paper doc ID.
     pub doc_id: PaperDocId,
@@ -619,7 +653,7 @@ impl ::serde::ser::Serialize for AddPaperDocUser {
 }
 
 /// Per-member result for [`docs_users_add()`](docs_users_add).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AddPaperDocUserMemberResult {
     /// One of specified input members.
     pub member: super::sharing::MemberSelector,
@@ -722,7 +756,7 @@ impl ::serde::ser::Serialize for AddPaperDocUserMemberResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum AddPaperDocUserResult {
     /// User was successfully added to the Paper doc.
     Success,
@@ -858,7 +892,7 @@ impl ::serde::ser::Serialize for AddPaperDocUserResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Cursor {
     /// The actual cursor value.
     pub value: String,
@@ -975,7 +1009,7 @@ impl ::serde::ser::Serialize for Cursor {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum DocLookupError {
     /// Your account does not have permissions to perform this action. This may be due to it only
     /// having access to Paper as files in the Dropbox filesystem. For more information, refer to
@@ -1062,7 +1096,7 @@ impl ::std::fmt::Display for DocLookupError {
 }
 
 /// The subscription level of a Paper doc.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum DocSubscriptionLevel {
     /// No change email messages unless you're the creator.
     Default,
@@ -1152,7 +1186,7 @@ impl ::serde::ser::Serialize for DocSubscriptionLevel {
 }
 
 /// The desired export format of the Paper doc.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ExportFormat {
     /// The HTML export format.
     Html,
@@ -1224,7 +1258,7 @@ impl ::serde::ser::Serialize for ExportFormat {
 }
 
 /// Data structure representing a Paper folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Folder {
     /// Paper folder ID. This ID uniquely identifies the folder.
     pub id: String,
@@ -1329,7 +1363,7 @@ impl ::serde::ser::Serialize for Folder {
 
 /// The sharing policy of a Paper folder. The sharing policy of subfolders is inherited from the
 /// root folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum FolderSharingPolicyType {
     /// Everyone in your team and anyone directly invited can access this folder.
     Team,
@@ -1393,7 +1427,7 @@ impl ::serde::ser::Serialize for FolderSharingPolicyType {
 }
 
 /// The subscription level of a Paper folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum FolderSubscriptionLevel {
     /// Not shown in activity, no email messages.
     None,
@@ -1483,7 +1517,7 @@ impl ::serde::ser::Serialize for FolderSubscriptionLevel {
 }
 
 /// Metadata about Paper folders containing the specififed Paper doc.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FoldersContainingPaperDoc {
     /// The sharing policy of the folder containing the Paper doc.
     pub folder_sharing_policy_type: Option<FolderSharingPolicyType>,
@@ -1575,7 +1609,7 @@ impl ::serde::ser::Serialize for FoldersContainingPaperDoc {
 }
 
 /// The import format of the incoming data.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ImportFormat {
     /// The provided data is interpreted as standard HTML.
     Html,
@@ -1661,7 +1695,7 @@ impl ::serde::ser::Serialize for ImportFormat {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct InviteeInfoWithPermissionLevel {
     /// Email address invited to the Paper doc.
     pub invitee: super::sharing::InviteeInfo,
@@ -1767,7 +1801,7 @@ impl ::serde::ser::Serialize for InviteeInfoWithPermissionLevel {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ListDocsCursorError {
     CursorError(PaperApiCursorError),
     /// Catch-all used for unrecognized values returned from the server. Encountering this value
@@ -1840,7 +1874,7 @@ impl ::std::fmt::Display for ListDocsCursorError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListPaperDocsArgs {
     /// Allows user to specify how the Paper docs should be filtered.
     pub filter_by: ListPaperDocsFilterBy,
@@ -1958,7 +1992,7 @@ impl ::serde::ser::Serialize for ListPaperDocsArgs {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListPaperDocsContinueArgs {
     /// The cursor obtained from [`docs_list()`](docs_list) or
     /// [`docs_list_continue()`](docs_list_continue). Allows for pagination.
@@ -2049,7 +2083,7 @@ impl ::serde::ser::Serialize for ListPaperDocsContinueArgs {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ListPaperDocsFilterBy {
     /// Fetches all Paper doc IDs that the user has ever accessed.
     DocsAccessed,
@@ -2120,7 +2154,7 @@ impl ::serde::ser::Serialize for ListPaperDocsFilterBy {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListPaperDocsResponse {
     /// The list of Paper doc IDs that can be used to access the given Paper docs or supplied to
     /// other API methods. The list is sorted in the order specified by the initial call to
@@ -2243,7 +2277,7 @@ impl ::serde::ser::Serialize for ListPaperDocsResponse {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ListPaperDocsSortBy {
     /// Sorts the Paper docs by the time they were last accessed.
     Accessed,
@@ -2327,7 +2361,7 @@ impl ::serde::ser::Serialize for ListPaperDocsSortBy {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ListPaperDocsSortOrder {
     /// Sorts the search result in ascending order.
     Ascending,
@@ -2398,7 +2432,7 @@ impl ::serde::ser::Serialize for ListPaperDocsSortOrder {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ListUsersCursorError {
     /// Your account does not have permissions to perform this action. This may be due to it only
     /// having access to Paper as files in the Dropbox filesystem. For more information, refer to
@@ -2500,7 +2534,7 @@ impl ::std::fmt::Display for ListUsersCursorError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListUsersOnFolderArgs {
     /// The Paper doc ID.
     pub doc_id: PaperDocId,
@@ -2609,7 +2643,7 @@ impl ::serde::ser::Serialize for ListUsersOnFolderArgs {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListUsersOnFolderContinueArgs {
     /// The Paper doc ID.
     pub doc_id: PaperDocId,
@@ -2714,7 +2748,7 @@ impl ::serde::ser::Serialize for ListUsersOnFolderContinueArgs {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListUsersOnFolderResponse {
     /// List of email addresses that are invited on the Paper folder.
     pub invitees: Vec<super::sharing::InviteeInfo>,
@@ -2853,7 +2887,7 @@ impl ::serde::ser::Serialize for ListUsersOnFolderResponse {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListUsersOnPaperDocArgs {
     /// The Paper doc ID.
     pub doc_id: PaperDocId,
@@ -2980,7 +3014,7 @@ impl ::serde::ser::Serialize for ListUsersOnPaperDocArgs {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListUsersOnPaperDocContinueArgs {
     /// The Paper doc ID.
     pub doc_id: PaperDocId,
@@ -3084,7 +3118,7 @@ impl ::serde::ser::Serialize for ListUsersOnPaperDocContinueArgs {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListUsersOnPaperDocResponse {
     /// List of email addresses with their respective permission levels that are invited on the
     /// Paper doc.
@@ -3238,7 +3272,7 @@ impl ::serde::ser::Serialize for ListUsersOnPaperDocResponse {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum PaperApiBaseError {
     /// Your account does not have permissions to perform this action. This may be due to it only
     /// having access to Paper as files in the Dropbox filesystem. For more information, refer to
@@ -3311,7 +3345,7 @@ impl ::std::fmt::Display for PaperApiBaseError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum PaperApiCursorError {
     /// The provided cursor is expired.
     ExpiredCursor,
@@ -3421,7 +3455,7 @@ impl ::std::fmt::Display for PaperApiCursorError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocCreateArgs {
     /// The format of provided data.
     pub import_format: ImportFormat,
@@ -3530,7 +3564,7 @@ impl ::serde::ser::Serialize for PaperDocCreateArgs {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum PaperDocCreateError {
     /// Your account does not have permissions to perform this action. This may be due to it only
     /// having access to Paper as files in the Dropbox filesystem. For more information, refer to
@@ -3656,7 +3690,7 @@ impl ::std::fmt::Display for PaperDocCreateError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocCreateUpdateResult {
     /// Doc ID of the newly created doc.
     pub doc_id: String,
@@ -3772,7 +3806,7 @@ impl ::serde::ser::Serialize for PaperDocCreateUpdateResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocExport {
     /// The Paper doc ID.
     pub doc_id: PaperDocId,
@@ -3874,7 +3908,7 @@ impl ::serde::ser::Serialize for PaperDocExport {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocExportResult {
     /// The Paper doc owner's email address.
     pub owner: String,
@@ -4004,7 +4038,7 @@ impl ::serde::ser::Serialize for PaperDocExportResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum PaperDocPermissionLevel {
     /// User will be granted edit permissions.
     Edit,
@@ -4075,7 +4109,7 @@ impl ::serde::ser::Serialize for PaperDocPermissionLevel {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocSharingPolicy {
     /// The Paper doc ID.
     pub doc_id: PaperDocId,
@@ -4178,7 +4212,7 @@ impl ::serde::ser::Serialize for PaperDocSharingPolicy {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocUpdateArgs {
     /// The Paper doc ID.
     pub doc_id: PaperDocId,
@@ -4313,7 +4347,7 @@ impl ::serde::ser::Serialize for PaperDocUpdateArgs {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum PaperDocUpdateError {
     /// Your account does not have permissions to perform this action. This may be due to it only
     /// having access to Paper as files in the Dropbox filesystem. For more information, refer to
@@ -4478,7 +4512,7 @@ impl ::std::fmt::Display for PaperDocUpdateError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum PaperDocUpdatePolicy {
     /// The content will be appended to the doc.
     Append,
@@ -4562,7 +4596,7 @@ impl ::serde::ser::Serialize for PaperDocUpdatePolicy {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperFolderCreateArg {
     /// The name of the new Paper folder.
     pub name: String,
@@ -4693,7 +4727,7 @@ impl ::serde::ser::Serialize for PaperFolderCreateArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum PaperFolderCreateError {
     /// Your account does not have permissions to perform this action. This may be due to it only
     /// having access to Paper as files in the Dropbox filesystem. For more information, refer to
@@ -4792,7 +4826,7 @@ impl ::std::fmt::Display for PaperFolderCreateError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperFolderCreateResult {
     /// Folder ID of the newly created folder.
     pub folder_id: String,
@@ -4882,7 +4916,7 @@ impl ::serde::ser::Serialize for PaperFolderCreateResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct RefPaperDoc {
     /// The Paper doc ID.
     pub doc_id: PaperDocId,
@@ -4972,7 +5006,7 @@ impl ::serde::ser::Serialize for RefPaperDoc {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct RemovePaperDocUser {
     /// The Paper doc ID.
     pub doc_id: PaperDocId,
@@ -5077,7 +5111,7 @@ impl ::serde::ser::Serialize for RemovePaperDocUser {
 }
 
 /// Sharing policy of Paper doc.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharingPolicy {
     /// This value applies to the non-team members.
     pub public_sharing_policy: Option<SharingPublicPolicyType>,
@@ -5168,7 +5202,7 @@ impl ::serde::ser::Serialize for SharingPolicy {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SharingPublicPolicyType {
     /// Users who have a link to this doc can edit it.
     PeopleWithLinkCanEdit,
@@ -5258,7 +5292,7 @@ impl ::serde::ser::Serialize for SharingPublicPolicyType {
 }
 
 /// The sharing policy type of the Paper doc.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SharingTeamPolicyType {
     /// Users who have a link to this doc can edit it.
     PeopleWithLinkCanEdit,
@@ -5334,7 +5368,7 @@ impl ::serde::ser::Serialize for SharingTeamPolicyType {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UserInfoWithPermissionLevel {
     /// User shared on the Paper doc.
     pub user: super::sharing::UserInfo,
@@ -5437,7 +5471,7 @@ impl ::serde::ser::Serialize for UserInfoWithPermissionLevel {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum UserOnPaperDocFilter {
     /// all users who have visited the Paper doc.
     Visited,

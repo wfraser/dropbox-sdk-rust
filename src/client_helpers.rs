@@ -34,101 +34,104 @@ enum RateLimitedReason {
 /// an error if the server returned one for the request, otherwise it has the deserialized JSON
 /// response and the body stream (if any).
 #[allow(clippy::too_many_arguments)]
-pub fn request_with_body<T: DeserializeOwned, E: DeserializeOwned + Debug, P: Serialize>(
+pub async fn request_with_body<ReturnType, ErrorType, Params>(
     client: &impl HttpClient,
     endpoint: Endpoint,
     style: Style,
-    function: &str,
-    params: &P,
-    body: Option<&[u8]>,
+    function: &'static str,
+    params: Params,
+    body: Option<BodyStream>,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> crate::Result<Result<HttpRequestResult<T>, E>> {
-    let params_json = serde_json::to_string(params)?;
-    let result = client.request(endpoint, style, function, params_json, ParamsType::Json, body,
-        range_start, range_end);
+) -> crate::Result<Result<HttpRequestResult<ReturnType>, ErrorType>>
+    where ReturnType: DeserializeOwned,
+          ErrorType: DeserializeOwned + Debug + Send + Sync + 'static,
+          Params: Serialize,
+{
+    let params_json = serde_json::to_string(&params)?;
+    let result = client.request(
+        endpoint, style, function, params_json, ParamsType::Json, body, range_start, range_end)
+        .await;
     match result {
         Ok(HttpRequestResultRaw { result_json, content_length, body }) => {
             debug!("json: {}", result_json);
-            let result_value: T = serde_json::from_str(&result_json)?;
+            let result_value: ReturnType = serde_json::from_str(&result_json)?;
             Ok(Ok(HttpRequestResult {
                 result: result_value,
                 content_length,
                 body,
             }))
         },
-        Err(e) => {
-            let innards = if let Error::UnexpectedHttpError {
-                    ref code, ref status, ref json } = e {
-                Some((*code, status.clone(), json.clone()))
-            } else {
-                None
-            };
-
+        Err(HttpClientError::HttpError { code, response_body }) => {
             // Try to turn the error into a more specific one.
-            if let Some((code, status, response)) = innards {
-                error!("HTTP {} {}: {}", code, status, response);
-                return match code {
-                    400 => {
-                        Err(Error::BadRequest(response))
-                    },
-                    401 => {
-                        Err(Error::InvalidToken(response))
-                    },
-                    409 => {
-                        // Response should be JSON-deseraializable into the strongly-typed
-                        // error specified by type parameter E.
-                        match serde_json::from_str::<TopLevelError<E>>(&response) {
-                            Ok(deserialized) => {
-                                error!("API error: {:?}", deserialized);
-                                Ok(Err(deserialized.error))
-                            },
-                            Err(de_error) => {
-                                error!("Failed to deserialize JSON from API error: {}", de_error);
-                                Err(Error::Json(de_error))
-                            }
+            error!("HTTP {}: {}", code, response_body);
+            match code {
+                400 => {
+                    Err(Error::BadRequest(response_body))
+                },
+                401 => {
+                    Err(Error::InvalidToken(response_body))
+                },
+                409 => {
+                    // Response should be JSON-deseraializable into the strongly-typed
+                    // error specified by type parameter ErrorType.
+                    match serde_json::from_str::<TopLevelError<ErrorType>>(&response_body) {
+                        Ok(deserialized) => {
+                            error!("API error: {:?}", deserialized);
+                            Ok(Err(deserialized.error))
+                        },
+                        Err(de_error) => {
+                            error!("Failed to deserialize JSON from API error: {}", de_error);
+                            Err(Error::Json(de_error))
                         }
-                    },
-                    429 => {
-                        match serde_json::from_str::<TopLevelError<RateLimitedError>>(&response) {
-                            Ok(deserialized) => {
-                                error!("API Rate-Limited: {:?}", deserialized);
-                                Err(Error::RateLimited {
-                                    reason: format!("{:?}", deserialized.error.reason),
-                                    retry_after_seconds: deserialized.error.retry_after,
-                                })
-                            }
-                            Err(de_error) => {
-                                error!("Failed to deserialize JSON from API error: {}", de_error);
-                                Err(Error::Json(de_error))
-                            }
-                        }
-                    },
-                    500 ..= 599 => {
-                        Err(Error::ServerError(response))
-                    },
-                    _ => {
-                        Err(e)
                     }
+                },
+                429 => {
+                    match serde_json::from_str::<TopLevelError<RateLimitedError>>(&response_body) {
+                        Ok(deserialized) => {
+                            error!("API Rate-Limited: {:?}", deserialized);
+                            Err(Error::RateLimited {
+                                reason: format!("{:?}", deserialized.error.reason),
+                                retry_after_seconds: deserialized.error.retry_after,
+                            })
+                        }
+                        Err(de_error) => {
+                            error!("Failed to deserialize JSON from API error: {}", de_error);
+                            Err(Error::Json(de_error))
+                        }
+                    }
+                },
+                500 ..= 599 => {
+                    Err(Error::ServerError(response_body))
+                },
+                other_code => {
+                    Err(Error::UnexpectedHttpError {
+                        code: other_code,
+                        response_body,
+                    })
                 }
-            } else if let Error::Json(ref json_err) = e {
-                error!("JSON deserialization error: {}", json_err);
-            } else {
-                error!("HTTP request error: {}", e);
             }
-            Err(e)
+        }
+        Err(HttpClientError::Other(e)) => {
+            error!("HTTP request error: {}", e);
+            Err(Error::HttpClient(e))
         }
     }
 }
 
-pub fn request<T: DeserializeOwned, E: DeserializeOwned + Debug, P: Serialize>(
+pub async fn request<ReturnType, ErrorType, ParamsType>(
     client: &impl HttpClient,
     endpoint: Endpoint,
     style: Style,
-    function: &str,
-    params: &P,
-    body: Option<&[u8]>,
-) -> crate::Result<Result<T, E>> {
+    function: &'static str,
+    params: ParamsType,
+    body: Option<BodyStream>,
+) -> crate::Result<Result<ReturnType, ErrorType>>
+    where ReturnType: DeserializeOwned,
+          ErrorType: DeserializeOwned + Debug + Send + Sync + 'static,
+          ParamsType: Serialize,
+{
     request_with_body(client, endpoint, style, function, params, body, None, None)
+        .await
         .map(|result| result.map(|HttpRequestResult { result, .. }| result))
 }

@@ -1,7 +1,6 @@
 // Copyright (c) 2019-2020 Dropbox, Inc.
 
 #![deny(
-    broken_intra_doc_links,
     missing_docs,
     rust_2018_idioms,
 )]
@@ -29,6 +28,8 @@ macro_rules! if_feature {
         )*
     }
 }
+
+//#![allow(clippy::needless_lifetimes)] // this lint is broken in async functions
 
 #[macro_use] extern crate log;
 
@@ -73,16 +74,13 @@ pub enum Error {
     ServerError(String),
 
     /// The Dropbox API returned an unexpected HTTP response code.
-    #[error("Dropbox API returned HTTP {code} {status} - {json}")]
+    #[error("Dropbox API returned HTTP {code} - {response_body}")]
     UnexpectedHttpError {
         /// HTTP status code returned.
         code: u16,
 
-        /// The HTTP status string.
-        status: String,
-
         /// The response body.
-        json: String,
+        response_body: String,
     },
 }
 

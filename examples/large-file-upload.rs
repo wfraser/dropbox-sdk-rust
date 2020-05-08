@@ -5,10 +5,13 @@ use dropbox_sdk::oauth2::{oauth2_token_from_authorization_code, Oauth2AuthorizeU
 use dropbox_sdk::files;
 use dropbox_sdk::default_client::{NoauthDefaultClient, UserAuthDefaultClient};
 
-use std::fs::File;
+use bytes::BytesMut;
 use std::path::PathBuf;
-use std::io::{self, Read, Write, Seek, SeekFrom};
+use std::io::{self, Write, SeekFrom};
+use std::pin::Pin;
 use std::time::{Duration, Instant, SystemTime};
+use tokio::fs::File;
+use tokio::io::AsyncReadExt;
 
 fn prompt(msg: &str) -> String {
     eprint!("{}: ", msg);
@@ -104,29 +107,17 @@ fn parse_args() -> Operation {
     }
 }
 
+/// Read as much as possible into the buffer without reallocating.
 /// Similar to Read::read_exact except that this will partially fill the buffer on EOF instead of
 /// returning an error.
-/// The main reason this is needed is for reading from a stdin pipe, where normal Read::read may
-/// stop after it reads only a few kbytes, but where we really want a much larger buffer to upload.
-fn large_read(source: &mut impl Read, buffer: &mut [u8]) -> io::Result<usize> {
-    let mut nread = 0;
-    loop {
-        match source.read(&mut buffer[nread ..]) {
-            Ok(0) => {
-                return Ok(nread);
-            }
-            Ok(n) => {
-                nread += n;
-            }
-            Err(ref e) if e.kind() == io::ErrorKind::Interrupted => (),
-            Err(e) => {
-                return Err(e);
-            }
-        }
-    }
+async fn large_read(source: Pin<&mut impl AsyncReadExt>, buffer: &mut BytesMut) -> io::Result<()> {
+    let mut reader = source.take(buffer.capacity() as u64);
+    while 0 != reader.read_buf(buffer).await? {}
+    Ok(())
 }
 
-fn main() {
+#[tokio::main]
+async fn main() {
     env_logger::init();
 
     let mut args = match parse_args() {
@@ -139,48 +130,55 @@ fn main() {
     };
 
     let mut source_file = File::open(&args.source_path)
+        .await
         .unwrap_or_else(|e| {
             eprintln!("Source file {:?} not found: {}", args.source_path, e);
             std::process::exit(2);
         });
     let (source_mtime, source_len) = source_file.metadata()
+        .await
         .and_then(|meta| meta.modified().map(|mtime| (mtime, meta.len())))
         .unwrap_or_else(|e| {
             eprintln!("Error getting source file {:?} metadata: {}", args.source_path, e);
             std::process::exit(2);
         });
 
-    let token = std::env::var("DBX_OAUTH_TOKEN").unwrap_or_else(|_| {
-        let client_id = prompt("Give me a Dropbox API app key");
-        let client_secret = prompt("Give me a Dropbox API app secret");
+    let token = match std::env::var("DBX_OAUTH_TOKEN") {
+        Ok(token) => token,
+        Err(_) => {
+            let client_id = prompt("Give me a Dropbox API app key");
+            let client_secret = prompt("Give me a Dropbox API app secret");
 
-        let url = Oauth2AuthorizeUrlBuilder::new(&client_id, Oauth2Type::AuthorizationCode).build();
-        eprintln!("Open this URL in your browser:");
-        eprintln!("{}", url);
-        eprintln!();
-        let auth_code = prompt("Then paste the code here");
+            let url = Oauth2AuthorizeUrlBuilder::new(&client_id, Oauth2Type::AuthorizationCode)
+                .build();
+            eprintln!("Open this URL in your browser:");
+            eprintln!("{}", url);
+            eprintln!();
+            let auth_code = prompt("Then paste the code here");
 
-        eprintln!("requesting OAuth2 token");
-        match oauth2_token_from_authorization_code(
-            NoauthDefaultClient::default(), &client_id, &client_secret, auth_code.trim(), None)
-        {
-            Ok(token) => {
-                eprintln!("got token: {}", token);
-                token
-            }
-            Err(e) => {
-                eprintln!("Error getting OAuth2 token: {}", e);
-                std::process::exit(2);
+            eprintln!("requesting OAuth2 token");
+            match oauth2_token_from_authorization_code(
+                NoauthDefaultClient::default(), &client_id, &client_secret, auth_code.trim(), None)
+                .await
+            {
+                Ok(token) => {
+                    eprintln!("got token: {}", token);
+                    token
+                }
+                Err(e) => {
+                    eprintln!("Error getting OAuth2 token: {}", e);
+                    std::process::exit(2);
+                }
             }
         }
-    });
+    };
 
     let client = UserAuthDefaultClient::new(token);
 
     // Figure out if destination is a folder or not and change the destination path accordingly.
     let dest_path = match files::get_metadata(
-        &client,
-        &files::GetMetadataArg::new(args.dest_path.clone()))
+        &client, files::GetMetadataArg::new(args.dest_path.clone()))
+        .await
     {
         Ok(Ok(files::Metadata::File(_meta))) => {
             eprintln!("Error: \"{}\" already exists in Dropbox", args.dest_path);
@@ -226,7 +224,8 @@ fn main() {
         Some(ref resume) => resume.session_id.clone(),
         None => {
             match files::upload_session_start(
-                &client, &files::UploadSessionStartArg::default(), &[])
+                &client, files::UploadSessionStartArg::default(), Box::pin(futures::io::empty()))
+                .await
             {
                 Ok(Ok(result)) => result.session_id,
                 Ok(Err(())) => panic!(),
@@ -248,11 +247,6 @@ fn main() {
     // network errors.
     const BUF_SIZE: usize = 32 * 1024 * 1024;
 
-    // if the buffer is small we can stack-allocate it:
-    //let mut buf = [0u8; BUF_SIZE];
-    // otherwise it has to be heap-allocated:
-    let mut buf = vec![0; BUF_SIZE];
-
     let start_time = Instant::now();
     let mut last_time = Instant::now();
     let mut bytes_out = 0u64;
@@ -260,20 +254,26 @@ fn main() {
 
     if let Some(resume) = args.resume {
         eprintln!("Resuming upload: {:?}", resume);
-        source_file.seek(SeekFrom::Start(resume.start_offset)).unwrap_or_else(|e| {
-            eprintln!("Seek error: {}", e);
-            std::process::exit(2);
-        });
+        source_file.seek(SeekFrom::Start(resume.start_offset))
+            .await
+            .unwrap_or_else(|e| {
+                eprintln!("Seek error: {}", e);
+                std::process::exit(2);
+            });
         bytes_out = resume.start_offset;
         append_arg.cursor.offset = resume.start_offset;
     }
 
     loop {
-        let nread = large_read(&mut source_file, &mut buf)
+        let mut chunk = BytesMut::with_capacity(BUF_SIZE);
+        large_read(Pin::new(&mut source_file), &mut chunk)
+            .await
             .unwrap_or_else(|e| {
-                eprintln!("Read error: {}", e);
+                eprintln!("File read error: {}", e);
                 std::process::exit(2);
             });
+        let nread = chunk.len();
+
         if bytes_out < source_len && bytes_out + nread as u64 > source_len {
             eprintln!("WARNING: read past the initial end of the file");
             eprintln!("({} bytes vs {} expected)", bytes_out + nread as u64, source_len);
@@ -287,26 +287,24 @@ fn main() {
         }
 
         succeeded = false;
-        let mut consecutive_errors = 0;
+        let mut consecutive_errors = 0u8;
         while consecutive_errors < 3 {
-            match files::upload_session_append_v2(&client, &append_arg, &buf[0..nread]) {
-                Ok(Ok(())) => {}
-                Ok(Err(e)) => {
-                    eprintln!("Error appending data: {}", e);
-                    consecutive_errors += 1;
-                    std::thread::sleep(Duration::from_secs(1));
-                    continue;
+            // note: clone on Bytes doesn't actually copy any data, so this is cheap:
+            let cursor = Box::pin(futures::io::Cursor::new(chunk.clone()));
+            let e = match files::upload_session_append_v2(
+                &client, append_arg.clone(), cursor)
+                .await
+            {
+                Ok(Ok(())) => {
+                    succeeded = true;
+                    break;
                 }
-                Err(e) => {
-                    eprintln!("Error appending data: {}", e);
-                    consecutive_errors += 1;
-                    std::thread::sleep(Duration::from_secs(1));
-                    continue;
-                }
-            }
-
-            succeeded = true;
-            break;
+                Ok(Err(e)) => e.to_string(),
+                Err(e) => e.to_string(),
+            };
+            eprintln!("Error appending data: {}", e);
+            consecutive_errors += 1;
+            std::thread::sleep(Duration::from_secs(1));
         }
 
         if !succeeded {
@@ -341,29 +339,26 @@ fn main() {
             files::CommitInfo::new(dest_path)
                 .with_client_modified(Some(iso8601(source_mtime))));
 
-        let mut retry = 0;
+        let mut retry = 0u8;
         succeeded = false;
         while retry < 3 {
-            match files::upload_session_finish(&client, &finish, &[]) {
+            let e = match files::upload_session_finish(
+                &client, finish.clone(), Box::pin(futures::io::empty()))
+                .await
+            {
                 Ok(Ok(filemetadata)) => {
                     println!("Upload succeeded!");
                     println!("{:#?}", filemetadata);
+                    succeeded = true;
+                    break;
                 }
-                Ok(Err(e)) => {
-                    eprintln!("Error finishing upload: {}", e);
-                    retry += 1;
-                    std::thread::sleep(Duration::from_secs(1));
-                    continue;
-                }
-                Err(e) => {
-                    eprintln!("Error finishing upload: {}", e);
-                    retry += 1;
-                    std::thread::sleep(Duration::from_secs(1));
-                    continue;
-                }
-            }
-            succeeded = true;
-            break;
+                Ok(Err(e)) => e.to_string(),
+                Err(e) => e.to_string(),
+            };
+
+            eprintln!("Error finishing upload: {}", e);
+            retry += 1;
+            std::thread::sleep(Duration::from_secs(1));
         }
     }
 

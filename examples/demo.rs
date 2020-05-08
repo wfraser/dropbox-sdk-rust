@@ -1,13 +1,14 @@
 #![deny(rust_2018_idioms)]
+#![allow(clippy::needless_lifetimes)]  // this lint is broken in async functions
 
 use dropbox_sdk::{files, UserAuthClient};
 use dropbox_sdk::oauth2::{oauth2_token_from_authorization_code, Oauth2AuthorizeUrlBuilder,
     Oauth2Type};
 use dropbox_sdk::default_client::{NoauthDefaultClient, UserAuthDefaultClient};
-
+use futures::io::AsyncReadExt;
 use std::collections::VecDeque;
 use std::env;
-use std::io::{self, Read, Write};
+use std::io::{self, Write};
 
 enum Operation {
     Usage,
@@ -36,7 +37,8 @@ fn prompt(msg: &str) -> String {
     input.trim().to_owned()
 }
 
-fn main() {
+#[tokio::main]
+async fn main() {
     env_logger::init();
 
     let download_path = match parse_args() {
@@ -57,34 +59,39 @@ fn main() {
     };
 
     // Let the user pass the token in an environment variable, or prompt them if that's not found.
-    let token = env::var("DBX_OAUTH_TOKEN").unwrap_or_else(|_| {
-        let client_id = prompt("Give me a Dropbox API app key");
-        let client_secret = prompt("Give me a Dropbox API app secret");
+    let token = match env::var("DBX_OAUTH_TOKEN") {
+        Ok(token) => token,
+        Err(_) => {
+            let client_id = prompt("Give me a Dropbox API app key");
+            let client_secret = prompt("Give me a Dropbox API app secret");
 
-        let url = Oauth2AuthorizeUrlBuilder::new(&client_id, Oauth2Type::AuthorizationCode).build();
-        eprintln!("Open this URL in your browser:");
-        eprintln!("{}", url);
-        eprintln!();
-        let auth_code = prompt("Then paste the code here");
+            let url = Oauth2AuthorizeUrlBuilder::new(&client_id, Oauth2Type::AuthorizationCode)
+                .build();
+            eprintln!("Open this URL in your browser:");
+            eprintln!("{}", url);
+            eprintln!();
+            let auth_code = prompt("Then paste the code here");
 
-        eprintln!("requesting OAuth2 token");
-        match oauth2_token_from_authorization_code(
-            NoauthDefaultClient::default(), &client_id, &client_secret, auth_code.trim(), None)
-        {
-            Ok(token) => {
-                eprintln!("got token: {}", token);
+            eprintln!("requesting OAuth2 token");
+            match oauth2_token_from_authorization_code(
+                NoauthDefaultClient::default(), &client_id, &client_secret, auth_code.trim(), None)
+                .await
+            {
+                Ok(token) => {
+                    eprintln!("got token: {}", token);
 
-                // This is where you'd save the token somewhere so you don't need to do this dance
-                // again.
+                    // This is where you'd save the token somewhere so you don't need to do this
+                    // dance again.
 
-                token
-            },
-            Err(e) => {
-                eprintln!("Error getting OAuth2 token: {}", e);
-                std::process::exit(1);
+                    token
+                },
+                Err(e) => {
+                    eprintln!("Error getting OAuth2 token: {}", e);
+                    std::process::exit(1);
+                }
             }
         }
-    });
+    };
 
     let client = UserAuthDefaultClient::new(token);
 
@@ -96,20 +103,21 @@ fn main() {
         let stdout = io::stdout();
         let mut stdout_lock = stdout.lock();
         'download: loop {
-            let result = files::download(&client, &download_arg, Some(bytes_out), None);
-            match result {
+            match files::download(&client, download_arg.clone(), Some(bytes_out), None).await {
                 Ok(Ok(download_result)) => {
                     let mut body = download_result.body.expect("no body received!");
+                    let mut buf = Vec::with_capacity(1024 * 1024);
                     loop {
-                        // limit read to 1 MiB per loop iteration so we can output progress
-                        let mut input_chunk = (&mut body).take(1024 * 1024);
-                        match io::copy(&mut input_chunk, &mut stdout_lock) {
+                        // Read in chunks of 1M so we can print progress.
+                        buf.truncate(0);
+                        match (&mut body).take(1024 * 1024).read_to_end(&mut buf).await {
                             Ok(0) => {
                                 eprint!("\r");
                                 break 'download;
                             }
-                            Ok(len) => {
-                                bytes_out += len as u64;
+                            Ok(_) => {
+                                stdout_lock.write_all(&buf).expect("write error");
+                                bytes_out += buf.len() as u64;
                                 if let Some(total) = download_result.content_length {
                                     eprint!("\r{:.01}%",
                                         bytes_out as f64 / total as f64 * 100.);
@@ -118,7 +126,7 @@ fn main() {
                                 }
                             }
                             Err(e) => {
-                                eprintln!("Read error: {}", e);
+                                eprintln!("Read error: {:?}", e);
                                 continue 'download; // do another request and resume
                             }
                         }
@@ -135,9 +143,9 @@ fn main() {
         }
     } else {
         eprintln!("listing all files");
-        match list_directory(&client, "/", true) {
-            Ok(Ok(iterator)) => {
-                for entry_result in iterator {
+        match list_directory(&client, "/", true).await {
+            Ok(Ok(mut iterator)) => {
+                while let Some(entry_result) = iterator.next().await {
                     match entry_result {
                         Ok(Ok(files::Metadata::Folder(entry))) => {
                             println!("Folder: {}", entry.path_display.unwrap_or(entry.name));
@@ -169,20 +177,21 @@ fn main() {
     }
 }
 
-fn list_directory<'a, T: UserAuthClient>(client: &'a T, path: &str, recursive: bool)
+async fn list_directory<'a, T: UserAuthClient>(client: &'a T, path: &str, recursive: bool)
     -> dropbox_sdk::Result<Result<DirectoryIterator<'a, T>, files::ListFolderError>>
 {
     assert!(path.starts_with('/'), "path needs to be absolute (start with a '/')");
     let requested_path = if path == "/" {
         // Root folder should be requested as empty string
-        String::new()
+        ""
     } else {
-        path.to_owned()
+        path
     };
     match files::list_folder(
         client,
-        &files::ListFolderArg::new(requested_path)
+        files::ListFolderArg::new(requested_path.to_owned())
             .with_recursive(recursive))
+        .await
     {
         Ok(Ok(result)) => {
             let cursor = if result.has_more {
@@ -208,14 +217,16 @@ struct DirectoryIterator<'a, T: UserAuthClient> {
     cursor: Option<String>,
 }
 
-impl<'a, T: UserAuthClient> Iterator for DirectoryIterator<'a, T> {
-    type Item = dropbox_sdk::Result<Result<files::Metadata, files::ListFolderContinueError>>;
-
-    fn next(&mut self) -> Option<Self::Item> {
+impl<'a, T: UserAuthClient> DirectoryIterator<'a, T> {
+    pub async fn next(&mut self)
+        -> Option<dropbox_sdk::Result<Result<files::Metadata, files::ListFolderContinueError>>>
+    {
         if let Some(entry) = self.buffer.pop_front() {
             Some(Ok(Ok(entry)))
         } else if let Some(cursor) = self.cursor.take() {
-            match files::list_folder_continue(self.client, &files::ListFolderContinueArg::new(cursor)) {
+            match files::list_folder_continue(
+                self.client, files::ListFolderContinueArg::new(cursor),
+            ).await {
                 Ok(Ok(result)) => {
                     self.buffer.extend(result.entries.into_iter());
                     if result.has_more {
