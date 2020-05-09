@@ -1,21 +1,22 @@
 // Copyright (c) 2019-2020 Dropbox, Inc.
 
+use std::convert::TryFrom;
 use std::io::{self, Read};
 use std::str;
 
 use crate::Error;
 use crate::client_trait::{Endpoint, Style, HttpClient, HttpClientError, HttpRequestResultRaw, HttpResult};
 use futures::future::{ready, Ready};
-use hyper::{self, Url};
-use hyper::header::Headers;
-use hyper::header::{
-    Authorization, Bearer, ByteRangeSpec, Connection, ContentLength, ContentType, Range};
+
+use hyper::Uri;
 use url::form_urlencoded::Serializer as UrlEncoder;
 
 const USER_AGENT: &str = concat!("Dropbox-APIv2-Rust/", env!("CARGO_PKG_VERSION"));
 
+type Client = hyper::client::Client<hyper_tls::HttpsConnector<hyper::client::HttpConnector>>;
+
 pub struct HyperClient {
-    client: hyper::client::Client,
+    client: Client,
     token: String,
 }
 
@@ -71,8 +72,9 @@ impl HyperClient {
     ) -> crate::Result<String> {
 
         let client = Self::http_client();
-        let url = Url::parse("https://api.dropboxapi.com/oauth2/token").unwrap();
+        let url = Uri::from_static("https://api.dropboxapi.com/oauth2/token");
 
+        /*
         let mut headers = Headers::new();
         headers.set(UserAgent(USER_AGENT));
 
@@ -118,15 +120,22 @@ impl HyperClient {
                 Err(e.into())
             }
         }
+        */
+        unimplemented!();
     }
 
-    fn http_client() -> hyper::client::Client {
+    fn http_client() -> Client {
+        /*
         let tls = hyper_native_tls::NativeTlsClient::new().unwrap();
         let https_connector = hyper::net::HttpsConnector::new(tls);
         let pool_connector = hyper::client::pool::Pool::with_connector(
             hyper::client::pool::Config { max_idle: 1 },
             https_connector);
         hyper::client::Client::with_connector(pool_connector)
+        */
+        let https = hyper_tls::HttpsConnector::new();
+        hyper::client::Client::builder()
+            .build::<_, hyper::Body>(https)
     }
 }
 
@@ -162,9 +171,12 @@ impl HyperClient {
         range_end: Option<u64>,
     ) -> HttpResult {
 
-        let url = Url::parse(endpoint.url()).unwrap().join(function).expect("invalid request URL");
+        //let url = Url::parse(endpoint.url()).unwrap().join(function).expect("invalid request URL");
+        let url = Uri::try_from(endpoint.url().to_owned() + function)
+            .expect("invalid request URL");
         debug!("request for {:?}", url);
 
+        /*
         loop {
             let mut builder = self.client.post(url.clone());
 
@@ -267,6 +279,8 @@ impl HyperClient {
             }
 
         }
+        */
+        unimplemented!();
     }
 }
 
@@ -356,38 +370,43 @@ impl<'a> Oauth2AuthorizeUrlBuilder<'a> {
         self
     }
 
-    pub fn build(self) -> Url {
-        let mut url = Url::parse("https://www.dropbox.com/oauth2/authorize").unwrap();
+    pub fn build(self) -> Uri {
+        let mut params = vec![
+            ("response_type", self.response_type),
+            ("client_id", self.client_id)
+        ];
+
         {
-            let mut params = url.query_pairs_mut();
-            params.append_pair("response_type", self.response_type);
-            params.append_pair("client_id", self.client_id);
             if self.force_reapprove {
-                params.append_pair("force_reapprove", "true");
+                params.push(("force_reapprove", "true"));
             }
             if self.force_reauthentication {
-                params.append_pair("force_reauthentication", "true");
+                params.push(("force_reauthentication", "true"));
             }
             if self.disable_signup {
-                params.append_pair("disable_signup", "true");
+                params.push(("disable_signup", "true"));
             }
             if let Some(value) = self.redirect_uri {
-                params.append_pair("redirect_uri", value);
+                params.push(("redirect_uri", value));
             }
             if let Some(value) = self.state {
-                params.append_pair("state", value);
+                params.push(("state", value));
             }
             if let Some(value) = self.require_role {
-                params.append_pair("require_role", value);
+                params.push(("require_role", value));
             }
             if let Some(value) = self.locale {
-                params.append_pair("locale", value);
+                params.push(("locale", value));
             }
         }
-        url
+        let url = url::Url::parse_with_params("https://www.dropbox.com/oauth2/authorize", params)
+            .unwrap()
+            .to_string();
+        Uri::try_from(url).unwrap()
     }
 }
 
+/*
 #[derive(Debug, Copy, Clone)]
 struct UserAgent(&'static str);
 impl hyper::header::Header for UserAgent {
@@ -399,3 +418,4 @@ impl hyper::header::HeaderFormat for UserAgent {
         f.write_str(self.0)
     }
 }
+*/
