@@ -66,12 +66,12 @@ pub async fn docs_create(
 /// enabled, then the user is running the new version of Paper. Refer to the [Paper Migration
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for migration
 /// information.
-pub async fn docs_download(
-    client: &dyn crate::client_trait::HttpClient,
+pub async fn docs_download<'a>(
+    client: &'a dyn crate::client_trait::HttpClient,
     arg: &PaperDocExport,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> crate::Result<crate::client_trait::HttpRequestResult<PaperDocExportResult>, DocLookupError> {
+) -> crate::Result<crate::client_trait::HttpRequestResult<'a, PaperDocExportResult>, DocLookupError> {
     crate::client_helpers::request_with_body(
         client,
         crate::client_trait::Endpoint::Api,

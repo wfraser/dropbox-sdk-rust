@@ -11,12 +11,12 @@
 
 /// Fetch the binary content of the requested document. This route requires Cloud Docs auth. Please
 /// make a request to cloud_docs/authorize and supply that token in the Authorization header.
-pub async fn get_content(
-    client: &dyn crate::client_trait::HttpClient,
+pub async fn get_content<'a>(
+    client: &'a dyn crate::client_trait::HttpClient,
     arg: &GetContentArg,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> crate::Result<crate::client_trait::HttpRequestResult<()>, CloudDocsAccessError> {
+) -> crate::Result<crate::client_trait::HttpRequestResult<'a, ()>, CloudDocsAccessError> {
     crate::client_helpers::request_with_body(
         client,
         crate::client_trait::Endpoint::Content,

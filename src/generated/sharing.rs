@@ -207,12 +207,12 @@ pub async fn get_folder_metadata(
 }
 
 /// Download the shared link's file from a user's Dropbox.
-pub async fn get_shared_link_file(
-    client: &dyn crate::client_trait::HttpClient,
+pub async fn get_shared_link_file<'a>(
+    client: &'a dyn crate::client_trait::HttpClient,
     arg: &GetSharedLinkFileArg,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> crate::Result<crate::client_trait::HttpRequestResult<SharedLinkMetadata>, GetSharedLinkFileError> {
+) -> crate::Result<crate::client_trait::HttpRequestResult<'a, SharedLinkMetadata>, GetSharedLinkFileError> {
     crate::client_helpers::request_with_body(
         client,
         crate::client_trait::Endpoint::Content,

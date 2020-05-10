@@ -103,7 +103,8 @@ impl HyperClient {
 
 #[async_trait]
 impl HttpClient for HyperClient {
-    async fn request(
+    #[allow(clippy::too_many_arguments)]
+    async fn request<'a>(
         &self,
         endpoint: Endpoint,
         style: Style,
@@ -112,7 +113,7 @@ impl HttpClient for HyperClient {
         body: Option<Vec<u8>>,
         range_start: Option<u64>,
         range_end: Option<u64>,
-    ) -> Result<HttpRequestResultRaw, HttpClientError> {
+    ) -> Result<HttpRequestResultRaw<'a>, HttpClientError> {
 
         let uri = Uri::try_from(endpoint.url().to_owned() + function)
             .expect("invalid request URL");
@@ -147,7 +148,7 @@ impl HttpClient for HyperClient {
                     // Send params in the body.
                     assert_eq!(None, body);
                     if !params_json.is_empty() {
-                        builder = builder.header(header::CONTENT_TYPE, "text/json");
+                        builder = builder.header(header::CONTENT_TYPE, "application/json");
                         Body::from(params_json)
                     } else {
                         Body::empty()
@@ -222,7 +223,7 @@ impl HttpClient for HyperClient {
                     .and_then(|val| val.to_str().ok())
                     .and_then(|val| val.parse::<u64>().ok());
 
-                let response_body = Box::new(
+                let response_body = Box::pin(
                     response.into_body()
                         .map(|chunk| {
                             chunk.map_err(|e| {
