@@ -15,7 +15,7 @@ pub type FileRequestValidationError = Option<String>;
 /// Returns the total number of file requests owned by this user. Includes both open and closed file
 /// requests.
 pub async fn count(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
 ) -> crate::Result<CountFileRequestsResult, CountFileRequestsError> {
     crate::client_helpers::request(
         client,
@@ -30,7 +30,7 @@ pub async fn count(
 
 /// Creates a file request for this user.
 pub async fn create(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &CreateFileRequestArgs,
 ) -> crate::Result<FileRequest, CreateFileRequestError> {
     crate::client_helpers::request(
@@ -46,7 +46,7 @@ pub async fn create(
 
 /// Delete a batch of closed file requests.
 pub async fn delete(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &DeleteFileRequestArgs,
 ) -> crate::Result<DeleteFileRequestsResult, DeleteFileRequestError> {
     crate::client_helpers::request(
@@ -62,7 +62,7 @@ pub async fn delete(
 
 /// Delete all closed file requests owned by this user.
 pub async fn delete_all_closed(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
 ) -> crate::Result<DeleteAllClosedFileRequestsResult, DeleteAllClosedFileRequestsError> {
     crate::client_helpers::request(
         client,
@@ -77,7 +77,7 @@ pub async fn delete_all_closed(
 
 /// Returns the specified file request.
 pub async fn get(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &GetFileRequestArgs,
 ) -> crate::Result<FileRequest, GetFileRequestError> {
     crate::client_helpers::request(
@@ -94,7 +94,7 @@ pub async fn get(
 /// Returns a list of file requests owned by this user. For apps with the app folder permission,
 /// this will only return file requests with destinations in the app folder.
 pub async fn list_v2(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &ListFileRequestsArg,
 ) -> crate::Result<ListFileRequestsV2Result, ListFileRequestsError> {
     crate::client_helpers::request(
@@ -111,7 +111,7 @@ pub async fn list_v2(
 /// Returns a list of file requests owned by this user. For apps with the app folder permission,
 /// this will only return file requests with destinations in the app folder.
 pub async fn list(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
 ) -> crate::Result<ListFileRequestsResult, ListFileRequestsError> {
     crate::client_helpers::request(
         client,
@@ -128,7 +128,7 @@ pub async fn list(
 /// file requests. The cursor must come from a previous call to [`list_v2()`](list_v2) or
 /// [`list_continue()`](list_continue).
 pub async fn list_continue(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &ListFileRequestsContinueArg,
 ) -> crate::Result<ListFileRequestsV2Result, ListFileRequestsContinueError> {
     crate::client_helpers::request(
@@ -144,7 +144,7 @@ pub async fn list_continue(
 
 /// Update a file request.
 pub async fn update(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &UpdateFileRequestArgs,
 ) -> crate::Result<FileRequest, UpdateFileRequestError> {
     crate::client_helpers::request(

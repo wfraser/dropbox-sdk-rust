@@ -13,7 +13,7 @@ pub type GetAccountBatchResult = Vec<BasicAccount>;
 
 /// Get a list of feature values that may be configured for the current account.
 pub async fn features_get_values(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &UserFeaturesGetValuesBatchArg,
 ) -> crate::Result<UserFeaturesGetValuesBatchResult, UserFeaturesGetValuesBatchError> {
     crate::client_helpers::request(
@@ -29,7 +29,7 @@ pub async fn features_get_values(
 
 /// Get information about a user's account.
 pub async fn get_account(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &GetAccountArg,
 ) -> crate::Result<BasicAccount, GetAccountError> {
     crate::client_helpers::request(
@@ -45,7 +45,7 @@ pub async fn get_account(
 
 /// Get information about multiple user accounts.  At most 300 accounts may be queried per request.
 pub async fn get_account_batch(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &GetAccountBatchArg,
 ) -> crate::Result<GetAccountBatchResult, GetAccountBatchError> {
     crate::client_helpers::request(
@@ -61,7 +61,7 @@ pub async fn get_account_batch(
 
 /// Get information about the current user's account.
 pub async fn get_current_account(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
 ) -> crate::Result<FullAccount, ()> {
     crate::client_helpers::request(
         client,
@@ -76,7 +76,7 @@ pub async fn get_current_account(
 
 /// Get the space usage information for the current user's account.
 pub async fn get_space_usage(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
 ) -> crate::Result<SpaceUsage, ()> {
     crate::client_helpers::request(
         client,

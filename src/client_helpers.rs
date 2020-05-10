@@ -70,20 +70,19 @@ impl<'de, T: DeserializeOwned> Deserialize<'de> for TopLevelError<T> {
 /// an error if the server returned one for the request, otherwise it has the deserialized JSON
 /// response and the body stream (if any).
 #[allow(clippy::too_many_arguments)]
-pub async fn request_with_body<T, E, P, F>(
-    client: &dyn HttpClient<F>,
+pub async fn request_with_body<ReturnType, ErrorType, ParamsType>(
+    client: &dyn HttpClient,
     endpoint: Endpoint,
     style: Style,
     function: &str,
-    params: &P,
-    body: Option<&[u8]>,
+    params: &ParamsType,
+    body: Option<Vec<u8>>,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> crate::Result<HttpRequestResult<T>, E>
-    where T: DeserializeOwned,
-          E: DeserializeOwned + Debug + Send + Sync + 'static,
-          P: Serialize,
-          F: std::future::Future<Output=HttpResult>,
+) -> crate::Result<HttpRequestResult<ReturnType>, ErrorType>
+    where ReturnType: DeserializeOwned,
+          ErrorType: DeserializeOwned + Debug + Send + Sync + 'static,
+          ParamsType: Serialize,
 {
     let params_json = serde_json::to_string(params)?;
     let result = client.request(
@@ -92,7 +91,7 @@ pub async fn request_with_body<T, E, P, F>(
     match result {
         Ok(HttpRequestResultRaw { result_json, content_length, body }) => {
             debug!("json: {}", result_json);
-            let result_value: T = serde_json::from_str(&result_json)?;
+            let result_value: ReturnType = serde_json::from_str(&result_json)?;
             Ok(HttpRequestResult {
                 result: result_value,
                 content_length,
@@ -110,8 +109,8 @@ pub async fn request_with_body<T, E, P, F>(
                 },
                 409 => {
                     // Response should be JSON-deseraializable into the strongly-typed
-                    // error specified by type parameter E.
-                    match serde_json::from_str::<TopLevelError<E>>(&response_body) {
+                    // error specified by type parameter ErrorType.
+                    match serde_json::from_str::<TopLevelError<ErrorType>>(&response_body) {
                         Ok(deserialized) => {
                             error!("API error: {:?}", deserialized);
                             Err(Error::API(deserialized.error))
@@ -140,18 +139,17 @@ pub async fn request_with_body<T, E, P, F>(
     }
 }
 
-pub async fn request<T, E, P, F>(
-    client: &dyn HttpClient<F>,
+pub async fn request<ReturnType, ErrorType, ParamsType>(
+    client: &dyn HttpClient,
     endpoint: Endpoint,
     style: Style,
     function: &str,
-    params: &P,
-    body: Option<&[u8]>,
-) -> crate::Result<T, E>
-    where T: DeserializeOwned,
-          E: DeserializeOwned + Debug + Send + Sync + 'static,
-          P: Serialize,
-          F: std::future::Future<Output=HttpResult>,
+    params: &ParamsType,
+    body: Option<Vec<u8>>,
+) -> crate::Result<ReturnType, ErrorType>
+    where ReturnType: DeserializeOwned,
+          ErrorType: DeserializeOwned + Debug + Send + Sync + 'static,
+          ParamsType: Serialize,
 {
     request_with_body(client, endpoint, style, function, params, body, None, None)
         .await

@@ -48,7 +48,7 @@ pub type TemplateId = String;
 /// Add property groups to a Dropbox file. See [`templates_add_for_user()`](templates_add_for_user)
 /// or [`templates_add_for_team()`](templates_add_for_team) to create new templates.
 pub async fn properties_add(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &AddPropertiesArg,
 ) -> crate::Result<(), AddPropertiesError> {
     crate::client_helpers::request(
@@ -68,7 +68,7 @@ pub async fn properties_add(
 /// fields from a property group, whereas [`properties_update()`](properties_update) will only
 /// delete fields that are explicitly marked for deletion.
 pub async fn properties_overwrite(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &OverwritePropertyGroupArg,
 ) -> crate::Result<(), InvalidPropertyGroupError> {
     crate::client_helpers::request(
@@ -89,7 +89,7 @@ pub async fn properties_overwrite(
 /// [`templates_remove_for_user()`](templates_remove_for_user) or
 /// [`templates_remove_for_team()`](templates_remove_for_team).
 pub async fn properties_remove(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &RemovePropertiesArg,
 ) -> crate::Result<(), RemovePropertiesError> {
     crate::client_helpers::request(
@@ -105,7 +105,7 @@ pub async fn properties_remove(
 
 /// Search across property templates for particular property field values.
 pub async fn properties_search(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &PropertiesSearchArg,
 ) -> crate::Result<PropertiesSearchResult, PropertiesSearchError> {
     crate::client_helpers::request(
@@ -122,7 +122,7 @@ pub async fn properties_search(
 /// Once a cursor has been retrieved from [`properties_search()`](properties_search), use this to
 /// paginate through all search results.
 pub async fn properties_search_continue(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &PropertiesSearchContinueArg,
 ) -> crate::Result<PropertiesSearchResult, PropertiesSearchContinueError> {
     crate::client_helpers::request(
@@ -143,7 +143,7 @@ pub async fn properties_search_continue(
 /// [`properties_overwrite()`](properties_overwrite) will delete any fields that are omitted from a
 /// property group.
 pub async fn properties_update(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &UpdatePropertiesArg,
 ) -> crate::Result<(), UpdatePropertiesError> {
     crate::client_helpers::request(
@@ -160,7 +160,7 @@ pub async fn properties_update(
 /// Add a template associated with a team. See [`properties_add()`](properties_add) to add
 /// properties to a file or folder. Note: this endpoint will create team-owned templates.
 pub async fn templates_add_for_team(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &AddTemplateArg,
 ) -> crate::Result<AddTemplateResult, ModifyTemplateError> {
     crate::client_helpers::request(
@@ -177,7 +177,7 @@ pub async fn templates_add_for_team(
 /// Add a template associated with a user. See [`properties_add()`](properties_add) to add
 /// properties to a file. This endpoint can't be called on a team member or admin's behalf.
 pub async fn templates_add_for_user(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &AddTemplateArg,
 ) -> crate::Result<AddTemplateResult, ModifyTemplateError> {
     crate::client_helpers::request(
@@ -193,7 +193,7 @@ pub async fn templates_add_for_user(
 
 /// Get the schema for a specified template.
 pub async fn templates_get_for_team(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &GetTemplateArg,
 ) -> crate::Result<GetTemplateResult, TemplateError> {
     crate::client_helpers::request(
@@ -210,7 +210,7 @@ pub async fn templates_get_for_team(
 /// Get the schema for a specified template. This endpoint can't be called on a team member or
 /// admin's behalf.
 pub async fn templates_get_for_user(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &GetTemplateArg,
 ) -> crate::Result<GetTemplateResult, TemplateError> {
     crate::client_helpers::request(
@@ -227,7 +227,7 @@ pub async fn templates_get_for_user(
 /// Get the template identifiers for a team. To get the schema of each template use
 /// [`templates_get_for_team()`](templates_get_for_team).
 pub async fn templates_list_for_team(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
 ) -> crate::Result<ListTemplateResult, TemplateError> {
     crate::client_helpers::request(
         client,
@@ -244,7 +244,7 @@ pub async fn templates_list_for_team(
 /// [`templates_get_for_user()`](templates_get_for_user). This endpoint can't be called on a team
 /// member or admin's behalf.
 pub async fn templates_list_for_user(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
 ) -> crate::Result<ListTemplateResult, TemplateError> {
     crate::client_helpers::request(
         client,
@@ -261,7 +261,7 @@ pub async fn templates_list_for_user(
 /// [`templates_add_for_user()`](templates_add_for_user). All properties associated with the
 /// template will also be removed. This action cannot be undone.
 pub async fn templates_remove_for_team(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &RemoveTemplateArg,
 ) -> crate::Result<(), TemplateError> {
     crate::client_helpers::request(
@@ -279,7 +279,7 @@ pub async fn templates_remove_for_team(
 /// [`templates_add_for_user()`](templates_add_for_user). All properties associated with the
 /// template will also be removed. This action cannot be undone.
 pub async fn templates_remove_for_user(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &RemoveTemplateArg,
 ) -> crate::Result<(), TemplateError> {
     crate::client_helpers::request(
@@ -296,7 +296,7 @@ pub async fn templates_remove_for_user(
 /// Update a template associated with a team. This route can update the template name, the template
 /// description and add optional properties to templates.
 pub async fn templates_update_for_team(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &UpdateTemplateArg,
 ) -> crate::Result<UpdateTemplateResult, ModifyTemplateError> {
     crate::client_helpers::request(
@@ -314,7 +314,7 @@ pub async fn templates_update_for_team(
 /// description and add optional properties to templates. This endpoint can't be called on a team
 /// member or admin's behalf.
 pub async fn templates_update_for_user(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &UpdateTemplateArg,
 ) -> crate::Result<UpdateTemplateResult, ModifyTemplateError> {
     crate::client_helpers::request(

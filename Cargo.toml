@@ -9,6 +9,8 @@ license = "Apache-2.0"
 readme = "README.md"
 
 [dependencies]
+async-trait = "0.1"
+bytes = "0.5"
 futures = "0.3"
 hyper = { version = "0.13", optional = true }
 hyper-tls = { version = "0.4", optional = true }
