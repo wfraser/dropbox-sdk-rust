@@ -149,30 +149,34 @@ async fn main() {
             std::process::exit(2);
         });
 
-    let token = std::env::var("DBX_OAUTH_TOKEN").unwrap_or_else(|_| {
-        let client_id = prompt("Give me a Dropbox API app key");
-        let client_secret = prompt("Give me a Dropbox API app secret");
+    let token = match std::env::var("DBX_OAUTH_TOKEN") {
+        Ok(token) => token,
+        Err(_) => {
+            let client_id = prompt("Give me a Dropbox API app key");
+            let client_secret = prompt("Give me a Dropbox API app secret");
 
-        let url = Oauth2AuthorizeUrlBuilder::new(&client_id, Oauth2Type::AuthorizationCode).build();
-        eprintln!("Open this URL in your browser:");
-        eprintln!("{}", url);
-        eprintln!();
-        let auth_code = prompt("Then paste the code here");
+            let url = Oauth2AuthorizeUrlBuilder::new(&client_id, Oauth2Type::AuthorizationCode).build();
+            eprintln!("Open this URL in your browser:");
+            eprintln!("{}", url);
+            eprintln!();
+            let auth_code = prompt("Then paste the code here");
 
-        eprintln!("requesting OAuth2 token");
-        match HyperClient::oauth2_token_from_authorization_code(
-            &client_id, &client_secret, auth_code.trim(), None)
-        {
-            Ok(token) => {
-                eprintln!("got token: {}", token);
-                token
-            }
-            Err(e) => {
-                eprintln!("Error getting OAuth2 token: {}", e);
-                std::process::exit(2);
+            eprintln!("requesting OAuth2 token");
+            match HyperClient::oauth2_token_from_authorization_code(
+                &client_id, &client_secret, auth_code.trim(), None)
+                .await
+            {
+                Ok(token) => {
+                    eprintln!("got token: {}", token);
+                    token
+                }
+                Err(e) => {
+                    eprintln!("Error getting OAuth2 token: {}", e);
+                    std::process::exit(2);
+                }
             }
         }
-    });
+    };
 
     let client = HyperClient::new(token);
 
@@ -225,7 +229,7 @@ async fn main() {
         Some(ref resume) => resume.session_id.clone(),
         None => {
             match files::upload_session_start(
-                &client, &files::UploadSessionStartArg::default(), &[])
+                &client, &files::UploadSessionStartArg::default(), vec![])
                 .await
             {
                 Ok(Ok(result)) => result.session_id,
@@ -287,26 +291,22 @@ async fn main() {
         }
 
         succeeded = false;
-        let mut consecutive_errors = 0;
+        let mut consecutive_errors = 0u8;
         while consecutive_errors < 3 {
-            match files::upload_session_append_v2(&client, &append_arg, &buf[0..nread]).await {
-                Ok(Ok(())) => {}
-                Ok(Err(e)) => {
-                    eprintln!("Error appending data: {}", e);
-                    consecutive_errors += 1;
-                    std::thread::sleep(Duration::from_secs(1));
-                    continue;
+            let e = match files::upload_session_append_v2(
+                &client, &append_arg, (&buf[0..nread]).to_vec())
+                .await
+            {
+                Ok(Ok(())) => {
+                    succeeded = true;
+                    break;
                 }
-                Err(e) => {
-                    eprintln!("Error appending data: {}", e);
-                    consecutive_errors += 1;
-                    std::thread::sleep(Duration::from_secs(1));
-                    continue;
-                }
-            }
-
-            succeeded = true;
-            break;
+                Ok(Err(e)) => e.to_string(),
+                Err(e) => e.to_string(),
+            };
+            eprintln!("Error appending data: {}", e);
+            consecutive_errors += 1;
+            std::thread::sleep(Duration::from_secs(1));
         }
 
         if !succeeded {
@@ -341,29 +341,23 @@ async fn main() {
             files::CommitInfo::new(dest_path)
                 .with_client_modified(Some(iso8601(source_mtime))));
 
-        let mut retry = 0;
+        let mut retry = 0u8;
         succeeded = false;
         while retry < 3 {
-            match files::upload_session_finish(&client, &finish, &[]).await {
+            let e = match files::upload_session_finish(&client, &finish, vec![]).await {
                 Ok(Ok(filemetadata)) => {
                     println!("Upload succeeded!");
                     println!("{:#?}", filemetadata);
+                    succeeded = true;
+                    break;
                 }
-                Ok(Err(e)) => {
-                    eprintln!("Error finishing upload: {}", e);
-                    retry += 1;
-                    std::thread::sleep(Duration::from_secs(1));
-                    continue;
-                }
-                Err(e) => {
-                    eprintln!("Error finishing upload: {}", e);
-                    retry += 1;
-                    std::thread::sleep(Duration::from_secs(1));
-                    continue;
-                }
-            }
-            succeeded = true;
-            break;
+                Ok(Err(e)) => e.to_string(),
+                Err(e) => e.to_string(),
+            };
+
+            eprintln!("Error finishing upload: {}", e);
+            retry += 1;
+            std::thread::sleep(Duration::from_secs(1));
         }
     }
 
