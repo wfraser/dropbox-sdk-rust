@@ -12,7 +12,7 @@
 /// Fetch the binary content of the requested document. This route requires Cloud Docs auth. Please
 /// make a request to cloud_docs/authorize and supply that token in the Authorization header.
 pub async fn get_content(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &GetContentArg,
     range_start: Option<u64>,
     range_end: Option<u64>,
@@ -33,7 +33,7 @@ pub async fn get_content(
 /// Fetches metadata associated with a Cloud Doc and user. This route requires Cloud Docs auth.
 /// Please make a request to cloud_docs/authorize and supply that token in the Authorization header.
 pub async fn get_metadata(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &GetMetadataArg,
 ) -> crate::Result<Result<GetMetadataResult, GetMetadataError>> {
     crate::client_helpers::request(
@@ -50,7 +50,7 @@ pub async fn get_metadata(
 /// Lock a Cloud Doc. This route requires Cloud Docs auth. Please make a request to
 /// cloud_docs/authorize and supply that token in the Authorization header.
 pub async fn lock(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &LockArg,
 ) -> crate::Result<Result<LockResult, LockingError>> {
     crate::client_helpers::request(
@@ -67,7 +67,7 @@ pub async fn lock(
 /// Update the title of a Cloud Doc. This route requires Cloud Docs auth. Please make a request to
 /// cloud_docs/authorize and supply that token in the Authorization header.
 pub async fn rename(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &RenameArg,
 ) -> crate::Result<Result<RenameResult, RenameError>> {
     crate::client_helpers::request(
@@ -84,7 +84,7 @@ pub async fn rename(
 /// Unlock a Cloud Doc. This route requires Cloud Docs auth. Please make a request to
 /// cloud_docs/authorize and supply that token in the Authorization header.
 pub async fn unlock(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &UnlockArg,
 ) -> crate::Result<Result<UnlockResult, LockingError>> {
     crate::client_helpers::request(
@@ -102,9 +102,9 @@ pub async fn unlock(
 /// This route requires Cloud Docs auth. Please make a request to cloud_docs/authorize and supply
 /// that token in the Authorization header.
 pub async fn update_content(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &UpdateContentArg,
-    body: &[u8],
+    body: Vec<u8>,
 ) -> crate::Result<Result<UpdateContentResult, UpdateContentError>> {
     crate::client_helpers::request(
         client,

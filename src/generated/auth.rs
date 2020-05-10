@@ -9,7 +9,7 @@
 
 /// Creates an OAuth 2.0 access token from the supplied OAuth 1.0 access token.
 pub async fn token_from_oauth1(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &TokenFromOAuth1Arg,
 ) -> crate::Result<Result<TokenFromOAuth1Result, TokenFromOAuth1Error>> {
     crate::client_helpers::request(
@@ -25,7 +25,7 @@ pub async fn token_from_oauth1(
 
 /// Disables the access token used to authenticate the call.
 pub async fn token_revoke(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
 ) -> crate::Result<Result<(), ()>> {
     crate::client_helpers::request(
         client,

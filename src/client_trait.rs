@@ -1,24 +1,24 @@
-// Copyright (c) 2019 Dropbox, Inc.
+// Copyright (c) 2019-2020 Dropbox, Inc.
 
 //! Everything needed to implement your HTTP client.
 
-use std::future::Future;
-use std::io::Read;
+use async_trait::async_trait;
+use bytes::Bytes;
+use futures::stream::Stream;
 
-pub type HttpResult = Result<HttpRequestResultRaw, HttpClientError>;
-
-pub trait HttpClient<F: Future<Output=HttpResult>> {
+#[async_trait]
+pub trait HttpClient {
     #[allow(clippy::too_many_arguments)]
-    fn request(
+    async fn request(
         &self,
         endpoint: Endpoint,
         style: Style,
         function: &str,
         params_json: String,
-        body: Option<&[u8]>,
+        body: Option<Vec<u8>>,  // TODO: allow passing a Stream, reader, or a static buffer instead
         range_start: Option<u64>,
         range_end: Option<u64>,
-    ) -> F;
+    ) -> Result<HttpRequestResultRaw, HttpClientError>;
 }
 
 /// An error returned by the HTTP client.
@@ -50,13 +50,13 @@ impl std::fmt::Display for HttpClientError {
 pub struct HttpRequestResultRaw {
     pub result_json: String,
     pub content_length: Option<u64>,
-    pub body: Option<Box<dyn Read>>,
+    pub body: Option<Box<dyn Stream<Item=Result<Bytes, HttpClientError>>>>,
 }
 
 pub struct HttpRequestResult<T> {
     pub result: T,
     pub content_length: Option<u64>,
-    pub body: Option<Box<dyn Read>>,
+    pub body: Option<Box<dyn Stream<Item=Result<Bytes, HttpClientError>>>>,
 }
 
 #[derive(Debug, Copy, Clone, PartialEq)]

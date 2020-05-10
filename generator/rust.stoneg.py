@@ -177,7 +177,7 @@ class RustBackend(RustHelperBackend):
         if style == 'rpc':
             with self.emit_rust_function_def(
                     route_name,
-                    [u'client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>']
+                    [u'client: &dyn crate::client_trait::HttpClient']
                         + ([] if arg_void else
                             [u'arg: &{}'.format(self._rust_type(fn.arg_data_type))]),
                     u'crate::Result<Result<{}, {}>>'.format(
@@ -195,7 +195,7 @@ class RustBackend(RustHelperBackend):
         elif style == 'download':
             with self.emit_rust_function_def(
                     route_name,
-                    [u'client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>']
+                    [u'client: &dyn crate::client_trait::HttpClient']
                         + ([] if arg_void else
                             [u'arg: &{}'.format(self._rust_type(fn.arg_data_type))])
                         + [u'range_start: Option<u64>',
@@ -217,10 +217,10 @@ class RustBackend(RustHelperBackend):
         elif style == 'upload':
             with self.emit_rust_function_def(
                     route_name,
-                    [u'client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>']
+                    [u'client: &dyn crate::client_trait::HttpClient']
                         + ([] if arg_void else
                             [u'arg: &{}'.format(self._rust_type(fn.arg_data_type))])
-                        + [u'body: &[u8]'],
+                        + [u'body: Vec<u8>'],
                     u'crate::Result<Result<{}, {}>>'.format(
                         self._rust_type(fn.result_data_type),
                         self._rust_type(fn.error_data_type)),

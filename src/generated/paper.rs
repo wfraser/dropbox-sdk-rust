@@ -23,7 +23,7 @@ pub type PaperDocId = String;
 /// Migration Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for more
 /// information.
 pub async fn docs_archive(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &RefPaperDoc,
 ) -> crate::Result<Result<(), DocLookupError>> {
     crate::client_helpers::request(
@@ -45,9 +45,9 @@ pub async fn docs_archive(
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for more
 /// information.
 pub async fn docs_create(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &PaperDocCreateArgs,
-    body: &[u8],
+    body: Vec<u8>,
 ) -> crate::Result<Result<PaperDocCreateUpdateResult, PaperDocCreateError>> {
     crate::client_helpers::request(
         client,
@@ -67,7 +67,7 @@ pub async fn docs_create(
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for migration
 /// information.
 pub async fn docs_download(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &PaperDocExport,
     range_start: Option<u64>,
     range_end: Option<u64>,
@@ -94,7 +94,7 @@ pub async fn docs_download(
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for migration
 /// information.
 pub async fn docs_folder_users_list(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &ListUsersOnFolderArgs,
 ) -> crate::Result<Result<ListUsersOnFolderResponse, DocLookupError>> {
     crate::client_helpers::request(
@@ -116,7 +116,7 @@ pub async fn docs_folder_users_list(
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for migration
 /// information.
 pub async fn docs_folder_users_list_continue(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &ListUsersOnFolderContinueArgs,
 ) -> crate::Result<Result<ListUsersOnFolderResponse, ListUsersCursorError>> {
     crate::client_helpers::request(
@@ -142,7 +142,7 @@ pub async fn docs_folder_users_list_continue(
 /// Migration Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for
 /// migration information.
 pub async fn docs_get_folder_info(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &RefPaperDoc,
 ) -> crate::Result<Result<FoldersContainingPaperDoc, DocLookupError>> {
     crate::client_helpers::request(
@@ -165,7 +165,7 @@ pub async fn docs_get_folder_info(
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for migration
 /// information.
 pub async fn docs_list(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &ListPaperDocsArgs,
 ) -> crate::Result<Result<ListPaperDocsResponse, ()>> {
     crate::client_helpers::request(
@@ -187,7 +187,7 @@ pub async fn docs_list(
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for migration
 /// information.
 pub async fn docs_list_continue(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &ListPaperDocsContinueArgs,
 ) -> crate::Result<Result<ListPaperDocsResponse, ListDocsCursorError>> {
     crate::client_helpers::request(
@@ -209,7 +209,7 @@ pub async fn docs_list_continue(
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for migration
 /// information.
 pub async fn docs_permanently_delete(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &RefPaperDoc,
 ) -> crate::Result<Result<(), DocLookupError>> {
     crate::client_helpers::request(
@@ -230,7 +230,7 @@ pub async fn docs_permanently_delete(
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for migration
 /// information.
 pub async fn docs_sharing_policy_get(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &RefPaperDoc,
 ) -> crate::Result<Result<SharingPolicy, DocLookupError>> {
     crate::client_helpers::request(
@@ -254,7 +254,7 @@ pub async fn docs_sharing_policy_get(
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for migration
 /// information.
 pub async fn docs_sharing_policy_set(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &PaperDocSharingPolicy,
 ) -> crate::Result<Result<(), DocLookupError>> {
     crate::client_helpers::request(
@@ -276,9 +276,9 @@ pub async fn docs_sharing_policy_set(
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for more
 /// information.
 pub async fn docs_update(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &PaperDocUpdateArgs,
-    body: &[u8],
+    body: Vec<u8>,
 ) -> crate::Result<Result<PaperDocCreateUpdateResult, PaperDocUpdateError>> {
     crate::client_helpers::request(
         client,
@@ -300,7 +300,7 @@ pub async fn docs_update(
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for migration
 /// information.
 pub async fn docs_users_add(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &AddPaperDocUser,
 ) -> crate::Result<Result<Vec<AddPaperDocUserMemberResult>, DocLookupError>> {
     crate::client_helpers::request(
@@ -324,7 +324,7 @@ pub async fn docs_users_add(
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for migration
 /// information.
 pub async fn docs_users_list(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &ListUsersOnPaperDocArgs,
 ) -> crate::Result<Result<ListUsersOnPaperDocResponse, DocLookupError>> {
     crate::client_helpers::request(
@@ -346,7 +346,7 @@ pub async fn docs_users_list(
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for migration
 /// information.
 pub async fn docs_users_list_continue(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &ListUsersOnPaperDocContinueArgs,
 ) -> crate::Result<Result<ListUsersOnPaperDocResponse, ListUsersCursorError>> {
     crate::client_helpers::request(
@@ -368,7 +368,7 @@ pub async fn docs_users_list_continue(
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for migration
 /// information.
 pub async fn docs_users_remove(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &RemovePaperDocUser,
 ) -> crate::Result<Result<(), DocLookupError>> {
     crate::client_helpers::request(
@@ -389,7 +389,7 @@ pub async fn docs_users_remove(
 /// Guide](https://www.dropbox.com/lp/developers/reference/paper-migration-guide) for migration
 /// information.
 pub async fn folders_create(
-    client: &dyn crate::client_trait::HttpClient<impl std::future::Future<Output=crate::client_trait::HttpResult>>,
+    client: &dyn crate::client_trait::HttpClient,
     arg: &PaperFolderCreateArg,
 ) -> crate::Result<Result<PaperFolderCreateResult, PaperFolderCreateError>> {
     crate::client_helpers::request(
