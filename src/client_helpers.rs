@@ -70,8 +70,8 @@ impl<'de, T: DeserializeOwned> Deserialize<'de> for TopLevelError<T> {
 /// an error if the server returned one for the request, otherwise it has the deserialized JSON
 /// response and the body stream (if any).
 #[allow(clippy::too_many_arguments)]
-pub async fn request_with_body<ReturnType, ErrorType, ParamsType>(
-    client: &dyn HttpClient,
+pub async fn request_with_body<'a, ReturnType, ErrorType, ParamsType>(
+    client: &'a dyn HttpClient,
     endpoint: Endpoint,
     style: Style,
     function: &str,
@@ -79,7 +79,7 @@ pub async fn request_with_body<ReturnType, ErrorType, ParamsType>(
     body: Option<Vec<u8>>,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> crate::Result<Result<HttpRequestResult<ReturnType>, ErrorType>>
+) -> crate::Result<Result<HttpRequestResult<'a, ReturnType>, ErrorType>>
     where ReturnType: DeserializeOwned,
           ErrorType: DeserializeOwned + Debug + Send + Sync + 'static,
           ParamsType: Serialize,

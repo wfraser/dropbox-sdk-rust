@@ -1,11 +1,12 @@
 #![deny(rust_2018_idioms)]
+#![allow(clippy::needless_lifetimes)]  // this lint is broken in async functions
 
 use dropbox_sdk::{files, HyperClient, Oauth2AuthorizeUrlBuilder, Oauth2Type};
-use dropbox_sdk::client_trait::{HttpClient, HttpResult};
+use dropbox_sdk::client_trait::HttpClient;
+use futures::stream::StreamExt;
 use std::collections::VecDeque;
 use std::env;
-use std::future::Future;
-use std::io::{self, Read, Write};
+use std::io::{self, Write};
 
 enum Operation {
     Usage,
@@ -56,34 +57,38 @@ async fn main() {
     };
 
     // Let the user pass the token in an environment variable, or prompt them if that's not found.
-    let token = env::var("DBX_OAUTH_TOKEN").unwrap_or_else(|_| {
-        let client_id = prompt("Give me a Dropbox API app key");
-        let client_secret = prompt("Give me a Dropbox API app secret");
+    let token = match env::var("DBX_OAUTH_TOKEN") {
+        Ok(token) => token,
+        Err(_) => {
+            let client_id = prompt("Give me a Dropbox API app key");
+            let client_secret = prompt("Give me a Dropbox API app secret");
 
-        let url = Oauth2AuthorizeUrlBuilder::new(&client_id, Oauth2Type::AuthorizationCode).build();
-        eprintln!("Open this URL in your browser:");
-        eprintln!("{}", url);
-        eprintln!();
-        let auth_code = prompt("Then paste the code here");
+            let url = Oauth2AuthorizeUrlBuilder::new(&client_id, Oauth2Type::AuthorizationCode).build();
+            eprintln!("Open this URL in your browser:");
+            eprintln!("{}", url);
+            eprintln!();
+            let auth_code = prompt("Then paste the code here");
 
-        eprintln!("requesting OAuth2 token");
-        match HyperClient::oauth2_token_from_authorization_code(
-            &client_id, &client_secret, auth_code.trim(), None)
-        {
-            Ok(token) => {
-                eprintln!("got token: {}", token);
+            eprintln!("requesting OAuth2 token");
+            match HyperClient::oauth2_token_from_authorization_code(
+                &client_id, &client_secret, auth_code.trim(), None)
+                .await
+            {
+                Ok(token) => {
+                    eprintln!("got token: {}", token);
 
-                // This is where you'd save the token somewhere so you don't need to do this dance
-                // again.
+                    // This is where you'd save the token somewhere so you don't need to do this dance
+                    // again.
 
-                token
-            },
-            Err(e) => {
-                eprintln!("Error getting OAuth2 token: {}", e);
-                std::process::exit(1);
+                    token
+                },
+                Err(e) => {
+                    eprintln!("Error getting OAuth2 token: {}", e);
+                    std::process::exit(1);
+                }
             }
         }
-    });
+    };
 
     let client = HyperClient::new(token);
 
@@ -100,15 +105,14 @@ async fn main() {
                 Ok(Ok(download_result)) => {
                     let mut body = download_result.body.expect("no body received!");
                     loop {
-                        // limit read to 1 MiB per loop iteration so we can output progress
-                        let mut input_chunk = (&mut body).take(1024 * 1024);
-                        match io::copy(&mut input_chunk, &mut stdout_lock) {
-                            Ok(0) => {
+                        match body.next().await {
+                            None => {
                                 eprint!("\r");
                                 break 'download;
                             }
-                            Ok(len) => {
-                                bytes_out += len as u64;
+                            Some(Ok(ref buf)) => {
+                                stdout_lock.write_all(buf).expect("write error");
+                                bytes_out += buf.len() as u64;
                                 if let Some(total) = download_result.content_length {
                                     eprint!("\r{:.01}%",
                                         bytes_out as f64 / total as f64 * 100.);
@@ -116,8 +120,8 @@ async fn main() {
                                     eprint!("\r{} bytes", bytes_out);
                                 }
                             }
-                            Err(e) => {
-                                eprintln!("Read error: {}", e);
+                            Some(Err(e)) => {
+                                eprintln!("Read error: {:?}", e);
                                 continue 'download; // do another request and resume
                             }
                         }
@@ -168,20 +172,19 @@ async fn main() {
     }
 }
 
-async fn list_directory<'a, F>(client: &'a dyn HttpClient<F>, path: &str, recursive: bool)
-    -> dropbox_sdk::Result<Result<DirectoryIterator<'a, F>, files::ListFolderError>>
-    where F: Future<Output=HttpResult>
+async fn list_directory<'a>(client: &'a dyn HttpClient, path: &str, recursive: bool)
+    -> dropbox_sdk::Result<Result<DirectoryIterator<'a>, files::ListFolderError>>
 {
     assert!(path.starts_with('/'), "path needs to be absolute (start with a '/')");
     let requested_path = if path == "/" {
         // Root folder should be requested as empty string
-        String::new()
+        ""
     } else {
-        path.to_owned()
+        path
     };
     match files::list_folder(
         client,
-        &files::ListFolderArg::new(requested_path)
+        &files::ListFolderArg::new(requested_path.to_owned())
             .with_recursive(recursive))
         .await
     {
@@ -203,13 +206,13 @@ async fn list_directory<'a, F>(client: &'a dyn HttpClient<F>, path: &str, recurs
     }
 }
 
-struct DirectoryIterator<'a, F> {
-    client: &'a dyn HttpClient<F>,
+struct DirectoryIterator<'a> {
+    client: &'a dyn HttpClient,
     buffer: VecDeque<files::Metadata>,
     cursor: Option<String>,
 }
 
-impl<'a, F: Future<Output=HttpResult>> DirectoryIterator<'a, F> {
+impl<'a> DirectoryIterator<'a> {
     pub async fn next(&mut self) -> Option<dropbox_sdk::Result<Result<files::Metadata, files::ListFolderContinueError>>> {
         if let Some(entry) = self.buffer.pop_front() {
             Some(Ok(Ok(entry)))

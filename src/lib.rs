@@ -1,6 +1,7 @@
 // Copyright (c) 2019-2020 Dropbox, Inc.
 
 #![deny(rust_2018_idioms)]
+#![allow(clippy::needless_lifetimes)] // this lint is broken in async functions
 
 use thiserror::Error;
 #[macro_use] extern crate log;

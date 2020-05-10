@@ -353,12 +353,12 @@ pub async fn delete_batch_check(
 }
 
 /// Download a file from a user's Dropbox.
-pub async fn download(
-    client: &dyn crate::client_trait::HttpClient,
+pub async fn download<'a>(
+    client: &'a dyn crate::client_trait::HttpClient,
     arg: &DownloadArg,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> crate::Result<Result<crate::client_trait::HttpRequestResult<FileMetadata>, DownloadError>> {
+) -> crate::Result<Result<crate::client_trait::HttpRequestResult<'a, FileMetadata>, DownloadError>> {
     crate::client_helpers::request_with_body(
         client,
         crate::client_trait::Endpoint::Content,
@@ -375,12 +375,12 @@ pub async fn download(
 /// Download a folder from the user's Dropbox, as a zip file. The folder must be less than 20 GB in
 /// size and have fewer than 10,000 total files. The input cannot be a single file. Any single file
 /// must be less than 4GB in size.
-pub async fn download_zip(
-    client: &dyn crate::client_trait::HttpClient,
+pub async fn download_zip<'a>(
+    client: &'a dyn crate::client_trait::HttpClient,
     arg: &DownloadZipArg,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> crate::Result<Result<crate::client_trait::HttpRequestResult<DownloadZipResult>, DownloadZipError>> {
+) -> crate::Result<Result<crate::client_trait::HttpRequestResult<'a, DownloadZipResult>, DownloadZipError>> {
     crate::client_helpers::request_with_body(
         client,
         crate::client_trait::Endpoint::Content,
@@ -397,12 +397,12 @@ pub async fn download_zip(
 /// Export a file from a user's Dropbox. This route only supports exporting files that cannot be
 /// downloaded directly  and whose [`ExportResult::file_metadata`](ExportResult) has
 /// [`ExportInfo::export_as`](ExportInfo) populated.
-pub async fn export(
-    client: &dyn crate::client_trait::HttpClient,
+pub async fn export<'a>(
+    client: &'a dyn crate::client_trait::HttpClient,
     arg: &ExportArg,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> crate::Result<Result<crate::client_trait::HttpRequestResult<ExportResult>, ExportError>> {
+) -> crate::Result<Result<crate::client_trait::HttpRequestResult<'a, ExportResult>, ExportError>> {
     crate::client_helpers::request_with_body(
         client,
         crate::client_trait::Endpoint::Content,
@@ -453,12 +453,12 @@ pub async fn get_metadata(
 /// .ppt, .pptm, .pptx, .rtf. HTML previews are generated for files with the following extensions:
 /// .csv, .ods, .xls, .xlsm, .gsheet, .xlsx. Other formats will return an unsupported extension
 /// error.
-pub async fn get_preview(
-    client: &dyn crate::client_trait::HttpClient,
+pub async fn get_preview<'a>(
+    client: &'a dyn crate::client_trait::HttpClient,
     arg: &PreviewArg,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> crate::Result<Result<crate::client_trait::HttpRequestResult<FileMetadata>, PreviewError>> {
+) -> crate::Result<Result<crate::client_trait::HttpRequestResult<'a, FileMetadata>, PreviewError>> {
     crate::client_helpers::request_with_body(
         client,
         crate::client_trait::Endpoint::Content,
@@ -544,12 +544,12 @@ pub async fn get_temporary_upload_link(
 /// Get a thumbnail for an image. This method currently supports files with the following file
 /// extensions: jpg, jpeg, png, tiff, tif, gif and bmp. Photos that are larger than 20MB in size
 /// won't be converted to a thumbnail.
-pub async fn get_thumbnail(
-    client: &dyn crate::client_trait::HttpClient,
+pub async fn get_thumbnail<'a>(
+    client: &'a dyn crate::client_trait::HttpClient,
     arg: &ThumbnailArg,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> crate::Result<Result<crate::client_trait::HttpRequestResult<FileMetadata>, ThumbnailError>> {
+) -> crate::Result<Result<crate::client_trait::HttpRequestResult<'a, FileMetadata>, ThumbnailError>> {
     crate::client_helpers::request_with_body(
         client,
         crate::client_trait::Endpoint::Content,
@@ -564,12 +564,12 @@ pub async fn get_thumbnail(
 }
 
 /// Get a thumbnail for a file.
-pub async fn get_thumbnail_v2(
-    client: &dyn crate::client_trait::HttpClient,
+pub async fn get_thumbnail_v2<'a>(
+    client: &'a dyn crate::client_trait::HttpClient,
     arg: &ThumbnailV2Arg,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> crate::Result<Result<crate::client_trait::HttpRequestResult<PreviewResult>, ThumbnailV2Error>> {
+) -> crate::Result<Result<crate::client_trait::HttpRequestResult<'a, PreviewResult>, ThumbnailV2Error>> {
     crate::client_helpers::request_with_body(
         client,
         crate::client_trait::Endpoint::Content,

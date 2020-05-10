@@ -194,13 +194,13 @@ class RustBackend(RustHelperBackend):
                         u'None'])
         elif style == 'download':
             with self.emit_rust_function_def(
-                    route_name,
-                    [u'client: &dyn crate::client_trait::HttpClient']
+                    route_name + '<\'a>',
+                    [u'client: &\'a dyn crate::client_trait::HttpClient']
                         + ([] if arg_void else
                             [u'arg: &{}'.format(self._rust_type(fn.arg_data_type))])
                         + [u'range_start: Option<u64>',
                             u'range_end: Option<u64>'],
-                    u'crate::Result<Result<crate::client_trait::HttpRequestResult<{}>, {}>>'.format(
+                    u'crate::Result<Result<crate::client_trait::HttpRequestResult<\'a, {}>, {}>>'.format(
                         self._rust_type(fn.result_data_type),
                         self._rust_type(fn.error_data_type)),
                     access=u'pub async'):
