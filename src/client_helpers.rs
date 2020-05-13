@@ -70,21 +70,21 @@ impl<'de, T: DeserializeOwned> Deserialize<'de> for TopLevelError<T> {
 /// an error if the server returned one for the request, otherwise it has the deserialized JSON
 /// response and the body stream (if any).
 #[allow(clippy::too_many_arguments)]
-pub async fn request_with_body<'a, ReturnType, ErrorType, ParamsType>(
-    client: &'a dyn HttpClient,
+pub async fn request_with_body<ReturnType, ErrorType, ParamsType>(
+    client: &dyn HttpClient,
     endpoint: Endpoint,
     style: Style,
-    function: &str,
-    params: &ParamsType,
-    body: Option<Vec<u8>>,
+    function: &'static str,
+    params: ParamsType,
+    body: Option<RequestBodyStream>,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> crate::Result<Result<HttpRequestResult<'a, ReturnType>, ErrorType>>
+) -> crate::Result<Result<HttpRequestResult<ReturnType>, ErrorType>>
     where ReturnType: DeserializeOwned,
           ErrorType: DeserializeOwned + Debug + Send + Sync + 'static,
           ParamsType: Serialize,
 {
-    let params_json = serde_json::to_string(params)?;
+    let params_json = serde_json::to_string(&params)?;
     let result = client.request(
         endpoint, style, function, params_json, body, range_start, range_end)
         .await;
@@ -147,9 +147,9 @@ pub async fn request<ReturnType, ErrorType, ParamsType>(
     client: &dyn HttpClient,
     endpoint: Endpoint,
     style: Style,
-    function: &str,
-    params: &ParamsType,
-    body: Option<Vec<u8>>,
+    function: &'static str,
+    params: ParamsType,
+    body: Option<RequestBodyStream>,
 ) -> crate::Result<Result<ReturnType, ErrorType>>
     where ReturnType: DeserializeOwned,
           ErrorType: DeserializeOwned + Debug + Send + Sync + 'static,

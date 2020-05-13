@@ -26,7 +26,7 @@ pub async fn delete_manual_contacts(
 /// Removes manually added contacts from the given list.
 pub async fn delete_manual_contacts_batch(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &DeleteManualContactsArg,
+    arg: DeleteManualContactsArg,
 ) -> crate::Result<Result<(), DeleteManualContactsError>> {
     crate::client_helpers::request(
         client,
@@ -39,7 +39,7 @@ pub async fn delete_manual_contacts_batch(
         .await
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeleteManualContactsArg {
     /// List of manually added contacts to be deleted.
     pub email_addresses: Vec<super::common::EmailAddress>,
@@ -129,7 +129,7 @@ impl ::serde::ser::Serialize for DeleteManualContactsArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum DeleteManualContactsError {
     /// Can't delete contacts from this list. Make sure the list only has manually added contacts.
     /// The deletion was cancelled.

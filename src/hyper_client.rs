@@ -3,6 +3,7 @@
 use async_trait::async_trait;
 use crate::Error;
 use crate::client_trait::{Endpoint, Style, HttpClient, HttpClientError, HttpRequestResultRaw};
+use crate::client_trait::RequestBodyStream;
 use futures::stream::StreamExt;
 use hyper::{Body, Request, Uri};
 use hyper::header::{self, HeaderValue};
@@ -136,16 +137,16 @@ impl HyperClient {
 #[async_trait]
 impl HttpClient for HyperClient {
     #[allow(clippy::too_many_arguments)]
-    async fn request<'a>(
+    async fn request(
         &self,
         endpoint: Endpoint,
         style: Style,
-        function: &str,
+        function: &'static str,
         params_json: String,
-        body: Option<Vec<u8>>,
+        body: Option<RequestBodyStream>,
         range_start: Option<u64>,
         range_end: Option<u64>,
-    ) -> Result<HttpRequestResultRaw<'a>, HttpClientError> {
+    ) -> Result<HttpRequestResultRaw, HttpClientError> {
 
         let uri = Uri::try_from(endpoint.url().to_owned() + function)
             .expect("invalid request URL");
@@ -178,7 +179,7 @@ impl HttpClient for HyperClient {
             let request_body = match style {
                 Style::Rpc => {
                     // Send params in the body.
-                    assert_eq!(None, body);
+                    assert!(body.is_none());
                     if !params_json.is_empty() {
                         builder = builder.header(header::CONTENT_TYPE, "application/json");
                         Body::from(params_json)
@@ -194,11 +195,11 @@ impl HttpClient for HyperClient {
                     if style == Style::Upload {
                         builder = builder.header(header::CONTENT_TYPE, "application/octet-stream");
                         match body {
-                            Some(body) => Body::from(body),
+                            Some(body) => Body::wrap_stream(body),
                             None => Body::empty(),
                         }
                     } else {
-                        assert_eq!(None, body);
+                        assert!(body.is_none());
                         Body::empty()
                     }
                 }

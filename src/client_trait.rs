@@ -4,22 +4,28 @@
 
 use async_trait::async_trait;
 use bytes::Bytes;
-use futures::stream::BoxStream;
+use futures::stream::Stream;
+use std::pin::Pin;
 
 #[async_trait]
 pub trait HttpClient {
     #[allow(clippy::too_many_arguments)]
-    async fn request<'a>(
+    async fn request(
         &self,
         endpoint: Endpoint,
         style: Style,
-        function: &str,
+        function: &'static str,
         params_json: String,
-        body: Option<Vec<u8>>,  // TODO: allow passing a Stream, reader, or a static buffer instead
+        body: Option<RequestBodyStream>,
         range_start: Option<u64>,
         range_end: Option<u64>,
-    ) -> Result<HttpRequestResultRaw<'a>, HttpClientError>;
+    ) -> Result<HttpRequestResultRaw, HttpClientError>;
 }
+
+type AnyError = Box<dyn std::error::Error + Send + Sync + 'static>;
+pub type BodyStream<E> = Pin<Box<dyn Stream<Item = Result<Bytes, E>> + Send + Sync + 'static>>;
+pub type RequestBodyStream = BodyStream<AnyError>;
+pub type ResponseBodyStream = BodyStream<HttpClientError>;
 
 /// An error returned by the HTTP client.
 #[derive(Debug)]
@@ -48,16 +54,16 @@ impl std::fmt::Display for HttpClientError {
     }
 }
 
-pub struct HttpRequestResultRaw<'a> {
+pub struct HttpRequestResultRaw {
     pub result_json: String,
     pub content_length: Option<u64>,
-    pub body: Option<BoxStream<'a, Result<Bytes, HttpClientError>>>,
+    pub body: Option<ResponseBodyStream>,
 }
 
-pub struct HttpRequestResult<'a, T> {
+pub struct HttpRequestResult<T> {
     pub result: T,
     pub content_length: Option<u64>,
-    pub body: Option<BoxStream<'a, Result<Bytes, HttpClientError>>>,
+    pub body: Option<ResponseBodyStream>,
 }
 
 #[derive(Debug, Copy, Clone, PartialEq)]

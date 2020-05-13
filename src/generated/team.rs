@@ -24,7 +24,7 @@ pub type UserQuota = u32;
 /// List all device sessions of a team's member.
 pub async fn devices_list_member_devices(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &ListMemberDevicesArg,
+    arg: ListMemberDevicesArg,
 ) -> crate::Result<Result<ListMemberDevicesResult, ListMemberDevicesError>> {
     crate::client_helpers::request(
         client,
@@ -40,7 +40,7 @@ pub async fn devices_list_member_devices(
 /// List all device sessions of a team. Permission : Team member file access.
 pub async fn devices_list_members_devices(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &ListMembersDevicesArg,
+    arg: ListMembersDevicesArg,
 ) -> crate::Result<Result<ListMembersDevicesResult, ListMembersDevicesError>> {
     crate::client_helpers::request(
         client,
@@ -56,7 +56,7 @@ pub async fn devices_list_members_devices(
 /// List all device sessions of a team. Permission : Team member file access.
 pub async fn devices_list_team_devices(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &ListTeamDevicesArg,
+    arg: ListTeamDevicesArg,
 ) -> crate::Result<Result<ListTeamDevicesResult, ListTeamDevicesError>> {
     crate::client_helpers::request(
         client,
@@ -72,7 +72,7 @@ pub async fn devices_list_team_devices(
 /// Revoke a device session of a team's member.
 pub async fn devices_revoke_device_session(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &RevokeDeviceSessionArg,
+    arg: RevokeDeviceSessionArg,
 ) -> crate::Result<Result<(), RevokeDeviceSessionError>> {
     crate::client_helpers::request(
         client,
@@ -88,7 +88,7 @@ pub async fn devices_revoke_device_session(
 /// Revoke a list of device sessions of team members.
 pub async fn devices_revoke_device_session_batch(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &RevokeDeviceSessionBatchArg,
+    arg: RevokeDeviceSessionBatchArg,
 ) -> crate::Result<Result<RevokeDeviceSessionBatchResult, RevokeDeviceSessionBatchError>> {
     crate::client_helpers::request(
         client,
@@ -106,7 +106,7 @@ pub async fn devices_revoke_device_session_batch(
 /// information.
 pub async fn features_get_values(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &FeaturesGetValuesBatchArg,
+    arg: FeaturesGetValuesBatchArg,
 ) -> crate::Result<Result<FeaturesGetValuesBatchResult, FeaturesGetValuesBatchError>> {
     crate::client_helpers::request(
         client,
@@ -137,7 +137,7 @@ pub async fn get_info(
 /// Creates a new, empty group, with a requested name. Permission : Team member management.
 pub async fn groups_create(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &GroupCreateArg,
+    arg: GroupCreateArg,
 ) -> crate::Result<Result<GroupFullInfo, GroupCreateError>> {
     crate::client_helpers::request(
         client,
@@ -155,7 +155,7 @@ pub async fn groups_create(
 /// determine whether this process has completed. Permission : Team member management.
 pub async fn groups_delete(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &GroupSelector,
+    arg: GroupSelector,
 ) -> crate::Result<Result<super::dbx_async::LaunchEmptyResult, GroupDeleteError>> {
     crate::client_helpers::request(
         client,
@@ -173,7 +173,7 @@ pub async fn groups_delete(
 /// : Team Information.
 pub async fn groups_get_info(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &GroupsSelector,
+    arg: GroupsSelector,
 ) -> crate::Result<Result<GroupsGetInfoResult, GroupsGetInfoError>> {
     crate::client_helpers::request(
         client,
@@ -193,7 +193,7 @@ pub async fn groups_get_info(
 /// management.
 pub async fn groups_job_status_get(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &super::dbx_async::PollArg,
+    arg: super::dbx_async::PollArg,
 ) -> crate::Result<Result<super::dbx_async::PollEmptyResult, GroupsPollError>> {
     crate::client_helpers::request(
         client,
@@ -209,7 +209,7 @@ pub async fn groups_job_status_get(
 /// Lists groups on a team. Permission : Team Information.
 pub async fn groups_list(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &GroupsListArg,
+    arg: GroupsListArg,
 ) -> crate::Result<Result<GroupsListResult, ()>> {
     crate::client_helpers::request(
         client,
@@ -226,7 +226,7 @@ pub async fn groups_list(
 /// through all groups. Permission : Team Information.
 pub async fn groups_list_continue(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &GroupsListContinueArg,
+    arg: GroupsListContinueArg,
 ) -> crate::Result<Result<GroupsListResult, GroupsListContinueError>> {
     crate::client_helpers::request(
         client,
@@ -244,7 +244,7 @@ pub async fn groups_list_continue(
 /// to determine whether this process has completed. Permission : Team member management.
 pub async fn groups_members_add(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &GroupMembersAddArg,
+    arg: GroupMembersAddArg,
 ) -> crate::Result<Result<GroupMembersChangeResult, GroupMembersAddError>> {
     crate::client_helpers::request(
         client,
@@ -260,7 +260,7 @@ pub async fn groups_members_add(
 /// Lists members of a group. Permission : Team Information.
 pub async fn groups_members_list(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &GroupsMembersListArg,
+    arg: GroupsMembersListArg,
 ) -> crate::Result<Result<GroupsMembersListResult, GroupSelectorError>> {
     crate::client_helpers::request(
         client,
@@ -277,7 +277,7 @@ pub async fn groups_members_list(
 /// to paginate through all members of the group. Permission : Team information.
 pub async fn groups_members_list_continue(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &GroupsMembersListContinueArg,
+    arg: GroupsMembersListContinueArg,
 ) -> crate::Result<Result<GroupsMembersListResult, GroupsMembersListContinueError>> {
     crate::client_helpers::request(
         client,
@@ -297,7 +297,7 @@ pub async fn groups_members_list_continue(
 /// not possible via the web client. Permission : Team member management.
 pub async fn groups_members_remove(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &GroupMembersRemoveArg,
+    arg: GroupMembersRemoveArg,
 ) -> crate::Result<Result<GroupMembersChangeResult, GroupMembersRemoveError>> {
     crate::client_helpers::request(
         client,
@@ -313,7 +313,7 @@ pub async fn groups_members_remove(
 /// Sets a member's access type in a group. Permission : Team member management.
 pub async fn groups_members_set_access_type(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &GroupMembersSetAccessTypeArg,
+    arg: GroupMembersSetAccessTypeArg,
 ) -> crate::Result<Result<GroupsGetInfoResult, GroupMemberSetAccessTypeError>> {
     crate::client_helpers::request(
         client,
@@ -329,7 +329,7 @@ pub async fn groups_members_set_access_type(
 /// Updates a group's name and/or external ID. Permission : Team member management.
 pub async fn groups_update(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &GroupUpdateArgs,
+    arg: GroupUpdateArgs,
 ) -> crate::Result<Result<GroupFullInfo, GroupUpdateError>> {
     crate::client_helpers::request(
         client,
@@ -346,7 +346,7 @@ pub async fn groups_update(
 /// feature. Permission : Team member file access.
 pub async fn legal_holds_create_policy(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &LegalHoldsPolicyCreateArg,
+    arg: LegalHoldsPolicyCreateArg,
 ) -> crate::Result<Result<LegalHoldsPolicyCreateResult, LegalHoldsPolicyCreateError>> {
     crate::client_helpers::request(
         client,
@@ -363,7 +363,7 @@ pub async fn legal_holds_create_policy(
 /// Permission : Team member file access.
 pub async fn legal_holds_get_policy(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &LegalHoldsGetPolicyArg,
+    arg: LegalHoldsGetPolicyArg,
 ) -> crate::Result<Result<LegalHoldsGetPolicyResult, LegalHoldsGetPolicyError>> {
     crate::client_helpers::request(
         client,
@@ -380,7 +380,7 @@ pub async fn legal_holds_get_policy(
 /// have the feature. Permission : Team member file access.
 pub async fn legal_holds_list_held_revisions(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &LegalHoldsListHeldRevisionsArg,
+    arg: LegalHoldsListHeldRevisionsArg,
 ) -> crate::Result<Result<LegalHoldsListHeldRevisionResult, LegalHoldsListHeldRevisionsError>> {
     crate::client_helpers::request(
         client,
@@ -397,7 +397,7 @@ pub async fn legal_holds_list_held_revisions(
 /// Not all teams have the feature. Permission : Team member file access.
 pub async fn legal_holds_list_held_revisions_continue(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &LegalHoldsListHeldRevisionsContinueArg,
+    arg: LegalHoldsListHeldRevisionsContinueArg,
 ) -> crate::Result<Result<LegalHoldsListHeldRevisionResult, LegalHoldsListHeldRevisionsError>> {
     crate::client_helpers::request(
         client,
@@ -414,7 +414,7 @@ pub async fn legal_holds_list_held_revisions_continue(
 /// Permission : Team member file access.
 pub async fn legal_holds_list_policies(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &LegalHoldsListPoliciesArg,
+    arg: LegalHoldsListPoliciesArg,
 ) -> crate::Result<Result<LegalHoldsListPoliciesResult, LegalHoldsListPoliciesError>> {
     crate::client_helpers::request(
         client,
@@ -431,7 +431,7 @@ pub async fn legal_holds_list_policies(
 /// Permission : Team member file access.
 pub async fn legal_holds_release_policy(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &LegalHoldsPolicyReleaseArg,
+    arg: LegalHoldsPolicyReleaseArg,
 ) -> crate::Result<Result<(), LegalHoldsPolicyReleaseError>> {
     crate::client_helpers::request(
         client,
@@ -448,7 +448,7 @@ pub async fn legal_holds_release_policy(
 /// Permission : Team member file access.
 pub async fn legal_holds_update_policy(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &LegalHoldsPolicyUpdateArg,
+    arg: LegalHoldsPolicyUpdateArg,
 ) -> crate::Result<Result<LegalHoldsPolicyUpdateResult, LegalHoldsPolicyUpdateError>> {
     crate::client_helpers::request(
         client,
@@ -465,7 +465,7 @@ pub async fn legal_holds_update_policy(
 /// team-linked applications.
 pub async fn linked_apps_list_member_linked_apps(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &ListMemberAppsArg,
+    arg: ListMemberAppsArg,
 ) -> crate::Result<Result<ListMemberAppsResult, ListMemberAppsError>> {
     crate::client_helpers::request(
         client,
@@ -482,7 +482,7 @@ pub async fn linked_apps_list_member_linked_apps(
 /// any team-linked applications.
 pub async fn linked_apps_list_members_linked_apps(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &ListMembersAppsArg,
+    arg: ListMembersAppsArg,
 ) -> crate::Result<Result<ListMembersAppsResult, ListMembersAppsError>> {
     crate::client_helpers::request(
         client,
@@ -499,7 +499,7 @@ pub async fn linked_apps_list_members_linked_apps(
 /// team-linked applications.
 pub async fn linked_apps_list_team_linked_apps(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &ListTeamAppsArg,
+    arg: ListTeamAppsArg,
 ) -> crate::Result<Result<ListTeamAppsResult, ListTeamAppsError>> {
     crate::client_helpers::request(
         client,
@@ -515,7 +515,7 @@ pub async fn linked_apps_list_team_linked_apps(
 /// Revoke a linked application of the team member.
 pub async fn linked_apps_revoke_linked_app(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &RevokeLinkedApiAppArg,
+    arg: RevokeLinkedApiAppArg,
 ) -> crate::Result<Result<(), RevokeLinkedAppError>> {
     crate::client_helpers::request(
         client,
@@ -531,7 +531,7 @@ pub async fn linked_apps_revoke_linked_app(
 /// Revoke a list of linked applications of the team members.
 pub async fn linked_apps_revoke_linked_app_batch(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &RevokeLinkedApiAppBatchArg,
+    arg: RevokeLinkedApiAppBatchArg,
 ) -> crate::Result<Result<RevokeLinkedAppBatchResult, RevokeLinkedAppBatchError>> {
     crate::client_helpers::request(
         client,
@@ -547,7 +547,7 @@ pub async fn linked_apps_revoke_linked_app_batch(
 /// Add users to member space limits excluded users list.
 pub async fn member_space_limits_excluded_users_add(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &ExcludedUsersUpdateArg,
+    arg: ExcludedUsersUpdateArg,
 ) -> crate::Result<Result<ExcludedUsersUpdateResult, ExcludedUsersUpdateError>> {
     crate::client_helpers::request(
         client,
@@ -563,7 +563,7 @@ pub async fn member_space_limits_excluded_users_add(
 /// List member space limits excluded users.
 pub async fn member_space_limits_excluded_users_list(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &ExcludedUsersListArg,
+    arg: ExcludedUsersListArg,
 ) -> crate::Result<Result<ExcludedUsersListResult, ExcludedUsersListError>> {
     crate::client_helpers::request(
         client,
@@ -579,7 +579,7 @@ pub async fn member_space_limits_excluded_users_list(
 /// Continue listing member space limits excluded users.
 pub async fn member_space_limits_excluded_users_list_continue(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &ExcludedUsersListContinueArg,
+    arg: ExcludedUsersListContinueArg,
 ) -> crate::Result<Result<ExcludedUsersListResult, ExcludedUsersListContinueError>> {
     crate::client_helpers::request(
         client,
@@ -595,7 +595,7 @@ pub async fn member_space_limits_excluded_users_list_continue(
 /// Remove users from member space limits excluded users list.
 pub async fn member_space_limits_excluded_users_remove(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &ExcludedUsersUpdateArg,
+    arg: ExcludedUsersUpdateArg,
 ) -> crate::Result<Result<ExcludedUsersUpdateResult, ExcludedUsersUpdateError>> {
     crate::client_helpers::request(
         client,
@@ -612,7 +612,7 @@ pub async fn member_space_limits_excluded_users_remove(
 /// members can be specified in a single call.
 pub async fn member_space_limits_get_custom_quota(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &CustomQuotaUsersArg,
+    arg: CustomQuotaUsersArg,
 ) -> crate::Result<Result<Vec<CustomQuotaResult>, CustomQuotaError>> {
     crate::client_helpers::request(
         client,
@@ -628,7 +628,7 @@ pub async fn member_space_limits_get_custom_quota(
 /// Remove users custom quota. A maximum of 1000 members can be specified in a single call.
 pub async fn member_space_limits_remove_custom_quota(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &CustomQuotaUsersArg,
+    arg: CustomQuotaUsersArg,
 ) -> crate::Result<Result<Vec<RemoveCustomQuotaResult>, CustomQuotaError>> {
     crate::client_helpers::request(
         client,
@@ -645,7 +645,7 @@ pub async fn member_space_limits_remove_custom_quota(
 /// specified in a single call.
 pub async fn member_space_limits_set_custom_quota(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &SetCustomQuotaArg,
+    arg: SetCustomQuotaArg,
 ) -> crate::Result<Result<Vec<CustomQuotaResult>, SetCustomQuotaError>> {
     crate::client_helpers::request(
         client,
@@ -669,7 +669,7 @@ pub async fn member_space_limits_set_custom_quota(
 /// 'active'.
 pub async fn members_add(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &MembersAddArg,
+    arg: MembersAddArg,
 ) -> crate::Result<Result<MembersAddLaunch, ()>> {
     crate::client_helpers::request(
         client,
@@ -686,7 +686,7 @@ pub async fn members_add(
 /// status of the asynchronous request. Permission : Team member management.
 pub async fn members_add_job_status_get(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &super::dbx_async::PollArg,
+    arg: super::dbx_async::PollArg,
 ) -> crate::Result<Result<MembersAddJobStatus, super::dbx_async::PollError>> {
     crate::client_helpers::request(
         client,
@@ -702,7 +702,7 @@ pub async fn members_add_job_status_get(
 /// Deletes a team member's profile photo. Permission : Team member management.
 pub async fn members_delete_profile_photo(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &MembersDeleteProfilePhotoArg,
+    arg: MembersDeleteProfilePhotoArg,
 ) -> crate::Result<Result<TeamMemberInfo, MembersDeleteProfilePhotoError>> {
     crate::client_helpers::request(
         client,
@@ -720,7 +720,7 @@ pub async fn members_delete_profile_photo(
 /// emails) that cannot be matched to a valid team member.
 pub async fn members_get_info(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &MembersGetInfoArgs,
+    arg: MembersGetInfoArgs,
 ) -> crate::Result<Result<MembersGetInfoResult, MembersGetInfoError>> {
     crate::client_helpers::request(
         client,
@@ -736,7 +736,7 @@ pub async fn members_get_info(
 /// Lists members of a team. Permission : Team information.
 pub async fn members_list(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &MembersListArg,
+    arg: MembersListArg,
 ) -> crate::Result<Result<MembersListResult, MembersListError>> {
     crate::client_helpers::request(
         client,
@@ -753,7 +753,7 @@ pub async fn members_list(
 /// through all team members. Permission : Team information.
 pub async fn members_list_continue(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &MembersListContinueArg,
+    arg: MembersListContinueArg,
 ) -> crate::Result<Result<MembersListResult, MembersListContinueError>> {
     crate::client_helpers::request(
         client,
@@ -772,7 +772,7 @@ pub async fn members_list_continue(
 /// Permission : Team member management.
 pub async fn members_move_former_member_files(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &MembersDataTransferArg,
+    arg: MembersDataTransferArg,
 ) -> crate::Result<Result<super::dbx_async::LaunchEmptyResult, MembersTransferFormerMembersFilesError>> {
     crate::client_helpers::request(
         client,
@@ -790,7 +790,7 @@ pub async fn members_move_former_member_files(
 /// status of the asynchronous request. Permission : Team member management.
 pub async fn members_move_former_member_files_job_status_check(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &super::dbx_async::PollArg,
+    arg: super::dbx_async::PollArg,
 ) -> crate::Result<Result<super::dbx_async::PollEmptyResult, super::dbx_async::PollError>> {
     crate::client_helpers::request(
         client,
@@ -807,7 +807,7 @@ pub async fn members_move_former_member_files_job_status_check(
 /// email, or external_id must be provided to identify the user account.
 pub async fn members_recover(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &MembersRecoverArg,
+    arg: MembersRecoverArg,
 ) -> crate::Result<Result<(), MembersRecoverError>> {
     crate::client_helpers::request(
         client,
@@ -832,7 +832,7 @@ pub async fn members_recover(
 /// [`members_remove_job_status_get()`](members_remove_job_status_get).
 pub async fn members_remove(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &MembersRemoveArg,
+    arg: MembersRemoveArg,
 ) -> crate::Result<Result<super::dbx_async::LaunchEmptyResult, MembersRemoveError>> {
     crate::client_helpers::request(
         client,
@@ -849,7 +849,7 @@ pub async fn members_remove(
 /// the status of the asynchronous request. Permission : Team member management.
 pub async fn members_remove_job_status_get(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &super::dbx_async::PollArg,
+    arg: super::dbx_async::PollArg,
 ) -> crate::Result<Result<super::dbx_async::PollEmptyResult, super::dbx_async::PollError>> {
     crate::client_helpers::request(
         client,
@@ -867,7 +867,7 @@ pub async fn members_remove_job_status_get(
 /// verification email will be sent.
 pub async fn members_secondary_emails_add(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &AddSecondaryEmailsArg,
+    arg: AddSecondaryEmailsArg,
 ) -> crate::Result<Result<AddSecondaryEmailsResult, AddSecondaryEmailsError>> {
     crate::client_helpers::request(
         client,
@@ -884,7 +884,7 @@ pub async fn members_secondary_emails_add(
 /// of deletions of verified secondary emails at both the secondary email and their primary email.
 pub async fn members_secondary_emails_delete(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &DeleteSecondaryEmailsArg,
+    arg: DeleteSecondaryEmailsArg,
 ) -> crate::Result<Result<DeleteSecondaryEmailsResult, ()>> {
     crate::client_helpers::request(
         client,
@@ -900,7 +900,7 @@ pub async fn members_secondary_emails_delete(
 /// Resend secondary email verification emails. Permission : Team member management.
 pub async fn members_secondary_emails_resend_verification_emails(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &ResendVerificationEmailArg,
+    arg: ResendVerificationEmailArg,
 ) -> crate::Result<Result<ResendVerificationEmailResult, ()>> {
     crate::client_helpers::request(
         client,
@@ -918,7 +918,7 @@ pub async fn members_secondary_emails_resend_verification_emails(
 /// team member is not pending.
 pub async fn members_send_welcome_email(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &UserSelectorArg,
+    arg: UserSelectorArg,
 ) -> crate::Result<Result<(), MembersSendWelcomeError>> {
     crate::client_helpers::request(
         client,
@@ -934,7 +934,7 @@ pub async fn members_send_welcome_email(
 /// Updates a team member's permissions. Permission : Team member management.
 pub async fn members_set_admin_permissions(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &MembersSetPermissionsArg,
+    arg: MembersSetPermissionsArg,
 ) -> crate::Result<Result<MembersSetPermissionsResult, MembersSetPermissionsError>> {
     crate::client_helpers::request(
         client,
@@ -950,7 +950,7 @@ pub async fn members_set_admin_permissions(
 /// Updates a team member's profile. Permission : Team member management.
 pub async fn members_set_profile(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &MembersSetProfileArg,
+    arg: MembersSetProfileArg,
 ) -> crate::Result<Result<TeamMemberInfo, MembersSetProfileError>> {
     crate::client_helpers::request(
         client,
@@ -966,7 +966,7 @@ pub async fn members_set_profile(
 /// Updates a team member's profile photo. Permission : Team member management.
 pub async fn members_set_profile_photo(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &MembersSetProfilePhotoArg,
+    arg: MembersSetProfilePhotoArg,
 ) -> crate::Result<Result<TeamMemberInfo, MembersSetProfilePhotoError>> {
     crate::client_helpers::request(
         client,
@@ -983,7 +983,7 @@ pub async fn members_set_profile_photo(
 /// email, or external_id must be provided to identify the user account.
 pub async fn members_suspend(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &MembersDeactivateArg,
+    arg: MembersDeactivateArg,
 ) -> crate::Result<Result<(), MembersSuspendError>> {
     crate::client_helpers::request(
         client,
@@ -1000,7 +1000,7 @@ pub async fn members_suspend(
 /// team_member_id, email, or external_id must be provided to identify the user account.
 pub async fn members_unsuspend(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &MembersUnsuspendArg,
+    arg: MembersUnsuspendArg,
 ) -> crate::Result<Result<(), MembersUnsuspendError>> {
     crate::client_helpers::request(
         client,
@@ -1019,7 +1019,7 @@ pub async fn members_unsuspend(
 /// folders may be owned by other users or other teams. Duplicates may occur in the list.
 pub async fn namespaces_list(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &TeamNamespacesListArg,
+    arg: TeamNamespacesListArg,
 ) -> crate::Result<Result<TeamNamespacesListResult, TeamNamespacesListError>> {
     crate::client_helpers::request(
         client,
@@ -1036,7 +1036,7 @@ pub async fn namespaces_list(
 /// paginate through all team-accessible namespaces. Duplicates may occur in the list.
 pub async fn namespaces_list_continue(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &TeamNamespacesListContinueArg,
+    arg: TeamNamespacesListContinueArg,
 ) -> crate::Result<Result<TeamNamespacesListResult, TeamNamespacesListContinueError>> {
     crate::client_helpers::request(
         client,
@@ -1052,7 +1052,7 @@ pub async fn namespaces_list_continue(
 /// Permission : Team member file access.
 pub async fn properties_template_add(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &super::file_properties::AddTemplateArg,
+    arg: super::file_properties::AddTemplateArg,
 ) -> crate::Result<Result<super::file_properties::AddTemplateResult, super::file_properties::ModifyTemplateError>> {
     crate::client_helpers::request(
         client,
@@ -1068,7 +1068,7 @@ pub async fn properties_template_add(
 /// Permission : Team member file access.
 pub async fn properties_template_get(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &super::file_properties::GetTemplateArg,
+    arg: super::file_properties::GetTemplateArg,
 ) -> crate::Result<Result<super::file_properties::GetTemplateResult, super::file_properties::TemplateError>> {
     crate::client_helpers::request(
         client,
@@ -1099,7 +1099,7 @@ pub async fn properties_template_list(
 /// Permission : Team member file access.
 pub async fn properties_template_update(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &super::file_properties::UpdateTemplateArg,
+    arg: super::file_properties::UpdateTemplateArg,
 ) -> crate::Result<Result<super::file_properties::UpdateTemplateResult, super::file_properties::ModifyTemplateError>> {
     crate::client_helpers::request(
         client,
@@ -1115,7 +1115,7 @@ pub async fn properties_template_update(
 /// Retrieves reporting data about a team's user activity.
 pub async fn reports_get_activity(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &DateRange,
+    arg: DateRange,
 ) -> crate::Result<Result<GetActivityReport, DateRangeError>> {
     crate::client_helpers::request(
         client,
@@ -1131,7 +1131,7 @@ pub async fn reports_get_activity(
 /// Retrieves reporting data about a team's linked devices.
 pub async fn reports_get_devices(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &DateRange,
+    arg: DateRange,
 ) -> crate::Result<Result<GetDevicesReport, DateRangeError>> {
     crate::client_helpers::request(
         client,
@@ -1147,7 +1147,7 @@ pub async fn reports_get_devices(
 /// Retrieves reporting data about a team's membership.
 pub async fn reports_get_membership(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &DateRange,
+    arg: DateRange,
 ) -> crate::Result<Result<GetMembershipReport, DateRangeError>> {
     crate::client_helpers::request(
         client,
@@ -1163,7 +1163,7 @@ pub async fn reports_get_membership(
 /// Retrieves reporting data about a team's storage usage.
 pub async fn reports_get_storage(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &DateRange,
+    arg: DateRange,
 ) -> crate::Result<Result<GetStorageReport, DateRangeError>> {
     crate::client_helpers::request(
         client,
@@ -1179,7 +1179,7 @@ pub async fn reports_get_storage(
 /// Sets an archived team folder's status to active. Permission : Team member file access.
 pub async fn team_folder_activate(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &TeamFolderIdArg,
+    arg: TeamFolderIdArg,
 ) -> crate::Result<Result<TeamFolderMetadata, TeamFolderActivateError>> {
     crate::client_helpers::request(
         client,
@@ -1196,7 +1196,7 @@ pub async fn team_folder_activate(
 /// Permission : Team member file access.
 pub async fn team_folder_archive(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &TeamFolderArchiveArg,
+    arg: TeamFolderArchiveArg,
 ) -> crate::Result<Result<TeamFolderArchiveLaunch, TeamFolderArchiveError>> {
     crate::client_helpers::request(
         client,
@@ -1213,7 +1213,7 @@ pub async fn team_folder_archive(
 /// file access.
 pub async fn team_folder_archive_check(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &super::dbx_async::PollArg,
+    arg: super::dbx_async::PollArg,
 ) -> crate::Result<Result<TeamFolderArchiveJobStatus, super::dbx_async::PollError>> {
     crate::client_helpers::request(
         client,
@@ -1229,7 +1229,7 @@ pub async fn team_folder_archive_check(
 /// Creates a new, active, team folder with no members. Permission : Team member file access.
 pub async fn team_folder_create(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &TeamFolderCreateArg,
+    arg: TeamFolderCreateArg,
 ) -> crate::Result<Result<TeamFolderMetadata, TeamFolderCreateError>> {
     crate::client_helpers::request(
         client,
@@ -1245,7 +1245,7 @@ pub async fn team_folder_create(
 /// Retrieves metadata for team folders. Permission : Team member file access.
 pub async fn team_folder_get_info(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &TeamFolderIdListArg,
+    arg: TeamFolderIdListArg,
 ) -> crate::Result<Result<Vec<TeamFolderGetInfoItem>, ()>> {
     crate::client_helpers::request(
         client,
@@ -1261,7 +1261,7 @@ pub async fn team_folder_get_info(
 /// Lists all team folders. Permission : Team member file access.
 pub async fn team_folder_list(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &TeamFolderListArg,
+    arg: TeamFolderListArg,
 ) -> crate::Result<Result<TeamFolderListResult, TeamFolderListError>> {
     crate::client_helpers::request(
         client,
@@ -1278,7 +1278,7 @@ pub async fn team_folder_list(
 /// paginate through all team folders. Permission : Team member file access.
 pub async fn team_folder_list_continue(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &TeamFolderListContinueArg,
+    arg: TeamFolderListContinueArg,
 ) -> crate::Result<Result<TeamFolderListResult, TeamFolderListContinueError>> {
     crate::client_helpers::request(
         client,
@@ -1294,7 +1294,7 @@ pub async fn team_folder_list_continue(
 /// Permanently deletes an archived team folder. Permission : Team member file access.
 pub async fn team_folder_permanently_delete(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &TeamFolderIdArg,
+    arg: TeamFolderIdArg,
 ) -> crate::Result<Result<(), TeamFolderPermanentlyDeleteError>> {
     crate::client_helpers::request(
         client,
@@ -1310,7 +1310,7 @@ pub async fn team_folder_permanently_delete(
 /// Changes an active team folder's name. Permission : Team member file access.
 pub async fn team_folder_rename(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &TeamFolderRenameArg,
+    arg: TeamFolderRenameArg,
 ) -> crate::Result<Result<TeamFolderMetadata, TeamFolderRenameError>> {
     crate::client_helpers::request(
         client,
@@ -1327,7 +1327,7 @@ pub async fn team_folder_rename(
 /// the team has team selective sync enabled.
 pub async fn team_folder_update_sync_settings(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &TeamFolderUpdateSyncSettingsArg,
+    arg: TeamFolderUpdateSyncSettingsArg,
 ) -> crate::Result<Result<TeamFolderMetadata, TeamFolderUpdateSyncSettingsError>> {
     crate::client_helpers::request(
         client,
@@ -1357,7 +1357,7 @@ pub async fn token_get_authenticated_admin(
 }
 
 /// Information on active web sessions.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ActiveWebSession {
     /// The session id.
     pub session_id: String,
@@ -1579,7 +1579,7 @@ impl ::serde::ser::Serialize for ActiveWebSession {
 /// Result of trying to add a secondary email to a user. 'success' is the only value indicating that
 /// a secondary email was successfully added to a user. The other values explain the type of error
 /// that occurred, and include the email for which the error occured.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum AddSecondaryEmailResult {
     /// Describes a secondary email that was successfully added to a user.
     Success(SecondaryEmail),
@@ -1771,7 +1771,7 @@ impl ::serde::ser::Serialize for AddSecondaryEmailResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AddSecondaryEmailsArg {
     /// List of users and secondary emails to add.
     pub new_secondary_emails: Vec<UserSecondaryEmailsArg>,
@@ -1862,7 +1862,7 @@ impl ::serde::ser::Serialize for AddSecondaryEmailsArg {
 }
 
 /// Error returned when adding secondary emails fails.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum AddSecondaryEmailsError {
     /// Secondary emails are disabled for the team.
     SecondaryEmailsDisabled,
@@ -1945,7 +1945,7 @@ impl ::std::fmt::Display for AddSecondaryEmailsError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AddSecondaryEmailsResult {
     /// List of users and secondary email results.
     pub results: Vec<UserAddResult>,
@@ -2036,7 +2036,7 @@ impl ::serde::ser::Serialize for AddSecondaryEmailsResult {
 }
 
 /// Describes which team-related admin permissions a user has.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum AdminTier {
     /// User is an administrator of the team - has all permissions.
     TeamAdmin,
@@ -2126,7 +2126,7 @@ impl ::serde::ser::Serialize for AdminTier {
 }
 
 /// Information on linked third party applications.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ApiApp {
     /// The application unique id.
     pub app_id: String,
@@ -2297,7 +2297,7 @@ impl ::serde::ser::Serialize for ApiApp {
 }
 
 /// Base report structure.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct BaseDfbReport {
     /// First date present in the results as 'YYYY-MM-DD' or None.
     pub start_date: String,
@@ -2388,7 +2388,7 @@ impl ::serde::ser::Serialize for BaseDfbReport {
 }
 
 /// Base error that all errors for existing team folders should extend.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum BaseTeamFolderError {
     AccessError(TeamFolderAccessError),
     StatusError(TeamFolderInvalidStatusError),
@@ -2494,7 +2494,7 @@ impl ::std::fmt::Display for BaseTeamFolderError {
 }
 
 /// Error returned when getting member custom quota.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum CustomQuotaError {
     /// A maximum of 1000 users can be set for a single call.
     TooManyUsers,
@@ -2565,7 +2565,7 @@ impl ::std::fmt::Display for CustomQuotaError {
 }
 
 /// User custom quota.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum CustomQuotaResult {
     /// User's custom quota.
     Success(UserCustomQuotaResult),
@@ -2638,7 +2638,7 @@ impl ::serde::ser::Serialize for CustomQuotaResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct CustomQuotaUsersArg {
     /// List of users.
     pub users: Vec<UserSelectorArg>,
@@ -2729,7 +2729,7 @@ impl ::serde::ser::Serialize for CustomQuotaUsersArg {
 }
 
 /// Input arguments that can be provided for most reports.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DateRange {
     /// Optional starting date (inclusive). If start_date is None or too long ago, this field will
     /// be set to 6 months ago.
@@ -2822,7 +2822,7 @@ impl ::serde::ser::Serialize for DateRange {
 }
 
 /// Errors that can originate from problems in input arguments to reports.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum DateRangeError {
     /// Catch-all used for unrecognized values returned from the server. Encountering this value
     /// typically indicates that this SDK version is out of date.
@@ -2878,7 +2878,7 @@ impl ::std::fmt::Display for DateRangeError {
 /// Result of trying to delete a secondary email address. 'success' is the only value indicating
 /// that a secondary email was successfully deleted. The other values explain the type of error that
 /// occurred, and include the email for which the error occured.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum DeleteSecondaryEmailResult {
     /// The secondary email was successfully deleted.
     Success(super::common::EmailAddress),
@@ -2974,7 +2974,7 @@ impl ::serde::ser::Serialize for DeleteSecondaryEmailResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeleteSecondaryEmailsArg {
     /// List of users and their secondary emails to delete.
     pub emails_to_delete: Vec<UserSecondaryEmailsArg>,
@@ -3064,7 +3064,7 @@ impl ::serde::ser::Serialize for DeleteSecondaryEmailsArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeleteSecondaryEmailsResult {
     pub results: Vec<UserDeleteResult>,
 }
@@ -3154,7 +3154,7 @@ impl ::serde::ser::Serialize for DeleteSecondaryEmailsResult {
 }
 
 /// Information about linked Dropbox desktop client sessions.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DesktopClientSession {
     /// The session id.
     pub session_id: String,
@@ -3388,7 +3388,7 @@ impl ::serde::ser::Serialize for DesktopClientSession {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum DesktopPlatform {
     /// Official Windows Dropbox desktop client.
     Windows,
@@ -3472,7 +3472,7 @@ impl ::serde::ser::Serialize for DesktopPlatform {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeviceSession {
     /// The session id.
     pub session_id: String,
@@ -3634,7 +3634,7 @@ impl ::serde::ser::Serialize for DeviceSession {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeviceSessionArg {
     /// The session id.
     pub session_id: String,
@@ -3740,7 +3740,7 @@ impl ::serde::ser::Serialize for DeviceSessionArg {
 /// Each of the items is an array of values, one value per day. The value is the number of devices
 /// active within a time window, ending with that day. If there is no data for a day, then the value
 /// will be None.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DevicesActive {
     /// Array of number of linked windows (desktop) clients with activity.
     pub windows: NumberPerDay,
@@ -3917,7 +3917,7 @@ impl ::serde::ser::Serialize for DevicesActive {
 }
 
 /// Excluded users list argument.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ExcludedUsersListArg {
     /// Number of results to return per call.
     pub limit: u32,
@@ -3996,7 +3996,7 @@ impl ::serde::ser::Serialize for ExcludedUsersListArg {
 }
 
 /// Excluded users list continue argument.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ExcludedUsersListContinueArg {
     /// Indicates from what point to get the next set of users.
     pub cursor: String,
@@ -4087,7 +4087,7 @@ impl ::serde::ser::Serialize for ExcludedUsersListContinueArg {
 }
 
 /// Excluded users list continue error.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ExcludedUsersListContinueError {
     /// The cursor is invalid.
     InvalidCursor,
@@ -4158,7 +4158,7 @@ impl ::std::fmt::Display for ExcludedUsersListContinueError {
 }
 
 /// Excluded users list error.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ExcludedUsersListError {
     /// An error occurred.
     ListError,
@@ -4229,7 +4229,7 @@ impl ::std::fmt::Display for ExcludedUsersListError {
 }
 
 /// Excluded users list result.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ExcludedUsersListResult {
     pub users: Vec<MemberProfile>,
     /// Is true if there are additional excluded users that have not been returned yet. An
@@ -4356,7 +4356,7 @@ impl ::serde::ser::Serialize for ExcludedUsersListResult {
 
 /// Argument of excluded users update operation. Should include a list of users to add/remove
 /// (according to endpoint), Maximum size of the list is 1000 users.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ExcludedUsersUpdateArg {
     /// List of users to be added/removed.
     pub users: Option<Vec<UserSelectorArg>>,
@@ -4435,7 +4435,7 @@ impl ::serde::ser::Serialize for ExcludedUsersUpdateArg {
 }
 
 /// Excluded users update error.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ExcludedUsersUpdateError {
     /// At least one of the users is not part of your team.
     UsersNotInTeam,
@@ -4519,7 +4519,7 @@ impl ::std::fmt::Display for ExcludedUsersUpdateError {
 }
 
 /// Excluded users update result.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ExcludedUsersUpdateResult {
     /// Update status.
     pub status: ExcludedUsersUpdateStatus,
@@ -4610,7 +4610,7 @@ impl ::serde::ser::Serialize for ExcludedUsersUpdateResult {
 }
 
 /// Excluded users update operation status.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ExcludedUsersUpdateStatus {
     /// Update successful.
     Success,
@@ -4669,7 +4669,7 @@ impl ::serde::ser::Serialize for ExcludedUsersUpdateStatus {
 }
 
 /// A set of features that a Dropbox Business account may support.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Feature {
     /// The number of upload API calls allowed per month.
     UploadApiRateLimit,
@@ -4768,7 +4768,7 @@ impl ::serde::ser::Serialize for Feature {
 
 /// The values correspond to entries in [`Feature`](Feature). You may get different value according
 /// to your Dropbox Business plan.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum FeatureValue {
     UploadApiRateLimit(UploadApiRateLimitValue),
     HasTeamSharedDropbox(HasTeamSharedDropboxValue),
@@ -4877,7 +4877,7 @@ impl ::serde::ser::Serialize for FeatureValue {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FeaturesGetValuesBatchArg {
     /// A list of features in [`Feature`](Feature). If the list is empty, this route will return
     /// [`FeaturesGetValuesBatchError`](FeaturesGetValuesBatchError).
@@ -4968,7 +4968,7 @@ impl ::serde::ser::Serialize for FeaturesGetValuesBatchArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum FeaturesGetValuesBatchError {
     /// At least one [`Feature`](Feature) must be included in the
     /// [`FeaturesGetValuesBatchArg`](FeaturesGetValuesBatchArg).features list.
@@ -5039,7 +5039,7 @@ impl ::std::fmt::Display for FeaturesGetValuesBatchError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FeaturesGetValuesBatchResult {
     pub values: Vec<FeatureValue>,
 }
@@ -5130,7 +5130,7 @@ impl ::serde::ser::Serialize for FeaturesGetValuesBatchResult {
 
 /// Activity Report Result. Each of the items in the storage report is an array of values, one value
 /// per day. If there is no data for a day, then the value will be None.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GetActivityReport {
     /// First date present in the results as 'YYYY-MM-DD' or None.
     pub start_date: String,
@@ -5423,7 +5423,7 @@ impl ::serde::ser::Serialize for GetActivityReport {
 /// Devices Report Result. Contains subsections for different time ranges of activity. Each of the
 /// items in each subsection of the storage report is an array of values, one value per day. If
 /// there is no data for a day, then the value will be None.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GetDevicesReport {
     /// First date present in the results as 'YYYY-MM-DD' or None.
     pub start_date: String,
@@ -5559,7 +5559,7 @@ impl ::serde::ser::Serialize for GetDevicesReport {
 
 /// Membership Report Result. Each of the items in the storage report is an array of values, one
 /// value per day. If there is no data for a day, then the value will be None.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GetMembershipReport {
     /// First date present in the results as 'YYYY-MM-DD' or None.
     pub start_date: String,
@@ -5723,7 +5723,7 @@ impl ::serde::ser::Serialize for GetMembershipReport {
 
 /// Storage Report Result. Each of the items in the storage report is an array of values, one value
 /// per day. If there is no data for a day, then the value will be None.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GetStorageReport {
     /// First date present in the results as 'YYYY-MM-DD' or None.
     pub start_date: String,
@@ -5889,7 +5889,7 @@ impl ::serde::ser::Serialize for GetStorageReport {
 }
 
 /// Role of a user in group.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum GroupAccessType {
     /// User is a member of the group, but has no special permissions.
     Member,
@@ -5952,7 +5952,7 @@ impl ::serde::ser::Serialize for GroupAccessType {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupCreateArg {
     /// Group name.
     pub group_name: String,
@@ -6102,7 +6102,7 @@ impl ::serde::ser::Serialize for GroupCreateArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum GroupCreateError {
     /// The requested group name is already being used by another group.
     GroupNameAlreadyUsed,
@@ -6211,7 +6211,7 @@ impl ::std::fmt::Display for GroupCreateError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum GroupDeleteError {
     /// No matching group found. No groups match the specified group ID.
     GroupNotFound,
@@ -6308,7 +6308,7 @@ impl ::std::fmt::Display for GroupDeleteError {
 }
 
 /// Full description of a group.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupFullInfo {
     pub group_name: String,
     pub group_id: super::team_common::GroupId,
@@ -6498,7 +6498,7 @@ impl ::serde::ser::Serialize for GroupFullInfo {
 }
 
 /// Profile of group member, and role in group.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupMemberInfo {
     /// Profile of group member.
     pub profile: MemberProfile,
@@ -6602,7 +6602,7 @@ impl ::serde::ser::Serialize for GroupMemberInfo {
 }
 
 /// Argument for selecting a group and a single user.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupMemberSelector {
     /// Specify a group.
     pub group: GroupSelector,
@@ -6707,7 +6707,7 @@ impl ::serde::ser::Serialize for GroupMemberSelector {
 
 /// Error that can be raised when [`GroupMemberSelector`](GroupMemberSelector) is used, and the user
 /// is required to be a member of the specified group.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum GroupMemberSelectorError {
     /// No matching group found. No groups match the specified group ID.
     GroupNotFound,
@@ -6803,7 +6803,7 @@ impl ::std::fmt::Display for GroupMemberSelectorError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum GroupMemberSetAccessTypeError {
     /// No matching group found. No groups match the specified group ID.
     GroupNotFound,
@@ -6912,7 +6912,7 @@ impl ::std::fmt::Display for GroupMemberSetAccessTypeError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupMembersAddArg {
     /// Group to which users will be added.
     pub group: GroupSelector,
@@ -7035,7 +7035,7 @@ impl ::serde::ser::Serialize for GroupMembersAddArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum GroupMembersAddError {
     /// No matching group found. No groups match the specified group ID.
     GroupNotFound,
@@ -7214,7 +7214,7 @@ impl ::std::fmt::Display for GroupMembersAddError {
 
 /// Result returned by [`groups_members_add()`](groups_members_add) and
 /// [`groups_members_remove()`](groups_members_remove).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupMembersChangeResult {
     /// The group info after member change operation has been performed.
     pub group_info: GroupFullInfo,
@@ -7319,7 +7319,7 @@ impl ::serde::ser::Serialize for GroupMembersChangeResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupMembersRemoveArg {
     /// Group from which users will be removed.
     pub group: GroupSelector,
@@ -7442,7 +7442,7 @@ impl ::serde::ser::Serialize for GroupMembersRemoveArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum GroupMembersRemoveError {
     /// No matching group found. No groups match the specified group ID.
     GroupNotFound,
@@ -7587,7 +7587,7 @@ impl ::std::fmt::Display for GroupMembersRemoveError {
 }
 
 /// Argument for selecting a group and a list of users.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupMembersSelector {
     /// Specify a group.
     pub group: GroupSelector,
@@ -7692,7 +7692,7 @@ impl ::serde::ser::Serialize for GroupMembersSelector {
 
 /// Error that can be raised when [`GroupMembersSelector`](GroupMembersSelector) is used, and the
 /// users are required to be members of the specified group.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum GroupMembersSelectorError {
     /// No matching group found. No groups match the specified group ID.
     GroupNotFound,
@@ -7788,7 +7788,7 @@ impl ::std::fmt::Display for GroupMembersSelectorError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupMembersSetAccessTypeArg {
     /// Specify a group.
     pub group: GroupSelector,
@@ -7925,7 +7925,7 @@ impl ::serde::ser::Serialize for GroupMembersSetAccessTypeArg {
 }
 
 /// Argument for selecting a single group, either by group_id or by external group ID.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum GroupSelector {
     /// Group ID.
     GroupId(super::team_common::GroupId),
@@ -7997,7 +7997,7 @@ impl ::serde::ser::Serialize for GroupSelector {
 }
 
 /// Error that can be raised when [`GroupSelector`](GroupSelector) is used.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum GroupSelectorError {
     /// No matching group found. No groups match the specified group ID.
     GroupNotFound,
@@ -8069,7 +8069,7 @@ impl ::std::fmt::Display for GroupSelectorError {
 
 /// Error that can be raised when [`GroupSelector`](GroupSelector) is used and team groups are
 /// disallowed from being used.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum GroupSelectorWithTeamGroupError {
     /// No matching group found. No groups match the specified group ID.
     GroupNotFound,
@@ -8152,7 +8152,7 @@ impl ::std::fmt::Display for GroupSelectorWithTeamGroupError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupUpdateArgs {
     /// Specify a group.
     pub group: GroupSelector,
@@ -8323,7 +8323,7 @@ impl ::serde::ser::Serialize for GroupUpdateArgs {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum GroupUpdateError {
     /// No matching group found. No groups match the specified group ID.
     GroupNotFound,
@@ -8445,7 +8445,7 @@ impl ::std::fmt::Display for GroupUpdateError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum GroupsGetInfoError {
     /// The group is not on your team.
     GroupNotOnTeam,
@@ -8515,7 +8515,7 @@ impl ::std::fmt::Display for GroupsGetInfoError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum GroupsGetInfoItem {
     /// An ID that was provided as a parameter to [`groups_get_info()`](groups_get_info), and did
     /// not match a corresponding group. The ID can be a group ID, or an external ID, depending on
@@ -8582,7 +8582,7 @@ impl ::serde::ser::Serialize for GroupsGetInfoItem {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupsListArg {
     /// Number of results to return per call.
     pub limit: u32,
@@ -8660,7 +8660,7 @@ impl ::serde::ser::Serialize for GroupsListArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupsListContinueArg {
     /// Indicates from what point to get the next set of groups.
     pub cursor: String,
@@ -8750,7 +8750,7 @@ impl ::serde::ser::Serialize for GroupsListContinueArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum GroupsListContinueError {
     /// The cursor is invalid.
     InvalidCursor,
@@ -8820,7 +8820,7 @@ impl ::std::fmt::Display for GroupsListContinueError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupsListResult {
     pub groups: Vec<super::team_common::GroupSummary>,
     /// Pass the cursor into [`groups_list_continue()`](groups_list_continue) to obtain the
@@ -8941,7 +8941,7 @@ impl ::serde::ser::Serialize for GroupsListResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupsMembersListArg {
     /// The group whose members are to be listed.
     pub group: GroupSelector,
@@ -9049,7 +9049,7 @@ impl ::serde::ser::Serialize for GroupsMembersListArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupsMembersListContinueArg {
     /// Indicates from what point to get the next set of groups.
     pub cursor: String,
@@ -9139,7 +9139,7 @@ impl ::serde::ser::Serialize for GroupsMembersListContinueArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum GroupsMembersListContinueError {
     /// The cursor is invalid.
     InvalidCursor,
@@ -9209,7 +9209,7 @@ impl ::std::fmt::Display for GroupsMembersListContinueError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupsMembersListResult {
     pub members: Vec<GroupMemberInfo>,
     /// Pass the cursor into [`groups_members_list_continue()`](groups_members_list_continue) to
@@ -9326,7 +9326,7 @@ impl ::serde::ser::Serialize for GroupsMembersListResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum GroupsPollError {
     /// The job ID is invalid.
     InvalidAsyncJobId,
@@ -9424,7 +9424,7 @@ impl ::std::fmt::Display for GroupsPollError {
 }
 
 /// Argument for selecting a list of groups, either by group_ids, or external group IDs.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum GroupsSelector {
     /// List of group IDs.
     GroupIds(Vec<super::team_common::GroupId>),
@@ -9496,7 +9496,7 @@ impl ::serde::ser::Serialize for GroupsSelector {
 }
 
 /// The value for [`Feature::HasTeamFileEvents`](Feature::HasTeamFileEvents).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum HasTeamFileEventsValue {
     /// Does this team have file events.
     Enabled(bool),
@@ -9559,7 +9559,7 @@ impl ::serde::ser::Serialize for HasTeamFileEventsValue {
 }
 
 /// The value for [`Feature::HasTeamSelectiveSync`](Feature::HasTeamSelectiveSync).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum HasTeamSelectiveSyncValue {
     /// Does this team have team selective sync enabled.
     HasTeamSelectiveSync(bool),
@@ -9622,7 +9622,7 @@ impl ::serde::ser::Serialize for HasTeamSelectiveSyncValue {
 }
 
 /// The value for [`Feature::HasTeamSharedDropbox`](Feature::HasTeamSharedDropbox).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum HasTeamSharedDropboxValue {
     /// Does this team have a shared team root.
     HasTeamSharedDropbox(bool),
@@ -9684,7 +9684,7 @@ impl ::serde::ser::Serialize for HasTeamSharedDropboxValue {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct IncludeMembersArg {
     /// Whether to return the list of members in the group.  Note that the default value will cause
     /// all the group members  to be returned in the response. This may take a long time for large
@@ -9764,7 +9764,7 @@ impl ::serde::ser::Serialize for IncludeMembersArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LegalHoldHeldRevisionMetadata {
     /// The held revision filename.
     pub new_filename: String,
@@ -9984,7 +9984,7 @@ impl ::serde::ser::Serialize for LegalHoldHeldRevisionMetadata {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LegalHoldPolicy {
     /// The legal hold id.
     pub id: LegalHoldId,
@@ -10186,7 +10186,7 @@ impl ::serde::ser::Serialize for LegalHoldPolicy {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum LegalHoldStatus {
     /// The legal hold policy is active.
     Active,
@@ -10309,7 +10309,7 @@ impl ::serde::ser::Serialize for LegalHoldStatus {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum LegalHoldsError {
     /// There has been an unknown legal hold error.
     UnknownLegalHoldError,
@@ -10392,7 +10392,7 @@ impl ::std::fmt::Display for LegalHoldsError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LegalHoldsGetPolicyArg {
     /// The legal hold Id.
     pub id: LegalHoldId,
@@ -10482,7 +10482,7 @@ impl ::serde::ser::Serialize for LegalHoldsGetPolicyArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum LegalHoldsGetPolicyError {
     /// There has been an unknown legal hold error.
     UnknownLegalHoldError,
@@ -10578,7 +10578,7 @@ impl ::std::fmt::Display for LegalHoldsGetPolicyError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LegalHoldsListHeldRevisionResult {
     /// List of file entries that under the hold.
     pub entries: Vec<LegalHoldHeldRevisionMetadata>,
@@ -10702,7 +10702,7 @@ impl ::serde::ser::Serialize for LegalHoldsListHeldRevisionResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LegalHoldsListHeldRevisionsArg {
     /// The legal hold Id.
     pub id: LegalHoldId,
@@ -10792,7 +10792,7 @@ impl ::serde::ser::Serialize for LegalHoldsListHeldRevisionsArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LegalHoldsListHeldRevisionsContinueArg {
     /// The legal hold Id.
     pub id: LegalHoldId,
@@ -10901,7 +10901,7 @@ impl ::serde::ser::Serialize for LegalHoldsListHeldRevisionsContinueArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum LegalHoldsListHeldRevisionsContinueError {
     /// There has been an unknown legal hold error.
     UnknownLegalHoldError,
@@ -10999,7 +10999,7 @@ impl ::std::fmt::Display for LegalHoldsListHeldRevisionsContinueError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum LegalHoldsListHeldRevisionsError {
     /// There has been an unknown legal hold error.
     UnknownLegalHoldError,
@@ -11121,7 +11121,7 @@ impl ::std::fmt::Display for LegalHoldsListHeldRevisionsError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LegalHoldsListPoliciesArg {
     /// Whether to return holds that were released.
     pub include_released: bool,
@@ -11199,7 +11199,7 @@ impl ::serde::ser::Serialize for LegalHoldsListPoliciesArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum LegalHoldsListPoliciesError {
     /// There has been an unknown legal hold error.
     UnknownLegalHoldError,
@@ -11295,7 +11295,7 @@ impl ::std::fmt::Display for LegalHoldsListPoliciesError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LegalHoldsListPoliciesResult {
     pub policies: Vec<LegalHoldPolicy>,
 }
@@ -11384,7 +11384,7 @@ impl ::serde::ser::Serialize for LegalHoldsListPoliciesResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LegalHoldsPolicyCreateArg {
     /// Policy name.
     pub name: LegalHoldPolicyName,
@@ -11541,7 +11541,7 @@ impl ::serde::ser::Serialize for LegalHoldsPolicyCreateArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum LegalHoldsPolicyCreateError {
     /// There has been an unknown legal hold error.
     UnknownLegalHoldError,
@@ -11715,7 +11715,7 @@ impl ::std::fmt::Display for LegalHoldsPolicyCreateError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LegalHoldsPolicyReleaseArg {
     /// The legal hold Id.
     pub id: LegalHoldId,
@@ -11805,7 +11805,7 @@ impl ::serde::ser::Serialize for LegalHoldsPolicyReleaseArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum LegalHoldsPolicyReleaseError {
     /// There has been an unknown legal hold error.
     UnknownLegalHoldError,
@@ -11928,7 +11928,7 @@ impl ::std::fmt::Display for LegalHoldsPolicyReleaseError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LegalHoldsPolicyUpdateArg {
     /// The legal hold Id.
     pub id: LegalHoldId,
@@ -12072,7 +12072,7 @@ impl ::serde::ser::Serialize for LegalHoldsPolicyUpdateArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum LegalHoldsPolicyUpdateError {
     /// There has been an unknown legal hold error.
     UnknownLegalHoldError,
@@ -12247,7 +12247,7 @@ impl ::std::fmt::Display for LegalHoldsPolicyUpdateError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListMemberAppsArg {
     /// The team member id.
     pub team_member_id: String,
@@ -12339,7 +12339,7 @@ impl ::serde::ser::Serialize for ListMemberAppsArg {
 
 /// Error returned by
 /// [`linked_apps_list_member_linked_apps()`](linked_apps_list_member_linked_apps).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ListMemberAppsError {
     /// Member not found.
     MemberNotFound,
@@ -12409,7 +12409,7 @@ impl ::std::fmt::Display for ListMemberAppsError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListMemberAppsResult {
     /// List of third party applications linked by this team member.
     pub linked_api_apps: Vec<ApiApp>,
@@ -12499,7 +12499,7 @@ impl ::serde::ser::Serialize for ListMemberAppsResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListMemberDevicesArg {
     /// The team's member id.
     pub team_member_id: String,
@@ -12643,7 +12643,7 @@ impl ::serde::ser::Serialize for ListMemberDevicesArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ListMemberDevicesError {
     /// Member not found.
     MemberNotFound,
@@ -12713,7 +12713,7 @@ impl ::std::fmt::Display for ListMemberDevicesError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListMemberDevicesResult {
     /// List of web sessions made by this team member.
     pub active_web_sessions: Option<Vec<ActiveWebSession>>,
@@ -12818,7 +12818,7 @@ impl ::serde::ser::Serialize for ListMemberDevicesResult {
 }
 
 /// Arguments for [`linked_apps_list_members_linked_apps()`](linked_apps_list_members_linked_apps).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListMembersAppsArg {
     /// At the first call to the
     /// [`linked_apps_list_members_linked_apps()`](linked_apps_list_members_linked_apps) the cursor
@@ -12902,7 +12902,7 @@ impl ::serde::ser::Serialize for ListMembersAppsArg {
 
 /// Error returned by
 /// [`linked_apps_list_members_linked_apps()`](linked_apps_list_members_linked_apps).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ListMembersAppsError {
     /// Indicates that the cursor has been invalidated. Call
     /// [`linked_apps_list_members_linked_apps()`](linked_apps_list_members_linked_apps) again with
@@ -12976,7 +12976,7 @@ impl ::std::fmt::Display for ListMembersAppsError {
 
 /// Information returned by
 /// [`linked_apps_list_members_linked_apps()`](linked_apps_list_members_linked_apps).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListMembersAppsResult {
     /// The linked applications of each member of the team.
     pub apps: Vec<MemberLinkedApps>,
@@ -13101,7 +13101,7 @@ impl ::serde::ser::Serialize for ListMembersAppsResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListMembersDevicesArg {
     /// At the first call to the [`devices_list_members_devices()`](devices_list_members_devices)
     /// the cursor shouldn't be passed. Then, if the result of the call includes a cursor, the
@@ -13221,7 +13221,7 @@ impl ::serde::ser::Serialize for ListMembersDevicesArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ListMembersDevicesError {
     /// Indicates that the cursor has been invalidated. Call
     /// [`devices_list_members_devices()`](devices_list_members_devices) again with an empty cursor
@@ -13293,7 +13293,7 @@ impl ::std::fmt::Display for ListMembersDevicesError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListMembersDevicesResult {
     /// The devices of each member of the team.
     pub devices: Vec<MemberDevices>,
@@ -13417,7 +13417,7 @@ impl ::serde::ser::Serialize for ListMembersDevicesResult {
 }
 
 /// Arguments for [`linked_apps_list_team_linked_apps()`](linked_apps_list_team_linked_apps).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListTeamAppsArg {
     /// At the first call to the
     /// [`linked_apps_list_team_linked_apps()`](linked_apps_list_team_linked_apps) the cursor
@@ -13500,7 +13500,7 @@ impl ::serde::ser::Serialize for ListTeamAppsArg {
 }
 
 /// Error returned by [`linked_apps_list_team_linked_apps()`](linked_apps_list_team_linked_apps).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ListTeamAppsError {
     /// Indicates that the cursor has been invalidated. Call
     /// [`linked_apps_list_team_linked_apps()`](linked_apps_list_team_linked_apps) again with an
@@ -13574,7 +13574,7 @@ impl ::std::fmt::Display for ListTeamAppsError {
 
 /// Information returned by
 /// [`linked_apps_list_team_linked_apps()`](linked_apps_list_team_linked_apps).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListTeamAppsResult {
     /// The linked applications of each member of the team.
     pub apps: Vec<MemberLinkedApps>,
@@ -13699,7 +13699,7 @@ impl ::serde::ser::Serialize for ListTeamAppsResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListTeamDevicesArg {
     /// At the first call to the [`devices_list_team_devices()`](devices_list_team_devices) the
     /// cursor shouldn't be passed. Then, if the result of the call includes a cursor, the following
@@ -13819,7 +13819,7 @@ impl ::serde::ser::Serialize for ListTeamDevicesArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ListTeamDevicesError {
     /// Indicates that the cursor has been invalidated. Call
     /// [`devices_list_team_devices()`](devices_list_team_devices) again with an empty cursor to
@@ -13891,7 +13891,7 @@ impl ::std::fmt::Display for ListTeamDevicesError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListTeamDevicesResult {
     /// The devices of each member of the team.
     pub devices: Vec<MemberDevices>,
@@ -14015,7 +14015,7 @@ impl ::serde::ser::Serialize for ListTeamDevicesResult {
 }
 
 /// Specify access type a member should have when joined to a group.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberAccess {
     /// Identity of a user.
     pub user: UserSelectorArg,
@@ -14118,7 +14118,7 @@ impl ::serde::ser::Serialize for MemberAccess {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberAddArg {
     pub member_email: super::common::EmailAddress,
     /// Member's first name.
@@ -14344,7 +14344,7 @@ impl ::serde::ser::Serialize for MemberAddArg {
 /// Describes the result of attempting to add a single user to the team. 'success' is the only value
 /// indicating that a user was indeed added to the team - the other values explain the type of
 /// failure that occurred, and include the email of the user for which the operation has failed.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum MemberAddResult {
     /// Describes a user that was successfully added to the team.
     Success(TeamMemberInfo),
@@ -14568,7 +14568,7 @@ impl ::serde::ser::Serialize for MemberAddResult {
 }
 
 /// Information on devices of a team's member.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberDevices {
     /// The member unique Id.
     pub team_member_id: String,
@@ -14713,7 +14713,7 @@ impl ::serde::ser::Serialize for MemberDevices {
 }
 
 /// Information on linked applications of a team member.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberLinkedApps {
     /// The member unique Id.
     pub team_member_id: String,
@@ -14817,7 +14817,7 @@ impl ::serde::ser::Serialize for MemberLinkedApps {
 }
 
 /// Basic member profile.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberProfile {
     /// ID of user as a member of a team.
     pub team_member_id: super::team_common::TeamMemberId,
@@ -15149,7 +15149,7 @@ impl ::serde::ser::Serialize for MemberProfile {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum MemberSelectorError {
     /// No matching user found. The provided team_member_id, email, or external_id does not exist on
     /// this team.
@@ -15225,7 +15225,7 @@ impl ::std::fmt::Display for MemberSelectorError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MembersAddArg {
     /// Details of new members to be added to the team.
     pub new_members: Vec<MemberAddArg>,
@@ -15333,7 +15333,7 @@ impl ::serde::ser::Serialize for MembersAddArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum MembersAddJobStatus {
     /// The asynchronous job is still in progress.
     InProgress,
@@ -15419,7 +15419,7 @@ impl ::serde::ser::Serialize for MembersAddJobStatus {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum MembersAddLaunch {
     /// This response indicates that the processing is asynchronous. The string is an id that can be
     /// used to obtain the status of the asynchronous job.
@@ -15490,7 +15490,7 @@ impl ::serde::ser::Serialize for MembersAddLaunch {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MembersDataTransferArg {
     /// Identity of user to remove/suspend/have their files moved.
     pub user: UserSelectorArg,
@@ -15610,7 +15610,7 @@ impl ::serde::ser::Serialize for MembersDataTransferArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MembersDeactivateArg {
     /// Identity of user to remove/suspend/have their files moved.
     pub user: UserSelectorArg,
@@ -15720,7 +15720,7 @@ impl ::serde::ser::Serialize for MembersDeactivateArg {
 
 /// Exactly one of team_member_id, email, or external_id must be provided to identify the user
 /// account.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MembersDeactivateBaseArg {
     /// Identity of user to remove/suspend/have their files moved.
     pub user: UserSelectorArg,
@@ -15810,7 +15810,7 @@ impl ::serde::ser::Serialize for MembersDeactivateBaseArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum MembersDeactivateError {
     /// No matching user found. The provided team_member_id, email, or external_id does not exist on
     /// this team.
@@ -15894,7 +15894,7 @@ impl ::std::fmt::Display for MembersDeactivateError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MembersDeleteProfilePhotoArg {
     /// Identity of the user whose profile photo will be deleted.
     pub user: UserSelectorArg,
@@ -15984,7 +15984,7 @@ impl ::serde::ser::Serialize for MembersDeleteProfilePhotoArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum MembersDeleteProfilePhotoError {
     /// No matching user found. The provided team_member_id, email, or external_id does not exist on
     /// this team.
@@ -16081,7 +16081,7 @@ impl ::std::fmt::Display for MembersDeleteProfilePhotoError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MembersGetInfoArgs {
     /// List of team members.
     pub members: Vec<UserSelectorArg>,
@@ -16172,7 +16172,7 @@ impl ::serde::ser::Serialize for MembersGetInfoArgs {
 }
 
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum MembersGetInfoError {
     /// Catch-all used for unrecognized values returned from the server. Encountering this value
     /// typically indicates that this SDK version is out of date.
@@ -16227,7 +16227,7 @@ impl ::std::fmt::Display for MembersGetInfoError {
 
 /// Describes a result obtained for a single user whose id was specified in the parameter of
 /// [`members_get_info()`](members_get_info).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum MembersGetInfoItem {
     /// An ID that was provided as a parameter to [`members_get_info()`](members_get_info), and did
     /// not match a corresponding user. This might be a team_member_id, an email, or an external ID,
@@ -16294,7 +16294,7 @@ impl ::serde::ser::Serialize for MembersGetInfoItem {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MembersInfo {
     /// Team member IDs of the users under this hold.
     pub team_member_ids: Vec<super::team_common::TeamMemberId>,
@@ -16400,7 +16400,7 @@ impl ::serde::ser::Serialize for MembersInfo {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MembersListArg {
     /// Number of results to return per call.
     pub limit: u32,
@@ -16491,7 +16491,7 @@ impl ::serde::ser::Serialize for MembersListArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MembersListContinueArg {
     /// Indicates from what point to get the next set of members.
     pub cursor: String,
@@ -16581,7 +16581,7 @@ impl ::serde::ser::Serialize for MembersListContinueArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum MembersListContinueError {
     /// The cursor is invalid.
     InvalidCursor,
@@ -16652,7 +16652,7 @@ impl ::std::fmt::Display for MembersListContinueError {
 }
 
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum MembersListError {
     /// Catch-all used for unrecognized values returned from the server. Encountering this value
     /// typically indicates that this SDK version is out of date.
@@ -16705,7 +16705,7 @@ impl ::std::fmt::Display for MembersListError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MembersListResult {
     /// List of team members.
     pub members: Vec<TeamMemberInfo>,
@@ -16825,7 +16825,7 @@ impl ::serde::ser::Serialize for MembersListResult {
 
 /// Exactly one of team_member_id, email, or external_id must be provided to identify the user
 /// account.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MembersRecoverArg {
     /// Identity of user to recover.
     pub user: UserSelectorArg,
@@ -16915,7 +16915,7 @@ impl ::serde::ser::Serialize for MembersRecoverArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum MembersRecoverError {
     /// No matching user found. The provided team_member_id, email, or external_id does not exist on
     /// this team.
@@ -17025,7 +17025,7 @@ impl ::std::fmt::Display for MembersRecoverError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MembersRemoveArg {
     /// Identity of user to remove/suspend/have their files moved.
     pub user: UserSelectorArg,
@@ -17212,7 +17212,7 @@ impl ::serde::ser::Serialize for MembersRemoveArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum MembersRemoveError {
     /// No matching user found. The provided team_member_id, email, or external_id does not exist on
     /// this team.
@@ -17563,7 +17563,7 @@ impl ::std::fmt::Display for MembersRemoveError {
 }
 
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum MembersSendWelcomeError {
     /// No matching user found. The provided team_member_id, email, or external_id does not exist on
     /// this team.
@@ -17649,7 +17649,7 @@ impl ::std::fmt::Display for MembersSendWelcomeError {
 
 /// Exactly one of team_member_id, email, or external_id must be provided to identify the user
 /// account.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MembersSetPermissionsArg {
     /// Identity of user whose role will be set.
     pub user: UserSelectorArg,
@@ -17752,7 +17752,7 @@ impl ::serde::ser::Serialize for MembersSetPermissionsArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum MembersSetPermissionsError {
     /// No matching user found. The provided team_member_id, email, or external_id does not exist on
     /// this team.
@@ -17875,7 +17875,7 @@ impl ::std::fmt::Display for MembersSetPermissionsError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MembersSetPermissionsResult {
     /// The member ID of the user to which the change was applied.
     pub team_member_id: super::team_common::TeamMemberId,
@@ -17981,7 +17981,7 @@ impl ::serde::ser::Serialize for MembersSetPermissionsResult {
 /// Exactly one of team_member_id, email, or external_id must be provided to identify the user
 /// account. At least one of new_email, new_external_id, new_given_name, and/or new_surname must be
 /// provided.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MembersSetProfileArg {
     /// Identity of user whose profile will be set.
     pub user: UserSelectorArg,
@@ -18183,7 +18183,7 @@ impl ::serde::ser::Serialize for MembersSetProfileArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum MembersSetProfileError {
     /// No matching user found. The provided team_member_id, email, or external_id does not exist on
     /// this team.
@@ -18385,7 +18385,7 @@ impl ::std::fmt::Display for MembersSetProfileError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MembersSetProfilePhotoArg {
     /// Identity of the user whose profile photo will be set.
     pub user: UserSelectorArg,
@@ -18488,7 +18488,7 @@ impl ::serde::ser::Serialize for MembersSetProfilePhotoArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum MembersSetProfilePhotoError {
     /// No matching user found. The provided team_member_id, email, or external_id does not exist on
     /// this team.
@@ -18601,7 +18601,7 @@ impl ::std::fmt::Display for MembersSetProfilePhotoError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum MembersSuspendError {
     /// No matching user found. The provided team_member_id, email, or external_id does not exist on
     /// this team.
@@ -18724,7 +18724,7 @@ impl ::std::fmt::Display for MembersSuspendError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum MembersTransferFilesError {
     /// No matching user found. The provided team_member_id, email, or external_id does not exist on
     /// this team.
@@ -18925,7 +18925,7 @@ impl ::std::fmt::Display for MembersTransferFilesError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum MembersTransferFormerMembersFilesError {
     /// No matching user found. The provided team_member_id, email, or external_id does not exist on
     /// this team.
@@ -19180,7 +19180,7 @@ impl ::std::fmt::Display for MembersTransferFormerMembersFilesError {
 
 /// Exactly one of team_member_id, email, or external_id must be provided to identify the user
 /// account.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MembersUnsuspendArg {
     /// Identity of user to unsuspend.
     pub user: UserSelectorArg,
@@ -19270,7 +19270,7 @@ impl ::serde::ser::Serialize for MembersUnsuspendArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum MembersUnsuspendError {
     /// No matching user found. The provided team_member_id, email, or external_id does not exist on
     /// this team.
@@ -19380,7 +19380,7 @@ impl ::std::fmt::Display for MembersUnsuspendError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum MobileClientPlatform {
     /// Official Dropbox iPhone client.
     Iphone,
@@ -19491,7 +19491,7 @@ impl ::serde::ser::Serialize for MobileClientPlatform {
 }
 
 /// Information about linked Dropbox mobile client sessions.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MobileClientSession {
     /// The session id.
     pub session_id: String,
@@ -19738,7 +19738,7 @@ impl ::serde::ser::Serialize for MobileClientSession {
 }
 
 /// Properties of a namespace.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct NamespaceMetadata {
     /// The name of this namespace.
     pub name: String,
@@ -19877,7 +19877,7 @@ impl ::serde::ser::Serialize for NamespaceMetadata {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum NamespaceType {
     /// App sandbox folder.
     AppFolder,
@@ -19975,7 +19975,7 @@ impl ::serde::ser::Serialize for NamespaceType {
 }
 
 /// User result for setting member custom quota.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum RemoveCustomQuotaResult {
     /// Successfully removed user.
     Success(UserSelectorArg),
@@ -20054,7 +20054,7 @@ impl ::serde::ser::Serialize for RemoveCustomQuotaResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct RemovedStatus {
     /// True if the removed team member is recoverable.
     pub is_recoverable: bool,
@@ -20160,7 +20160,7 @@ impl ::serde::ser::Serialize for RemovedStatus {
 /// Result of trying to resend verification email to a secondary email address. 'success' is the
 /// only value indicating that a verification email was successfully sent. The other values explain
 /// the type of error that occurred, and include the email for which the error occured.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ResendSecondaryEmailResult {
     /// A verification email was successfully sent to the secondary email address.
     Success(super::common::EmailAddress),
@@ -20256,7 +20256,7 @@ impl ::serde::ser::Serialize for ResendSecondaryEmailResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ResendVerificationEmailArg {
     /// List of users and secondary emails to resend verification emails to.
     pub emails_to_resend: Vec<UserSecondaryEmailsArg>,
@@ -20347,7 +20347,7 @@ impl ::serde::ser::Serialize for ResendVerificationEmailArg {
 }
 
 /// List of users and resend results.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ResendVerificationEmailResult {
     pub results: Vec<UserResendResult>,
 }
@@ -20436,7 +20436,7 @@ impl ::serde::ser::Serialize for ResendVerificationEmailResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct RevokeDesktopClientArg {
     /// The session id.
     pub session_id: String,
@@ -20558,7 +20558,7 @@ impl ::serde::ser::Serialize for RevokeDesktopClientArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum RevokeDeviceSessionArg {
     /// End an active session.
     WebSession(DeviceSessionArg),
@@ -20628,7 +20628,7 @@ impl ::serde::ser::Serialize for RevokeDeviceSessionArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct RevokeDeviceSessionBatchArg {
     pub revoke_devices: Vec<RevokeDeviceSessionArg>,
 }
@@ -20718,7 +20718,7 @@ impl ::serde::ser::Serialize for RevokeDeviceSessionBatchArg {
 }
 
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum RevokeDeviceSessionBatchError {
     /// Catch-all used for unrecognized values returned from the server. Encountering this value
     /// typically indicates that this SDK version is out of date.
@@ -20771,7 +20771,7 @@ impl ::std::fmt::Display for RevokeDeviceSessionBatchError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct RevokeDeviceSessionBatchResult {
     pub revoke_devices_status: Vec<RevokeDeviceSessionStatus>,
 }
@@ -20860,7 +20860,7 @@ impl ::serde::ser::Serialize for RevokeDeviceSessionBatchResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum RevokeDeviceSessionError {
     /// Device session not found.
     DeviceSessionNotFound,
@@ -20943,7 +20943,7 @@ impl ::std::fmt::Display for RevokeDeviceSessionError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct RevokeDeviceSessionStatus {
     /// Result of the revoking request.
     pub success: bool,
@@ -21051,7 +21051,7 @@ impl ::serde::ser::Serialize for RevokeDeviceSessionStatus {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct RevokeLinkedApiAppArg {
     /// The application's unique id.
     pub app_id: String,
@@ -21173,7 +21173,7 @@ impl ::serde::ser::Serialize for RevokeLinkedApiAppArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct RevokeLinkedApiAppBatchArg {
     pub revoke_linked_app: Vec<RevokeLinkedApiAppArg>,
 }
@@ -21264,7 +21264,7 @@ impl ::serde::ser::Serialize for RevokeLinkedApiAppBatchArg {
 
 /// Error returned by
 /// [`linked_apps_revoke_linked_app_batch()`](linked_apps_revoke_linked_app_batch).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum RevokeLinkedAppBatchError {
     /// Catch-all used for unrecognized values returned from the server. Encountering this value
     /// typically indicates that this SDK version is out of date.
@@ -21317,7 +21317,7 @@ impl ::std::fmt::Display for RevokeLinkedAppBatchError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct RevokeLinkedAppBatchResult {
     pub revoke_linked_app_status: Vec<RevokeLinkedAppStatus>,
 }
@@ -21407,7 +21407,7 @@ impl ::serde::ser::Serialize for RevokeLinkedAppBatchResult {
 }
 
 /// Error returned by [`linked_apps_revoke_linked_app()`](linked_apps_revoke_linked_app).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum RevokeLinkedAppError {
     /// Application not found.
     AppNotFound,
@@ -21503,7 +21503,7 @@ impl ::std::fmt::Display for RevokeLinkedAppError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct RevokeLinkedAppStatus {
     /// Result of the revoking request.
     pub success: bool,
@@ -21611,7 +21611,7 @@ impl ::serde::ser::Serialize for RevokeLinkedAppStatus {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SetCustomQuotaArg {
     /// List of users and their custom quotas.
     pub users_and_quotas: Vec<UserCustomQuotaArg>,
@@ -21702,7 +21702,7 @@ impl ::serde::ser::Serialize for SetCustomQuotaArg {
 }
 
 /// Error returned when setting member custom quota.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SetCustomQuotaError {
     /// A maximum of 1000 users can be set for a single call.
     TooManyUsers,
@@ -21786,7 +21786,7 @@ impl ::std::fmt::Display for SetCustomQuotaError {
 }
 
 /// Describes the number of users in a specific storage bucket.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct StorageBucket {
     /// The name of the storage bucket. For example, '1G' is a bucket of users with storage size up
     /// to 1 Giga.
@@ -21890,7 +21890,7 @@ impl ::serde::ser::Serialize for StorageBucket {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TeamFolderAccessError {
     /// The team folder ID is invalid.
     InvalidTeamFolderId,
@@ -21974,7 +21974,7 @@ impl ::std::fmt::Display for TeamFolderAccessError {
 }
 
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TeamFolderActivateError {
     AccessError(TeamFolderAccessError),
     StatusError(TeamFolderInvalidStatusError),
@@ -22079,7 +22079,7 @@ impl ::std::fmt::Display for TeamFolderActivateError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamFolderArchiveArg {
     /// The ID of the team folder.
     pub team_folder_id: super::common::SharedFolderId,
@@ -22188,7 +22188,7 @@ impl ::serde::ser::Serialize for TeamFolderArchiveArg {
 }
 
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TeamFolderArchiveError {
     AccessError(TeamFolderAccessError),
     StatusError(TeamFolderInvalidStatusError),
@@ -22293,7 +22293,7 @@ impl ::std::fmt::Display for TeamFolderArchiveError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TeamFolderArchiveJobStatus {
     /// The asynchronous job is still in progress.
     InProgress,
@@ -22372,7 +22372,7 @@ impl ::serde::ser::Serialize for TeamFolderArchiveJobStatus {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TeamFolderArchiveLaunch {
     /// This response indicates that the processing is asynchronous. The string is an id that can be
     /// used to obtain the status of the asynchronous job.
@@ -22437,7 +22437,7 @@ impl ::serde::ser::Serialize for TeamFolderArchiveLaunch {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamFolderCreateArg {
     /// Name for the new team folder.
     pub name: String,
@@ -22546,7 +22546,7 @@ impl ::serde::ser::Serialize for TeamFolderCreateArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TeamFolderCreateError {
     /// The provided name cannot be used.
     InvalidFolderName,
@@ -22659,7 +22659,7 @@ impl ::std::fmt::Display for TeamFolderCreateError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TeamFolderGetInfoItem {
     /// An ID that was provided as a parameter to [`team_folder_get_info()`](team_folder_get_info)
     /// did not match any of the team's team folders.
@@ -22725,7 +22725,7 @@ impl ::serde::ser::Serialize for TeamFolderGetInfoItem {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamFolderIdArg {
     /// The ID of the team folder.
     pub team_folder_id: super::common::SharedFolderId,
@@ -22815,7 +22815,7 @@ impl ::serde::ser::Serialize for TeamFolderIdArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamFolderIdListArg {
     /// The list of team folder IDs.
     pub team_folder_ids: Vec<super::common::SharedFolderId>,
@@ -22905,7 +22905,7 @@ impl ::serde::ser::Serialize for TeamFolderIdListArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TeamFolderInvalidStatusError {
     /// The folder is active and the operation did not succeed.
     Active,
@@ -23001,7 +23001,7 @@ impl ::std::fmt::Display for TeamFolderInvalidStatusError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamFolderListArg {
     /// The maximum number of results to return per request.
     pub limit: u32,
@@ -23079,7 +23079,7 @@ impl ::serde::ser::Serialize for TeamFolderListArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamFolderListContinueArg {
     /// Indicates from what point to get the next set of team folders.
     pub cursor: String,
@@ -23169,7 +23169,7 @@ impl ::serde::ser::Serialize for TeamFolderListContinueArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TeamFolderListContinueError {
     /// The cursor is invalid.
     InvalidCursor,
@@ -23239,7 +23239,7 @@ impl ::std::fmt::Display for TeamFolderListContinueError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamFolderListError {
     pub access_error: TeamFolderAccessError,
 }
@@ -23330,7 +23330,7 @@ impl ::serde::ser::Serialize for TeamFolderListError {
 
 /// Result for [`team_folder_list()`](team_folder_list) and
 /// [`team_folder_list_continue()`](team_folder_list_continue).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamFolderListResult {
     /// List of all team folders in the authenticated team.
     pub team_folders: Vec<TeamFolderMetadata>,
@@ -23449,7 +23449,7 @@ impl ::serde::ser::Serialize for TeamFolderListResult {
 }
 
 /// Properties of a team folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamFolderMetadata {
     /// The ID of the team folder.
     pub team_folder_id: super::common::SharedFolderId,
@@ -23612,7 +23612,7 @@ impl ::serde::ser::Serialize for TeamFolderMetadata {
 }
 
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TeamFolderPermanentlyDeleteError {
     AccessError(TeamFolderAccessError),
     StatusError(TeamFolderInvalidStatusError),
@@ -23717,7 +23717,7 @@ impl ::std::fmt::Display for TeamFolderPermanentlyDeleteError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamFolderRenameArg {
     /// The ID of the team folder.
     pub team_folder_id: super::common::SharedFolderId,
@@ -23820,7 +23820,7 @@ impl ::serde::ser::Serialize for TeamFolderRenameArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TeamFolderRenameError {
     AccessError(TeamFolderAccessError),
     StatusError(TeamFolderInvalidStatusError),
@@ -23964,7 +23964,7 @@ impl ::std::fmt::Display for TeamFolderRenameError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TeamFolderStatus {
     /// The team folder and sub-folders are available to all members.
     Active,
@@ -24048,7 +24048,7 @@ impl ::serde::ser::Serialize for TeamFolderStatus {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TeamFolderTeamSharedDropboxError {
     /// This action is not allowed for a shared team root.
     Disallowed,
@@ -24118,7 +24118,7 @@ impl ::std::fmt::Display for TeamFolderTeamSharedDropboxError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamFolderUpdateSyncSettingsArg {
     /// The ID of the team folder.
     pub team_folder_id: super::common::SharedFolderId,
@@ -24248,7 +24248,7 @@ impl ::serde::ser::Serialize for TeamFolderUpdateSyncSettingsArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TeamFolderUpdateSyncSettingsError {
     AccessError(TeamFolderAccessError),
     StatusError(TeamFolderInvalidStatusError),
@@ -24370,7 +24370,7 @@ impl ::std::fmt::Display for TeamFolderUpdateSyncSettingsError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamGetInfoResult {
     /// The name of the team.
     pub name: String,
@@ -24518,7 +24518,7 @@ impl ::serde::ser::Serialize for TeamGetInfoResult {
 }
 
 /// Information about a team member.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMemberInfo {
     /// Profile of a user as a member of a team.
     pub profile: TeamMemberProfile,
@@ -24622,7 +24622,7 @@ impl ::serde::ser::Serialize for TeamMemberInfo {
 }
 
 /// Profile of a user as a member of a team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMemberProfile {
     /// ID of user as a member of a team.
     pub team_member_id: super::team_common::TeamMemberId,
@@ -24983,7 +24983,7 @@ impl ::serde::ser::Serialize for TeamMemberProfile {
 }
 
 /// The user's status as a member of a specific team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TeamMemberStatus {
     /// User has successfully joined the team.
     Active,
@@ -25072,7 +25072,7 @@ impl ::serde::ser::Serialize for TeamMemberStatus {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TeamMembershipType {
     /// User uses a license and has full access to team resources like the shared quota.
     Full,
@@ -25136,7 +25136,7 @@ impl ::serde::ser::Serialize for TeamMembershipType {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamNamespacesListArg {
     /// Specifying a value here has no effect.
     pub limit: u32,
@@ -25214,7 +25214,7 @@ impl ::serde::ser::Serialize for TeamNamespacesListArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamNamespacesListContinueArg {
     /// Indicates from what point to get the next set of team-accessible namespaces.
     pub cursor: String,
@@ -25304,7 +25304,7 @@ impl ::serde::ser::Serialize for TeamNamespacesListContinueArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TeamNamespacesListContinueError {
     /// Argument passed in is invalid.
     InvalidArg,
@@ -25387,7 +25387,7 @@ impl ::std::fmt::Display for TeamNamespacesListContinueError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TeamNamespacesListError {
     /// Argument passed in is invalid.
     InvalidArg,
@@ -25458,7 +25458,7 @@ impl ::std::fmt::Display for TeamNamespacesListError {
 }
 
 /// Result for [`namespaces_list()`](namespaces_list).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamNamespacesListResult {
     /// List of all namespaces the team can access.
     pub namespaces: Vec<NamespaceMetadata>,
@@ -25575,7 +25575,7 @@ impl ::serde::ser::Serialize for TeamNamespacesListResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TeamReportFailureReason {
     /// We couldn't create the report, but we think this was a fluke. Everything should work if you
     /// try it again.
@@ -25662,7 +25662,7 @@ impl ::serde::ser::Serialize for TeamReportFailureReason {
 }
 
 /// Error returned by [`token_get_authenticated_admin()`](token_get_authenticated_admin).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TokenGetAuthenticatedAdminError {
     /// The current token is not associated with a team admin, because mappings were not recorded
     /// when the token was created. Consider re-authorizing a new access token to record its
@@ -25749,7 +25749,7 @@ impl ::std::fmt::Display for TokenGetAuthenticatedAdminError {
 }
 
 /// Results for [`token_get_authenticated_admin()`](token_get_authenticated_admin).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TokenGetAuthenticatedAdminResult {
     /// The admin who authorized the token.
     pub admin_profile: TeamMemberProfile,
@@ -25840,7 +25840,7 @@ impl ::serde::ser::Serialize for TokenGetAuthenticatedAdminResult {
 }
 
 /// The value for [`Feature::UploadApiRateLimit`](Feature::UploadApiRateLimit).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum UploadApiRateLimitValue {
     /// This team has unlimited upload API quota. So far both server version account and legacy
     /// account type have unlimited monthly upload api quota.
@@ -25919,7 +25919,7 @@ impl ::serde::ser::Serialize for UploadApiRateLimitValue {
 /// Result of trying to add secondary emails to a user. 'success' is the only value indicating that
 /// a user was successfully retrieved for adding secondary emails. The other values explain the type
 /// of error that occurred, and include the user for which the error occured.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum UserAddResult {
     /// Describes a user and the results for each attempt to add a secondary email.
     Success(UserSecondaryEmailsResult),
@@ -26027,7 +26027,7 @@ impl ::serde::ser::Serialize for UserAddResult {
 }
 
 /// User and their required custom quota in GB (1 TB = 1024 GB).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UserCustomQuotaArg {
     pub user: UserSelectorArg,
     pub quota_gb: UserQuota,
@@ -26130,7 +26130,7 @@ impl ::serde::ser::Serialize for UserCustomQuotaArg {
 
 /// User and their custom quota in GB (1 TB = 1024 GB).  No quota returns if the user has no custom
 /// quota set.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UserCustomQuotaResult {
     pub user: UserSelectorArg,
     pub quota_gb: Option<UserQuota>,
@@ -26236,7 +26236,7 @@ impl ::serde::ser::Serialize for UserCustomQuotaResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UserDeleteEmailsResult {
     pub user: UserSelectorArg,
     pub results: Vec<DeleteSecondaryEmailResult>,
@@ -26340,7 +26340,7 @@ impl ::serde::ser::Serialize for UserDeleteEmailsResult {
 /// Result of trying to delete a user's secondary emails. 'success' is the only value indicating
 /// that a user was successfully retrieved for deleting secondary emails. The other values explain
 /// the type of error that occurred, and include the user for which the error occured.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum UserDeleteResult {
     /// Describes a user and the results for each attempt to delete a secondary email.
     Success(UserDeleteEmailsResult),
@@ -26413,7 +26413,7 @@ impl ::serde::ser::Serialize for UserDeleteResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UserResendEmailsResult {
     pub user: UserSelectorArg,
     pub results: Vec<ResendSecondaryEmailResult>,
@@ -26517,7 +26517,7 @@ impl ::serde::ser::Serialize for UserResendEmailsResult {
 /// Result of trying to resend verification emails to a user. 'success' is the only value indicating
 /// that a user was successfully retrieved for sending verification emails. The other values explain
 /// the type of error that occurred, and include the user for which the error occured.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum UserResendResult {
     /// Describes a user and the results for each attempt to resend verification emails.
     Success(UserResendEmailsResult),
@@ -26591,7 +26591,7 @@ impl ::serde::ser::Serialize for UserResendResult {
 }
 
 /// User and a list of secondary emails.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UserSecondaryEmailsArg {
     pub user: UserSelectorArg,
     pub secondary_emails: Vec<super::common::EmailAddress>,
@@ -26692,7 +26692,7 @@ impl ::serde::ser::Serialize for UserSecondaryEmailsArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UserSecondaryEmailsResult {
     pub user: UserSelectorArg,
     pub results: Vec<AddSecondaryEmailResult>,
@@ -26794,7 +26794,7 @@ impl ::serde::ser::Serialize for UserSecondaryEmailsResult {
 }
 
 /// Argument for selecting a single user, either by team_member_id, external_id or email.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum UserSelectorArg {
     TeamMemberId(super::team_common::TeamMemberId),
     ExternalId(super::team_common::MemberExternalId),
@@ -26881,7 +26881,7 @@ impl ::serde::ser::Serialize for UserSelectorArg {
 
 /// Error that can be returned whenever a struct derived from [`UserSelectorArg`](UserSelectorArg)
 /// is used.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum UserSelectorError {
     /// No matching user found. The provided team_member_id, email, or external_id does not exist on
     /// this team.
@@ -26945,7 +26945,7 @@ impl ::std::fmt::Display for UserSelectorError {
 }
 
 /// Argument for selecting a list of users, either by team_member_ids, external_ids or emails.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum UsersSelectorArg {
     /// List of member IDs.
     TeamMemberIds(Vec<super::team_common::TeamMemberId>),

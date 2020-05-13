@@ -30,7 +30,7 @@ pub type WritePathOrId = String;
 /// properties API. Note: Metadata for the root folder is unsupported.
 pub async fn alpha_get_metadata(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &AlphaGetMetadataArg,
+    arg: AlphaGetMetadataArg,
 ) -> crate::Result<Result<Metadata, AlphaGetMetadataError>> {
     crate::client_helpers::request(
         client,
@@ -49,8 +49,8 @@ pub async fn alpha_get_metadata(
 /// [`upload_session_start()`](upload_session_start).
 pub async fn alpha_upload(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &CommitInfoWithProperties,
-    body: Vec<u8>,
+    arg: CommitInfoWithProperties,
+    body: crate::client_trait::RequestBodyStream,
 ) -> crate::Result<Result<FileMetadata, UploadErrorWithProperties>> {
     crate::client_helpers::request(
         client,
@@ -67,7 +67,7 @@ pub async fn alpha_upload(
 /// folder all its contents will be copied.
 pub async fn copy_v2(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &RelocationArg,
+    arg: RelocationArg,
 ) -> crate::Result<Result<RelocationResult, RelocationError>> {
     crate::client_helpers::request(
         client,
@@ -84,7 +84,7 @@ pub async fn copy_v2(
 /// folder all its contents will be copied.
 pub async fn copy(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &RelocationArg,
+    arg: RelocationArg,
 ) -> crate::Result<Result<Metadata, RelocationError>> {
     crate::client_helpers::request(
         client,
@@ -104,7 +104,7 @@ pub async fn copy(
 /// Please use [`copy_batch_check_v2()`](copy_batch_check_v2) to check the job status.
 pub async fn copy_batch_v2(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &CopyBatchArg,
+    arg: CopyBatchArg,
 ) -> crate::Result<Result<RelocationBatchV2Launch, ()>> {
     crate::client_helpers::request(
         client,
@@ -126,7 +126,7 @@ pub async fn copy_batch_v2(
 /// [`copy_batch_check()`](copy_batch_check) to check the job status.
 pub async fn copy_batch(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &RelocationBatchArg,
+    arg: RelocationBatchArg,
 ) -> crate::Result<Result<RelocationBatchLaunch, ()>> {
     crate::client_helpers::request(
         client,
@@ -143,7 +143,7 @@ pub async fn copy_batch(
 /// list of results for each entry.
 pub async fn copy_batch_check_v2(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &super::dbx_async::PollArg,
+    arg: super::dbx_async::PollArg,
 ) -> crate::Result<Result<RelocationBatchV2JobStatus, super::dbx_async::PollError>> {
     crate::client_helpers::request(
         client,
@@ -160,7 +160,7 @@ pub async fn copy_batch_check_v2(
 /// returns list of results for each entry.
 pub async fn copy_batch_check(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &super::dbx_async::PollArg,
+    arg: super::dbx_async::PollArg,
 ) -> crate::Result<Result<RelocationBatchJobStatus, super::dbx_async::PollError>> {
     crate::client_helpers::request(
         client,
@@ -178,7 +178,7 @@ pub async fn copy_batch_check(
 /// [`copy_reference_save()`](copy_reference_save).
 pub async fn copy_reference_get(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &GetCopyReferenceArg,
+    arg: GetCopyReferenceArg,
 ) -> crate::Result<Result<GetCopyReferenceResult, GetCopyReferenceError>> {
     crate::client_helpers::request(
         client,
@@ -195,7 +195,7 @@ pub async fn copy_reference_get(
 /// Dropbox.
 pub async fn copy_reference_save(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &SaveCopyReferenceArg,
+    arg: SaveCopyReferenceArg,
 ) -> crate::Result<Result<SaveCopyReferenceResult, SaveCopyReferenceError>> {
     crate::client_helpers::request(
         client,
@@ -211,7 +211,7 @@ pub async fn copy_reference_save(
 /// Create a folder at a given path.
 pub async fn create_folder_v2(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &CreateFolderArg,
+    arg: CreateFolderArg,
 ) -> crate::Result<Result<CreateFolderResult, CreateFolderError>> {
     crate::client_helpers::request(
         client,
@@ -227,7 +227,7 @@ pub async fn create_folder_v2(
 /// Create a folder at a given path.
 pub async fn create_folder(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &CreateFolderArg,
+    arg: CreateFolderArg,
 ) -> crate::Result<Result<FolderMetadata, CreateFolderError>> {
     crate::client_helpers::request(
         client,
@@ -247,7 +247,7 @@ pub async fn create_folder(
 /// [`create_folder_batch_check()`](create_folder_batch_check) to check the job status.
 pub async fn create_folder_batch(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &CreateFolderBatchArg,
+    arg: CreateFolderBatchArg,
 ) -> crate::Result<Result<CreateFolderBatchLaunch, ()>> {
     crate::client_helpers::request(
         client,
@@ -264,7 +264,7 @@ pub async fn create_folder_batch(
 /// success, it returns list of result for each entry.
 pub async fn create_folder_batch_check(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &super::dbx_async::PollArg,
+    arg: super::dbx_async::PollArg,
 ) -> crate::Result<Result<CreateFolderBatchJobStatus, super::dbx_async::PollError>> {
     crate::client_helpers::request(
         client,
@@ -284,7 +284,7 @@ pub async fn create_folder_batch_check(
 /// [`DeletedMetadata`](DeletedMetadata) object.
 pub async fn delete_v2(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &DeleteArg,
+    arg: DeleteArg,
 ) -> crate::Result<Result<DeleteResult, DeleteError>> {
     crate::client_helpers::request(
         client,
@@ -304,7 +304,7 @@ pub async fn delete_v2(
 /// [`DeletedMetadata`](DeletedMetadata) object.
 pub async fn delete(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &DeleteArg,
+    arg: DeleteArg,
 ) -> crate::Result<Result<Metadata, DeleteError>> {
     crate::client_helpers::request(
         client,
@@ -322,7 +322,7 @@ pub async fn delete(
 /// [`delete_batch_check()`](delete_batch_check) to check the job status.
 pub async fn delete_batch(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &DeleteBatchArg,
+    arg: DeleteBatchArg,
 ) -> crate::Result<Result<DeleteBatchLaunch, ()>> {
     crate::client_helpers::request(
         client,
@@ -339,7 +339,7 @@ pub async fn delete_batch(
 /// returns list of result for each entry.
 pub async fn delete_batch_check(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &super::dbx_async::PollArg,
+    arg: super::dbx_async::PollArg,
 ) -> crate::Result<Result<DeleteBatchJobStatus, super::dbx_async::PollError>> {
     crate::client_helpers::request(
         client,
@@ -353,12 +353,12 @@ pub async fn delete_batch_check(
 }
 
 /// Download a file from a user's Dropbox.
-pub async fn download<'a>(
-    client: &'a dyn crate::client_trait::HttpClient,
-    arg: &DownloadArg,
+pub async fn download(
+    client: &dyn crate::client_trait::HttpClient,
+    arg: DownloadArg,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> crate::Result<Result<crate::client_trait::HttpRequestResult<'a, FileMetadata>, DownloadError>> {
+) -> crate::Result<Result<crate::client_trait::HttpRequestResult<FileMetadata>, DownloadError>> {
     crate::client_helpers::request_with_body(
         client,
         crate::client_trait::Endpoint::Content,
@@ -375,12 +375,12 @@ pub async fn download<'a>(
 /// Download a folder from the user's Dropbox, as a zip file. The folder must be less than 20 GB in
 /// size and have fewer than 10,000 total files. The input cannot be a single file. Any single file
 /// must be less than 4GB in size.
-pub async fn download_zip<'a>(
-    client: &'a dyn crate::client_trait::HttpClient,
-    arg: &DownloadZipArg,
+pub async fn download_zip(
+    client: &dyn crate::client_trait::HttpClient,
+    arg: DownloadZipArg,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> crate::Result<Result<crate::client_trait::HttpRequestResult<'a, DownloadZipResult>, DownloadZipError>> {
+) -> crate::Result<Result<crate::client_trait::HttpRequestResult<DownloadZipResult>, DownloadZipError>> {
     crate::client_helpers::request_with_body(
         client,
         crate::client_trait::Endpoint::Content,
@@ -397,12 +397,12 @@ pub async fn download_zip<'a>(
 /// Export a file from a user's Dropbox. This route only supports exporting files that cannot be
 /// downloaded directly  and whose [`ExportResult::file_metadata`](ExportResult) has
 /// [`ExportInfo::export_as`](ExportInfo) populated.
-pub async fn export<'a>(
-    client: &'a dyn crate::client_trait::HttpClient,
-    arg: &ExportArg,
+pub async fn export(
+    client: &dyn crate::client_trait::HttpClient,
+    arg: ExportArg,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> crate::Result<Result<crate::client_trait::HttpRequestResult<'a, ExportResult>, ExportError>> {
+) -> crate::Result<Result<crate::client_trait::HttpRequestResult<ExportResult>, ExportError>> {
     crate::client_helpers::request_with_body(
         client,
         crate::client_trait::Endpoint::Content,
@@ -419,7 +419,7 @@ pub async fn export<'a>(
 /// Return the lock metadata for the given list of paths.
 pub async fn get_file_lock_batch(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &LockFileBatchArg,
+    arg: LockFileBatchArg,
 ) -> crate::Result<Result<LockFileBatchResult, LockFileError>> {
     crate::client_helpers::request(
         client,
@@ -435,7 +435,7 @@ pub async fn get_file_lock_batch(
 /// Returns the metadata for a file or folder. Note: Metadata for the root folder is unsupported.
 pub async fn get_metadata(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &GetMetadataArg,
+    arg: GetMetadataArg,
 ) -> crate::Result<Result<Metadata, GetMetadataError>> {
     crate::client_helpers::request(
         client,
@@ -453,12 +453,12 @@ pub async fn get_metadata(
 /// .ppt, .pptm, .pptx, .rtf. HTML previews are generated for files with the following extensions:
 /// .csv, .ods, .xls, .xlsm, .gsheet, .xlsx. Other formats will return an unsupported extension
 /// error.
-pub async fn get_preview<'a>(
-    client: &'a dyn crate::client_trait::HttpClient,
-    arg: &PreviewArg,
+pub async fn get_preview(
+    client: &dyn crate::client_trait::HttpClient,
+    arg: PreviewArg,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> crate::Result<Result<crate::client_trait::HttpRequestResult<'a, FileMetadata>, PreviewError>> {
+) -> crate::Result<Result<crate::client_trait::HttpRequestResult<FileMetadata>, PreviewError>> {
     crate::client_helpers::request_with_body(
         client,
         crate::client_trait::Endpoint::Content,
@@ -477,7 +477,7 @@ pub async fn get_preview<'a>(
 /// browser. The Content-Type of the link is determined automatically by the file's mime type.
 pub async fn get_temporary_link(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &GetTemporaryLinkArg,
+    arg: GetTemporaryLinkArg,
 ) -> crate::Result<Result<GetTemporaryLinkResult, GetTemporaryLinkError>> {
     crate::client_helpers::request(
         client,
@@ -528,7 +528,7 @@ pub async fn get_temporary_link(
 /// recently consumed.
 pub async fn get_temporary_upload_link(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &GetTemporaryUploadLinkArg,
+    arg: GetTemporaryUploadLinkArg,
 ) -> crate::Result<Result<GetTemporaryUploadLinkResult, ()>> {
     crate::client_helpers::request(
         client,
@@ -544,12 +544,12 @@ pub async fn get_temporary_upload_link(
 /// Get a thumbnail for an image. This method currently supports files with the following file
 /// extensions: jpg, jpeg, png, tiff, tif, gif and bmp. Photos that are larger than 20MB in size
 /// won't be converted to a thumbnail.
-pub async fn get_thumbnail<'a>(
-    client: &'a dyn crate::client_trait::HttpClient,
-    arg: &ThumbnailArg,
+pub async fn get_thumbnail(
+    client: &dyn crate::client_trait::HttpClient,
+    arg: ThumbnailArg,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> crate::Result<Result<crate::client_trait::HttpRequestResult<'a, FileMetadata>, ThumbnailError>> {
+) -> crate::Result<Result<crate::client_trait::HttpRequestResult<FileMetadata>, ThumbnailError>> {
     crate::client_helpers::request_with_body(
         client,
         crate::client_trait::Endpoint::Content,
@@ -564,12 +564,12 @@ pub async fn get_thumbnail<'a>(
 }
 
 /// Get a thumbnail for a file.
-pub async fn get_thumbnail_v2<'a>(
-    client: &'a dyn crate::client_trait::HttpClient,
-    arg: &ThumbnailV2Arg,
+pub async fn get_thumbnail_v2(
+    client: &dyn crate::client_trait::HttpClient,
+    arg: ThumbnailV2Arg,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> crate::Result<Result<crate::client_trait::HttpRequestResult<'a, PreviewResult>, ThumbnailV2Error>> {
+) -> crate::Result<Result<crate::client_trait::HttpRequestResult<PreviewResult>, ThumbnailV2Error>> {
     crate::client_helpers::request_with_body(
         client,
         crate::client_trait::Endpoint::Content,
@@ -588,7 +588,7 @@ pub async fn get_thumbnail_v2<'a>(
 /// bmp. Photos that are larger than 20MB in size won't be converted to a thumbnail.
 pub async fn get_thumbnail_batch(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &GetThumbnailBatchArg,
+    arg: GetThumbnailBatchArg,
 ) -> crate::Result<Result<GetThumbnailBatchResult, GetThumbnailBatchError>> {
     crate::client_helpers::request(
         client,
@@ -623,7 +623,7 @@ pub async fn get_thumbnail_batch(
 /// off the retry until the previous request finishes.
 pub async fn list_folder(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &ListFolderArg,
+    arg: ListFolderArg,
 ) -> crate::Result<Result<ListFolderResult, ListFolderError>> {
     crate::client_helpers::request(
         client,
@@ -641,7 +641,7 @@ pub async fn list_folder(
 /// [`list_folder()`](list_folder).
 pub async fn list_folder_continue(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &ListFolderContinueArg,
+    arg: ListFolderContinueArg,
 ) -> crate::Result<Result<ListFolderResult, ListFolderContinueError>> {
     crate::client_helpers::request(
         client,
@@ -660,7 +660,7 @@ pub async fn list_folder_continue(
 /// need to know about files that already exist in Dropbox.
 pub async fn list_folder_get_latest_cursor(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &ListFolderArg,
+    arg: ListFolderArg,
 ) -> crate::Result<Result<ListFolderGetLatestCursorResult, ListFolderError>> {
     crate::client_helpers::request(
         client,
@@ -681,7 +681,7 @@ pub async fn list_folder_get_latest_cursor(
 /// documentation](https://www.dropbox.com/developers/reference/webhooks).
 pub async fn list_folder_longpoll(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &ListFolderLongpollArg,
+    arg: ListFolderLongpollArg,
 ) -> crate::Result<Result<ListFolderLongpollResult, ListFolderLongpollError>> {
     crate::client_helpers::request(
         client,
@@ -704,7 +704,7 @@ pub async fn list_folder_longpoll(
 /// given file across moves or renames.
 pub async fn list_revisions(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &ListRevisionsArg,
+    arg: ListRevisionsArg,
 ) -> crate::Result<Result<ListRevisionsResult, ListRevisionsError>> {
     crate::client_helpers::request(
         client,
@@ -722,7 +722,7 @@ pub async fn list_revisions(
 /// paths and their metadata after this operation.
 pub async fn lock_file_batch(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &LockFileBatchArg,
+    arg: LockFileBatchArg,
 ) -> crate::Result<Result<LockFileBatchResult, LockFileError>> {
     crate::client_helpers::request(
         client,
@@ -739,7 +739,7 @@ pub async fn lock_file_batch(
 /// folder all its contents will be moved. Note that we do not currently support case-only renaming.
 pub async fn move_v2(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &RelocationArg,
+    arg: RelocationArg,
 ) -> crate::Result<Result<RelocationResult, RelocationError>> {
     crate::client_helpers::request(
         client,
@@ -756,7 +756,7 @@ pub async fn move_v2(
 /// folder all its contents will be moved.
 pub async fn do_move(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &RelocationArg,
+    arg: RelocationArg,
 ) -> crate::Result<Result<Metadata, RelocationError>> {
     crate::client_helpers::request(
         client,
@@ -777,7 +777,7 @@ pub async fn do_move(
 /// use [`move_batch_check_v2()`](move_batch_check_v2) to check the job status.
 pub async fn move_batch_v2(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &MoveBatchArg,
+    arg: MoveBatchArg,
 ) -> crate::Result<Result<RelocationBatchV2Launch, ()>> {
     crate::client_helpers::request(
         client,
@@ -795,7 +795,7 @@ pub async fn move_batch_v2(
 /// [`move_batch_check()`](move_batch_check) to check the job status.
 pub async fn move_batch(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &RelocationBatchArg,
+    arg: RelocationBatchArg,
 ) -> crate::Result<Result<RelocationBatchLaunch, ()>> {
     crate::client_helpers::request(
         client,
@@ -812,7 +812,7 @@ pub async fn move_batch(
 /// list of results for each entry.
 pub async fn move_batch_check_v2(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &super::dbx_async::PollArg,
+    arg: super::dbx_async::PollArg,
 ) -> crate::Result<Result<RelocationBatchV2JobStatus, super::dbx_async::PollError>> {
     crate::client_helpers::request(
         client,
@@ -829,7 +829,7 @@ pub async fn move_batch_check_v2(
 /// returns list of results for each entry.
 pub async fn move_batch_check(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &super::dbx_async::PollArg,
+    arg: super::dbx_async::PollArg,
 ) -> crate::Result<Result<RelocationBatchJobStatus, super::dbx_async::PollError>> {
     crate::client_helpers::request(
         client,
@@ -846,7 +846,7 @@ pub async fn move_batch_check(
 /// Note: This endpoint is only available for Dropbox Business apps.
 pub async fn permanently_delete(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &DeleteArg,
+    arg: DeleteArg,
 ) -> crate::Result<Result<(), DeleteError>> {
     crate::client_helpers::request(
         client,
@@ -861,7 +861,7 @@ pub async fn permanently_delete(
 
 pub async fn properties_add(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &super::file_properties::AddPropertiesArg,
+    arg: super::file_properties::AddPropertiesArg,
 ) -> crate::Result<Result<(), super::file_properties::AddPropertiesError>> {
     crate::client_helpers::request(
         client,
@@ -876,7 +876,7 @@ pub async fn properties_add(
 
 pub async fn properties_overwrite(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &super::file_properties::OverwritePropertyGroupArg,
+    arg: super::file_properties::OverwritePropertyGroupArg,
 ) -> crate::Result<Result<(), super::file_properties::InvalidPropertyGroupError>> {
     crate::client_helpers::request(
         client,
@@ -891,7 +891,7 @@ pub async fn properties_overwrite(
 
 pub async fn properties_remove(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &super::file_properties::RemovePropertiesArg,
+    arg: super::file_properties::RemovePropertiesArg,
 ) -> crate::Result<Result<(), super::file_properties::RemovePropertiesError>> {
     crate::client_helpers::request(
         client,
@@ -906,7 +906,7 @@ pub async fn properties_remove(
 
 pub async fn properties_template_get(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &super::file_properties::GetTemplateArg,
+    arg: super::file_properties::GetTemplateArg,
 ) -> crate::Result<Result<super::file_properties::GetTemplateResult, super::file_properties::TemplateError>> {
     crate::client_helpers::request(
         client,
@@ -935,7 +935,7 @@ pub async fn properties_template_list(
 
 pub async fn properties_update(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &super::file_properties::UpdatePropertiesArg,
+    arg: super::file_properties::UpdatePropertiesArg,
 ) -> crate::Result<Result<(), super::file_properties::UpdatePropertiesError>> {
     crate::client_helpers::request(
         client,
@@ -951,7 +951,7 @@ pub async fn properties_update(
 /// Restore a specific revision of a file to the given path.
 pub async fn restore(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &RestoreArg,
+    arg: RestoreArg,
 ) -> crate::Result<Result<FileMetadata, RestoreError>> {
     crate::client_helpers::request(
         client,
@@ -970,7 +970,7 @@ pub async fn restore(
 /// (1).txt).
 pub async fn save_url(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &SaveUrlArg,
+    arg: SaveUrlArg,
 ) -> crate::Result<Result<SaveUrlResult, SaveUrlError>> {
     crate::client_helpers::request(
         client,
@@ -986,7 +986,7 @@ pub async fn save_url(
 /// Check the status of a [`save_url()`](save_url) job.
 pub async fn save_url_check_job_status(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &super::dbx_async::PollArg,
+    arg: super::dbx_async::PollArg,
 ) -> crate::Result<Result<SaveUrlJobStatus, super::dbx_async::PollError>> {
     crate::client_helpers::request(
         client,
@@ -1004,7 +1004,7 @@ pub async fn save_url_check_job_status(
 /// days.
 pub async fn search(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &SearchArg,
+    arg: SearchArg,
 ) -> crate::Result<Result<SearchResult, SearchError>> {
     crate::client_helpers::request(
         client,
@@ -1023,7 +1023,7 @@ pub async fn search(
 /// in indexing. Duplicate results may be returned across pages. Some results may not be returned.
 pub async fn search_v2(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &SearchV2Arg,
+    arg: SearchV2Arg,
 ) -> crate::Result<Result<SearchV2Result, SearchError>> {
     crate::client_helpers::request(
         client,
@@ -1043,7 +1043,7 @@ pub async fn search_v2(
 /// Some results may not be returned.
 pub async fn search_continue_v2(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &SearchV2ContinueArg,
+    arg: SearchV2ContinueArg,
 ) -> crate::Result<Result<SearchV2Result, SearchError>> {
     crate::client_helpers::request(
         client,
@@ -1061,7 +1061,7 @@ pub async fn search_continue_v2(
 /// unlocked. Returns a list of the unlocked file paths and their metadata after this operation.
 pub async fn unlock_file_batch(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &UnlockFileBatchArg,
+    arg: UnlockFileBatchArg,
 ) -> crate::Result<Result<LockFileBatchResult, LockFileError>> {
     crate::client_helpers::request(
         client,
@@ -1082,8 +1082,8 @@ pub async fn unlock_file_batch(
 /// page](https://www.dropbox.com/developers/reference/data-transport-limit).
 pub async fn upload(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &CommitInfo,
-    body: Vec<u8>,
+    arg: CommitInfo,
+    body: crate::client_trait::RequestBodyStream,
 ) -> crate::Result<Result<FileMetadata, UploadError>> {
     crate::client_helpers::request(
         client,
@@ -1104,8 +1104,8 @@ pub async fn upload(
 /// page](https://www.dropbox.com/developers/reference/data-transport-limit).
 pub async fn upload_session_append_v2(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &UploadSessionAppendArg,
-    body: Vec<u8>,
+    arg: UploadSessionAppendArg,
+    body: crate::client_trait::RequestBodyStream,
 ) -> crate::Result<Result<(), UploadSessionLookupError>> {
     crate::client_helpers::request(
         client,
@@ -1125,8 +1125,8 @@ pub async fn upload_session_append_v2(
 /// page](https://www.dropbox.com/developers/reference/data-transport-limit).
 pub async fn upload_session_append(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &UploadSessionCursor,
-    body: Vec<u8>,
+    arg: UploadSessionCursor,
+    body: crate::client_trait::RequestBodyStream,
 ) -> crate::Result<Result<(), UploadSessionLookupError>> {
     crate::client_helpers::request(
         client,
@@ -1147,8 +1147,8 @@ pub async fn upload_session_append(
 /// page](https://www.dropbox.com/developers/reference/data-transport-limit).
 pub async fn upload_session_finish(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &UploadSessionFinishArg,
-    body: Vec<u8>,
+    arg: UploadSessionFinishArg,
+    body: crate::client_trait::RequestBodyStream,
 ) -> crate::Result<Result<FileMetadata, UploadSessionFinishError>> {
     crate::client_helpers::request(
         client,
@@ -1181,7 +1181,7 @@ pub async fn upload_session_finish(
 /// [Data transport limit page](https://www.dropbox.com/developers/reference/data-transport-limit).
 pub async fn upload_session_finish_batch(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &UploadSessionFinishBatchArg,
+    arg: UploadSessionFinishBatchArg,
 ) -> crate::Result<Result<UploadSessionFinishBatchLaunch, ()>> {
     crate::client_helpers::request(
         client,
@@ -1199,7 +1199,7 @@ pub async fn upload_session_finish_batch(
 /// result for each entry.
 pub async fn upload_session_finish_batch_check(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &super::dbx_async::PollArg,
+    arg: super::dbx_async::PollArg,
 ) -> crate::Result<Result<UploadSessionFinishBatchJobStatus, super::dbx_async::PollError>> {
     crate::client_helpers::request(
         client,
@@ -1227,8 +1227,8 @@ pub async fn upload_session_finish_batch_check(
 /// transport limit page](https://www.dropbox.com/developers/reference/data-transport-limit).
 pub async fn upload_session_start(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &UploadSessionStartArg,
-    body: Vec<u8>,
+    arg: UploadSessionStartArg,
+    body: crate::client_trait::RequestBodyStream,
 ) -> crate::Result<Result<UploadSessionStartResult, ()>> {
     crate::client_helpers::request(
         client,
@@ -1241,7 +1241,7 @@ pub async fn upload_session_start(
         .await
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AlphaGetMetadataArg {
     /// The path of a file or folder on Dropbox.
     pub path: ReadPath,
@@ -1431,7 +1431,7 @@ impl ::serde::ser::Serialize for AlphaGetMetadataArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum AlphaGetMetadataError {
     Path(LookupError),
     PropertiesError(super::file_properties::LookUpPropertiesError),
@@ -1512,7 +1512,7 @@ impl ::std::fmt::Display for AlphaGetMetadataError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct CommitInfo {
     /// Path in the user's Dropbox to save the file.
     pub path: WritePathOrId,
@@ -1721,7 +1721,7 @@ impl ::serde::ser::Serialize for CommitInfo {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct CommitInfoWithProperties {
     /// Path in the user's Dropbox to save the file.
     pub path: WritePathOrId,
@@ -1930,7 +1930,7 @@ impl ::serde::ser::Serialize for CommitInfoWithProperties {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ContentSyncSetting {
     /// Id of the item this setting is applied to.
     pub id: FileId,
@@ -2033,7 +2033,7 @@ impl ::serde::ser::Serialize for ContentSyncSetting {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ContentSyncSettingArg {
     /// Id of the item this setting is applied to.
     pub id: FileId,
@@ -2136,7 +2136,7 @@ impl ::serde::ser::Serialize for ContentSyncSettingArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct CreateFolderArg {
     /// Path in the user's Dropbox to create.
     pub path: WritePath,
@@ -2245,7 +2245,7 @@ impl ::serde::ser::Serialize for CreateFolderArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct CreateFolderBatchArg {
     /// List of paths to be created in the user's Dropbox. Duplicate path arguments in the batch are
     /// considered only once.
@@ -2373,7 +2373,7 @@ impl ::serde::ser::Serialize for CreateFolderBatchArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum CreateFolderBatchError {
     /// The operation would involve too many files or folders.
     TooManyFiles,
@@ -2443,7 +2443,7 @@ impl ::std::fmt::Display for CreateFolderBatchError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum CreateFolderBatchJobStatus {
     /// The asynchronous job is still in progress.
     InProgress,
@@ -2531,7 +2531,7 @@ impl ::serde::ser::Serialize for CreateFolderBatchJobStatus {
 
 /// Result returned by [`create_folder_batch()`](create_folder_batch) that may either launch an
 /// asynchronous job or complete synchronously.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum CreateFolderBatchLaunch {
     /// This response indicates that the processing is asynchronous. The string is an id that can be
     /// used to obtain the status of the asynchronous job.
@@ -2604,7 +2604,7 @@ impl ::serde::ser::Serialize for CreateFolderBatchLaunch {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct CreateFolderBatchResult {
     /// Each entry in [`CreateFolderBatchArg::paths`](CreateFolderBatchArg) will appear at the same
     /// position inside [`CreateFolderBatchResult::entries`](CreateFolderBatchResult).
@@ -2695,7 +2695,7 @@ impl ::serde::ser::Serialize for CreateFolderBatchResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum CreateFolderBatchResultEntry {
     Success(CreateFolderEntryResult),
     Failure(CreateFolderEntryError),
@@ -2758,7 +2758,7 @@ impl ::serde::ser::Serialize for CreateFolderBatchResultEntry {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum CreateFolderEntryError {
     Path(WriteError),
     /// Catch-all used for unrecognized values returned from the server. Encountering this value
@@ -2831,7 +2831,7 @@ impl ::std::fmt::Display for CreateFolderEntryError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct CreateFolderEntryResult {
     /// Metadata of the created folder.
     pub metadata: FolderMetadata,
@@ -2921,7 +2921,7 @@ impl ::serde::ser::Serialize for CreateFolderEntryResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum CreateFolderError {
     Path(WriteError),
 }
@@ -2986,7 +2986,7 @@ impl ::std::fmt::Display for CreateFolderError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct CreateFolderResult {
     /// Metadata of the created folder.
     pub metadata: FolderMetadata,
@@ -3076,7 +3076,7 @@ impl ::serde::ser::Serialize for CreateFolderResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeleteArg {
     /// Path in the user's Dropbox to delete.
     pub path: WritePathOrId,
@@ -3185,7 +3185,7 @@ impl ::serde::ser::Serialize for DeleteArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeleteBatchArg {
     pub entries: Vec<DeleteArg>,
 }
@@ -3274,7 +3274,7 @@ impl ::serde::ser::Serialize for DeleteBatchArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum DeleteBatchError {
     /// Use [`DeleteError::TooManyWriteOperations`](DeleteError::TooManyWriteOperations).
     /// [`delete_batch()`](delete_batch) now provides smaller granularity about which entry has
@@ -3346,7 +3346,7 @@ impl ::std::fmt::Display for DeleteBatchError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum DeleteBatchJobStatus {
     /// The asynchronous job is still in progress.
     InProgress,
@@ -3434,7 +3434,7 @@ impl ::serde::ser::Serialize for DeleteBatchJobStatus {
 
 /// Result returned by [`delete_batch()`](delete_batch) that may either launch an asynchronous job
 /// or complete synchronously.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum DeleteBatchLaunch {
     /// This response indicates that the processing is asynchronous. The string is an id that can be
     /// used to obtain the status of the asynchronous job.
@@ -3507,7 +3507,7 @@ impl ::serde::ser::Serialize for DeleteBatchLaunch {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeleteBatchResult {
     /// Each entry in [`DeleteBatchArg::entries`](DeleteBatchArg) will appear at the same position
     /// inside [`DeleteBatchResult::entries`](DeleteBatchResult).
@@ -3598,7 +3598,7 @@ impl ::serde::ser::Serialize for DeleteBatchResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeleteBatchResultData {
     /// Metadata of the deleted object.
     pub metadata: Metadata,
@@ -3688,7 +3688,7 @@ impl ::serde::ser::Serialize for DeleteBatchResultData {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum DeleteBatchResultEntry {
     Success(DeleteBatchResultData),
     Failure(DeleteError),
@@ -3751,7 +3751,7 @@ impl ::serde::ser::Serialize for DeleteBatchResultEntry {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum DeleteError {
     PathLookup(LookupError),
     PathWrite(WriteError),
@@ -3866,7 +3866,7 @@ impl ::std::fmt::Display for DeleteError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeleteResult {
     /// Metadata of the deleted object.
     pub metadata: Metadata,
@@ -3957,7 +3957,7 @@ impl ::serde::ser::Serialize for DeleteResult {
 }
 
 /// Indicates that there used to be a file or folder at this path, but it no longer exists.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeletedMetadata {
     /// The last component of the path (including extension). This never contains a slash.
     pub name: String,
@@ -4112,7 +4112,7 @@ impl ::serde::ser::Serialize for DeletedMetadata {
 }
 
 /// Dimensions for a photo or video.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Dimensions {
     /// Height of the photo/video.
     pub height: u64,
@@ -4215,7 +4215,7 @@ impl ::serde::ser::Serialize for Dimensions {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DownloadArg {
     /// The path of the file to download.
     pub path: ReadPath,
@@ -4323,7 +4323,7 @@ impl ::serde::ser::Serialize for DownloadArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum DownloadError {
     Path(LookupError),
     /// This file type cannot be downloaded directly; use [`export()`](export) instead.
@@ -4409,7 +4409,7 @@ impl ::std::fmt::Display for DownloadError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DownloadZipArg {
     /// The path of the folder to download.
     pub path: ReadPath,
@@ -4499,7 +4499,7 @@ impl ::serde::ser::Serialize for DownloadZipArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum DownloadZipError {
     Path(LookupError),
     /// The folder or a file is too large to download.
@@ -4598,7 +4598,7 @@ impl ::std::fmt::Display for DownloadZipError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DownloadZipResult {
     pub metadata: FolderMetadata,
 }
@@ -4687,7 +4687,7 @@ impl ::serde::ser::Serialize for DownloadZipResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ExportArg {
     /// The path of the file to be exported.
     pub path: ReadPath,
@@ -4777,7 +4777,7 @@ impl ::serde::ser::Serialize for ExportArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ExportError {
     Path(LookupError),
     /// This file type cannot be exported. Use [`download()`](download) instead.
@@ -4877,7 +4877,7 @@ impl ::std::fmt::Display for ExportError {
 }
 
 /// Export information for a file.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ExportInfo {
     /// Format to which the file can be exported to.
     pub export_as: Option<String>,
@@ -4955,7 +4955,7 @@ impl ::serde::ser::Serialize for ExportInfo {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ExportMetadata {
     /// The last component of the path (including extension). This never contains a slash.
     pub name: String,
@@ -5078,7 +5078,7 @@ impl ::serde::ser::Serialize for ExportMetadata {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ExportResult {
     /// Metadata for the exported version of the file.
     pub export_metadata: ExportMetadata,
@@ -5181,7 +5181,7 @@ impl ::serde::ser::Serialize for ExportResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum FileCategory {
     /// jpg, png, gif, and more.
     Image,
@@ -5356,7 +5356,7 @@ impl ::serde::ser::Serialize for FileCategory {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileLock {
     /// The lock description.
     pub content: FileLockContent,
@@ -5446,7 +5446,7 @@ impl ::serde::ser::Serialize for FileLock {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum FileLockContent {
     /// Empty type to indicate no lock.
     Unlocked,
@@ -5515,7 +5515,7 @@ impl ::serde::ser::Serialize for FileLockContent {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileLockMetadata {
     /// True if caller holds the file lock.
     pub is_lockholder: Option<bool>,
@@ -5632,7 +5632,7 @@ impl ::serde::ser::Serialize for FileLockMetadata {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileMetadata {
     /// The last component of the path (including extension). This never contains a slash.
     pub name: String,
@@ -6038,7 +6038,7 @@ impl ::serde::ser::Serialize for FileMetadata {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileOpsResult {
 }
 
@@ -6088,7 +6088,7 @@ impl ::serde::ser::Serialize for FileOpsResult {
 }
 
 /// Sharing info for a file which is contained by a shared folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileSharingInfo {
     /// True if the file or folder is inside a read-only shared folder.
     pub read_only: bool,
@@ -6210,7 +6210,7 @@ impl ::serde::ser::Serialize for FileSharingInfo {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum FileStatus {
     Active,
     Deleted,
@@ -6279,7 +6279,7 @@ impl ::serde::ser::Serialize for FileStatus {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FolderMetadata {
     /// The last component of the path (including extension). This never contains a slash.
     pub name: String,
@@ -6507,7 +6507,7 @@ impl ::serde::ser::Serialize for FolderMetadata {
 
 /// Sharing info for a folder which is contained in a shared folder or is a shared folder mount
 /// point.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FolderSharingInfo {
     /// True if the file or folder is inside a read-only shared folder.
     pub read_only: bool,
@@ -6675,7 +6675,7 @@ impl ::serde::ser::Serialize for FolderSharingInfo {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GetCopyReferenceArg {
     /// The path to the file or folder you want to get a copy reference to.
     pub path: ReadPath,
@@ -6765,7 +6765,7 @@ impl ::serde::ser::Serialize for GetCopyReferenceArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum GetCopyReferenceError {
     Path(LookupError),
     /// Catch-all used for unrecognized values returned from the server. Encountering this value
@@ -6838,7 +6838,7 @@ impl ::std::fmt::Display for GetCopyReferenceError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GetCopyReferenceResult {
     /// Metadata of the file or folder.
     pub metadata: Metadata,
@@ -6959,7 +6959,7 @@ impl ::serde::ser::Serialize for GetCopyReferenceResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GetMetadataArg {
     /// The path of a file or folder on Dropbox.
     pub path: ReadPath,
@@ -7127,7 +7127,7 @@ impl ::serde::ser::Serialize for GetMetadataArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum GetMetadataError {
     Path(LookupError),
 }
@@ -7192,7 +7192,7 @@ impl ::std::fmt::Display for GetMetadataError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GetTemporaryLinkArg {
     /// The path to the file you want a temporary link to.
     pub path: ReadPath,
@@ -7282,7 +7282,7 @@ impl ::serde::ser::Serialize for GetTemporaryLinkArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum GetTemporaryLinkError {
     Path(LookupError),
     /// The user's email address needs to be verified to use this functionality.
@@ -7381,7 +7381,7 @@ impl ::std::fmt::Display for GetTemporaryLinkError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GetTemporaryLinkResult {
     /// Metadata of the file.
     pub metadata: FileMetadata,
@@ -7484,7 +7484,7 @@ impl ::serde::ser::Serialize for GetTemporaryLinkResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GetTemporaryUploadLinkArg {
     /// Contains the path and other optional modifiers for the future upload commit. Equivalent to
     /// the parameters provided to [`upload()`](upload).
@@ -7594,7 +7594,7 @@ impl ::serde::ser::Serialize for GetTemporaryUploadLinkArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GetTemporaryUploadLinkResult {
     /// The temporary link which can be used to stream a file to a Dropbox location.
     pub link: String,
@@ -7685,7 +7685,7 @@ impl ::serde::ser::Serialize for GetTemporaryUploadLinkResult {
 }
 
 /// Arguments for [`get_thumbnail_batch()`](get_thumbnail_batch).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GetThumbnailBatchArg {
     /// List of files to get thumbnails.
     pub entries: Vec<ThumbnailArg>,
@@ -7775,7 +7775,7 @@ impl ::serde::ser::Serialize for GetThumbnailBatchArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum GetThumbnailBatchError {
     /// The operation involves more than 25 files.
     TooManyFiles,
@@ -7845,7 +7845,7 @@ impl ::std::fmt::Display for GetThumbnailBatchError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GetThumbnailBatchResult {
     /// List of files and their thumbnails.
     pub entries: Vec<GetThumbnailBatchResultEntry>,
@@ -7935,7 +7935,7 @@ impl ::serde::ser::Serialize for GetThumbnailBatchResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GetThumbnailBatchResultData {
     pub metadata: FileMetadata,
     /// A string containing the base64-encoded thumbnail data for this file.
@@ -8037,7 +8037,7 @@ impl ::serde::ser::Serialize for GetThumbnailBatchResultData {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum GetThumbnailBatchResultEntry {
     Success(GetThumbnailBatchResultData),
     /// The result for this file if it was an error.
@@ -8110,7 +8110,7 @@ impl ::serde::ser::Serialize for GetThumbnailBatchResultEntry {
 }
 
 /// GPS coordinates for a photo or video.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GpsCoordinates {
     /// Latitude of the GPS coordinates.
     pub latitude: f64,
@@ -8213,7 +8213,7 @@ impl ::serde::ser::Serialize for GpsCoordinates {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct HighlightSpan {
     /// String to be determined whether it should be highlighted or not.
     pub highlight_str: String,
@@ -8316,7 +8316,7 @@ impl ::serde::ser::Serialize for HighlightSpan {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListFolderArg {
     /// A unique identifier for the file.
     pub path: PathROrId,
@@ -8580,7 +8580,7 @@ impl ::serde::ser::Serialize for ListFolderArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListFolderContinueArg {
     /// The cursor returned by your last call to [`list_folder()`](list_folder) or
     /// [`list_folder_continue()`](list_folder_continue).
@@ -8671,7 +8671,7 @@ impl ::serde::ser::Serialize for ListFolderContinueArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ListFolderContinueError {
     Path(LookupError),
     /// Indicates that the cursor has been invalidated. Call [`list_folder()`](list_folder) to
@@ -8758,7 +8758,7 @@ impl ::std::fmt::Display for ListFolderContinueError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ListFolderError {
     Path(LookupError),
     TemplateError(super::file_properties::TemplateError),
@@ -8847,7 +8847,7 @@ impl ::std::fmt::Display for ListFolderError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListFolderGetLatestCursorResult {
     /// Pass the cursor into [`list_folder_continue()`](list_folder_continue) to see what's changed
     /// in the folder since your previous query.
@@ -8938,7 +8938,7 @@ impl ::serde::ser::Serialize for ListFolderGetLatestCursorResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListFolderLongpollArg {
     /// A cursor as returned by [`list_folder()`](list_folder) or
     /// [`list_folder_continue()`](list_folder_continue). Cursors retrieved by setting
@@ -9050,7 +9050,7 @@ impl ::serde::ser::Serialize for ListFolderLongpollArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ListFolderLongpollError {
     /// Indicates that the cursor has been invalidated. Call [`list_folder()`](list_folder) to
     /// obtain a new cursor.
@@ -9121,7 +9121,7 @@ impl ::std::fmt::Display for ListFolderLongpollError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListFolderLongpollResult {
     /// Indicates whether new changes are available. If true, call
     /// [`list_folder_continue()`](list_folder_continue) to retrieve the changes.
@@ -9231,7 +9231,7 @@ impl ::serde::ser::Serialize for ListFolderLongpollResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListFolderResult {
     /// The files and (direct) subfolders in the folder.
     pub entries: Vec<Metadata>,
@@ -9349,7 +9349,7 @@ impl ::serde::ser::Serialize for ListFolderResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListRevisionsArg {
     /// The path to the file you want to see the revisions of.
     pub path: PathOrId,
@@ -9475,7 +9475,7 @@ impl ::serde::ser::Serialize for ListRevisionsArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ListRevisionsError {
     Path(LookupError),
     /// Catch-all used for unrecognized values returned from the server. Encountering this value
@@ -9548,7 +9548,7 @@ impl ::std::fmt::Display for ListRevisionsError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ListRevisionsMode {
     /// Returns revisions with the same file path as identified by the latest file entry at the
     /// given file path or id.
@@ -9621,7 +9621,7 @@ impl ::serde::ser::Serialize for ListRevisionsMode {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListRevisionsResult {
     /// If the file identified by the latest revision in the response is either deleted or moved.
     pub is_deleted: bool,
@@ -9742,7 +9742,7 @@ impl ::serde::ser::Serialize for ListRevisionsResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LockConflictError {
     /// The lock that caused the conflict.
     pub lock: FileLock,
@@ -9832,7 +9832,7 @@ impl ::serde::ser::Serialize for LockConflictError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LockFileArg {
     /// Path in the user's Dropbox to a file.
     pub path: WritePathOrId,
@@ -9922,7 +9922,7 @@ impl ::serde::ser::Serialize for LockFileArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LockFileBatchArg {
     /// List of 'entries'. Each 'entry' contains a path of the file which will be locked or queried.
     /// Duplicate path arguments in the batch are considered only once.
@@ -10013,7 +10013,7 @@ impl ::serde::ser::Serialize for LockFileBatchArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LockFileBatchResult {
     /// Each Entry in the 'entries' will have '.tag' with the operation status (e.g. success), the
     /// metadata for the file and the lock state after the operation.
@@ -10104,7 +10104,7 @@ impl ::serde::ser::Serialize for LockFileBatchResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum LockFileError {
     /// Could not find the specified resource.
     PathLookup(LookupError),
@@ -10268,7 +10268,7 @@ impl ::std::fmt::Display for LockFileError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LockFileResult {
     /// Metadata of the file.
     pub metadata: Metadata,
@@ -10371,7 +10371,7 @@ impl ::serde::ser::Serialize for LockFileResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum LockFileResultEntry {
     Success(LockFileResult),
     Failure(LockFileError),
@@ -10434,7 +10434,7 @@ impl ::serde::ser::Serialize for LockFileResultEntry {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum LookupError {
     /// The given path does not satisfy the required path format. Please refer to the [Path formats
     /// documentation](https://www.dropbox.com/developers/documentation/http/documentation#path-formats)
@@ -10592,7 +10592,7 @@ impl ::std::fmt::Display for LookupError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum MediaInfo {
     /// Indicate the photo/video is still under processing and metadata is not available yet.
     Pending,
@@ -10660,7 +10660,7 @@ impl ::serde::ser::Serialize for MediaInfo {
 }
 
 /// Metadata for a photo or video.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum MediaMetadata {
     Photo(PhotoMetadata),
     Video(VideoMetadata),
@@ -10721,7 +10721,7 @@ impl ::serde::ser::Serialize for MediaMetadata {
 }
 
 /// Metadata for a file or folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Metadata {
     File(FileMetadata),
     Folder(FolderMetadata),
@@ -10813,7 +10813,7 @@ impl ::serde::ser::Serialize for Metadata {
 }
 
 /// Metadata for a file, folder or other resource types.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum MetadataV2 {
     Metadata(Metadata),
     /// Catch-all used for unrecognized values returned from the server. Encountering this value
@@ -10874,7 +10874,7 @@ impl ::serde::ser::Serialize for MetadataV2 {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MinimalFileLinkMetadata {
     /// URL of the shared link.
     pub url: String,
@@ -11015,7 +11015,7 @@ impl ::serde::ser::Serialize for MinimalFileLinkMetadata {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MoveBatchArg {
     /// List of entries to be moved or copied. Each entry is [`RelocationPath`](RelocationPath).
     pub entries: Vec<RelocationPath>,
@@ -11143,7 +11143,7 @@ impl ::serde::ser::Serialize for MoveBatchArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum MoveIntoVaultError {
     /// Moving shared folder into Vault is not allowed.
     IsSharedFolder,
@@ -11213,7 +11213,7 @@ impl ::std::fmt::Display for MoveIntoVaultError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum PathOrLink {
     Path(ReadPath),
     Link(SharedLinkFileInfo),
@@ -11285,7 +11285,7 @@ impl ::serde::ser::Serialize for PathOrLink {
 }
 
 /// Metadata for a photo.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PhotoMetadata {
     /// Dimension of the photo/video.
     pub dimensions: Option<Dimensions>,
@@ -11389,7 +11389,7 @@ impl ::serde::ser::Serialize for PhotoMetadata {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PreviewArg {
     /// The path of the file to preview.
     pub path: ReadPath,
@@ -11497,7 +11497,7 @@ impl ::serde::ser::Serialize for PreviewArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum PreviewError {
     /// An error occurs when downloading metadata for the file.
     Path(LookupError),
@@ -11602,7 +11602,7 @@ impl ::std::fmt::Display for PreviewError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PreviewResult {
     /// Metadata corresponding to the file received as an argument. Will be populated if the
     /// endpoint is called with a path (ReadPath).
@@ -11695,7 +11695,7 @@ impl ::serde::ser::Serialize for PreviewResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct RelocationArg {
     /// Path in the user's Dropbox to be copied or moved.
     pub from_path: WritePathOrId,
@@ -11857,7 +11857,7 @@ impl ::serde::ser::Serialize for RelocationArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct RelocationBatchArg {
     /// List of entries to be moved or copied. Each entry is [`RelocationPath`](RelocationPath).
     pub entries: Vec<RelocationPath>,
@@ -12006,7 +12006,7 @@ impl ::serde::ser::Serialize for RelocationBatchArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct RelocationBatchArgBase {
     /// List of entries to be moved or copied. Each entry is [`RelocationPath`](RelocationPath).
     pub entries: Vec<RelocationPath>,
@@ -12115,7 +12115,7 @@ impl ::serde::ser::Serialize for RelocationBatchArgBase {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum RelocationBatchError {
     FromLookup(LookupError),
     FromWrite(WriteError),
@@ -12370,7 +12370,7 @@ impl ::std::fmt::Display for RelocationBatchError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum RelocationBatchErrorEntry {
     /// User errors that retry won't help.
     RelocationError(RelocationError),
@@ -12459,7 +12459,7 @@ impl ::serde::ser::Serialize for RelocationBatchErrorEntry {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum RelocationBatchJobStatus {
     /// The asynchronous job is still in progress.
     InProgress,
@@ -12539,7 +12539,7 @@ impl ::serde::ser::Serialize for RelocationBatchJobStatus {
 
 /// Result returned by [`copy_batch()`](copy_batch) or [`move_batch()`](move_batch) that may either
 /// launch an asynchronous job or complete synchronously.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum RelocationBatchLaunch {
     /// This response indicates that the processing is asynchronous. The string is an id that can be
     /// used to obtain the status of the asynchronous job.
@@ -12612,7 +12612,7 @@ impl ::serde::ser::Serialize for RelocationBatchLaunch {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct RelocationBatchResult {
     pub entries: Vec<RelocationBatchResultData>,
 }
@@ -12701,7 +12701,7 @@ impl ::serde::ser::Serialize for RelocationBatchResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct RelocationBatchResultData {
     /// Metadata of the relocated object.
     pub metadata: Metadata,
@@ -12791,7 +12791,7 @@ impl ::serde::ser::Serialize for RelocationBatchResultData {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum RelocationBatchResultEntry {
     Success(Metadata),
     Failure(RelocationBatchErrorEntry),
@@ -12871,7 +12871,7 @@ impl ::serde::ser::Serialize for RelocationBatchResultEntry {
 /// Result returned by [`copy_batch_check_v2()`](copy_batch_check_v2) or
 /// [`move_batch_check_v2()`](move_batch_check_v2) that may either be in progress or completed with
 /// result for each entry.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum RelocationBatchV2JobStatus {
     /// The asynchronous job is still in progress.
     InProgress,
@@ -12934,7 +12934,7 @@ impl ::serde::ser::Serialize for RelocationBatchV2JobStatus {
 
 /// Result returned by [`copy_batch_v2()`](copy_batch_v2) or [`move_batch_v2()`](move_batch_v2) that
 /// may either launch an asynchronous job or complete synchronously.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum RelocationBatchV2Launch {
     /// This response indicates that the processing is asynchronous. The string is an id that can be
     /// used to obtain the status of the asynchronous job.
@@ -12999,7 +12999,7 @@ impl ::serde::ser::Serialize for RelocationBatchV2Launch {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct RelocationBatchV2Result {
     /// Each entry in CopyBatchArg.entries or [`MoveBatchArg::entries`](MoveBatchArg) will appear at
     /// the same position inside [`RelocationBatchV2Result::entries`](RelocationBatchV2Result).
@@ -13090,7 +13090,7 @@ impl ::serde::ser::Serialize for RelocationBatchV2Result {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum RelocationError {
     FromLookup(LookupError),
     FromWrite(WriteError),
@@ -13332,7 +13332,7 @@ impl ::std::fmt::Display for RelocationError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct RelocationPath {
     /// Path in the user's Dropbox to be copied or moved.
     pub from_path: WritePathOrId,
@@ -13435,7 +13435,7 @@ impl ::serde::ser::Serialize for RelocationPath {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct RelocationResult {
     /// Metadata of the relocated object.
     pub metadata: Metadata,
@@ -13525,7 +13525,7 @@ impl ::serde::ser::Serialize for RelocationResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct RestoreArg {
     /// The path to save the restored file.
     pub path: WritePath,
@@ -13628,7 +13628,7 @@ impl ::serde::ser::Serialize for RestoreArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum RestoreError {
     /// An error occurs when downloading metadata for the file.
     PathLookup(LookupError),
@@ -13732,7 +13732,7 @@ impl ::std::fmt::Display for RestoreError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SaveCopyReferenceArg {
     /// A copy reference returned by [`copy_reference_get()`](copy_reference_get).
     pub copy_reference: String,
@@ -13835,7 +13835,7 @@ impl ::serde::ser::Serialize for SaveCopyReferenceArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SaveCopyReferenceError {
     Path(WriteError),
     /// The copy reference is invalid.
@@ -13961,7 +13961,7 @@ impl ::std::fmt::Display for SaveCopyReferenceError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SaveCopyReferenceResult {
     /// The metadata of the saved file or folder in the user's Dropbox.
     pub metadata: Metadata,
@@ -14051,7 +14051,7 @@ impl ::serde::ser::Serialize for SaveCopyReferenceResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SaveUrlArg {
     /// The path in Dropbox where the URL will be saved to.
     pub path: Path,
@@ -14154,7 +14154,7 @@ impl ::serde::ser::Serialize for SaveUrlArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SaveUrlError {
     Path(WriteError),
     /// Failed downloading the given URL. The URL may be  password-protected and the password
@@ -14267,7 +14267,7 @@ impl ::std::fmt::Display for SaveUrlError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SaveUrlJobStatus {
     /// The asynchronous job is still in progress.
     InProgress,
@@ -14344,7 +14344,7 @@ impl ::serde::ser::Serialize for SaveUrlJobStatus {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SaveUrlResult {
     /// This response indicates that the processing is asynchronous. The string is an id that can be
     /// used to obtain the status of the asynchronous job.
@@ -14410,7 +14410,7 @@ impl ::serde::ser::Serialize for SaveUrlResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SearchArg {
     /// The path in the user's Dropbox to search. Should probably be a folder.
     pub path: PathROrId,
@@ -14570,7 +14570,7 @@ impl ::serde::ser::Serialize for SearchArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SearchError {
     Path(LookupError),
     InvalidArgument(Option<String>),
@@ -14675,7 +14675,7 @@ impl ::std::fmt::Display for SearchError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SearchMatch {
     /// The type of the match.
     pub match_type: SearchMatchType,
@@ -14778,7 +14778,7 @@ impl ::serde::ser::Serialize for SearchMatch {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SearchMatchFieldOptions {
     /// Whether to include highlight span from file title.
     pub include_highlights: bool,
@@ -14857,7 +14857,7 @@ impl ::serde::ser::Serialize for SearchMatchFieldOptions {
 }
 
 /// Indicates what type of match was found for a given item.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SearchMatchType {
     /// This item was matched on its file or folder name.
     Filename,
@@ -14933,7 +14933,7 @@ impl ::serde::ser::Serialize for SearchMatchType {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SearchMatchV2 {
     /// The metadata for the matched file or folder.
     pub metadata: MetadataV2,
@@ -15041,7 +15041,7 @@ impl ::serde::ser::Serialize for SearchMatchV2 {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SearchMode {
     /// Search file and folder names.
     Filename,
@@ -15117,7 +15117,7 @@ impl ::serde::ser::Serialize for SearchMode {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SearchOptions {
     /// Scopes the search to a path in the user's Dropbox. Searches the entire Dropbox if not
     /// specified.
@@ -15262,7 +15262,7 @@ impl ::serde::ser::Serialize for SearchOptions {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SearchResult {
     /// A list (possibly empty) of matches for the query.
     pub matches: Vec<SearchMatch>,
@@ -15380,7 +15380,7 @@ impl ::serde::ser::Serialize for SearchResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SearchV2Arg {
     /// The string to search for. May match across multiple fields based on the request arguments.
     /// Query string may be rewritten to improve relevance of results.
@@ -15525,7 +15525,7 @@ impl ::serde::ser::Serialize for SearchV2Arg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SearchV2ContinueArg {
     /// The cursor returned by your last call to [`search_v2()`](search_v2). Used to fetch the next
     /// page of results.
@@ -15616,7 +15616,7 @@ impl ::serde::ser::Serialize for SearchV2ContinueArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SearchV2Result {
     /// A list (possibly empty) of matches for the query.
     pub matches: Vec<SearchMatchV2>,
@@ -15739,7 +15739,7 @@ impl ::serde::ser::Serialize for SearchV2Result {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedLink {
     /// Shared link url.
     pub url: SharedLinkUrl,
@@ -15847,7 +15847,7 @@ impl ::serde::ser::Serialize for SharedLink {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedLinkFileInfo {
     /// The shared link corresponding to either a file or shared link to a folder. If it is for a
     /// folder shared link, we use the path param to determine for which file in the folder the view
@@ -15978,7 +15978,7 @@ impl ::serde::ser::Serialize for SharedLinkFileInfo {
 }
 
 /// Sharing info for a file or folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharingInfo {
     /// True if the file or folder is inside a read-only shared folder.
     pub read_only: bool,
@@ -16068,7 +16068,7 @@ impl ::serde::ser::Serialize for SharingInfo {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SingleUserLock {
     /// The time the lock was created.
     pub created: super::common::DropboxTimestamp,
@@ -16192,7 +16192,7 @@ impl ::serde::ser::Serialize for SingleUserLock {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SymlinkInfo {
     /// The target this symlink points to.
     pub target: String,
@@ -16282,7 +16282,7 @@ impl ::serde::ser::Serialize for SymlinkInfo {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SyncSetting {
     /// On first sync to members' computers, the specified folder will follow its parent folder's
     /// setting or otherwise follow default sync behavior.
@@ -16369,7 +16369,7 @@ impl ::serde::ser::Serialize for SyncSetting {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SyncSettingArg {
     /// On first sync to members' computers, the specified folder will follow its parent folder's
     /// setting or otherwise follow default sync behavior.
@@ -16442,7 +16442,7 @@ impl ::serde::ser::Serialize for SyncSettingArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SyncSettingsError {
     Path(LookupError),
     /// Setting this combination of sync settings simultaneously is not supported.
@@ -16541,7 +16541,7 @@ impl ::std::fmt::Display for SyncSettingsError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ThumbnailArg {
     /// The path to the image file you want to thumbnail.
     pub path: ReadPath,
@@ -16686,7 +16686,7 @@ impl ::serde::ser::Serialize for ThumbnailArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ThumbnailError {
     /// An error occurs when downloading metadata for the image.
     Path(LookupError),
@@ -16791,7 +16791,7 @@ impl ::std::fmt::Display for ThumbnailError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ThumbnailFormat {
     Jpeg,
     Png,
@@ -16852,7 +16852,7 @@ impl ::serde::ser::Serialize for ThumbnailFormat {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ThumbnailMode {
     /// Scale down the image to fit within the given size.
     Strict,
@@ -16928,7 +16928,7 @@ impl ::serde::ser::Serialize for ThumbnailMode {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ThumbnailSize {
     /// 32 by 32 px.
     W32h32,
@@ -17082,7 +17082,7 @@ impl ::serde::ser::Serialize for ThumbnailSize {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ThumbnailV2Arg {
     /// Information specifying which file to preview. This could be a path to a file, a shared link
     /// pointing to a file, or a shared link pointing to a folder, with a relative path.
@@ -17228,7 +17228,7 @@ impl ::serde::ser::Serialize for ThumbnailV2Arg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ThumbnailV2Error {
     /// An error occurred when downloading metadata for the image.
     Path(LookupError),
@@ -17367,7 +17367,7 @@ impl ::std::fmt::Display for ThumbnailV2Error {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UnlockFileArg {
     /// Path in the user's Dropbox to a file.
     pub path: WritePathOrId,
@@ -17457,7 +17457,7 @@ impl ::serde::ser::Serialize for UnlockFileArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UnlockFileBatchArg {
     /// List of 'entries'. Each 'entry' contains a path of the file which will be unlocked.
     /// Duplicate path arguments in the batch are considered only once.
@@ -17548,7 +17548,7 @@ impl ::serde::ser::Serialize for UnlockFileBatchArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum UploadError {
     /// Unable to save the uploaded contents to a file.
     Path(UploadWriteFailed),
@@ -17633,7 +17633,7 @@ impl ::std::fmt::Display for UploadError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum UploadErrorWithProperties {
     /// Unable to save the uploaded contents to a file.
     Path(UploadWriteFailed),
@@ -17706,7 +17706,7 @@ impl ::serde::ser::Serialize for UploadErrorWithProperties {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UploadSessionAppendArg {
     /// Contains the upload session ID and the offset.
     pub cursor: UploadSessionCursor,
@@ -17815,7 +17815,7 @@ impl ::serde::ser::Serialize for UploadSessionAppendArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UploadSessionCursor {
     /// The upload session ID (returned by [`upload_session_start()`](upload_session_start)).
     pub session_id: String,
@@ -17919,7 +17919,7 @@ impl ::serde::ser::Serialize for UploadSessionCursor {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UploadSessionFinishArg {
     /// Contains the upload session ID and the offset.
     pub cursor: UploadSessionCursor,
@@ -18022,7 +18022,7 @@ impl ::serde::ser::Serialize for UploadSessionFinishArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UploadSessionFinishBatchArg {
     /// Commit information for each file in the batch.
     pub entries: Vec<UploadSessionFinishArg>,
@@ -18112,7 +18112,7 @@ impl ::serde::ser::Serialize for UploadSessionFinishBatchArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum UploadSessionFinishBatchJobStatus {
     /// The asynchronous job is still in progress.
     InProgress,
@@ -18175,7 +18175,7 @@ impl ::serde::ser::Serialize for UploadSessionFinishBatchJobStatus {
 
 /// Result returned by [`upload_session_finish_batch()`](upload_session_finish_batch) that may
 /// either launch an asynchronous job or complete synchronously.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum UploadSessionFinishBatchLaunch {
     /// This response indicates that the processing is asynchronous. The string is an id that can be
     /// used to obtain the status of the asynchronous job.
@@ -18248,7 +18248,7 @@ impl ::serde::ser::Serialize for UploadSessionFinishBatchLaunch {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UploadSessionFinishBatchResult {
     /// Each entry in [`UploadSessionFinishBatchArg::entries`](UploadSessionFinishBatchArg) will
     /// appear at the same position inside
@@ -18340,7 +18340,7 @@ impl ::serde::ser::Serialize for UploadSessionFinishBatchResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum UploadSessionFinishBatchResultEntry {
     Success(FileMetadata),
     Failure(UploadSessionFinishError),
@@ -18403,7 +18403,7 @@ impl ::serde::ser::Serialize for UploadSessionFinishBatchResultEntry {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum UploadSessionFinishError {
     /// The session arguments are incorrect; the value explains the reason.
     LookupFailed(UploadSessionLookupError),
@@ -18540,7 +18540,7 @@ impl ::std::fmt::Display for UploadSessionFinishError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum UploadSessionLookupError {
     /// The upload session ID was not found or has expired. Upload sessions are valid for 48 hours.
     NotFound,
@@ -18664,7 +18664,7 @@ impl ::std::fmt::Display for UploadSessionLookupError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UploadSessionOffsetError {
     /// The offset up to which data has been collected.
     pub correct_offset: u64,
@@ -18754,7 +18754,7 @@ impl ::serde::ser::Serialize for UploadSessionOffsetError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UploadSessionStartArg {
     /// If true, the current session will be closed, at which point you won't be able to call
     /// [`upload_session_append_v2()`](upload_session_append_v2) anymore with the current session.
@@ -18833,7 +18833,7 @@ impl ::serde::ser::Serialize for UploadSessionStartArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UploadSessionStartResult {
     /// A unique identifier for the upload session. Pass this to
     /// [`upload_session_append_v2()`](upload_session_append_v2) and
@@ -18925,7 +18925,7 @@ impl ::serde::ser::Serialize for UploadSessionStartResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UploadWriteFailed {
     /// The reason why the file couldn't be saved.
     pub reason: WriteError,
@@ -19031,7 +19031,7 @@ impl ::serde::ser::Serialize for UploadWriteFailed {
 }
 
 /// Metadata for a video.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct VideoMetadata {
     /// Dimension of the photo/video.
     pub dimensions: Option<Dimensions>,
@@ -19148,7 +19148,7 @@ impl ::serde::ser::Serialize for VideoMetadata {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum WriteConflictError {
     /// There's a file in the way.
     File,
@@ -19244,7 +19244,7 @@ impl ::std::fmt::Display for WriteConflictError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum WriteError {
     /// The given path does not satisfy the required path format. Please refer to the [Path formats
     /// documentation](https://www.dropbox.com/developers/documentation/http/documentation#path-formats)
@@ -19412,7 +19412,7 @@ impl ::std::fmt::Display for WriteError {
 /// path refers to a file with identical contents, nothing gets written; no conflict. The conflict
 /// checking differs in the case where there's a file at the target path with contents different
 /// from the contents you're trying to write.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum WriteMode {
     /// Do not overwrite an existing file if there is a conflict. The autorename strategy is to
     /// append a number to the file name. For example, "document.txt" might become "document

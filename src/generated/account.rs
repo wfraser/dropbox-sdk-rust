@@ -10,7 +10,7 @@
 /// Sets a user's profile photo.
 pub async fn set_profile_photo(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &SetProfilePhotoArg,
+    arg: SetProfilePhotoArg,
 ) -> crate::Result<Result<SetProfilePhotoResult, SetProfilePhotoError>> {
     crate::client_helpers::request(
         client,
@@ -23,7 +23,7 @@ pub async fn set_profile_photo(
         .await
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum PhotoSourceArg {
     /// Image data in base64-encoded bytes.
     Base64Data(String),
@@ -85,7 +85,7 @@ impl ::serde::ser::Serialize for PhotoSourceArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SetProfilePhotoArg {
     /// Image to set as the user's new profile photo.
     pub photo: PhotoSourceArg,
@@ -175,7 +175,7 @@ impl ::serde::ser::Serialize for SetProfilePhotoArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SetProfilePhotoError {
     /// File cannot be set as profile photo.
     FileTypeError,
@@ -297,7 +297,7 @@ impl ::std::fmt::Display for SetProfilePhotoError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SetProfilePhotoResult {
     /// URL for the photo representing the user, if one is set.
     pub profile_photo_url: String,

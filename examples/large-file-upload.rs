@@ -3,6 +3,8 @@
 use dropbox_sdk::{HyperClient, Oauth2AuthorizeUrlBuilder, Oauth2Type};
 use dropbox_sdk::files;
 
+use bytes::Bytes;
+use futures::stream;
 use std::fs::File;
 use std::path::PathBuf;
 use std::io::{self, Read, Write, Seek, SeekFrom};
@@ -155,7 +157,8 @@ async fn main() {
             let client_id = prompt("Give me a Dropbox API app key");
             let client_secret = prompt("Give me a Dropbox API app secret");
 
-            let url = Oauth2AuthorizeUrlBuilder::new(&client_id, Oauth2Type::AuthorizationCode).build();
+            let url = Oauth2AuthorizeUrlBuilder::new(&client_id, Oauth2Type::AuthorizationCode)
+                .build();
             eprintln!("Open this URL in your browser:");
             eprintln!("{}", url);
             eprintln!();
@@ -182,7 +185,7 @@ async fn main() {
 
     // Figure out if destination is a folder or not and change the destination path accordingly.
     let dest_path = match files::get_metadata(
-        &client, &files::GetMetadataArg::new(args.dest_path.clone()))
+        &client, files::GetMetadataArg::new(args.dest_path.clone()))
         .await
     {
         Ok(Ok(files::Metadata::File(_meta))) => {
@@ -229,7 +232,7 @@ async fn main() {
         Some(ref resume) => resume.session_id.clone(),
         None => {
             match files::upload_session_start(
-                &client, &files::UploadSessionStartArg::default(), vec![])
+                &client, files::UploadSessionStartArg::default(), Box::pin(stream::empty()))
                 .await
             {
                 Ok(Ok(result)) => result.session_id,
@@ -278,6 +281,7 @@ async fn main() {
                 eprintln!("Read error: {}", e);
                 std::process::exit(2);
             });
+
         if bytes_out < source_len && bytes_out + nread as u64 > source_len {
             eprintln!("WARNING: read past the initial end of the file");
             eprintln!("({} bytes vs {} expected)", bytes_out + nread as u64, source_len);
@@ -293,8 +297,9 @@ async fn main() {
         succeeded = false;
         let mut consecutive_errors = 0u8;
         while consecutive_errors < 3 {
+            let chunk = Bytes::from((&buf[0..nread]).to_vec()); // FIXME: avoid this copy
             let e = match files::upload_session_append_v2(
-                &client, &append_arg, (&buf[0..nread]).to_vec())
+                &client, append_arg.clone(), Box::pin(stream::once(async { Ok(chunk) })))
                 .await
             {
                 Ok(Ok(())) => {
@@ -344,7 +349,9 @@ async fn main() {
         let mut retry = 0u8;
         succeeded = false;
         while retry < 3 {
-            let e = match files::upload_session_finish(&client, &finish, vec![]).await {
+            let e = match files::upload_session_finish(&client, finish.clone(), Box::pin(stream::empty()))
+                .await
+            {
                 Ok(Ok(filemetadata)) => {
                     println!("Upload succeeded!");
                     println!("{:#?}", filemetadata);

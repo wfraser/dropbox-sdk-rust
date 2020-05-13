@@ -8,7 +8,7 @@
 )]
 
 /// This struct left intentionally empty
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct EmptyContainer {
 }
 
@@ -57,7 +57,7 @@ impl ::serde::ser::Serialize for EmptyContainer {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MixedInternalOnlyContainer {
     pub public_value: i32,
 }
@@ -134,7 +134,7 @@ impl ::serde::ser::Serialize for MixedInternalOnlyContainer {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum MixedInternalOnlyEnum {
     Public,
     /// Catch-all used for unrecognized values returned from the server. Encountering this value

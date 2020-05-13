@@ -7,7 +7,7 @@
     clippy::doc_markdown,
 )]
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum CameraUploadsPolicyState {
     /// Background camera uploads are disabled.
     Disabled,
@@ -78,7 +78,7 @@ impl ::serde::ser::Serialize for CameraUploadsPolicyState {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum EmmState {
     /// Emm token is disabled.
     Disabled,
@@ -162,7 +162,7 @@ impl ::serde::ser::Serialize for EmmState {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum FileLockingPolicyState {
     /// File locking feature is disabled.
     Disabled,
@@ -233,7 +233,7 @@ impl ::serde::ser::Serialize for FileLockingPolicyState {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum GroupCreation {
     /// Team admins and members can create groups.
     AdminsAndMembers,
@@ -296,7 +296,7 @@ impl ::serde::ser::Serialize for GroupCreation {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum OfficeAddInPolicy {
     /// Office Add-In is disabled.
     Disabled,
@@ -367,7 +367,7 @@ impl ::serde::ser::Serialize for OfficeAddInPolicy {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum PaperDefaultFolderPolicy {
     /// Everyone in team will be the default option when creating a folder in Paper.
     EveryoneInTeam,
@@ -438,7 +438,7 @@ impl ::serde::ser::Serialize for PaperDefaultFolderPolicy {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum PaperDeploymentPolicy {
     /// All team members have access to Paper.
     Full,
@@ -510,7 +510,7 @@ impl ::serde::ser::Serialize for PaperDeploymentPolicy {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum PaperDesktopPolicy {
     /// Do not allow team members to use Paper Desktop.
     Disabled,
@@ -581,7 +581,7 @@ impl ::serde::ser::Serialize for PaperDesktopPolicy {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum PaperEnabledPolicy {
     /// Paper is disabled.
     Disabled,
@@ -665,7 +665,7 @@ impl ::serde::ser::Serialize for PaperEnabledPolicy {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum PasswordControlMode {
     /// Password is disabled.
     Disabled,
@@ -736,7 +736,7 @@ impl ::serde::ser::Serialize for PasswordControlMode {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum PasswordStrengthPolicy {
     /// User passwords will adhere to the minimal password strength policy.
     MinimalRequirements,
@@ -820,7 +820,7 @@ impl ::serde::ser::Serialize for PasswordStrengthPolicy {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum RolloutMethod {
     /// Unlink all.
     UnlinkAll,
@@ -897,7 +897,7 @@ impl ::serde::ser::Serialize for RolloutMethod {
 }
 
 /// Policy governing which shared folders a team member can join.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SharedFolderJoinPolicy {
     /// Team members can only join folders shared by teammates.
     FromTeamOnly,
@@ -969,7 +969,7 @@ impl ::serde::ser::Serialize for SharedFolderJoinPolicy {
 }
 
 /// Policy governing who can be a member of a folder shared by a team member.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SharedFolderMemberPolicy {
     /// Only a teammate can be a member of a folder shared by a team member.
     Team,
@@ -1042,7 +1042,7 @@ impl ::serde::ser::Serialize for SharedFolderMemberPolicy {
 
 /// Policy governing the visibility of shared links. This policy can apply to newly created shared
 /// links, or all shared links.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SharedLinkCreatePolicy {
     /// By default, anyone can access newly created shared links. No login will be required to
     /// access the shared links unless overridden.
@@ -1129,7 +1129,7 @@ impl ::serde::ser::Serialize for SharedLinkCreatePolicy {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ShowcaseDownloadPolicy {
     /// Do not allow files to be downloaded from Showcases.
     Disabled,
@@ -1200,7 +1200,7 @@ impl ::serde::ser::Serialize for ShowcaseDownloadPolicy {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ShowcaseEnabledPolicy {
     /// Showcase is disabled.
     Disabled,
@@ -1271,7 +1271,7 @@ impl ::serde::ser::Serialize for ShowcaseEnabledPolicy {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ShowcaseExternalSharingPolicy {
     /// Do not allow showcases to be shared with people not on the team.
     Disabled,
@@ -1342,7 +1342,7 @@ impl ::serde::ser::Serialize for ShowcaseExternalSharingPolicy {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SmartSyncPolicy {
     /// The specified content will be synced as local files by default.
     Local,
@@ -1413,7 +1413,7 @@ impl ::serde::ser::Serialize for SmartSyncPolicy {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SmarterSmartSyncPolicyState {
     /// Smarter Smart Sync feature is disabled.
     Disabled,
@@ -1484,7 +1484,7 @@ impl ::serde::ser::Serialize for SmarterSmartSyncPolicyState {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SsoPolicy {
     /// Users will be able to sign in with their Dropbox credentials.
     Disabled,
@@ -1569,7 +1569,7 @@ impl ::serde::ser::Serialize for SsoPolicy {
 }
 
 /// Policies governing team members.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMemberPolicies {
     /// Policies governing sharing.
     pub sharing: TeamSharingPolicies,
@@ -1694,7 +1694,7 @@ impl ::serde::ser::Serialize for TeamMemberPolicies {
 }
 
 /// Policies governing sharing within and outside of the team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamSharingPolicies {
     /// Who can join folders shared by team members.
     pub shared_folder_member_policy: SharedFolderMemberPolicy,
@@ -1814,7 +1814,7 @@ impl ::serde::ser::Serialize for TeamSharingPolicies {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TwoStepVerificationPolicy {
     /// Enabled require two factor authorization.
     RequireTfaEnable,
@@ -1885,7 +1885,7 @@ impl ::serde::ser::Serialize for TwoStepVerificationPolicy {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TwoStepVerificationState {
     /// Enabled require two factor authorization.
     Required,
