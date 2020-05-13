@@ -7,7 +7,7 @@
     clippy::doc_markdown,
 )]
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SecondaryEmail {
     /// Secondary email address.
     pub email: super::common::EmailAddress,

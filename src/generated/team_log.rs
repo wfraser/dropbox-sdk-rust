@@ -26,7 +26,7 @@ pub type TeamEventList = Vec<TeamEvent>;
 /// for this feature. Permission : Team Auditing.
 pub async fn get_events(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &GetTeamEventsArg,
+    arg: GetTeamEventsArg,
 ) -> crate::Result<GetTeamEventsResult, GetTeamEventsError> {
     crate::client_helpers::request(
         client,
@@ -43,7 +43,7 @@ pub async fn get_events(
 /// all events. Permission : Team Auditing.
 pub async fn get_events_continue(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &GetTeamEventsContinueArg,
+    arg: GetTeamEventsContinueArg,
 ) -> crate::Result<GetTeamEventsResult, GetTeamEventsContinueError> {
     crate::client_helpers::request(
         client,
@@ -57,7 +57,7 @@ pub async fn get_events_continue(
 }
 
 /// Indicates the method in which the action was performed.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum AccessMethodLogInfo {
     /// End user session details.
     EndUser(SessionLogInfo),
@@ -174,7 +174,7 @@ impl ::serde::ser::Serialize for AccessMethodLogInfo {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum AccountCaptureAvailability {
     Unavailable,
     Available,
@@ -244,7 +244,7 @@ impl ::serde::ser::Serialize for AccountCaptureAvailability {
 }
 
 /// Granted/revoked option to enable account capture on team domains.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AccountCaptureChangeAvailabilityDetails {
     /// New account capture availabilty value.
     pub new_value: AccountCaptureAvailability,
@@ -352,7 +352,7 @@ impl ::serde::ser::Serialize for AccountCaptureChangeAvailabilityDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AccountCaptureChangeAvailabilityType {
     pub description: String,
 }
@@ -442,7 +442,7 @@ impl ::serde::ser::Serialize for AccountCaptureChangeAvailabilityType {
 }
 
 /// Changed account capture setting on team domain.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AccountCaptureChangePolicyDetails {
     /// New account capture policy.
     pub new_value: AccountCapturePolicy,
@@ -550,7 +550,7 @@ impl ::serde::ser::Serialize for AccountCaptureChangePolicyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AccountCaptureChangePolicyType {
     pub description: String,
 }
@@ -640,7 +640,7 @@ impl ::serde::ser::Serialize for AccountCaptureChangePolicyType {
 }
 
 /// Account-captured user migrated account to team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AccountCaptureMigrateAccountDetails {
     /// Domain name.
     pub domain_name: String,
@@ -730,7 +730,7 @@ impl ::serde::ser::Serialize for AccountCaptureMigrateAccountDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AccountCaptureMigrateAccountType {
     pub description: String,
 }
@@ -820,7 +820,7 @@ impl ::serde::ser::Serialize for AccountCaptureMigrateAccountType {
 }
 
 /// Sent account capture email to all unmanaged members.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AccountCaptureNotificationEmailsSentDetails {
     /// Domain name.
     pub domain_name: String,
@@ -931,7 +931,7 @@ impl ::serde::ser::Serialize for AccountCaptureNotificationEmailsSentDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AccountCaptureNotificationEmailsSentType {
     pub description: String,
 }
@@ -1020,7 +1020,7 @@ impl ::serde::ser::Serialize for AccountCaptureNotificationEmailsSentType {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum AccountCaptureNotificationType {
     ProactiveWarningNotification,
     ActionableNotification,
@@ -1089,7 +1089,7 @@ impl ::serde::ser::Serialize for AccountCaptureNotificationType {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum AccountCapturePolicy {
     Disabled,
     InvitedUsers,
@@ -1171,7 +1171,7 @@ impl ::serde::ser::Serialize for AccountCapturePolicy {
 }
 
 /// Account-captured user changed account email to personal email.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AccountCaptureRelinquishAccountDetails {
     /// Domain name.
     pub domain_name: String,
@@ -1261,7 +1261,7 @@ impl ::serde::ser::Serialize for AccountCaptureRelinquishAccountDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AccountCaptureRelinquishAccountType {
     pub description: String,
 }
@@ -1351,7 +1351,7 @@ impl ::serde::ser::Serialize for AccountCaptureRelinquishAccountType {
 }
 
 /// Unlocked/locked account after failed sign in attempts.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AccountLockOrUnlockedDetails {
     /// The previous account status.
     pub previous_value: AccountState,
@@ -1454,7 +1454,7 @@ impl ::serde::ser::Serialize for AccountLockOrUnlockedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AccountLockOrUnlockedType {
     pub description: String,
 }
@@ -1543,7 +1543,7 @@ impl ::serde::ser::Serialize for AccountLockOrUnlockedType {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum AccountState {
     Locked,
     Unlocked,
@@ -1613,7 +1613,7 @@ impl ::serde::ser::Serialize for AccountState {
 }
 
 /// Additional information indicating the action taken that caused status change.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ActionDetails {
     /// Additional information relevant when a new member joins the team.
     TeamJoinDetails(JoinTeamDetails),
@@ -1698,7 +1698,7 @@ impl ::serde::ser::Serialize for ActionDetails {
 }
 
 /// The entity who performed the action.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ActorLogInfo {
     /// The user who did the action.
     User(UserLogInfo),
@@ -1831,7 +1831,7 @@ impl ::serde::ser::Serialize for ActorLogInfo {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum AdminRole {
     TeamAdmin,
     UserManagementAdmin,
@@ -1937,7 +1937,7 @@ impl ::serde::ser::Serialize for AdminRole {
 }
 
 /// Disabled downloads.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AllowDownloadDisabledDetails {
 }
 
@@ -1986,7 +1986,7 @@ impl ::serde::ser::Serialize for AllowDownloadDisabledDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AllowDownloadDisabledType {
     pub description: String,
 }
@@ -2076,7 +2076,7 @@ impl ::serde::ser::Serialize for AllowDownloadDisabledType {
 }
 
 /// Enabled downloads.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AllowDownloadEnabledDetails {
 }
 
@@ -2125,7 +2125,7 @@ impl ::serde::ser::Serialize for AllowDownloadEnabledDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AllowDownloadEnabledType {
     pub description: String,
 }
@@ -2215,7 +2215,7 @@ impl ::serde::ser::Serialize for AllowDownloadEnabledType {
 }
 
 /// Api session.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ApiSessionLogInfo {
     /// Api request ID.
     pub request_id: RequestId,
@@ -2306,7 +2306,7 @@ impl ::serde::ser::Serialize for ApiSessionLogInfo {
 }
 
 /// Linked app for team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AppLinkTeamDetails {
     /// Relevant application details.
     pub app_info: AppLogInfo,
@@ -2396,7 +2396,7 @@ impl ::serde::ser::Serialize for AppLinkTeamDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AppLinkTeamType {
     pub description: String,
 }
@@ -2486,7 +2486,7 @@ impl ::serde::ser::Serialize for AppLinkTeamType {
 }
 
 /// Linked app for member.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AppLinkUserDetails {
     /// Relevant application details.
     pub app_info: AppLogInfo,
@@ -2576,7 +2576,7 @@ impl ::serde::ser::Serialize for AppLinkUserDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AppLinkUserType {
     pub description: String,
 }
@@ -2666,7 +2666,7 @@ impl ::serde::ser::Serialize for AppLinkUserType {
 }
 
 /// App's logged information.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum AppLogInfo {
     UserOrTeamLinkedApp(UserOrTeamLinkedAppLogInfo),
     UserLinkedApp(UserLinkedAppLogInfo),
@@ -2739,7 +2739,7 @@ impl ::serde::ser::Serialize for AppLogInfo {
 }
 
 /// Unlinked app for team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AppUnlinkTeamDetails {
     /// Relevant application details.
     pub app_info: AppLogInfo,
@@ -2829,7 +2829,7 @@ impl ::serde::ser::Serialize for AppUnlinkTeamDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AppUnlinkTeamType {
     pub description: String,
 }
@@ -2919,7 +2919,7 @@ impl ::serde::ser::Serialize for AppUnlinkTeamType {
 }
 
 /// Unlinked app for member.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AppUnlinkUserDetails {
     /// Relevant application details.
     pub app_info: AppLogInfo,
@@ -3009,7 +3009,7 @@ impl ::serde::ser::Serialize for AppUnlinkUserDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AppUnlinkUserType {
     pub description: String,
 }
@@ -3099,7 +3099,7 @@ impl ::serde::ser::Serialize for AppUnlinkUserType {
 }
 
 /// Asset details.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum AssetLogInfo {
     /// File's details.
     File(FileLogInfo),
@@ -3200,7 +3200,7 @@ impl ::serde::ser::Serialize for AssetLogInfo {
 }
 
 /// Added Binder page.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct BinderAddPageDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -3316,7 +3316,7 @@ impl ::serde::ser::Serialize for BinderAddPageDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct BinderAddPageType {
     pub description: String,
 }
@@ -3406,7 +3406,7 @@ impl ::serde::ser::Serialize for BinderAddPageType {
 }
 
 /// Added Binder section.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct BinderAddSectionDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -3522,7 +3522,7 @@ impl ::serde::ser::Serialize for BinderAddSectionDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct BinderAddSectionType {
     pub description: String,
 }
@@ -3612,7 +3612,7 @@ impl ::serde::ser::Serialize for BinderAddSectionType {
 }
 
 /// Removed Binder page.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct BinderRemovePageDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -3728,7 +3728,7 @@ impl ::serde::ser::Serialize for BinderRemovePageDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct BinderRemovePageType {
     pub description: String,
 }
@@ -3818,7 +3818,7 @@ impl ::serde::ser::Serialize for BinderRemovePageType {
 }
 
 /// Removed Binder section.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct BinderRemoveSectionDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -3934,7 +3934,7 @@ impl ::serde::ser::Serialize for BinderRemoveSectionDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct BinderRemoveSectionType {
     pub description: String,
 }
@@ -4024,7 +4024,7 @@ impl ::serde::ser::Serialize for BinderRemoveSectionType {
 }
 
 /// Renamed Binder page.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct BinderRenamePageDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -4158,7 +4158,7 @@ impl ::serde::ser::Serialize for BinderRenamePageDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct BinderRenamePageType {
     pub description: String,
 }
@@ -4248,7 +4248,7 @@ impl ::serde::ser::Serialize for BinderRenamePageType {
 }
 
 /// Renamed Binder section.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct BinderRenameSectionDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -4382,7 +4382,7 @@ impl ::serde::ser::Serialize for BinderRenameSectionDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct BinderRenameSectionType {
     pub description: String,
 }
@@ -4472,7 +4472,7 @@ impl ::serde::ser::Serialize for BinderRenameSectionType {
 }
 
 /// Reordered Binder page.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct BinderReorderPageDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -4588,7 +4588,7 @@ impl ::serde::ser::Serialize for BinderReorderPageDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct BinderReorderPageType {
     pub description: String,
 }
@@ -4678,7 +4678,7 @@ impl ::serde::ser::Serialize for BinderReorderPageType {
 }
 
 /// Reordered Binder section.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct BinderReorderSectionDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -4794,7 +4794,7 @@ impl ::serde::ser::Serialize for BinderReorderSectionDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct BinderReorderSectionType {
     pub description: String,
 }
@@ -4884,7 +4884,7 @@ impl ::serde::ser::Serialize for BinderReorderSectionType {
 }
 
 /// Policy for controlling if team members can activate camera uploads
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum CameraUploadsPolicy {
     Disabled,
     Enabled,
@@ -4954,7 +4954,7 @@ impl ::serde::ser::Serialize for CameraUploadsPolicy {
 }
 
 /// Changed camera uploads setting for team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct CameraUploadsPolicyChangedDetails {
     /// New camera uploads setting.
     pub new_value: CameraUploadsPolicy,
@@ -5057,7 +5057,7 @@ impl ::serde::ser::Serialize for CameraUploadsPolicyChangedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct CameraUploadsPolicyChangedType {
     pub description: String,
 }
@@ -5147,7 +5147,7 @@ impl ::serde::ser::Serialize for CameraUploadsPolicyChangedType {
 }
 
 /// Certificate details.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Certificate {
     /// Certificate subject.
     pub subject: String,
@@ -5328,7 +5328,7 @@ impl ::serde::ser::Serialize for Certificate {
 }
 
 /// Changed enterprise admin role.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ChangedEnterpriseAdminRoleDetails {
     /// The member&#x2019s previous enterprise admin role.
     pub previous_value: FedAdminRole,
@@ -5444,7 +5444,7 @@ impl ::serde::ser::Serialize for ChangedEnterpriseAdminRoleDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ChangedEnterpriseAdminRoleType {
     pub description: String,
 }
@@ -5534,7 +5534,7 @@ impl ::serde::ser::Serialize for ChangedEnterpriseAdminRoleType {
 }
 
 /// Changed enterprise-connected team status.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ChangedEnterpriseConnectedTeamStatusDetails {
     /// The preformed change in the team&#x2019s connection status.
     pub action: FedHandshakeAction,
@@ -5668,7 +5668,7 @@ impl ::serde::ser::Serialize for ChangedEnterpriseConnectedTeamStatusDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ChangedEnterpriseConnectedTeamStatusType {
     pub description: String,
 }
@@ -5758,7 +5758,7 @@ impl ::serde::ser::Serialize for ChangedEnterpriseConnectedTeamStatusType {
 }
 
 /// Shared album.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct CollectionShareDetails {
     /// Album name.
     pub album_name: String,
@@ -5848,7 +5848,7 @@ impl ::serde::ser::Serialize for CollectionShareDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct CollectionShareType {
     pub description: String,
 }
@@ -5938,7 +5938,7 @@ impl ::serde::ser::Serialize for CollectionShareType {
 }
 
 /// The name of the team
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ConnectedTeamName {
     /// The name of the team.
     pub team: String,
@@ -6029,7 +6029,7 @@ impl ::serde::ser::Serialize for ConnectedTeamName {
 }
 
 /// Policy for pemanent content deletion
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ContentPermanentDeletePolicy {
     Disabled,
     Enabled,
@@ -6099,7 +6099,7 @@ impl ::serde::ser::Serialize for ContentPermanentDeletePolicy {
 }
 
 /// The primary entity on which the action was done.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ContextLogInfo {
     /// Action was done on behalf of a team member.
     TeamMember(TeamMemberLogInfo),
@@ -6215,7 +6215,7 @@ impl ::serde::ser::Serialize for ContextLogInfo {
 }
 
 /// Created folders.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct CreateFolderDetails {
 }
 
@@ -6264,7 +6264,7 @@ impl ::serde::ser::Serialize for CreateFolderDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct CreateFolderType {
     pub description: String,
 }
@@ -6354,7 +6354,7 @@ impl ::serde::ser::Serialize for CreateFolderType {
 }
 
 /// Created team invite link.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct CreateTeamInviteLinkDetails {
     /// The invite link url that was created.
     pub link_url: String,
@@ -6457,7 +6457,7 @@ impl ::serde::ser::Serialize for CreateTeamInviteLinkDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct CreateTeamInviteLinkType {
     pub description: String,
 }
@@ -6547,7 +6547,7 @@ impl ::serde::ser::Serialize for CreateTeamInviteLinkType {
 }
 
 /// Set restrictions on data center locations where team data resides.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DataPlacementRestrictionChangePolicyDetails {
     /// Previous placement restriction.
     pub previous_value: PlacementRestriction,
@@ -6650,7 +6650,7 @@ impl ::serde::ser::Serialize for DataPlacementRestrictionChangePolicyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DataPlacementRestrictionChangePolicyType {
     pub description: String,
 }
@@ -6740,7 +6740,7 @@ impl ::serde::ser::Serialize for DataPlacementRestrictionChangePolicyType {
 }
 
 /// Completed restrictions on data center locations where team data resides.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DataPlacementRestrictionSatisfyPolicyDetails {
     /// Placement restriction.
     pub placement_restriction: PlacementRestriction,
@@ -6830,7 +6830,7 @@ impl ::serde::ser::Serialize for DataPlacementRestrictionSatisfyPolicyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DataPlacementRestrictionSatisfyPolicyType {
     pub description: String,
 }
@@ -6920,7 +6920,7 @@ impl ::serde::ser::Serialize for DataPlacementRestrictionSatisfyPolicyType {
 }
 
 /// Deleted team invite link.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeleteTeamInviteLinkDetails {
     /// The invite link url that was deleted.
     pub link_url: String,
@@ -7010,7 +7010,7 @@ impl ::serde::ser::Serialize for DeleteTeamInviteLinkDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeleteTeamInviteLinkType {
     pub description: String,
 }
@@ -7100,7 +7100,7 @@ impl ::serde::ser::Serialize for DeleteTeamInviteLinkType {
 }
 
 /// Information about linked Dropbox desktop client sessions
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DesktopDeviceSessionLogInfo {
     /// Name of the hosting desktop.
     pub host_name: String,
@@ -7327,7 +7327,7 @@ impl ::serde::ser::Serialize for DesktopDeviceSessionLogInfo {
 }
 
 /// Desktop session.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DesktopSessionLogInfo {
     /// Session ID. Might be missing due to historical data gap.
     pub session_id: Option<super::common::SessionId>,
@@ -7406,7 +7406,7 @@ impl ::serde::ser::Serialize for DesktopSessionLogInfo {
 }
 
 /// Added members to device approvals exception list.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeviceApprovalsAddExceptionDetails {
 }
 
@@ -7455,7 +7455,7 @@ impl ::serde::ser::Serialize for DeviceApprovalsAddExceptionDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeviceApprovalsAddExceptionType {
     pub description: String,
 }
@@ -7545,7 +7545,7 @@ impl ::serde::ser::Serialize for DeviceApprovalsAddExceptionType {
 }
 
 /// Set/removed limit on number of computers member can link to team Dropbox account.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeviceApprovalsChangeDesktopPolicyDetails {
     /// New desktop device approvals policy. Might be missing due to historical data gap.
     pub new_value: Option<DeviceApprovalsPolicy>,
@@ -7636,7 +7636,7 @@ impl ::serde::ser::Serialize for DeviceApprovalsChangeDesktopPolicyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeviceApprovalsChangeDesktopPolicyType {
     pub description: String,
 }
@@ -7726,7 +7726,7 @@ impl ::serde::ser::Serialize for DeviceApprovalsChangeDesktopPolicyType {
 }
 
 /// Set/removed limit on number of mobile devices member can link to team Dropbox account.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeviceApprovalsChangeMobilePolicyDetails {
     /// New mobile device approvals policy. Might be missing due to historical data gap.
     pub new_value: Option<DeviceApprovalsPolicy>,
@@ -7817,7 +7817,7 @@ impl ::serde::ser::Serialize for DeviceApprovalsChangeMobilePolicyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeviceApprovalsChangeMobilePolicyType {
     pub description: String,
 }
@@ -7907,7 +7907,7 @@ impl ::serde::ser::Serialize for DeviceApprovalsChangeMobilePolicyType {
 }
 
 /// Changed device approvals setting when member is over limit.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeviceApprovalsChangeOverageActionDetails {
     /// New over the limits policy. Might be missing due to historical data gap.
     pub new_value: Option<super::team_policies::RolloutMethod>,
@@ -7998,7 +7998,7 @@ impl ::serde::ser::Serialize for DeviceApprovalsChangeOverageActionDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeviceApprovalsChangeOverageActionType {
     pub description: String,
 }
@@ -8088,7 +8088,7 @@ impl ::serde::ser::Serialize for DeviceApprovalsChangeOverageActionType {
 }
 
 /// Changed device approvals setting when member unlinks approved device.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeviceApprovalsChangeUnlinkActionDetails {
     /// New device unlink policy. Might be missing due to historical data gap.
     pub new_value: Option<DeviceUnlinkPolicy>,
@@ -8179,7 +8179,7 @@ impl ::serde::ser::Serialize for DeviceApprovalsChangeUnlinkActionDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeviceApprovalsChangeUnlinkActionType {
     pub description: String,
 }
@@ -8268,7 +8268,7 @@ impl ::serde::ser::Serialize for DeviceApprovalsChangeUnlinkActionType {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum DeviceApprovalsPolicy {
     Unlimited,
     Limited,
@@ -8338,7 +8338,7 @@ impl ::serde::ser::Serialize for DeviceApprovalsPolicy {
 }
 
 /// Removed members from device approvals exception list.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeviceApprovalsRemoveExceptionDetails {
 }
 
@@ -8387,7 +8387,7 @@ impl ::serde::ser::Serialize for DeviceApprovalsRemoveExceptionDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeviceApprovalsRemoveExceptionType {
     pub description: String,
 }
@@ -8477,7 +8477,7 @@ impl ::serde::ser::Serialize for DeviceApprovalsRemoveExceptionType {
 }
 
 /// Changed IP address associated with active desktop session.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeviceChangeIpDesktopDetails {
     /// Device's session logged information.
     pub device_session_info: DeviceSessionLogInfo,
@@ -8567,7 +8567,7 @@ impl ::serde::ser::Serialize for DeviceChangeIpDesktopDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeviceChangeIpDesktopType {
     pub description: String,
 }
@@ -8657,7 +8657,7 @@ impl ::serde::ser::Serialize for DeviceChangeIpDesktopType {
 }
 
 /// Changed IP address associated with active mobile session.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeviceChangeIpMobileDetails {
     /// Device's session logged information.
     pub device_session_info: Option<DeviceSessionLogInfo>,
@@ -8735,7 +8735,7 @@ impl ::serde::ser::Serialize for DeviceChangeIpMobileDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeviceChangeIpMobileType {
     pub description: String,
 }
@@ -8825,7 +8825,7 @@ impl ::serde::ser::Serialize for DeviceChangeIpMobileType {
 }
 
 /// Changed IP address associated with active web session.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeviceChangeIpWebDetails {
     /// Web browser name.
     pub user_agent: String,
@@ -8915,7 +8915,7 @@ impl ::serde::ser::Serialize for DeviceChangeIpWebDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeviceChangeIpWebType {
     pub description: String,
 }
@@ -9005,7 +9005,7 @@ impl ::serde::ser::Serialize for DeviceChangeIpWebType {
 }
 
 /// Failed to delete all files from unlinked device.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeviceDeleteOnUnlinkFailDetails {
     /// The number of times that remote file deletion failed.
     pub num_failures: i64,
@@ -9131,7 +9131,7 @@ impl ::serde::ser::Serialize for DeviceDeleteOnUnlinkFailDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeviceDeleteOnUnlinkFailType {
     pub description: String,
 }
@@ -9221,7 +9221,7 @@ impl ::serde::ser::Serialize for DeviceDeleteOnUnlinkFailType {
 }
 
 /// Deleted all files from unlinked device.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeviceDeleteOnUnlinkSuccessDetails {
     /// Session unique id. Might be missing due to historical data gap.
     pub session_info: Option<SessionLogInfo>,
@@ -9312,7 +9312,7 @@ impl ::serde::ser::Serialize for DeviceDeleteOnUnlinkSuccessDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeviceDeleteOnUnlinkSuccessType {
     pub description: String,
 }
@@ -9402,7 +9402,7 @@ impl ::serde::ser::Serialize for DeviceDeleteOnUnlinkSuccessType {
 }
 
 /// Failed to link device.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeviceLinkFailDetails {
     /// A description of the device used while user approval blocked.
     pub device_type: DeviceType,
@@ -9510,7 +9510,7 @@ impl ::serde::ser::Serialize for DeviceLinkFailDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeviceLinkFailType {
     pub description: String,
 }
@@ -9600,7 +9600,7 @@ impl ::serde::ser::Serialize for DeviceLinkFailType {
 }
 
 /// Linked device.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeviceLinkSuccessDetails {
     /// Device's session logged information.
     pub device_session_info: Option<DeviceSessionLogInfo>,
@@ -9678,7 +9678,7 @@ impl ::serde::ser::Serialize for DeviceLinkSuccessDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeviceLinkSuccessType {
     pub description: String,
 }
@@ -9768,7 +9768,7 @@ impl ::serde::ser::Serialize for DeviceLinkSuccessType {
 }
 
 /// Disabled device management.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeviceManagementDisabledDetails {
 }
 
@@ -9817,7 +9817,7 @@ impl ::serde::ser::Serialize for DeviceManagementDisabledDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeviceManagementDisabledType {
     pub description: String,
 }
@@ -9907,7 +9907,7 @@ impl ::serde::ser::Serialize for DeviceManagementDisabledType {
 }
 
 /// Enabled device management.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeviceManagementEnabledDetails {
 }
 
@@ -9956,7 +9956,7 @@ impl ::serde::ser::Serialize for DeviceManagementEnabledDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeviceManagementEnabledType {
     pub description: String,
 }
@@ -10046,7 +10046,7 @@ impl ::serde::ser::Serialize for DeviceManagementEnabledType {
 }
 
 /// Device's session logged information.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum DeviceSessionLogInfo {
     DesktopDeviceSession(DesktopDeviceSessionLogInfo),
     MobileDeviceSession(MobileDeviceSessionLogInfo),
@@ -10157,7 +10157,7 @@ impl ::serde::ser::Serialize for DeviceSessionLogInfo {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum DeviceType {
     Desktop,
     Mobile,
@@ -10227,7 +10227,7 @@ impl ::serde::ser::Serialize for DeviceType {
 }
 
 /// Disconnected device.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeviceUnlinkDetails {
     /// True if the user requested to delete data after device unlink, false otherwise.
     pub delete_data: bool,
@@ -10353,7 +10353,7 @@ impl ::serde::ser::Serialize for DeviceUnlinkDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum DeviceUnlinkPolicy {
     Remove,
     Keep,
@@ -10422,7 +10422,7 @@ impl ::serde::ser::Serialize for DeviceUnlinkPolicy {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeviceUnlinkType {
     pub description: String,
 }
@@ -10512,7 +10512,7 @@ impl ::serde::ser::Serialize for DeviceUnlinkType {
 }
 
 /// Added members to directory restrictions list.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DirectoryRestrictionsAddMembersDetails {
 }
 
@@ -10561,7 +10561,7 @@ impl ::serde::ser::Serialize for DirectoryRestrictionsAddMembersDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DirectoryRestrictionsAddMembersType {
     pub description: String,
 }
@@ -10651,7 +10651,7 @@ impl ::serde::ser::Serialize for DirectoryRestrictionsAddMembersType {
 }
 
 /// Removed members from directory restrictions list.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DirectoryRestrictionsRemoveMembersDetails {
 }
 
@@ -10700,7 +10700,7 @@ impl ::serde::ser::Serialize for DirectoryRestrictionsRemoveMembersDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DirectoryRestrictionsRemoveMembersType {
     pub description: String,
 }
@@ -10790,7 +10790,7 @@ impl ::serde::ser::Serialize for DirectoryRestrictionsRemoveMembersType {
 }
 
 /// Disabled domain invites.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DisabledDomainInvitesDetails {
 }
 
@@ -10839,7 +10839,7 @@ impl ::serde::ser::Serialize for DisabledDomainInvitesDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DisabledDomainInvitesType {
     pub description: String,
 }
@@ -10929,7 +10929,7 @@ impl ::serde::ser::Serialize for DisabledDomainInvitesType {
 }
 
 /// Approved user's request to join team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DomainInvitesApproveRequestToJoinTeamDetails {
 }
 
@@ -10978,7 +10978,7 @@ impl ::serde::ser::Serialize for DomainInvitesApproveRequestToJoinTeamDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DomainInvitesApproveRequestToJoinTeamType {
     pub description: String,
 }
@@ -11068,7 +11068,7 @@ impl ::serde::ser::Serialize for DomainInvitesApproveRequestToJoinTeamType {
 }
 
 /// Declined user's request to join team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DomainInvitesDeclineRequestToJoinTeamDetails {
 }
 
@@ -11117,7 +11117,7 @@ impl ::serde::ser::Serialize for DomainInvitesDeclineRequestToJoinTeamDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DomainInvitesDeclineRequestToJoinTeamType {
     pub description: String,
 }
@@ -11207,7 +11207,7 @@ impl ::serde::ser::Serialize for DomainInvitesDeclineRequestToJoinTeamType {
 }
 
 /// Sent domain invites to existing domain accounts.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DomainInvitesEmailExistingUsersDetails {
     /// Domain names.
     pub domain_name: String,
@@ -11310,7 +11310,7 @@ impl ::serde::ser::Serialize for DomainInvitesEmailExistingUsersDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DomainInvitesEmailExistingUsersType {
     pub description: String,
 }
@@ -11400,7 +11400,7 @@ impl ::serde::ser::Serialize for DomainInvitesEmailExistingUsersType {
 }
 
 /// Requested to join team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DomainInvitesRequestToJoinTeamDetails {
 }
 
@@ -11449,7 +11449,7 @@ impl ::serde::ser::Serialize for DomainInvitesRequestToJoinTeamDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DomainInvitesRequestToJoinTeamType {
     pub description: String,
 }
@@ -11539,7 +11539,7 @@ impl ::serde::ser::Serialize for DomainInvitesRequestToJoinTeamType {
 }
 
 /// Disabled "Automatically invite new users".
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DomainInvitesSetInviteNewUserPrefToNoDetails {
 }
 
@@ -11588,7 +11588,7 @@ impl ::serde::ser::Serialize for DomainInvitesSetInviteNewUserPrefToNoDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DomainInvitesSetInviteNewUserPrefToNoType {
     pub description: String,
 }
@@ -11678,7 +11678,7 @@ impl ::serde::ser::Serialize for DomainInvitesSetInviteNewUserPrefToNoType {
 }
 
 /// Enabled "Automatically invite new users".
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DomainInvitesSetInviteNewUserPrefToYesDetails {
 }
 
@@ -11727,7 +11727,7 @@ impl ::serde::ser::Serialize for DomainInvitesSetInviteNewUserPrefToYesDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DomainInvitesSetInviteNewUserPrefToYesType {
     pub description: String,
 }
@@ -11817,7 +11817,7 @@ impl ::serde::ser::Serialize for DomainInvitesSetInviteNewUserPrefToYesType {
 }
 
 /// Failed to verify team domain.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DomainVerificationAddDomainFailDetails {
     /// Domain name.
     pub domain_name: String,
@@ -11925,7 +11925,7 @@ impl ::serde::ser::Serialize for DomainVerificationAddDomainFailDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DomainVerificationAddDomainFailType {
     pub description: String,
 }
@@ -12015,7 +12015,7 @@ impl ::serde::ser::Serialize for DomainVerificationAddDomainFailType {
 }
 
 /// Verified team domain.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DomainVerificationAddDomainSuccessDetails {
     /// Domain names.
     pub domain_names: Vec<String>,
@@ -12123,7 +12123,7 @@ impl ::serde::ser::Serialize for DomainVerificationAddDomainSuccessDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DomainVerificationAddDomainSuccessType {
     pub description: String,
 }
@@ -12213,7 +12213,7 @@ impl ::serde::ser::Serialize for DomainVerificationAddDomainSuccessType {
 }
 
 /// Removed domain from list of verified team domains.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DomainVerificationRemoveDomainDetails {
     /// Domain names.
     pub domain_names: Vec<String>,
@@ -12303,7 +12303,7 @@ impl ::serde::ser::Serialize for DomainVerificationRemoveDomainDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DomainVerificationRemoveDomainType {
     pub description: String,
 }
@@ -12393,7 +12393,7 @@ impl ::serde::ser::Serialize for DomainVerificationRemoveDomainType {
 }
 
 /// Shared content downloads policy
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum DownloadPolicyType {
     Allow,
     Disallow,
@@ -12463,7 +12463,7 @@ impl ::serde::ser::Serialize for DownloadPolicyType {
 }
 
 /// Represents a time duration: unit and amount
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DurationLogInfo {
     /// Time unit.
     pub unit: TimeUnit,
@@ -12567,7 +12567,7 @@ impl ::serde::ser::Serialize for DurationLogInfo {
 }
 
 /// Added members to EMM exception list.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct EmmAddExceptionDetails {
 }
 
@@ -12616,7 +12616,7 @@ impl ::serde::ser::Serialize for EmmAddExceptionDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct EmmAddExceptionType {
     pub description: String,
 }
@@ -12706,7 +12706,7 @@ impl ::serde::ser::Serialize for EmmAddExceptionType {
 }
 
 /// Enabled/disabled enterprise mobility management for members.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct EmmChangePolicyDetails {
     /// New enterprise mobility management policy.
     pub new_value: super::team_policies::EmmState,
@@ -12814,7 +12814,7 @@ impl ::serde::ser::Serialize for EmmChangePolicyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct EmmChangePolicyType {
     pub description: String,
 }
@@ -12904,7 +12904,7 @@ impl ::serde::ser::Serialize for EmmChangePolicyType {
 }
 
 /// Created EMM-excluded users report.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct EmmCreateExceptionsReportDetails {
 }
 
@@ -12953,7 +12953,7 @@ impl ::serde::ser::Serialize for EmmCreateExceptionsReportDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct EmmCreateExceptionsReportType {
     pub description: String,
 }
@@ -13043,7 +13043,7 @@ impl ::serde::ser::Serialize for EmmCreateExceptionsReportType {
 }
 
 /// Created EMM mobile app usage report.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct EmmCreateUsageReportDetails {
 }
 
@@ -13092,7 +13092,7 @@ impl ::serde::ser::Serialize for EmmCreateUsageReportDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct EmmCreateUsageReportType {
     pub description: String,
 }
@@ -13182,7 +13182,7 @@ impl ::serde::ser::Serialize for EmmCreateUsageReportType {
 }
 
 /// Failed to sign in via EMM.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct EmmErrorDetails {
     /// Error details.
     pub error_details: FailureDetailsLogInfo,
@@ -13272,7 +13272,7 @@ impl ::serde::ser::Serialize for EmmErrorDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct EmmErrorType {
     pub description: String,
 }
@@ -13362,7 +13362,7 @@ impl ::serde::ser::Serialize for EmmErrorType {
 }
 
 /// Refreshed auth token used for setting up EMM.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct EmmRefreshAuthTokenDetails {
 }
 
@@ -13411,7 +13411,7 @@ impl ::serde::ser::Serialize for EmmRefreshAuthTokenDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct EmmRefreshAuthTokenType {
     pub description: String,
 }
@@ -13501,7 +13501,7 @@ impl ::serde::ser::Serialize for EmmRefreshAuthTokenType {
 }
 
 /// Removed members from EMM exception list.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct EmmRemoveExceptionDetails {
 }
 
@@ -13550,7 +13550,7 @@ impl ::serde::ser::Serialize for EmmRemoveExceptionDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct EmmRemoveExceptionType {
     pub description: String,
 }
@@ -13640,7 +13640,7 @@ impl ::serde::ser::Serialize for EmmRemoveExceptionType {
 }
 
 /// Enabled domain invites.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct EnabledDomainInvitesDetails {
 }
 
@@ -13689,7 +13689,7 @@ impl ::serde::ser::Serialize for EnabledDomainInvitesDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct EnabledDomainInvitesType {
     pub description: String,
 }
@@ -13779,7 +13779,7 @@ impl ::serde::ser::Serialize for EnabledDomainInvitesType {
 }
 
 /// Ended enterprise admin session.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct EndedEnterpriseAdminSessionDeprecatedDetails {
     /// More information about the organization or team.
     pub federation_extra_details: FedExtraDetails,
@@ -13869,7 +13869,7 @@ impl ::serde::ser::Serialize for EndedEnterpriseAdminSessionDeprecatedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct EndedEnterpriseAdminSessionDeprecatedType {
     pub description: String,
 }
@@ -13959,7 +13959,7 @@ impl ::serde::ser::Serialize for EndedEnterpriseAdminSessionDeprecatedType {
 }
 
 /// Ended enterprise admin session.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct EndedEnterpriseAdminSessionDetails {
 }
 
@@ -14008,7 +14008,7 @@ impl ::serde::ser::Serialize for EndedEnterpriseAdminSessionDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct EndedEnterpriseAdminSessionType {
     pub description: String,
 }
@@ -14098,7 +14098,7 @@ impl ::serde::ser::Serialize for EndedEnterpriseAdminSessionType {
 }
 
 /// Changed who can update a setting.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct EnterpriseSettingsLockingDetails {
     /// The secondary team name.
     pub team_name: String,
@@ -14232,7 +14232,7 @@ impl ::serde::ser::Serialize for EnterpriseSettingsLockingDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct EnterpriseSettingsLockingType {
     pub description: String,
 }
@@ -14322,7 +14322,7 @@ impl ::serde::ser::Serialize for EnterpriseSettingsLockingType {
 }
 
 /// Category of events in event audit log.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum EventCategory {
     /// Events that apply to management of linked apps.
     Apps,
@@ -14645,7 +14645,7 @@ impl ::serde::ser::Serialize for EventCategory {
 }
 
 /// Additional fields depending on the event type.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum EventDetails {
     AppLinkTeamDetails(AppLinkTeamDetails),
     AppLinkUserDetails(AppLinkUserDetails),
@@ -18854,7 +18854,7 @@ impl ::serde::ser::Serialize for EventDetails {
 }
 
 /// The type of the event.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum EventType {
     /// (apps) Linked app for team
     AppLinkTeam(AppLinkTeamType),
@@ -23587,7 +23587,7 @@ impl ::serde::ser::Serialize for EventType {
 }
 
 /// Created member data report.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ExportMembersReportDetails {
 }
 
@@ -23637,7 +23637,7 @@ impl ::serde::ser::Serialize for ExportMembersReportDetails {
 }
 
 /// Failed to create members data report.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ExportMembersReportFailDetails {
     /// Failure reason.
     pub failure_reason: super::team::TeamReportFailureReason,
@@ -23727,7 +23727,7 @@ impl ::serde::ser::Serialize for ExportMembersReportFailDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ExportMembersReportFailType {
     pub description: String,
 }
@@ -23816,7 +23816,7 @@ impl ::serde::ser::Serialize for ExportMembersReportFailType {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ExportMembersReportType {
     pub description: String,
 }
@@ -23906,7 +23906,7 @@ impl ::serde::ser::Serialize for ExportMembersReportType {
 }
 
 /// Accepted/opted out of extended version history.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ExtendedVersionHistoryChangePolicyDetails {
     /// New extended version history policy.
     pub new_value: ExtendedVersionHistoryPolicy,
@@ -24014,7 +24014,7 @@ impl ::serde::ser::Serialize for ExtendedVersionHistoryChangePolicyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ExtendedVersionHistoryChangePolicyType {
     pub description: String,
 }
@@ -24103,7 +24103,7 @@ impl ::serde::ser::Serialize for ExtendedVersionHistoryChangePolicyType {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ExtendedVersionHistoryPolicy {
     ExplicitlyLimited,
     ExplicitlyUnlimited,
@@ -24197,7 +24197,7 @@ impl ::serde::ser::Serialize for ExtendedVersionHistoryPolicy {
 }
 
 /// A user without a Dropbox account.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ExternalUserLogInfo {
     /// An external user identifier.
     pub user_identifier: String,
@@ -24301,7 +24301,7 @@ impl ::serde::ser::Serialize for ExternalUserLogInfo {
 }
 
 /// Provides details about a failure
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FailureDetailsLogInfo {
     /// A user friendly explanation of the error. Might be missing due to historical data gap.
     pub user_friendly_message: Option<String>,
@@ -24392,7 +24392,7 @@ impl ::serde::ser::Serialize for FailureDetailsLogInfo {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum FedAdminRole {
     NotEnterpriseAdmin,
     EnterpriseAdmin,
@@ -24462,7 +24462,7 @@ impl ::serde::ser::Serialize for FedAdminRole {
 }
 
 /// More details about the organization or team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum FedExtraDetails {
     /// More details about the team.
     Team(TeamDetails),
@@ -24529,7 +24529,7 @@ impl ::serde::ser::Serialize for FedExtraDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum FedHandshakeAction {
     Invited,
     AcceptedInvite,
@@ -24647,7 +24647,7 @@ impl ::serde::ser::Serialize for FedHandshakeAction {
 }
 
 /// Additional information about the organization or connected team
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum FederationStatusChangeAdditionalInfo {
     /// The name of the team.
     ConnectedTeamName(ConnectedTeamName),
@@ -24726,7 +24726,7 @@ impl ::serde::ser::Serialize for FederationStatusChangeAdditionalInfo {
 }
 
 /// Added file comment.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileAddCommentDetails {
     /// Comment text. Might be missing due to historical data gap.
     pub comment_text: Option<String>,
@@ -24804,7 +24804,7 @@ impl ::serde::ser::Serialize for FileAddCommentDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileAddCommentType {
     pub description: String,
 }
@@ -24894,7 +24894,7 @@ impl ::serde::ser::Serialize for FileAddCommentType {
 }
 
 /// Added files and/or folders.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileAddDetails {
 }
 
@@ -24943,7 +24943,7 @@ impl ::serde::ser::Serialize for FileAddDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileAddType {
     pub description: String,
 }
@@ -25033,7 +25033,7 @@ impl ::serde::ser::Serialize for FileAddType {
 }
 
 /// Subscribed to or unsubscribed from comment notifications for file.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileChangeCommentSubscriptionDetails {
     /// New file comment subscription.
     pub new_value: FileCommentNotificationPolicy,
@@ -25141,7 +25141,7 @@ impl ::serde::ser::Serialize for FileChangeCommentSubscriptionDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileChangeCommentSubscriptionType {
     pub description: String,
 }
@@ -25231,7 +25231,7 @@ impl ::serde::ser::Serialize for FileChangeCommentSubscriptionType {
 }
 
 /// Enable or disable file comments notifications
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum FileCommentNotificationPolicy {
     Disabled,
     Enabled,
@@ -25301,7 +25301,7 @@ impl ::serde::ser::Serialize for FileCommentNotificationPolicy {
 }
 
 /// Enabled/disabled commenting on team files.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileCommentsChangePolicyDetails {
     /// New commenting on team files policy.
     pub new_value: FileCommentsPolicy,
@@ -25409,7 +25409,7 @@ impl ::serde::ser::Serialize for FileCommentsChangePolicyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileCommentsChangePolicyType {
     pub description: String,
 }
@@ -25499,7 +25499,7 @@ impl ::serde::ser::Serialize for FileCommentsChangePolicyType {
 }
 
 /// File comments policy
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum FileCommentsPolicy {
     Disabled,
     Enabled,
@@ -25569,7 +25569,7 @@ impl ::serde::ser::Serialize for FileCommentsPolicy {
 }
 
 /// Copied files and/or folders.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileCopyDetails {
     /// Relocate action details.
     pub relocate_action_details: Vec<RelocateAssetReferencesLogInfo>,
@@ -25659,7 +25659,7 @@ impl ::serde::ser::Serialize for FileCopyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileCopyType {
     pub description: String,
 }
@@ -25749,7 +25749,7 @@ impl ::serde::ser::Serialize for FileCopyType {
 }
 
 /// Deleted file comment.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileDeleteCommentDetails {
     /// Comment text. Might be missing due to historical data gap.
     pub comment_text: Option<String>,
@@ -25827,7 +25827,7 @@ impl ::serde::ser::Serialize for FileDeleteCommentDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileDeleteCommentType {
     pub description: String,
 }
@@ -25917,7 +25917,7 @@ impl ::serde::ser::Serialize for FileDeleteCommentType {
 }
 
 /// Deleted files and/or folders.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileDeleteDetails {
 }
 
@@ -25966,7 +25966,7 @@ impl ::serde::ser::Serialize for FileDeleteDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileDeleteType {
     pub description: String,
 }
@@ -26056,7 +26056,7 @@ impl ::serde::ser::Serialize for FileDeleteType {
 }
 
 /// Downloaded files and/or folders.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileDownloadDetails {
 }
 
@@ -26105,7 +26105,7 @@ impl ::serde::ser::Serialize for FileDownloadDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileDownloadType {
     pub description: String,
 }
@@ -26195,7 +26195,7 @@ impl ::serde::ser::Serialize for FileDownloadType {
 }
 
 /// Edited file comment.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileEditCommentDetails {
     /// Previous comment text.
     pub previous_comment_text: String,
@@ -26303,7 +26303,7 @@ impl ::serde::ser::Serialize for FileEditCommentDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileEditCommentType {
     pub description: String,
 }
@@ -26393,7 +26393,7 @@ impl ::serde::ser::Serialize for FileEditCommentType {
 }
 
 /// Edited files.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileEditDetails {
 }
 
@@ -26442,7 +26442,7 @@ impl ::serde::ser::Serialize for FileEditDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileEditType {
     pub description: String,
 }
@@ -26532,7 +26532,7 @@ impl ::serde::ser::Serialize for FileEditType {
 }
 
 /// Created copy reference to file/folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileGetCopyReferenceDetails {
 }
 
@@ -26581,7 +26581,7 @@ impl ::serde::ser::Serialize for FileGetCopyReferenceDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileGetCopyReferenceType {
     pub description: String,
 }
@@ -26671,7 +26671,7 @@ impl ::serde::ser::Serialize for FileGetCopyReferenceType {
 }
 
 /// Liked file comment.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileLikeCommentDetails {
     /// Comment text. Might be missing due to historical data gap.
     pub comment_text: Option<String>,
@@ -26749,7 +26749,7 @@ impl ::serde::ser::Serialize for FileLikeCommentDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileLikeCommentType {
     pub description: String,
 }
@@ -26839,7 +26839,7 @@ impl ::serde::ser::Serialize for FileLikeCommentType {
 }
 
 /// Locked/unlocked editing for a file.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileLockingLockStatusChangedDetails {
     /// Previous lock status of the file.
     pub previous_value: LockStatus,
@@ -26942,7 +26942,7 @@ impl ::serde::ser::Serialize for FileLockingLockStatusChangedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileLockingLockStatusChangedType {
     pub description: String,
 }
@@ -27032,7 +27032,7 @@ impl ::serde::ser::Serialize for FileLockingLockStatusChangedType {
 }
 
 /// Changed file locking policy for team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileLockingPolicyChangedDetails {
     /// New file locking policy.
     pub new_value: super::team_policies::FileLockingPolicyState,
@@ -27138,7 +27138,7 @@ impl ::serde::ser::Serialize for FileLockingPolicyChangedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileLockingPolicyChangedType {
     pub description: String,
 }
@@ -27228,7 +27228,7 @@ impl ::serde::ser::Serialize for FileLockingPolicyChangedType {
 }
 
 /// File's logged information.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileLogInfo {
     /// Path relative to event context.
     pub path: PathLogInfo,
@@ -27373,7 +27373,7 @@ impl ::serde::ser::Serialize for FileLogInfo {
 }
 
 /// Moved files and/or folders.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileMoveDetails {
     /// Relocate action details.
     pub relocate_action_details: Vec<RelocateAssetReferencesLogInfo>,
@@ -27463,7 +27463,7 @@ impl ::serde::ser::Serialize for FileMoveDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileMoveType {
     pub description: String,
 }
@@ -27553,7 +27553,7 @@ impl ::serde::ser::Serialize for FileMoveType {
 }
 
 /// Generic information relevant both for files and folders
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileOrFolderLogInfo {
     /// Path relative to event context.
     pub path: PathLogInfo,
@@ -27698,7 +27698,7 @@ impl ::serde::ser::Serialize for FileOrFolderLogInfo {
 }
 
 /// Permanently deleted files and/or folders.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FilePermanentlyDeleteDetails {
 }
 
@@ -27747,7 +27747,7 @@ impl ::serde::ser::Serialize for FilePermanentlyDeleteDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FilePermanentlyDeleteType {
     pub description: String,
 }
@@ -27837,7 +27837,7 @@ impl ::serde::ser::Serialize for FilePermanentlyDeleteType {
 }
 
 /// Previewed files and/or folders.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FilePreviewDetails {
 }
 
@@ -27886,7 +27886,7 @@ impl ::serde::ser::Serialize for FilePreviewDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FilePreviewType {
     pub description: String,
 }
@@ -27976,7 +27976,7 @@ impl ::serde::ser::Serialize for FilePreviewType {
 }
 
 /// Renamed files and/or folders.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileRenameDetails {
     /// Relocate action details.
     pub relocate_action_details: Vec<RelocateAssetReferencesLogInfo>,
@@ -28066,7 +28066,7 @@ impl ::serde::ser::Serialize for FileRenameDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileRenameType {
     pub description: String,
 }
@@ -28156,7 +28156,7 @@ impl ::serde::ser::Serialize for FileRenameType {
 }
 
 /// Changed file request.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileRequestChangeDetails {
     /// New file request details.
     pub new_details: FileRequestDetails,
@@ -28285,7 +28285,7 @@ impl ::serde::ser::Serialize for FileRequestChangeDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileRequestChangeType {
     pub description: String,
 }
@@ -28375,7 +28375,7 @@ impl ::serde::ser::Serialize for FileRequestChangeType {
 }
 
 /// Closed file request.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileRequestCloseDetails {
     /// File request id. Might be missing due to historical data gap.
     pub file_request_id: Option<super::file_requests::FileRequestId>,
@@ -28466,7 +28466,7 @@ impl ::serde::ser::Serialize for FileRequestCloseDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileRequestCloseType {
     pub description: String,
 }
@@ -28556,7 +28556,7 @@ impl ::serde::ser::Serialize for FileRequestCloseType {
 }
 
 /// Created file request.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileRequestCreateDetails {
     /// File request id. Might be missing due to historical data gap.
     pub file_request_id: Option<super::file_requests::FileRequestId>,
@@ -28647,7 +28647,7 @@ impl ::serde::ser::Serialize for FileRequestCreateDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileRequestCreateType {
     pub description: String,
 }
@@ -28737,7 +28737,7 @@ impl ::serde::ser::Serialize for FileRequestCreateType {
 }
 
 /// File request deadline
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileRequestDeadline {
     /// The deadline for this file request. Might be missing due to historical data gap.
     pub deadline: Option<super::common::DropboxTimestamp>,
@@ -28830,7 +28830,7 @@ impl ::serde::ser::Serialize for FileRequestDeadline {
 }
 
 /// Delete file request.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileRequestDeleteDetails {
     /// File request id. Might be missing due to historical data gap.
     pub file_request_id: Option<super::file_requests::FileRequestId>,
@@ -28921,7 +28921,7 @@ impl ::serde::ser::Serialize for FileRequestDeleteDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileRequestDeleteType {
     pub description: String,
 }
@@ -29011,7 +29011,7 @@ impl ::serde::ser::Serialize for FileRequestDeleteType {
 }
 
 /// File request details
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileRequestDetails {
     /// Asset position in the Assets list.
     pub asset_index: u64,
@@ -29120,7 +29120,7 @@ impl ::serde::ser::Serialize for FileRequestDetails {
 }
 
 /// Received files for file request.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileRequestReceiveFileDetails {
     /// Submitted file names.
     pub submitted_file_names: Vec<String>,
@@ -29285,7 +29285,7 @@ impl ::serde::ser::Serialize for FileRequestReceiveFileDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileRequestReceiveFileType {
     pub description: String,
 }
@@ -29375,7 +29375,7 @@ impl ::serde::ser::Serialize for FileRequestReceiveFileType {
 }
 
 /// Enabled/disabled file requests.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileRequestsChangePolicyDetails {
     /// New file requests policy.
     pub new_value: FileRequestsPolicy,
@@ -29483,7 +29483,7 @@ impl ::serde::ser::Serialize for FileRequestsChangePolicyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileRequestsChangePolicyType {
     pub description: String,
 }
@@ -29573,7 +29573,7 @@ impl ::serde::ser::Serialize for FileRequestsChangePolicyType {
 }
 
 /// Enabled file request emails for everyone.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileRequestsEmailsEnabledDetails {
 }
 
@@ -29622,7 +29622,7 @@ impl ::serde::ser::Serialize for FileRequestsEmailsEnabledDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileRequestsEmailsEnabledType {
     pub description: String,
 }
@@ -29712,7 +29712,7 @@ impl ::serde::ser::Serialize for FileRequestsEmailsEnabledType {
 }
 
 /// Enabled file request emails for team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileRequestsEmailsRestrictedToTeamOnlyDetails {
 }
 
@@ -29761,7 +29761,7 @@ impl ::serde::ser::Serialize for FileRequestsEmailsRestrictedToTeamOnlyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileRequestsEmailsRestrictedToTeamOnlyType {
     pub description: String,
 }
@@ -29851,7 +29851,7 @@ impl ::serde::ser::Serialize for FileRequestsEmailsRestrictedToTeamOnlyType {
 }
 
 /// File requests policy
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum FileRequestsPolicy {
     Disabled,
     Enabled,
@@ -29921,7 +29921,7 @@ impl ::serde::ser::Serialize for FileRequestsPolicy {
 }
 
 /// Resolved file comment.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileResolveCommentDetails {
     /// Comment text. Might be missing due to historical data gap.
     pub comment_text: Option<String>,
@@ -29999,7 +29999,7 @@ impl ::serde::ser::Serialize for FileResolveCommentDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileResolveCommentType {
     pub description: String,
 }
@@ -30089,7 +30089,7 @@ impl ::serde::ser::Serialize for FileResolveCommentType {
 }
 
 /// Restored deleted files and/or folders.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileRestoreDetails {
 }
 
@@ -30138,7 +30138,7 @@ impl ::serde::ser::Serialize for FileRestoreDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileRestoreType {
     pub description: String,
 }
@@ -30228,7 +30228,7 @@ impl ::serde::ser::Serialize for FileRestoreType {
 }
 
 /// Reverted files to previous version.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileRevertDetails {
 }
 
@@ -30277,7 +30277,7 @@ impl ::serde::ser::Serialize for FileRevertDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileRevertType {
     pub description: String,
 }
@@ -30367,7 +30367,7 @@ impl ::serde::ser::Serialize for FileRevertType {
 }
 
 /// Rolled back file actions.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileRollbackChangesDetails {
 }
 
@@ -30416,7 +30416,7 @@ impl ::serde::ser::Serialize for FileRollbackChangesDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileRollbackChangesType {
     pub description: String,
 }
@@ -30506,7 +30506,7 @@ impl ::serde::ser::Serialize for FileRollbackChangesType {
 }
 
 /// Saved file/folder using copy reference.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileSaveCopyReferenceDetails {
     /// Relocate action details.
     pub relocate_action_details: Vec<RelocateAssetReferencesLogInfo>,
@@ -30596,7 +30596,7 @@ impl ::serde::ser::Serialize for FileSaveCopyReferenceDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileSaveCopyReferenceType {
     pub description: String,
 }
@@ -30686,7 +30686,7 @@ impl ::serde::ser::Serialize for FileSaveCopyReferenceType {
 }
 
 /// Transfer files added.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileTransfersFileAddDetails {
     /// Transfer id.
     pub file_transfer_id: String,
@@ -30776,7 +30776,7 @@ impl ::serde::ser::Serialize for FileTransfersFileAddDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileTransfersFileAddType {
     pub description: String,
 }
@@ -30866,7 +30866,7 @@ impl ::serde::ser::Serialize for FileTransfersFileAddType {
 }
 
 /// File transfers policy
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum FileTransfersPolicy {
     Disabled,
     Enabled,
@@ -30936,7 +30936,7 @@ impl ::serde::ser::Serialize for FileTransfersPolicy {
 }
 
 /// Changed file transfers policy for team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileTransfersPolicyChangedDetails {
     /// New file transfers policy.
     pub new_value: FileTransfersPolicy,
@@ -31039,7 +31039,7 @@ impl ::serde::ser::Serialize for FileTransfersPolicyChangedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileTransfersPolicyChangedType {
     pub description: String,
 }
@@ -31129,7 +31129,7 @@ impl ::serde::ser::Serialize for FileTransfersPolicyChangedType {
 }
 
 /// Deleted transfer.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileTransfersTransferDeleteDetails {
     /// Transfer id.
     pub file_transfer_id: String,
@@ -31219,7 +31219,7 @@ impl ::serde::ser::Serialize for FileTransfersTransferDeleteDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileTransfersTransferDeleteType {
     pub description: String,
 }
@@ -31309,7 +31309,7 @@ impl ::serde::ser::Serialize for FileTransfersTransferDeleteType {
 }
 
 /// Transfer downloaded.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileTransfersTransferDownloadDetails {
     /// Transfer id.
     pub file_transfer_id: String,
@@ -31399,7 +31399,7 @@ impl ::serde::ser::Serialize for FileTransfersTransferDownloadDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileTransfersTransferDownloadType {
     pub description: String,
 }
@@ -31489,7 +31489,7 @@ impl ::serde::ser::Serialize for FileTransfersTransferDownloadType {
 }
 
 /// Sent transfer.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileTransfersTransferSendDetails {
     /// Transfer id.
     pub file_transfer_id: String,
@@ -31579,7 +31579,7 @@ impl ::serde::ser::Serialize for FileTransfersTransferSendDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileTransfersTransferSendType {
     pub description: String,
 }
@@ -31669,7 +31669,7 @@ impl ::serde::ser::Serialize for FileTransfersTransferSendType {
 }
 
 /// Viewed transfer.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileTransfersTransferViewDetails {
     /// Transfer id.
     pub file_transfer_id: String,
@@ -31759,7 +31759,7 @@ impl ::serde::ser::Serialize for FileTransfersTransferViewDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileTransfersTransferViewType {
     pub description: String,
 }
@@ -31849,7 +31849,7 @@ impl ::serde::ser::Serialize for FileTransfersTransferViewType {
 }
 
 /// Unliked file comment.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileUnlikeCommentDetails {
     /// Comment text. Might be missing due to historical data gap.
     pub comment_text: Option<String>,
@@ -31927,7 +31927,7 @@ impl ::serde::ser::Serialize for FileUnlikeCommentDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileUnlikeCommentType {
     pub description: String,
 }
@@ -32017,7 +32017,7 @@ impl ::serde::ser::Serialize for FileUnlikeCommentType {
 }
 
 /// Unresolved file comment.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileUnresolveCommentDetails {
     /// Comment text. Might be missing due to historical data gap.
     pub comment_text: Option<String>,
@@ -32095,7 +32095,7 @@ impl ::serde::ser::Serialize for FileUnresolveCommentDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileUnresolveCommentType {
     pub description: String,
 }
@@ -32185,7 +32185,7 @@ impl ::serde::ser::Serialize for FileUnresolveCommentType {
 }
 
 /// Folder's logged information.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FolderLogInfo {
     /// Path relative to event context.
     pub path: PathLogInfo,
@@ -32348,7 +32348,7 @@ impl ::serde::ser::Serialize for FolderLogInfo {
 }
 
 /// Updated folder overview.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FolderOverviewDescriptionChangedDetails {
     /// Folder Overview location position in the Assets list.
     pub folder_overview_location_asset: u64,
@@ -32438,7 +32438,7 @@ impl ::serde::ser::Serialize for FolderOverviewDescriptionChangedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FolderOverviewDescriptionChangedType {
     pub description: String,
 }
@@ -32528,7 +32528,7 @@ impl ::serde::ser::Serialize for FolderOverviewDescriptionChangedType {
 }
 
 /// Pinned item to folder overview.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FolderOverviewItemPinnedDetails {
     /// Folder Overview location position in the Assets list.
     pub folder_overview_location_asset: u64,
@@ -32631,7 +32631,7 @@ impl ::serde::ser::Serialize for FolderOverviewItemPinnedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FolderOverviewItemPinnedType {
     pub description: String,
 }
@@ -32721,7 +32721,7 @@ impl ::serde::ser::Serialize for FolderOverviewItemPinnedType {
 }
 
 /// Unpinned item from folder overview.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FolderOverviewItemUnpinnedDetails {
     /// Folder Overview location position in the Assets list.
     pub folder_overview_location_asset: u64,
@@ -32824,7 +32824,7 @@ impl ::serde::ser::Serialize for FolderOverviewItemUnpinnedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FolderOverviewItemUnpinnedType {
     pub description: String,
 }
@@ -32914,7 +32914,7 @@ impl ::serde::ser::Serialize for FolderOverviewItemUnpinnedType {
 }
 
 /// Geographic location details.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GeoLocationLogInfo {
     /// IP address.
     pub ip_address: IpAddress,
@@ -33058,7 +33058,7 @@ impl ::serde::ser::Serialize for GeoLocationLogInfo {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GetTeamEventsArg {
     /// The maximal number of results to return per call. Note that some calls may not return
     /// `limit` number of events, and may even return no events, even with `has_more` set to true.
@@ -33179,7 +33179,7 @@ impl ::serde::ser::Serialize for GetTeamEventsArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GetTeamEventsContinueArg {
     /// Indicates from what point to get the next set of events.
     pub cursor: String,
@@ -33270,7 +33270,7 @@ impl ::serde::ser::Serialize for GetTeamEventsContinueArg {
 }
 
 /// Errors that can be raised when calling [`get_events_continue()`](get_events_continue).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum GetTeamEventsContinueError {
     /// Bad cursor.
     BadCursor,
@@ -33362,7 +33362,7 @@ impl ::std::fmt::Display for GetTeamEventsContinueError {
 }
 
 /// Errors that can be raised when calling [`get_events()`](get_events).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum GetTeamEventsError {
     /// No user found matching the provided account_id.
     AccountIdNotFound,
@@ -33445,7 +33445,7 @@ impl ::std::fmt::Display for GetTeamEventsError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GetTeamEventsResult {
     /// List of events. Note that events are not guaranteed to be sorted by their timestamp value.
     pub events: Vec<TeamEvent>,
@@ -33569,7 +33569,7 @@ impl ::serde::ser::Serialize for GetTeamEventsResult {
 }
 
 /// Enabled/disabled Google single sign-on for team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GoogleSsoChangePolicyDetails {
     /// New Google single sign-on policy.
     pub new_value: GoogleSsoPolicy,
@@ -33677,7 +33677,7 @@ impl ::serde::ser::Serialize for GoogleSsoChangePolicyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GoogleSsoChangePolicyType {
     pub description: String,
 }
@@ -33767,7 +33767,7 @@ impl ::serde::ser::Serialize for GoogleSsoChangePolicyType {
 }
 
 /// Google SSO policy
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum GoogleSsoPolicy {
     Disabled,
     Enabled,
@@ -33837,7 +33837,7 @@ impl ::serde::ser::Serialize for GoogleSsoPolicy {
 }
 
 /// Added external ID for group.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupAddExternalIdDetails {
     /// Current external id.
     pub new_value: super::team_common::GroupExternalId,
@@ -33927,7 +33927,7 @@ impl ::serde::ser::Serialize for GroupAddExternalIdDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupAddExternalIdType {
     pub description: String,
 }
@@ -34017,7 +34017,7 @@ impl ::serde::ser::Serialize for GroupAddExternalIdType {
 }
 
 /// Added team members to group.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupAddMemberDetails {
     /// Is group owner.
     pub is_group_owner: bool,
@@ -34107,7 +34107,7 @@ impl ::serde::ser::Serialize for GroupAddMemberDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupAddMemberType {
     pub description: String,
 }
@@ -34197,7 +34197,7 @@ impl ::serde::ser::Serialize for GroupAddMemberType {
 }
 
 /// Changed external ID for group.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupChangeExternalIdDetails {
     /// Current external id.
     pub new_value: super::team_common::GroupExternalId,
@@ -34303,7 +34303,7 @@ impl ::serde::ser::Serialize for GroupChangeExternalIdDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupChangeExternalIdType {
     pub description: String,
 }
@@ -34393,7 +34393,7 @@ impl ::serde::ser::Serialize for GroupChangeExternalIdType {
 }
 
 /// Changed group management type.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupChangeManagementTypeDetails {
     /// New group management type.
     pub new_value: super::team_common::GroupManagementType,
@@ -34504,7 +34504,7 @@ impl ::serde::ser::Serialize for GroupChangeManagementTypeDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupChangeManagementTypeType {
     pub description: String,
 }
@@ -34594,7 +34594,7 @@ impl ::serde::ser::Serialize for GroupChangeManagementTypeType {
 }
 
 /// Changed manager permissions of group member.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupChangeMemberRoleDetails {
     /// Is group owner.
     pub is_group_owner: bool,
@@ -34684,7 +34684,7 @@ impl ::serde::ser::Serialize for GroupChangeMemberRoleDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupChangeMemberRoleType {
     pub description: String,
 }
@@ -34774,7 +34774,7 @@ impl ::serde::ser::Serialize for GroupChangeMemberRoleType {
 }
 
 /// Created group.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupCreateDetails {
     /// Is company managed group. Might be missing due to historical data gap.
     pub is_company_managed: Option<bool>,
@@ -34865,7 +34865,7 @@ impl ::serde::ser::Serialize for GroupCreateDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupCreateType {
     pub description: String,
 }
@@ -34955,7 +34955,7 @@ impl ::serde::ser::Serialize for GroupCreateType {
 }
 
 /// Deleted group.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupDeleteDetails {
     /// Is company managed group. Might be missing due to historical data gap.
     pub is_company_managed: Option<bool>,
@@ -35033,7 +35033,7 @@ impl ::serde::ser::Serialize for GroupDeleteDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupDeleteType {
     pub description: String,
 }
@@ -35123,7 +35123,7 @@ impl ::serde::ser::Serialize for GroupDeleteType {
 }
 
 /// Updated group.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupDescriptionUpdatedDetails {
 }
 
@@ -35172,7 +35172,7 @@ impl ::serde::ser::Serialize for GroupDescriptionUpdatedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupDescriptionUpdatedType {
     pub description: String,
 }
@@ -35261,7 +35261,7 @@ impl ::serde::ser::Serialize for GroupDescriptionUpdatedType {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum GroupJoinPolicy {
     Open,
     RequestToJoin,
@@ -35331,7 +35331,7 @@ impl ::serde::ser::Serialize for GroupJoinPolicy {
 }
 
 /// Updated group join policy.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupJoinPolicyUpdatedDetails {
     /// Is company managed group. Might be missing due to historical data gap.
     pub is_company_managed: Option<bool>,
@@ -35422,7 +35422,7 @@ impl ::serde::ser::Serialize for GroupJoinPolicyUpdatedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupJoinPolicyUpdatedType {
     pub description: String,
 }
@@ -35512,7 +35512,7 @@ impl ::serde::ser::Serialize for GroupJoinPolicyUpdatedType {
 }
 
 /// Group's logged information.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupLogInfo {
     /// The name of this group.
     pub display_name: String,
@@ -35639,7 +35639,7 @@ impl ::serde::ser::Serialize for GroupLogInfo {
 }
 
 /// Moved group.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupMovedDetails {
 }
 
@@ -35688,7 +35688,7 @@ impl ::serde::ser::Serialize for GroupMovedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupMovedType {
     pub description: String,
 }
@@ -35778,7 +35778,7 @@ impl ::serde::ser::Serialize for GroupMovedType {
 }
 
 /// Removed external ID for group.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupRemoveExternalIdDetails {
     /// Old external id.
     pub previous_value: super::team_common::GroupExternalId,
@@ -35868,7 +35868,7 @@ impl ::serde::ser::Serialize for GroupRemoveExternalIdDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupRemoveExternalIdType {
     pub description: String,
 }
@@ -35958,7 +35958,7 @@ impl ::serde::ser::Serialize for GroupRemoveExternalIdType {
 }
 
 /// Removed team members from group.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupRemoveMemberDetails {
 }
 
@@ -36007,7 +36007,7 @@ impl ::serde::ser::Serialize for GroupRemoveMemberDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupRemoveMemberType {
     pub description: String,
 }
@@ -36097,7 +36097,7 @@ impl ::serde::ser::Serialize for GroupRemoveMemberType {
 }
 
 /// Renamed group.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupRenameDetails {
     /// Previous display name.
     pub previous_value: String,
@@ -36200,7 +36200,7 @@ impl ::serde::ser::Serialize for GroupRenameDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupRenameType {
     pub description: String,
 }
@@ -36290,7 +36290,7 @@ impl ::serde::ser::Serialize for GroupRenameType {
 }
 
 /// Changed who can create groups.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupUserManagementChangePolicyDetails {
     /// New group users management policy.
     pub new_value: super::team_policies::GroupCreation,
@@ -36401,7 +36401,7 @@ impl ::serde::ser::Serialize for GroupUserManagementChangePolicyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupUserManagementChangePolicyType {
     pub description: String,
 }
@@ -36491,7 +36491,7 @@ impl ::serde::ser::Serialize for GroupUserManagementChangePolicyType {
 }
 
 /// Changed guest team admin status.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GuestAdminChangeStatusDetails {
     /// True for guest, false for host.
     pub is_guest: bool,
@@ -36661,7 +36661,7 @@ impl ::serde::ser::Serialize for GuestAdminChangeStatusDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GuestAdminChangeStatusType {
     pub description: String,
 }
@@ -36751,7 +36751,7 @@ impl ::serde::ser::Serialize for GuestAdminChangeStatusType {
 }
 
 /// Started trusted team admin session.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GuestAdminSignedInViaTrustedTeamsDetails {
     /// Host team name.
     pub team_name: Option<String>,
@@ -36842,7 +36842,7 @@ impl ::serde::ser::Serialize for GuestAdminSignedInViaTrustedTeamsDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GuestAdminSignedInViaTrustedTeamsType {
     pub description: String,
 }
@@ -36932,7 +36932,7 @@ impl ::serde::ser::Serialize for GuestAdminSignedInViaTrustedTeamsType {
 }
 
 /// Ended trusted team admin session.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GuestAdminSignedOutViaTrustedTeamsDetails {
     /// Host team name.
     pub team_name: Option<String>,
@@ -37023,7 +37023,7 @@ impl ::serde::ser::Serialize for GuestAdminSignedOutViaTrustedTeamsDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GuestAdminSignedOutViaTrustedTeamsType {
     pub description: String,
 }
@@ -37112,7 +37112,7 @@ impl ::serde::ser::Serialize for GuestAdminSignedOutViaTrustedTeamsType {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum IdentifierType {
     Email,
     FacebookProfileName,
@@ -37182,7 +37182,7 @@ impl ::serde::ser::Serialize for IdentifierType {
 }
 
 /// Connected integration for member.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct IntegrationConnectedDetails {
     /// Name of the third-party integration.
     pub integration_name: String,
@@ -37272,7 +37272,7 @@ impl ::serde::ser::Serialize for IntegrationConnectedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct IntegrationConnectedType {
     pub description: String,
 }
@@ -37362,7 +37362,7 @@ impl ::serde::ser::Serialize for IntegrationConnectedType {
 }
 
 /// Disconnected integration for member.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct IntegrationDisconnectedDetails {
     /// Name of the third-party integration.
     pub integration_name: String,
@@ -37452,7 +37452,7 @@ impl ::serde::ser::Serialize for IntegrationDisconnectedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct IntegrationDisconnectedType {
     pub description: String,
 }
@@ -37542,7 +37542,7 @@ impl ::serde::ser::Serialize for IntegrationDisconnectedType {
 }
 
 /// Policy for controlling whether a service integration is enabled for the team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum IntegrationPolicy {
     Disabled,
     Enabled,
@@ -37612,7 +37612,7 @@ impl ::serde::ser::Serialize for IntegrationPolicy {
 }
 
 /// Changed integration policy for team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct IntegrationPolicyChangedDetails {
     /// Name of the third-party integration.
     pub integration_name: String,
@@ -37732,7 +37732,7 @@ impl ::serde::ser::Serialize for IntegrationPolicyChangedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct IntegrationPolicyChangedType {
     pub description: String,
 }
@@ -37821,7 +37821,7 @@ impl ::serde::ser::Serialize for IntegrationPolicyChangedType {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum InviteMethod {
     InviteLink,
     /// Catch-all used for unrecognized values returned from the server. Encountering this value
@@ -37879,7 +37879,7 @@ impl ::serde::ser::Serialize for InviteMethod {
 }
 
 /// Additional information relevant when a new member joins the team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct JoinTeamDetails {
     /// Linked applications. (Deprecated) Please use has_linked_apps boolean field instead.
     pub linked_apps: Vec<UserLinkedAppLogInfo>,
@@ -38109,7 +38109,7 @@ impl ::serde::ser::Serialize for JoinTeamDetails {
 }
 
 /// Information on sessions, in legacy format
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LegacyDeviceSessionLogInfo {
     /// The IP address of the last activity from this session. Might be missing due to historical
     /// data gap.
@@ -38335,7 +38335,7 @@ impl ::serde::ser::Serialize for LegacyDeviceSessionLogInfo {
 }
 
 /// Activated a hold.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LegalHoldsActivateAHoldDetails {
     /// Hold ID.
     pub legal_hold_id: String,
@@ -38473,7 +38473,7 @@ impl ::serde::ser::Serialize for LegalHoldsActivateAHoldDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LegalHoldsActivateAHoldType {
     pub description: String,
 }
@@ -38563,7 +38563,7 @@ impl ::serde::ser::Serialize for LegalHoldsActivateAHoldType {
 }
 
 /// Added members to a hold.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LegalHoldsAddMembersDetails {
     /// Hold ID.
     pub legal_hold_id: String,
@@ -38666,7 +38666,7 @@ impl ::serde::ser::Serialize for LegalHoldsAddMembersDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LegalHoldsAddMembersType {
     pub description: String,
 }
@@ -38756,7 +38756,7 @@ impl ::serde::ser::Serialize for LegalHoldsAddMembersType {
 }
 
 /// Edited details for a hold.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LegalHoldsChangeHoldDetailsDetails {
     /// Hold ID.
     pub legal_hold_id: String,
@@ -38890,7 +38890,7 @@ impl ::serde::ser::Serialize for LegalHoldsChangeHoldDetailsDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LegalHoldsChangeHoldDetailsType {
     pub description: String,
 }
@@ -38980,7 +38980,7 @@ impl ::serde::ser::Serialize for LegalHoldsChangeHoldDetailsType {
 }
 
 /// Renamed a hold.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LegalHoldsChangeHoldNameDetails {
     /// Hold ID.
     pub legal_hold_id: String,
@@ -39096,7 +39096,7 @@ impl ::serde::ser::Serialize for LegalHoldsChangeHoldNameDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LegalHoldsChangeHoldNameType {
     pub description: String,
 }
@@ -39186,7 +39186,7 @@ impl ::serde::ser::Serialize for LegalHoldsChangeHoldNameType {
 }
 
 /// Exported hold.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LegalHoldsExportAHoldDetails {
     /// Hold ID.
     pub legal_hold_id: String,
@@ -39307,7 +39307,7 @@ impl ::serde::ser::Serialize for LegalHoldsExportAHoldDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LegalHoldsExportAHoldType {
     pub description: String,
 }
@@ -39397,7 +39397,7 @@ impl ::serde::ser::Serialize for LegalHoldsExportAHoldType {
 }
 
 /// Canceled export for a hold.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LegalHoldsExportCancelledDetails {
     /// Hold ID.
     pub legal_hold_id: String,
@@ -39513,7 +39513,7 @@ impl ::serde::ser::Serialize for LegalHoldsExportCancelledDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LegalHoldsExportCancelledType {
     pub description: String,
 }
@@ -39603,7 +39603,7 @@ impl ::serde::ser::Serialize for LegalHoldsExportCancelledType {
 }
 
 /// Downloaded export for a hold.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LegalHoldsExportDownloadedDetails {
     /// Hold ID.
     pub legal_hold_id: String,
@@ -39755,7 +39755,7 @@ impl ::serde::ser::Serialize for LegalHoldsExportDownloadedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LegalHoldsExportDownloadedType {
     pub description: String,
 }
@@ -39845,7 +39845,7 @@ impl ::serde::ser::Serialize for LegalHoldsExportDownloadedType {
 }
 
 /// Removed export for a hold.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LegalHoldsExportRemovedDetails {
     /// Hold ID.
     pub legal_hold_id: String,
@@ -39961,7 +39961,7 @@ impl ::serde::ser::Serialize for LegalHoldsExportRemovedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LegalHoldsExportRemovedType {
     pub description: String,
 }
@@ -40051,7 +40051,7 @@ impl ::serde::ser::Serialize for LegalHoldsExportRemovedType {
 }
 
 /// Released a hold.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LegalHoldsReleaseAHoldDetails {
     /// Hold ID.
     pub legal_hold_id: String,
@@ -40154,7 +40154,7 @@ impl ::serde::ser::Serialize for LegalHoldsReleaseAHoldDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LegalHoldsReleaseAHoldType {
     pub description: String,
 }
@@ -40244,7 +40244,7 @@ impl ::serde::ser::Serialize for LegalHoldsReleaseAHoldType {
 }
 
 /// Removed members from a hold.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LegalHoldsRemoveMembersDetails {
     /// Hold ID.
     pub legal_hold_id: String,
@@ -40347,7 +40347,7 @@ impl ::serde::ser::Serialize for LegalHoldsRemoveMembersDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LegalHoldsRemoveMembersType {
     pub description: String,
 }
@@ -40437,7 +40437,7 @@ impl ::serde::ser::Serialize for LegalHoldsRemoveMembersType {
 }
 
 /// Created a summary report for a hold.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LegalHoldsReportAHoldDetails {
     /// Hold ID.
     pub legal_hold_id: String,
@@ -40540,7 +40540,7 @@ impl ::serde::ser::Serialize for LegalHoldsReportAHoldDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LegalHoldsReportAHoldType {
     pub description: String,
 }
@@ -40630,7 +40630,7 @@ impl ::serde::ser::Serialize for LegalHoldsReportAHoldType {
 }
 
 /// The device sessions that user is linked to.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum LinkedDeviceLogInfo {
     /// mobile device session's details.
     MobileDeviceSession(MobileDeviceSessionLogInfo),
@@ -40720,7 +40720,7 @@ impl ::serde::ser::Serialize for LinkedDeviceLogInfo {
 }
 
 /// File lock status
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum LockStatus {
     Locked,
     Unlocked,
@@ -40790,7 +40790,7 @@ impl ::serde::ser::Serialize for LockStatus {
 }
 
 /// Failed to sign in.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LoginFailDetails {
     /// Login method.
     pub login_method: LoginMethod,
@@ -40911,7 +40911,7 @@ impl ::serde::ser::Serialize for LoginFailDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LoginFailType {
     pub description: String,
 }
@@ -41000,7 +41000,7 @@ impl ::serde::ser::Serialize for LoginFailType {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum LoginMethod {
     Password,
     TwoFactorAuthentication,
@@ -41142,7 +41142,7 @@ impl ::serde::ser::Serialize for LoginMethod {
 }
 
 /// Signed in.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LoginSuccessDetails {
     /// Login method.
     pub login_method: LoginMethod,
@@ -41250,7 +41250,7 @@ impl ::serde::ser::Serialize for LoginSuccessDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LoginSuccessType {
     pub description: String,
 }
@@ -41340,7 +41340,7 @@ impl ::serde::ser::Serialize for LoginSuccessType {
 }
 
 /// Signed out.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LogoutDetails {
 }
 
@@ -41389,7 +41389,7 @@ impl ::serde::ser::Serialize for LogoutDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LogoutType {
     pub description: String,
 }
@@ -41479,7 +41479,7 @@ impl ::serde::ser::Serialize for LogoutType {
 }
 
 /// Added an external ID for team member.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberAddExternalIdDetails {
     /// Current external id.
     pub new_value: super::team_common::MemberExternalId,
@@ -41569,7 +41569,7 @@ impl ::serde::ser::Serialize for MemberAddExternalIdDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberAddExternalIdType {
     pub description: String,
 }
@@ -41659,7 +41659,7 @@ impl ::serde::ser::Serialize for MemberAddExternalIdType {
 }
 
 /// Added team member name.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberAddNameDetails {
     /// New user's name.
     pub new_value: UserNameLogInfo,
@@ -41749,7 +41749,7 @@ impl ::serde::ser::Serialize for MemberAddNameDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberAddNameType {
     pub description: String,
 }
@@ -41839,7 +41839,7 @@ impl ::serde::ser::Serialize for MemberAddNameType {
 }
 
 /// Changed team member admin role.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberChangeAdminRoleDetails {
     /// New admin role. This field is relevant when the admin role is changed or whenthe user role
     /// changes from no admin rights to with admin rights.
@@ -41932,7 +41932,7 @@ impl ::serde::ser::Serialize for MemberChangeAdminRoleDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberChangeAdminRoleType {
     pub description: String,
 }
@@ -42022,7 +42022,7 @@ impl ::serde::ser::Serialize for MemberChangeAdminRoleType {
 }
 
 /// Changed team member email.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberChangeEmailDetails {
     /// New email.
     pub new_value: EmailAddress,
@@ -42130,7 +42130,7 @@ impl ::serde::ser::Serialize for MemberChangeEmailDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberChangeEmailType {
     pub description: String,
 }
@@ -42220,7 +42220,7 @@ impl ::serde::ser::Serialize for MemberChangeEmailType {
 }
 
 /// Changed the external ID for team member.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberChangeExternalIdDetails {
     /// Current external id.
     pub new_value: super::team_common::MemberExternalId,
@@ -42326,7 +42326,7 @@ impl ::serde::ser::Serialize for MemberChangeExternalIdDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberChangeExternalIdType {
     pub description: String,
 }
@@ -42416,7 +42416,7 @@ impl ::serde::ser::Serialize for MemberChangeExternalIdType {
 }
 
 /// Changed membership type (limited/full) of member.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberChangeMembershipTypeDetails {
     /// Previous membership type.
     pub prev_value: TeamMembershipType,
@@ -42519,7 +42519,7 @@ impl ::serde::ser::Serialize for MemberChangeMembershipTypeDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberChangeMembershipTypeType {
     pub description: String,
 }
@@ -42609,7 +42609,7 @@ impl ::serde::ser::Serialize for MemberChangeMembershipTypeType {
 }
 
 /// Changed team member name.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberChangeNameDetails {
     /// New user's name.
     pub new_value: UserNameLogInfo,
@@ -42717,7 +42717,7 @@ impl ::serde::ser::Serialize for MemberChangeNameDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberChangeNameType {
     pub description: String,
 }
@@ -42807,7 +42807,7 @@ impl ::serde::ser::Serialize for MemberChangeNameType {
 }
 
 /// Changed member status (invited, joined, suspended, etc.).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberChangeStatusDetails {
     /// New member status.
     pub new_value: MemberStatus,
@@ -42933,7 +42933,7 @@ impl ::serde::ser::Serialize for MemberChangeStatusDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberChangeStatusType {
     pub description: String,
 }
@@ -43023,7 +43023,7 @@ impl ::serde::ser::Serialize for MemberChangeStatusType {
 }
 
 /// Cleared manually added contacts.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberDeleteManualContactsDetails {
 }
 
@@ -43072,7 +43072,7 @@ impl ::serde::ser::Serialize for MemberDeleteManualContactsDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberDeleteManualContactsType {
     pub description: String,
 }
@@ -43162,7 +43162,7 @@ impl ::serde::ser::Serialize for MemberDeleteManualContactsType {
 }
 
 /// Deleted team member profile photo.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberDeleteProfilePhotoDetails {
 }
 
@@ -43211,7 +43211,7 @@ impl ::serde::ser::Serialize for MemberDeleteProfilePhotoDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberDeleteProfilePhotoType {
     pub description: String,
 }
@@ -43301,7 +43301,7 @@ impl ::serde::ser::Serialize for MemberDeleteProfilePhotoType {
 }
 
 /// Permanently deleted contents of deleted team member account.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberPermanentlyDeleteAccountContentsDetails {
 }
 
@@ -43350,7 +43350,7 @@ impl ::serde::ser::Serialize for MemberPermanentlyDeleteAccountContentsDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberPermanentlyDeleteAccountContentsType {
     pub description: String,
 }
@@ -43439,7 +43439,7 @@ impl ::serde::ser::Serialize for MemberPermanentlyDeleteAccountContentsType {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum MemberRemoveActionType {
     Delete,
     Offboard,
@@ -43533,7 +43533,7 @@ impl ::serde::ser::Serialize for MemberRemoveActionType {
 }
 
 /// Removed the external ID for team member.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberRemoveExternalIdDetails {
     /// Old external id.
     pub previous_value: super::team_common::MemberExternalId,
@@ -43623,7 +43623,7 @@ impl ::serde::ser::Serialize for MemberRemoveExternalIdDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberRemoveExternalIdType {
     pub description: String,
 }
@@ -43713,7 +43713,7 @@ impl ::serde::ser::Serialize for MemberRemoveExternalIdType {
 }
 
 /// Changed whether users can find team when not invited.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberRequestsChangePolicyDetails {
     /// New member change requests policy.
     pub new_value: MemberRequestsPolicy,
@@ -43821,7 +43821,7 @@ impl ::serde::ser::Serialize for MemberRequestsChangePolicyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberRequestsChangePolicyType {
     pub description: String,
 }
@@ -43910,7 +43910,7 @@ impl ::serde::ser::Serialize for MemberRequestsChangePolicyType {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum MemberRequestsPolicy {
     AutoAccept,
     Disabled,
@@ -43992,7 +43992,7 @@ impl ::serde::ser::Serialize for MemberRequestsPolicy {
 }
 
 /// Policy for controlling whether team members can send team invites
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum MemberSendInvitePolicy {
     Disabled,
     SpecificMembers,
@@ -44074,7 +44074,7 @@ impl ::serde::ser::Serialize for MemberSendInvitePolicy {
 }
 
 /// Changed member send invite policy for team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberSendInvitePolicyChangedDetails {
     /// New team member send invite policy.
     pub new_value: MemberSendInvitePolicy,
@@ -44177,7 +44177,7 @@ impl ::serde::ser::Serialize for MemberSendInvitePolicyChangedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberSendInvitePolicyChangedType {
     pub description: String,
 }
@@ -44267,7 +44267,7 @@ impl ::serde::ser::Serialize for MemberSendInvitePolicyChangedType {
 }
 
 /// Set team member profile photo.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberSetProfilePhotoDetails {
 }
 
@@ -44316,7 +44316,7 @@ impl ::serde::ser::Serialize for MemberSetProfilePhotoDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberSetProfilePhotoType {
     pub description: String,
 }
@@ -44406,7 +44406,7 @@ impl ::serde::ser::Serialize for MemberSetProfilePhotoType {
 }
 
 /// Set custom member space limit.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberSpaceLimitsAddCustomQuotaDetails {
     /// New custom quota value in bytes.
     pub new_value: u64,
@@ -44496,7 +44496,7 @@ impl ::serde::ser::Serialize for MemberSpaceLimitsAddCustomQuotaDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberSpaceLimitsAddCustomQuotaType {
     pub description: String,
 }
@@ -44586,7 +44586,7 @@ impl ::serde::ser::Serialize for MemberSpaceLimitsAddCustomQuotaType {
 }
 
 /// Added members to member space limit exception list.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberSpaceLimitsAddExceptionDetails {
 }
 
@@ -44635,7 +44635,7 @@ impl ::serde::ser::Serialize for MemberSpaceLimitsAddExceptionDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberSpaceLimitsAddExceptionType {
     pub description: String,
 }
@@ -44725,7 +44725,7 @@ impl ::serde::ser::Serialize for MemberSpaceLimitsAddExceptionType {
 }
 
 /// Changed member space limit type for team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberSpaceLimitsChangeCapsTypePolicyDetails {
     /// Previous space limit type.
     pub previous_value: SpaceCapsType,
@@ -44828,7 +44828,7 @@ impl ::serde::ser::Serialize for MemberSpaceLimitsChangeCapsTypePolicyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberSpaceLimitsChangeCapsTypePolicyType {
     pub description: String,
 }
@@ -44918,7 +44918,7 @@ impl ::serde::ser::Serialize for MemberSpaceLimitsChangeCapsTypePolicyType {
 }
 
 /// Changed custom member space limit.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberSpaceLimitsChangeCustomQuotaDetails {
     /// Previous custom quota value in bytes.
     pub previous_value: u64,
@@ -45021,7 +45021,7 @@ impl ::serde::ser::Serialize for MemberSpaceLimitsChangeCustomQuotaDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberSpaceLimitsChangeCustomQuotaType {
     pub description: String,
 }
@@ -45111,7 +45111,7 @@ impl ::serde::ser::Serialize for MemberSpaceLimitsChangeCustomQuotaType {
 }
 
 /// Changed team default member space limit.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberSpaceLimitsChangePolicyDetails {
     /// Previous team default limit value in bytes. Might be missing due to historical data gap.
     pub previous_value: Option<u64>,
@@ -45202,7 +45202,7 @@ impl ::serde::ser::Serialize for MemberSpaceLimitsChangePolicyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberSpaceLimitsChangePolicyType {
     pub description: String,
 }
@@ -45292,7 +45292,7 @@ impl ::serde::ser::Serialize for MemberSpaceLimitsChangePolicyType {
 }
 
 /// Changed space limit status.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberSpaceLimitsChangeStatusDetails {
     /// Previous storage quota status.
     pub previous_value: SpaceLimitsStatus,
@@ -45395,7 +45395,7 @@ impl ::serde::ser::Serialize for MemberSpaceLimitsChangeStatusDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberSpaceLimitsChangeStatusType {
     pub description: String,
 }
@@ -45485,7 +45485,7 @@ impl ::serde::ser::Serialize for MemberSpaceLimitsChangeStatusType {
 }
 
 /// Removed custom member space limit.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberSpaceLimitsRemoveCustomQuotaDetails {
 }
 
@@ -45534,7 +45534,7 @@ impl ::serde::ser::Serialize for MemberSpaceLimitsRemoveCustomQuotaDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberSpaceLimitsRemoveCustomQuotaType {
     pub description: String,
 }
@@ -45624,7 +45624,7 @@ impl ::serde::ser::Serialize for MemberSpaceLimitsRemoveCustomQuotaType {
 }
 
 /// Removed members from member space limit exception list.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberSpaceLimitsRemoveExceptionDetails {
 }
 
@@ -45673,7 +45673,7 @@ impl ::serde::ser::Serialize for MemberSpaceLimitsRemoveExceptionDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberSpaceLimitsRemoveExceptionType {
     pub description: String,
 }
@@ -45762,7 +45762,7 @@ impl ::serde::ser::Serialize for MemberSpaceLimitsRemoveExceptionType {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum MemberStatus {
     NotJoined,
     Invited,
@@ -45868,7 +45868,7 @@ impl ::serde::ser::Serialize for MemberStatus {
 }
 
 /// Suggested person to add to team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberSuggestDetails {
     /// suggested users emails.
     pub suggested_members: Vec<EmailAddress>,
@@ -45958,7 +45958,7 @@ impl ::serde::ser::Serialize for MemberSuggestDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberSuggestType {
     pub description: String,
 }
@@ -46048,7 +46048,7 @@ impl ::serde::ser::Serialize for MemberSuggestType {
 }
 
 /// Enabled/disabled option for team members to suggest people to add to team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberSuggestionsChangePolicyDetails {
     /// New team member suggestions policy.
     pub new_value: MemberSuggestionsPolicy,
@@ -46156,7 +46156,7 @@ impl ::serde::ser::Serialize for MemberSuggestionsChangePolicyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberSuggestionsChangePolicyType {
     pub description: String,
 }
@@ -46246,7 +46246,7 @@ impl ::serde::ser::Serialize for MemberSuggestionsChangePolicyType {
 }
 
 /// Member suggestions policy
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum MemberSuggestionsPolicy {
     Disabled,
     Enabled,
@@ -46316,7 +46316,7 @@ impl ::serde::ser::Serialize for MemberSuggestionsPolicy {
 }
 
 /// Transferred contents of deleted member account to another member.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberTransferAccountContentsDetails {
 }
 
@@ -46365,7 +46365,7 @@ impl ::serde::ser::Serialize for MemberTransferAccountContentsDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberTransferAccountContentsType {
     pub description: String,
 }
@@ -46455,7 +46455,7 @@ impl ::serde::ser::Serialize for MemberTransferAccountContentsType {
 }
 
 /// Enabled/disabled Microsoft Office add-in.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MicrosoftOfficeAddinChangePolicyDetails {
     /// New Microsoft Office addin policy.
     pub new_value: MicrosoftOfficeAddinPolicy,
@@ -46563,7 +46563,7 @@ impl ::serde::ser::Serialize for MicrosoftOfficeAddinChangePolicyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MicrosoftOfficeAddinChangePolicyType {
     pub description: String,
 }
@@ -46653,7 +46653,7 @@ impl ::serde::ser::Serialize for MicrosoftOfficeAddinChangePolicyType {
 }
 
 /// Microsoft Office addin policy
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum MicrosoftOfficeAddinPolicy {
     Disabled,
     Enabled,
@@ -46724,7 +46724,7 @@ impl ::serde::ser::Serialize for MicrosoftOfficeAddinPolicy {
 
 /// An indication that an error occurred while retrieving the event. Some attributes of the event
 /// may be omitted as a result.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MissingDetails {
     /// All the data that could be retrieved and converted from the source event.
     pub source_event_fields: Option<String>,
@@ -46803,7 +46803,7 @@ impl ::serde::ser::Serialize for MissingDetails {
 }
 
 /// Information about linked Dropbox mobile client sessions
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MobileDeviceSessionLogInfo {
     /// The device name.
     pub device_name: String,
@@ -47035,7 +47035,7 @@ impl ::serde::ser::Serialize for MobileDeviceSessionLogInfo {
 }
 
 /// Mobile session.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MobileSessionLogInfo {
     /// Session ID. Might be missing due to historical data gap.
     pub session_id: Option<super::common::SessionId>,
@@ -47114,7 +47114,7 @@ impl ::serde::ser::Serialize for MobileSessionLogInfo {
 }
 
 /// Namespace relative path details.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct NamespaceRelativePathLogInfo {
     /// Namespace ID. Might be missing due to historical data gap.
     pub ns_id: Option<NamespaceId>,
@@ -47219,7 +47219,7 @@ impl ::serde::ser::Serialize for NamespaceRelativePathLogInfo {
 }
 
 /// Enabled/disabled network control.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct NetworkControlChangePolicyDetails {
     /// New network control policy.
     pub new_value: NetworkControlPolicy,
@@ -47327,7 +47327,7 @@ impl ::serde::ser::Serialize for NetworkControlChangePolicyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct NetworkControlChangePolicyType {
     pub description: String,
 }
@@ -47417,7 +47417,7 @@ impl ::serde::ser::Serialize for NetworkControlChangePolicyType {
 }
 
 /// Network control policy
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum NetworkControlPolicy {
     Disabled,
     Enabled,
@@ -47487,7 +47487,7 @@ impl ::serde::ser::Serialize for NetworkControlPolicy {
 }
 
 /// Report created: Links created with no expiration.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct NoExpirationLinkGenCreateReportDetails {
     /// Report start date.
     pub start_date: super::common::DropboxTimestamp,
@@ -47593,7 +47593,7 @@ impl ::serde::ser::Serialize for NoExpirationLinkGenCreateReportDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct NoExpirationLinkGenCreateReportType {
     pub description: String,
 }
@@ -47683,7 +47683,7 @@ impl ::serde::ser::Serialize for NoExpirationLinkGenCreateReportType {
 }
 
 /// Couldn't create report: Links created with no expiration.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct NoExpirationLinkGenReportFailedDetails {
     /// Failure reason.
     pub failure_reason: super::team::TeamReportFailureReason,
@@ -47773,7 +47773,7 @@ impl ::serde::ser::Serialize for NoExpirationLinkGenReportFailedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct NoExpirationLinkGenReportFailedType {
     pub description: String,
 }
@@ -47863,7 +47863,7 @@ impl ::serde::ser::Serialize for NoExpirationLinkGenReportFailedType {
 }
 
 /// Report created: Links created without passwords.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct NoPasswordLinkGenCreateReportDetails {
     /// Report start date.
     pub start_date: super::common::DropboxTimestamp,
@@ -47969,7 +47969,7 @@ impl ::serde::ser::Serialize for NoPasswordLinkGenCreateReportDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct NoPasswordLinkGenCreateReportType {
     pub description: String,
 }
@@ -48059,7 +48059,7 @@ impl ::serde::ser::Serialize for NoPasswordLinkGenCreateReportType {
 }
 
 /// Couldn't create report: Links created without passwords.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct NoPasswordLinkGenReportFailedDetails {
     /// Failure reason.
     pub failure_reason: super::team::TeamReportFailureReason,
@@ -48149,7 +48149,7 @@ impl ::serde::ser::Serialize for NoPasswordLinkGenReportFailedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct NoPasswordLinkGenReportFailedType {
     pub description: String,
 }
@@ -48239,7 +48239,7 @@ impl ::serde::ser::Serialize for NoPasswordLinkGenReportFailedType {
 }
 
 /// Report created: Views of links without passwords.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct NoPasswordLinkViewCreateReportDetails {
     /// Report start date.
     pub start_date: super::common::DropboxTimestamp,
@@ -48345,7 +48345,7 @@ impl ::serde::ser::Serialize for NoPasswordLinkViewCreateReportDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct NoPasswordLinkViewCreateReportType {
     pub description: String,
 }
@@ -48435,7 +48435,7 @@ impl ::serde::ser::Serialize for NoPasswordLinkViewCreateReportType {
 }
 
 /// Couldn't create report: Views of links without passwords.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct NoPasswordLinkViewReportFailedDetails {
     /// Failure reason.
     pub failure_reason: super::team::TeamReportFailureReason,
@@ -48525,7 +48525,7 @@ impl ::serde::ser::Serialize for NoPasswordLinkViewReportFailedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct NoPasswordLinkViewReportFailedType {
     pub description: String,
 }
@@ -48615,7 +48615,7 @@ impl ::serde::ser::Serialize for NoPasswordLinkViewReportFailedType {
 }
 
 /// Non team member's logged information.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct NonTeamMemberLogInfo {
     /// User unique ID. Might be missing due to historical data gap.
     pub account_id: Option<super::users_common::AccountId>,
@@ -48720,7 +48720,7 @@ impl ::serde::ser::Serialize for NonTeamMemberLogInfo {
 }
 
 /// The email to which the request was sent
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct NonTrustedTeamDetails {
     /// The email to which the request was sent.
     pub team: String,
@@ -48811,7 +48811,7 @@ impl ::serde::ser::Serialize for NonTrustedTeamDetails {
 }
 
 /// Changed Paper doc to invite-only.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct NoteAclInviteOnlyDetails {
 }
 
@@ -48860,7 +48860,7 @@ impl ::serde::ser::Serialize for NoteAclInviteOnlyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct NoteAclInviteOnlyType {
     pub description: String,
 }
@@ -48950,7 +48950,7 @@ impl ::serde::ser::Serialize for NoteAclInviteOnlyType {
 }
 
 /// Changed Paper doc to link-accessible.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct NoteAclLinkDetails {
 }
 
@@ -48999,7 +48999,7 @@ impl ::serde::ser::Serialize for NoteAclLinkDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct NoteAclLinkType {
     pub description: String,
 }
@@ -49089,7 +49089,7 @@ impl ::serde::ser::Serialize for NoteAclLinkType {
 }
 
 /// Changed Paper doc to link-accessible for team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct NoteAclTeamLinkDetails {
 }
 
@@ -49138,7 +49138,7 @@ impl ::serde::ser::Serialize for NoteAclTeamLinkDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct NoteAclTeamLinkType {
     pub description: String,
 }
@@ -49228,7 +49228,7 @@ impl ::serde::ser::Serialize for NoteAclTeamLinkType {
 }
 
 /// Shared received Paper doc.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct NoteShareReceiveDetails {
 }
 
@@ -49277,7 +49277,7 @@ impl ::serde::ser::Serialize for NoteShareReceiveDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct NoteShareReceiveType {
     pub description: String,
 }
@@ -49367,7 +49367,7 @@ impl ::serde::ser::Serialize for NoteShareReceiveType {
 }
 
 /// Shared Paper doc.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct NoteSharedDetails {
 }
 
@@ -49416,7 +49416,7 @@ impl ::serde::ser::Serialize for NoteSharedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct NoteSharedType {
     pub description: String,
 }
@@ -49506,7 +49506,7 @@ impl ::serde::ser::Serialize for NoteSharedType {
 }
 
 /// Opened shared Paper doc.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct OpenNoteSharedDetails {
 }
 
@@ -49555,7 +49555,7 @@ impl ::serde::ser::Serialize for OpenNoteSharedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct OpenNoteSharedType {
     pub description: String,
 }
@@ -49645,7 +49645,7 @@ impl ::serde::ser::Serialize for OpenNoteSharedType {
 }
 
 /// More details about the organization.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct OrganizationDetails {
     /// The name of the organization.
     pub organization: String,
@@ -49736,7 +49736,7 @@ impl ::serde::ser::Serialize for OrganizationDetails {
 }
 
 /// The name of the organization
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct OrganizationName {
     /// The name of the organization.
     pub organization: String,
@@ -49827,7 +49827,7 @@ impl ::serde::ser::Serialize for OrganizationName {
 }
 
 /// The origin from which the actor performed the action.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct OriginLogInfo {
     /// The method that was used to perform the action.
     pub access_method: AccessMethodLogInfo,
@@ -49936,7 +49936,7 @@ impl ::serde::ser::Serialize for OriginLogInfo {
 }
 
 /// Report created: Views of old links.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct OutdatedLinkViewCreateReportDetails {
     /// Report start date.
     pub start_date: super::common::DropboxTimestamp,
@@ -50042,7 +50042,7 @@ impl ::serde::ser::Serialize for OutdatedLinkViewCreateReportDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct OutdatedLinkViewCreateReportType {
     pub description: String,
 }
@@ -50132,7 +50132,7 @@ impl ::serde::ser::Serialize for OutdatedLinkViewCreateReportType {
 }
 
 /// Couldn't create report: Views of old links.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct OutdatedLinkViewReportFailedDetails {
     /// Failure reason.
     pub failure_reason: super::team::TeamReportFailureReason,
@@ -50222,7 +50222,7 @@ impl ::serde::ser::Serialize for OutdatedLinkViewReportFailedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct OutdatedLinkViewReportFailedType {
     pub description: String,
 }
@@ -50311,7 +50311,7 @@ impl ::serde::ser::Serialize for OutdatedLinkViewReportFailedType {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum PaperAccessType {
     Viewer,
     Commenter,
@@ -50393,7 +50393,7 @@ impl ::serde::ser::Serialize for PaperAccessType {
 }
 
 /// Exported all team Paper docs.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperAdminExportStartDetails {
 }
 
@@ -50442,7 +50442,7 @@ impl ::serde::ser::Serialize for PaperAdminExportStartDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperAdminExportStartType {
     pub description: String,
 }
@@ -50532,7 +50532,7 @@ impl ::serde::ser::Serialize for PaperAdminExportStartType {
 }
 
 /// Changed whether Dropbox Paper, when enabled, is deployed to all members or to specific members.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperChangeDeploymentPolicyDetails {
     /// New Dropbox Paper deployment policy.
     pub new_value: super::team_policies::PaperDeploymentPolicy,
@@ -50643,7 +50643,7 @@ impl ::serde::ser::Serialize for PaperChangeDeploymentPolicyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperChangeDeploymentPolicyType {
     pub description: String,
 }
@@ -50733,7 +50733,7 @@ impl ::serde::ser::Serialize for PaperChangeDeploymentPolicyType {
 }
 
 /// Changed whether non-members can view Paper docs with link.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperChangeMemberLinkPolicyDetails {
     /// New paper external link accessibility policy.
     pub new_value: PaperMemberPolicy,
@@ -50823,7 +50823,7 @@ impl ::serde::ser::Serialize for PaperChangeMemberLinkPolicyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperChangeMemberLinkPolicyType {
     pub description: String,
 }
@@ -50914,7 +50914,7 @@ impl ::serde::ser::Serialize for PaperChangeMemberLinkPolicyType {
 
 /// Changed whether members can share Paper docs outside team, and if docs are accessible only by
 /// team members or anyone by default.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperChangeMemberPolicyDetails {
     /// New paper external accessibility policy.
     pub new_value: PaperMemberPolicy,
@@ -51022,7 +51022,7 @@ impl ::serde::ser::Serialize for PaperChangeMemberPolicyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperChangeMemberPolicyType {
     pub description: String,
 }
@@ -51112,7 +51112,7 @@ impl ::serde::ser::Serialize for PaperChangeMemberPolicyType {
 }
 
 /// Enabled/disabled Dropbox Paper for team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperChangePolicyDetails {
     /// New Dropbox Paper policy.
     pub new_value: super::team_policies::PaperEnabledPolicy,
@@ -51223,7 +51223,7 @@ impl ::serde::ser::Serialize for PaperChangePolicyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperChangePolicyType {
     pub description: String,
 }
@@ -51313,7 +51313,7 @@ impl ::serde::ser::Serialize for PaperChangePolicyType {
 }
 
 /// Added users and/or groups to Paper doc/folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperContentAddMemberDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -51403,7 +51403,7 @@ impl ::serde::ser::Serialize for PaperContentAddMemberDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperContentAddMemberType {
     pub description: String,
 }
@@ -51493,7 +51493,7 @@ impl ::serde::ser::Serialize for PaperContentAddMemberType {
 }
 
 /// Added Paper doc/folder to folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperContentAddToFolderDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -51609,7 +51609,7 @@ impl ::serde::ser::Serialize for PaperContentAddToFolderDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperContentAddToFolderType {
     pub description: String,
 }
@@ -51699,7 +51699,7 @@ impl ::serde::ser::Serialize for PaperContentAddToFolderType {
 }
 
 /// Archived Paper doc/folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperContentArchiveDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -51789,7 +51789,7 @@ impl ::serde::ser::Serialize for PaperContentArchiveDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperContentArchiveType {
     pub description: String,
 }
@@ -51879,7 +51879,7 @@ impl ::serde::ser::Serialize for PaperContentArchiveType {
 }
 
 /// Created Paper doc/folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperContentCreateDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -51969,7 +51969,7 @@ impl ::serde::ser::Serialize for PaperContentCreateDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperContentCreateType {
     pub description: String,
 }
@@ -52059,7 +52059,7 @@ impl ::serde::ser::Serialize for PaperContentCreateType {
 }
 
 /// Permanently deleted Paper doc/folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperContentPermanentlyDeleteDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -52149,7 +52149,7 @@ impl ::serde::ser::Serialize for PaperContentPermanentlyDeleteDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperContentPermanentlyDeleteType {
     pub description: String,
 }
@@ -52239,7 +52239,7 @@ impl ::serde::ser::Serialize for PaperContentPermanentlyDeleteType {
 }
 
 /// Removed Paper doc/folder from folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperContentRemoveFromFolderDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -52365,7 +52365,7 @@ impl ::serde::ser::Serialize for PaperContentRemoveFromFolderDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperContentRemoveFromFolderType {
     pub description: String,
 }
@@ -52455,7 +52455,7 @@ impl ::serde::ser::Serialize for PaperContentRemoveFromFolderType {
 }
 
 /// Removed users and/or groups from Paper doc/folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperContentRemoveMemberDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -52545,7 +52545,7 @@ impl ::serde::ser::Serialize for PaperContentRemoveMemberDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperContentRemoveMemberType {
     pub description: String,
 }
@@ -52635,7 +52635,7 @@ impl ::serde::ser::Serialize for PaperContentRemoveMemberType {
 }
 
 /// Renamed Paper doc/folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperContentRenameDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -52725,7 +52725,7 @@ impl ::serde::ser::Serialize for PaperContentRenameDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperContentRenameType {
     pub description: String,
 }
@@ -52815,7 +52815,7 @@ impl ::serde::ser::Serialize for PaperContentRenameType {
 }
 
 /// Restored archived Paper doc/folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperContentRestoreDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -52905,7 +52905,7 @@ impl ::serde::ser::Serialize for PaperContentRestoreDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperContentRestoreType {
     pub description: String,
 }
@@ -52995,7 +52995,7 @@ impl ::serde::ser::Serialize for PaperContentRestoreType {
 }
 
 /// Policy to set default access for newly created Paper folders.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum PaperDefaultFolderPolicy {
     EveryoneInTeam,
     InviteOnly,
@@ -53065,7 +53065,7 @@ impl ::serde::ser::Serialize for PaperDefaultFolderPolicy {
 }
 
 /// Changed Paper Default Folder Policy setting for team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDefaultFolderPolicyChangedDetails {
     /// New Paper Default Folder Policy.
     pub new_value: PaperDefaultFolderPolicy,
@@ -53171,7 +53171,7 @@ impl ::serde::ser::Serialize for PaperDefaultFolderPolicyChangedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDefaultFolderPolicyChangedType {
     pub description: String,
 }
@@ -53261,7 +53261,7 @@ impl ::serde::ser::Serialize for PaperDefaultFolderPolicyChangedType {
 }
 
 /// Policy for controlling if team members can use Paper Desktop
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum PaperDesktopPolicy {
     Disabled,
     Enabled,
@@ -53331,7 +53331,7 @@ impl ::serde::ser::Serialize for PaperDesktopPolicy {
 }
 
 /// Enabled/disabled Paper Desktop for team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDesktopPolicyChangedDetails {
     /// New Paper Desktop policy.
     pub new_value: PaperDesktopPolicy,
@@ -53434,7 +53434,7 @@ impl ::serde::ser::Serialize for PaperDesktopPolicyChangedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDesktopPolicyChangedType {
     pub description: String,
 }
@@ -53524,7 +53524,7 @@ impl ::serde::ser::Serialize for PaperDesktopPolicyChangedType {
 }
 
 /// Added Paper doc comment.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocAddCommentDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -53632,7 +53632,7 @@ impl ::serde::ser::Serialize for PaperDocAddCommentDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocAddCommentType {
     pub description: String,
 }
@@ -53722,7 +53722,7 @@ impl ::serde::ser::Serialize for PaperDocAddCommentType {
 }
 
 /// Changed member permissions for Paper doc.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocChangeMemberRoleDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -53825,7 +53825,7 @@ impl ::serde::ser::Serialize for PaperDocChangeMemberRoleDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocChangeMemberRoleType {
     pub description: String,
 }
@@ -53915,7 +53915,7 @@ impl ::serde::ser::Serialize for PaperDocChangeMemberRoleType {
 }
 
 /// Changed sharing setting for Paper doc.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocChangeSharingPolicyDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -54041,7 +54041,7 @@ impl ::serde::ser::Serialize for PaperDocChangeSharingPolicyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocChangeSharingPolicyType {
     pub description: String,
 }
@@ -54131,7 +54131,7 @@ impl ::serde::ser::Serialize for PaperDocChangeSharingPolicyType {
 }
 
 /// Followed/unfollowed Paper doc.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocChangeSubscriptionDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -54252,7 +54252,7 @@ impl ::serde::ser::Serialize for PaperDocChangeSubscriptionDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocChangeSubscriptionType {
     pub description: String,
 }
@@ -54342,7 +54342,7 @@ impl ::serde::ser::Serialize for PaperDocChangeSubscriptionType {
 }
 
 /// Deleted Paper doc comment.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocDeleteCommentDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -54450,7 +54450,7 @@ impl ::serde::ser::Serialize for PaperDocDeleteCommentDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocDeleteCommentType {
     pub description: String,
 }
@@ -54540,7 +54540,7 @@ impl ::serde::ser::Serialize for PaperDocDeleteCommentType {
 }
 
 /// Archived Paper doc.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocDeletedDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -54630,7 +54630,7 @@ impl ::serde::ser::Serialize for PaperDocDeletedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocDeletedType {
     pub description: String,
 }
@@ -54720,7 +54720,7 @@ impl ::serde::ser::Serialize for PaperDocDeletedType {
 }
 
 /// Downloaded Paper doc in specific format.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocDownloadDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -54823,7 +54823,7 @@ impl ::serde::ser::Serialize for PaperDocDownloadDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocDownloadType {
     pub description: String,
 }
@@ -54913,7 +54913,7 @@ impl ::serde::ser::Serialize for PaperDocDownloadType {
 }
 
 /// Edited Paper doc comment.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocEditCommentDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -55021,7 +55021,7 @@ impl ::serde::ser::Serialize for PaperDocEditCommentDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocEditCommentType {
     pub description: String,
 }
@@ -55111,7 +55111,7 @@ impl ::serde::ser::Serialize for PaperDocEditCommentType {
 }
 
 /// Edited Paper doc.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocEditDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -55201,7 +55201,7 @@ impl ::serde::ser::Serialize for PaperDocEditDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocEditType {
     pub description: String,
 }
@@ -55291,7 +55291,7 @@ impl ::serde::ser::Serialize for PaperDocEditType {
 }
 
 /// Followed Paper doc.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocFollowedDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -55381,7 +55381,7 @@ impl ::serde::ser::Serialize for PaperDocFollowedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocFollowedType {
     pub description: String,
 }
@@ -55471,7 +55471,7 @@ impl ::serde::ser::Serialize for PaperDocFollowedType {
 }
 
 /// Mentioned user in Paper doc.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocMentionDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -55561,7 +55561,7 @@ impl ::serde::ser::Serialize for PaperDocMentionDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocMentionType {
     pub description: String,
 }
@@ -55651,7 +55651,7 @@ impl ::serde::ser::Serialize for PaperDocMentionType {
 }
 
 /// Transferred ownership of Paper doc.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocOwnershipChangedDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -55775,7 +55775,7 @@ impl ::serde::ser::Serialize for PaperDocOwnershipChangedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocOwnershipChangedType {
     pub description: String,
 }
@@ -55865,7 +55865,7 @@ impl ::serde::ser::Serialize for PaperDocOwnershipChangedType {
 }
 
 /// Requested access to Paper doc.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocRequestAccessDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -55955,7 +55955,7 @@ impl ::serde::ser::Serialize for PaperDocRequestAccessDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocRequestAccessType {
     pub description: String,
 }
@@ -56045,7 +56045,7 @@ impl ::serde::ser::Serialize for PaperDocRequestAccessType {
 }
 
 /// Resolved Paper doc comment.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocResolveCommentDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -56153,7 +56153,7 @@ impl ::serde::ser::Serialize for PaperDocResolveCommentDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocResolveCommentType {
     pub description: String,
 }
@@ -56243,7 +56243,7 @@ impl ::serde::ser::Serialize for PaperDocResolveCommentType {
 }
 
 /// Restored Paper doc to previous version.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocRevertDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -56333,7 +56333,7 @@ impl ::serde::ser::Serialize for PaperDocRevertDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocRevertType {
     pub description: String,
 }
@@ -56423,7 +56423,7 @@ impl ::serde::ser::Serialize for PaperDocRevertType {
 }
 
 /// Shared Paper doc via Slack.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocSlackShareDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -56513,7 +56513,7 @@ impl ::serde::ser::Serialize for PaperDocSlackShareDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocSlackShareType {
     pub description: String,
 }
@@ -56603,7 +56603,7 @@ impl ::serde::ser::Serialize for PaperDocSlackShareType {
 }
 
 /// Shared Paper doc with users and/or groups.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocTeamInviteDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -56693,7 +56693,7 @@ impl ::serde::ser::Serialize for PaperDocTeamInviteDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocTeamInviteType {
     pub description: String,
 }
@@ -56783,7 +56783,7 @@ impl ::serde::ser::Serialize for PaperDocTeamInviteType {
 }
 
 /// Deleted Paper doc.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocTrashedDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -56873,7 +56873,7 @@ impl ::serde::ser::Serialize for PaperDocTrashedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocTrashedType {
     pub description: String,
 }
@@ -56963,7 +56963,7 @@ impl ::serde::ser::Serialize for PaperDocTrashedType {
 }
 
 /// Unresolved Paper doc comment.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocUnresolveCommentDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -57071,7 +57071,7 @@ impl ::serde::ser::Serialize for PaperDocUnresolveCommentDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocUnresolveCommentType {
     pub description: String,
 }
@@ -57161,7 +57161,7 @@ impl ::serde::ser::Serialize for PaperDocUnresolveCommentType {
 }
 
 /// Restored Paper doc.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocUntrashedDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -57251,7 +57251,7 @@ impl ::serde::ser::Serialize for PaperDocUntrashedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocUntrashedType {
     pub description: String,
 }
@@ -57341,7 +57341,7 @@ impl ::serde::ser::Serialize for PaperDocUntrashedType {
 }
 
 /// Viewed Paper doc.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocViewDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -57431,7 +57431,7 @@ impl ::serde::ser::Serialize for PaperDocViewDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocViewType {
     pub description: String,
 }
@@ -57521,7 +57521,7 @@ impl ::serde::ser::Serialize for PaperDocViewType {
 }
 
 /// Paper document's logged information.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperDocumentLogInfo {
     /// Papers document Id.
     pub doc_id: String,
@@ -57624,7 +57624,7 @@ impl ::serde::ser::Serialize for PaperDocumentLogInfo {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum PaperDownloadFormat {
     Docx,
     Html,
@@ -57718,7 +57718,7 @@ impl ::serde::ser::Serialize for PaperDownloadFormat {
 }
 
 /// Added users to Paper-enabled users list.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperEnabledUsersGroupAdditionDetails {
 }
 
@@ -57767,7 +57767,7 @@ impl ::serde::ser::Serialize for PaperEnabledUsersGroupAdditionDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperEnabledUsersGroupAdditionType {
     pub description: String,
 }
@@ -57857,7 +57857,7 @@ impl ::serde::ser::Serialize for PaperEnabledUsersGroupAdditionType {
 }
 
 /// Removed users from Paper-enabled users list.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperEnabledUsersGroupRemovalDetails {
 }
 
@@ -57906,7 +57906,7 @@ impl ::serde::ser::Serialize for PaperEnabledUsersGroupRemovalDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperEnabledUsersGroupRemovalType {
     pub description: String,
 }
@@ -57996,7 +57996,7 @@ impl ::serde::ser::Serialize for PaperEnabledUsersGroupRemovalType {
 }
 
 /// Changed Paper external sharing setting to anyone.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperExternalViewAllowDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -58086,7 +58086,7 @@ impl ::serde::ser::Serialize for PaperExternalViewAllowDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperExternalViewAllowType {
     pub description: String,
 }
@@ -58176,7 +58176,7 @@ impl ::serde::ser::Serialize for PaperExternalViewAllowType {
 }
 
 /// Changed Paper external sharing setting to default team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperExternalViewDefaultTeamDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -58266,7 +58266,7 @@ impl ::serde::ser::Serialize for PaperExternalViewDefaultTeamDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperExternalViewDefaultTeamType {
     pub description: String,
 }
@@ -58356,7 +58356,7 @@ impl ::serde::ser::Serialize for PaperExternalViewDefaultTeamType {
 }
 
 /// Changed Paper external sharing setting to team-only.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperExternalViewForbidDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -58446,7 +58446,7 @@ impl ::serde::ser::Serialize for PaperExternalViewForbidDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperExternalViewForbidType {
     pub description: String,
 }
@@ -58536,7 +58536,7 @@ impl ::serde::ser::Serialize for PaperExternalViewForbidType {
 }
 
 /// Followed/unfollowed Paper folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperFolderChangeSubscriptionDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -58657,7 +58657,7 @@ impl ::serde::ser::Serialize for PaperFolderChangeSubscriptionDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperFolderChangeSubscriptionType {
     pub description: String,
 }
@@ -58747,7 +58747,7 @@ impl ::serde::ser::Serialize for PaperFolderChangeSubscriptionType {
 }
 
 /// Archived Paper folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperFolderDeletedDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -58837,7 +58837,7 @@ impl ::serde::ser::Serialize for PaperFolderDeletedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperFolderDeletedType {
     pub description: String,
 }
@@ -58927,7 +58927,7 @@ impl ::serde::ser::Serialize for PaperFolderDeletedType {
 }
 
 /// Followed Paper folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperFolderFollowedDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -59017,7 +59017,7 @@ impl ::serde::ser::Serialize for PaperFolderFollowedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperFolderFollowedType {
     pub description: String,
 }
@@ -59107,7 +59107,7 @@ impl ::serde::ser::Serialize for PaperFolderFollowedType {
 }
 
 /// Paper folder's logged information.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperFolderLogInfo {
     /// Papers folder Id.
     pub folder_id: String,
@@ -59211,7 +59211,7 @@ impl ::serde::ser::Serialize for PaperFolderLogInfo {
 }
 
 /// Shared Paper folder with users and/or groups.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperFolderTeamInviteDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -59301,7 +59301,7 @@ impl ::serde::ser::Serialize for PaperFolderTeamInviteDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperFolderTeamInviteType {
     pub description: String,
 }
@@ -59391,7 +59391,7 @@ impl ::serde::ser::Serialize for PaperFolderTeamInviteType {
 }
 
 /// Policy for controlling if team members can share Paper documents externally.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum PaperMemberPolicy {
     AnyoneWithLink,
     OnlyTeam,
@@ -59473,7 +59473,7 @@ impl ::serde::ser::Serialize for PaperMemberPolicy {
 }
 
 /// Changed permissions for published doc.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperPublishedLinkChangePermissionDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -59593,7 +59593,7 @@ impl ::serde::ser::Serialize for PaperPublishedLinkChangePermissionDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperPublishedLinkChangePermissionType {
     pub description: String,
 }
@@ -59683,7 +59683,7 @@ impl ::serde::ser::Serialize for PaperPublishedLinkChangePermissionType {
 }
 
 /// Published doc.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperPublishedLinkCreateDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -59773,7 +59773,7 @@ impl ::serde::ser::Serialize for PaperPublishedLinkCreateDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperPublishedLinkCreateType {
     pub description: String,
 }
@@ -59863,7 +59863,7 @@ impl ::serde::ser::Serialize for PaperPublishedLinkCreateType {
 }
 
 /// Unpublished doc.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperPublishedLinkDisabledDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -59953,7 +59953,7 @@ impl ::serde::ser::Serialize for PaperPublishedLinkDisabledDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperPublishedLinkDisabledType {
     pub description: String,
 }
@@ -60043,7 +60043,7 @@ impl ::serde::ser::Serialize for PaperPublishedLinkDisabledType {
 }
 
 /// Viewed published doc.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperPublishedLinkViewDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -60133,7 +60133,7 @@ impl ::serde::ser::Serialize for PaperPublishedLinkViewDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PaperPublishedLinkViewType {
     pub description: String,
 }
@@ -60223,7 +60223,7 @@ impl ::serde::ser::Serialize for PaperPublishedLinkViewType {
 }
 
 /// A user or group
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ParticipantLogInfo {
     /// A user with a Dropbox account.
     User(UserLogInfo),
@@ -60296,7 +60296,7 @@ impl ::serde::ser::Serialize for ParticipantLogInfo {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum PassPolicy {
     Enabled,
     Allow,
@@ -60378,7 +60378,7 @@ impl ::serde::ser::Serialize for PassPolicy {
 }
 
 /// Changed password.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PasswordChangeDetails {
 }
 
@@ -60427,7 +60427,7 @@ impl ::serde::ser::Serialize for PasswordChangeDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PasswordChangeType {
     pub description: String,
 }
@@ -60517,7 +60517,7 @@ impl ::serde::ser::Serialize for PasswordChangeType {
 }
 
 /// Reset all team member passwords.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PasswordResetAllDetails {
 }
 
@@ -60566,7 +60566,7 @@ impl ::serde::ser::Serialize for PasswordResetAllDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PasswordResetAllType {
     pub description: String,
 }
@@ -60656,7 +60656,7 @@ impl ::serde::ser::Serialize for PasswordResetAllType {
 }
 
 /// Reset password.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PasswordResetDetails {
 }
 
@@ -60705,7 +60705,7 @@ impl ::serde::ser::Serialize for PasswordResetDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PasswordResetType {
     pub description: String,
 }
@@ -60795,7 +60795,7 @@ impl ::serde::ser::Serialize for PasswordResetType {
 }
 
 /// Changed team password strength requirements.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PasswordStrengthRequirementsChangePolicyDetails {
     /// Old password strength policy.
     pub previous_value: super::team_policies::PasswordStrengthPolicy,
@@ -60901,7 +60901,7 @@ impl ::serde::ser::Serialize for PasswordStrengthRequirementsChangePolicyDetails
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PasswordStrengthRequirementsChangePolicyType {
     pub description: String,
 }
@@ -60991,7 +60991,7 @@ impl ::serde::ser::Serialize for PasswordStrengthRequirementsChangePolicyType {
 }
 
 /// Path's details.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PathLogInfo {
     /// Path relative to the namespace containing the content.
     pub namespace_relative: NamespaceRelativePathLogInfo,
@@ -61101,7 +61101,7 @@ impl ::serde::ser::Serialize for PathLogInfo {
 }
 
 /// Added pending secondary email.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PendingSecondaryEmailAddedDetails {
     /// New pending secondary email.
     pub secondary_email: EmailAddress,
@@ -61191,7 +61191,7 @@ impl ::serde::ser::Serialize for PendingSecondaryEmailAddedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PendingSecondaryEmailAddedType {
     pub description: String,
 }
@@ -61281,7 +61281,7 @@ impl ::serde::ser::Serialize for PendingSecondaryEmailAddedType {
 }
 
 /// Enabled/disabled ability of team members to permanently delete content.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PermanentDeleteChangePolicyDetails {
     /// New permanent delete content policy.
     pub new_value: ContentPermanentDeletePolicy,
@@ -61389,7 +61389,7 @@ impl ::serde::ser::Serialize for PermanentDeleteChangePolicyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PermanentDeleteChangePolicyType {
     pub description: String,
 }
@@ -61478,7 +61478,7 @@ impl ::serde::ser::Serialize for PermanentDeleteChangePolicyType {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum PlacementRestriction {
     AustraliaOnly,
     EuropeOnly,
@@ -61572,7 +61572,7 @@ impl ::serde::ser::Serialize for PlacementRestriction {
 }
 
 /// Team merge request acceptance details shown to the primary team
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PrimaryTeamRequestAcceptedDetails {
     /// The secondary team name.
     pub secondary_team: String,
@@ -61676,7 +61676,7 @@ impl ::serde::ser::Serialize for PrimaryTeamRequestAcceptedDetails {
 }
 
 /// Team merge request cancellation details shown to the primary team
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PrimaryTeamRequestCanceledDetails {
     /// The secondary team name.
     pub secondary_team: String,
@@ -61780,7 +61780,7 @@ impl ::serde::ser::Serialize for PrimaryTeamRequestCanceledDetails {
 }
 
 /// Team merge request expiration details shown to the primary team
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PrimaryTeamRequestExpiredDetails {
     /// The secondary team name.
     pub secondary_team: String,
@@ -61884,7 +61884,7 @@ impl ::serde::ser::Serialize for PrimaryTeamRequestExpiredDetails {
 }
 
 /// Team merge request reminder details shown to the primary team
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PrimaryTeamRequestReminderDetails {
     /// The secondary team name.
     pub secondary_team: String,
@@ -61988,7 +61988,7 @@ impl ::serde::ser::Serialize for PrimaryTeamRequestReminderDetails {
 }
 
 /// Quick action type.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum QuickActionType {
     DeleteSharedLink,
     ResetPassword,
@@ -62106,7 +62106,7 @@ impl ::serde::ser::Serialize for QuickActionType {
 }
 
 /// Provides the indices of the source asset and the destination asset for a relocate action.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct RelocateAssetReferencesLogInfo {
     /// Source asset position in the Assets list.
     pub src_asset_index: u64,
@@ -62210,7 +62210,7 @@ impl ::serde::ser::Serialize for RelocateAssetReferencesLogInfo {
 }
 
 /// Reseller information.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ResellerLogInfo {
     /// Reseller name.
     pub reseller_name: String,
@@ -62314,7 +62314,7 @@ impl ::serde::ser::Serialize for ResellerLogInfo {
 }
 
 /// Enabled/disabled reseller support.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ResellerSupportChangePolicyDetails {
     /// New Reseller support policy.
     pub new_value: ResellerSupportPolicy,
@@ -62417,7 +62417,7 @@ impl ::serde::ser::Serialize for ResellerSupportChangePolicyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ResellerSupportChangePolicyType {
     pub description: String,
 }
@@ -62507,7 +62507,7 @@ impl ::serde::ser::Serialize for ResellerSupportChangePolicyType {
 }
 
 /// Policy for controlling if reseller can access the admin console as administrator
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ResellerSupportPolicy {
     Disabled,
     Enabled,
@@ -62577,7 +62577,7 @@ impl ::serde::ser::Serialize for ResellerSupportPolicy {
 }
 
 /// Ended reseller support session.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ResellerSupportSessionEndDetails {
 }
 
@@ -62626,7 +62626,7 @@ impl ::serde::ser::Serialize for ResellerSupportSessionEndDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ResellerSupportSessionEndType {
     pub description: String,
 }
@@ -62716,7 +62716,7 @@ impl ::serde::ser::Serialize for ResellerSupportSessionEndType {
 }
 
 /// Started reseller support session.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ResellerSupportSessionStartDetails {
 }
 
@@ -62765,7 +62765,7 @@ impl ::serde::ser::Serialize for ResellerSupportSessionStartDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ResellerSupportSessionStartType {
     pub description: String,
 }
@@ -62855,7 +62855,7 @@ impl ::serde::ser::Serialize for ResellerSupportSessionStartType {
 }
 
 /// Rewound a folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct RewindFolderDetails {
     /// Folder was Rewound to this date.
     pub rewind_folder_target_ts_ms: super::common::DropboxTimestamp,
@@ -62945,7 +62945,7 @@ impl ::serde::ser::Serialize for RewindFolderDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct RewindFolderType {
     pub description: String,
 }
@@ -63035,7 +63035,7 @@ impl ::serde::ser::Serialize for RewindFolderType {
 }
 
 /// Policy for controlling whether team members can rewind
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum RewindPolicy {
     AdminsOnly,
     Everyone,
@@ -63105,7 +63105,7 @@ impl ::serde::ser::Serialize for RewindPolicy {
 }
 
 /// Changed Rewind policy for team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct RewindPolicyChangedDetails {
     /// New Dropbox Rewind policy.
     pub new_value: RewindPolicy,
@@ -63208,7 +63208,7 @@ impl ::serde::ser::Serialize for RewindPolicyChangedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct RewindPolicyChangedType {
     pub description: String,
 }
@@ -63298,7 +63298,7 @@ impl ::serde::ser::Serialize for RewindPolicyChangedType {
 }
 
 /// Deleted secondary email.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SecondaryEmailDeletedDetails {
     /// Deleted secondary email.
     pub secondary_email: EmailAddress,
@@ -63388,7 +63388,7 @@ impl ::serde::ser::Serialize for SecondaryEmailDeletedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SecondaryEmailDeletedType {
     pub description: String,
 }
@@ -63478,7 +63478,7 @@ impl ::serde::ser::Serialize for SecondaryEmailDeletedType {
 }
 
 /// Verified secondary email.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SecondaryEmailVerifiedDetails {
     /// Verified secondary email.
     pub secondary_email: EmailAddress,
@@ -63568,7 +63568,7 @@ impl ::serde::ser::Serialize for SecondaryEmailVerifiedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SecondaryEmailVerifiedType {
     pub description: String,
 }
@@ -63657,7 +63657,7 @@ impl ::serde::ser::Serialize for SecondaryEmailVerifiedType {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SecondaryMailsPolicy {
     Disabled,
     Enabled,
@@ -63727,7 +63727,7 @@ impl ::serde::ser::Serialize for SecondaryMailsPolicy {
 }
 
 /// Secondary mails policy changed.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SecondaryMailsPolicyChangedDetails {
     /// Previous secondary mails policy.
     pub previous_value: SecondaryMailsPolicy,
@@ -63830,7 +63830,7 @@ impl ::serde::ser::Serialize for SecondaryMailsPolicyChangedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SecondaryMailsPolicyChangedType {
     pub description: String,
 }
@@ -63920,7 +63920,7 @@ impl ::serde::ser::Serialize for SecondaryMailsPolicyChangedType {
 }
 
 /// Team merge request acceptance details shown to the secondary team
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SecondaryTeamRequestAcceptedDetails {
     /// The primary team name.
     pub primary_team: String,
@@ -64024,7 +64024,7 @@ impl ::serde::ser::Serialize for SecondaryTeamRequestAcceptedDetails {
 }
 
 /// Team merge request cancellation details shown to the secondary team
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SecondaryTeamRequestCanceledDetails {
     /// The email of the primary team admin that the request was sent to.
     pub sent_to: String,
@@ -64128,7 +64128,7 @@ impl ::serde::ser::Serialize for SecondaryTeamRequestCanceledDetails {
 }
 
 /// Team merge request expiration details shown to the secondary team
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SecondaryTeamRequestExpiredDetails {
     /// The email of the primary team admin the request was sent to.
     pub sent_to: String,
@@ -64219,7 +64219,7 @@ impl ::serde::ser::Serialize for SecondaryTeamRequestExpiredDetails {
 }
 
 /// Team merge request reminder details shown to the secondary team
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SecondaryTeamRequestReminderDetails {
     /// The email of the primary team admin the request was sent to.
     pub sent_to: String,
@@ -64310,7 +64310,7 @@ impl ::serde::ser::Serialize for SecondaryTeamRequestReminderDetails {
 }
 
 /// Session's logged information.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SessionLogInfo {
     Web(WebSessionLogInfo),
     Desktop(DesktopSessionLogInfo),
@@ -64380,7 +64380,7 @@ impl ::serde::ser::Serialize for SessionLogInfo {
 }
 
 /// Added team to shared folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SfAddGroupDetails {
     /// Target asset position in the Assets list.
     pub target_asset_index: u64,
@@ -64514,7 +64514,7 @@ impl ::serde::ser::Serialize for SfAddGroupDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SfAddGroupType {
     pub description: String,
 }
@@ -64604,7 +64604,7 @@ impl ::serde::ser::Serialize for SfAddGroupType {
 }
 
 /// Allowed non-collaborators to view links to files in shared folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SfAllowNonMembersToViewSharedLinksDetails {
     /// Target asset position in the Assets list.
     pub target_asset_index: u64,
@@ -64725,7 +64725,7 @@ impl ::serde::ser::Serialize for SfAllowNonMembersToViewSharedLinksDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SfAllowNonMembersToViewSharedLinksType {
     pub description: String,
 }
@@ -64815,7 +64815,7 @@ impl ::serde::ser::Serialize for SfAllowNonMembersToViewSharedLinksType {
 }
 
 /// Set team members to see warning before sharing folders outside team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SfExternalInviteWarnDetails {
     /// Target asset position in the Assets list.
     pub target_asset_index: u64,
@@ -64954,7 +64954,7 @@ impl ::serde::ser::Serialize for SfExternalInviteWarnDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SfExternalInviteWarnType {
     pub description: String,
 }
@@ -65044,7 +65044,7 @@ impl ::serde::ser::Serialize for SfExternalInviteWarnType {
 }
 
 /// Changed Facebook user's role in shared folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SfFbInviteChangeRoleDetails {
     /// Target asset position in the Assets list.
     pub target_asset_index: u64,
@@ -65183,7 +65183,7 @@ impl ::serde::ser::Serialize for SfFbInviteChangeRoleDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SfFbInviteChangeRoleType {
     pub description: String,
 }
@@ -65273,7 +65273,7 @@ impl ::serde::ser::Serialize for SfFbInviteChangeRoleType {
 }
 
 /// Invited Facebook users to shared folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SfFbInviteDetails {
     /// Target asset position in the Assets list.
     pub target_asset_index: u64,
@@ -65394,7 +65394,7 @@ impl ::serde::ser::Serialize for SfFbInviteDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SfFbInviteType {
     pub description: String,
 }
@@ -65484,7 +65484,7 @@ impl ::serde::ser::Serialize for SfFbInviteType {
 }
 
 /// Uninvited Facebook user from shared folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SfFbUninviteDetails {
     /// Target asset position in the Assets list.
     pub target_asset_index: u64,
@@ -65587,7 +65587,7 @@ impl ::serde::ser::Serialize for SfFbUninviteDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SfFbUninviteType {
     pub description: String,
 }
@@ -65677,7 +65677,7 @@ impl ::serde::ser::Serialize for SfFbUninviteType {
 }
 
 /// Invited group to shared folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SfInviteGroupDetails {
     /// Target asset position in the Assets list.
     pub target_asset_index: u64,
@@ -65767,7 +65767,7 @@ impl ::serde::ser::Serialize for SfInviteGroupDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SfInviteGroupType {
     pub description: String,
 }
@@ -65857,7 +65857,7 @@ impl ::serde::ser::Serialize for SfInviteGroupType {
 }
 
 /// Granted access to shared folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SfTeamGrantAccessDetails {
     /// Target asset position in the Assets list.
     pub target_asset_index: u64,
@@ -65960,7 +65960,7 @@ impl ::serde::ser::Serialize for SfTeamGrantAccessDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SfTeamGrantAccessType {
     pub description: String,
 }
@@ -66050,7 +66050,7 @@ impl ::serde::ser::Serialize for SfTeamGrantAccessType {
 }
 
 /// Changed team member's role in shared folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SfTeamInviteChangeRoleDetails {
     /// Target asset position in the Assets list.
     pub target_asset_index: u64,
@@ -66189,7 +66189,7 @@ impl ::serde::ser::Serialize for SfTeamInviteChangeRoleDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SfTeamInviteChangeRoleType {
     pub description: String,
 }
@@ -66279,7 +66279,7 @@ impl ::serde::ser::Serialize for SfTeamInviteChangeRoleType {
 }
 
 /// Invited team members to shared folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SfTeamInviteDetails {
     /// Target asset position in the Assets list.
     pub target_asset_index: u64,
@@ -66400,7 +66400,7 @@ impl ::serde::ser::Serialize for SfTeamInviteDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SfTeamInviteType {
     pub description: String,
 }
@@ -66490,7 +66490,7 @@ impl ::serde::ser::Serialize for SfTeamInviteType {
 }
 
 /// Joined team member's shared folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SfTeamJoinDetails {
     /// Target asset position in the Assets list.
     pub target_asset_index: u64,
@@ -66594,7 +66594,7 @@ impl ::serde::ser::Serialize for SfTeamJoinDetails {
 }
 
 /// Joined team member's shared folder from link.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SfTeamJoinFromOobLinkDetails {
     /// Target asset position in the Assets list.
     pub target_asset_index: u64,
@@ -66733,7 +66733,7 @@ impl ::serde::ser::Serialize for SfTeamJoinFromOobLinkDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SfTeamJoinFromOobLinkType {
     pub description: String,
 }
@@ -66822,7 +66822,7 @@ impl ::serde::ser::Serialize for SfTeamJoinFromOobLinkType {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SfTeamJoinType {
     pub description: String,
 }
@@ -66912,7 +66912,7 @@ impl ::serde::ser::Serialize for SfTeamJoinType {
 }
 
 /// Unshared folder with team member.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SfTeamUninviteDetails {
     /// Target asset position in the Assets list.
     pub target_asset_index: u64,
@@ -67015,7 +67015,7 @@ impl ::serde::ser::Serialize for SfTeamUninviteDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SfTeamUninviteType {
     pub description: String,
 }
@@ -67105,7 +67105,7 @@ impl ::serde::ser::Serialize for SfTeamUninviteType {
 }
 
 /// Invited user to Dropbox and added them to shared file/folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentAddInviteesDetails {
     /// Shared content access level.
     pub shared_content_access_level: super::sharing::AccessLevel,
@@ -67211,7 +67211,7 @@ impl ::serde::ser::Serialize for SharedContentAddInviteesDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentAddInviteesType {
     pub description: String,
 }
@@ -67301,7 +67301,7 @@ impl ::serde::ser::Serialize for SharedContentAddInviteesType {
 }
 
 /// Added expiration date to link for shared file/folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentAddLinkExpiryDetails {
     /// New shared content link expiration date. Might be missing due to historical data gap.
     pub new_value: Option<super::common::DropboxTimestamp>,
@@ -67379,7 +67379,7 @@ impl ::serde::ser::Serialize for SharedContentAddLinkExpiryDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentAddLinkExpiryType {
     pub description: String,
 }
@@ -67469,7 +67469,7 @@ impl ::serde::ser::Serialize for SharedContentAddLinkExpiryType {
 }
 
 /// Added password to link for shared file/folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentAddLinkPasswordDetails {
 }
 
@@ -67518,7 +67518,7 @@ impl ::serde::ser::Serialize for SharedContentAddLinkPasswordDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentAddLinkPasswordType {
     pub description: String,
 }
@@ -67608,7 +67608,7 @@ impl ::serde::ser::Serialize for SharedContentAddLinkPasswordType {
 }
 
 /// Added users and/or groups to shared file/folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentAddMemberDetails {
     /// Shared content access level.
     pub shared_content_access_level: super::sharing::AccessLevel,
@@ -67698,7 +67698,7 @@ impl ::serde::ser::Serialize for SharedContentAddMemberDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentAddMemberType {
     pub description: String,
 }
@@ -67788,7 +67788,7 @@ impl ::serde::ser::Serialize for SharedContentAddMemberType {
 }
 
 /// Changed whether members can download shared file/folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentChangeDownloadsPolicyDetails {
     /// New downloads policy.
     pub new_value: DownloadPolicyType,
@@ -67896,7 +67896,7 @@ impl ::serde::ser::Serialize for SharedContentChangeDownloadsPolicyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentChangeDownloadsPolicyType {
     pub description: String,
 }
@@ -67986,7 +67986,7 @@ impl ::serde::ser::Serialize for SharedContentChangeDownloadsPolicyType {
 }
 
 /// Changed access type of invitee to shared file/folder before invite was accepted.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentChangeInviteeRoleDetails {
     /// New access level.
     pub new_access_level: super::sharing::AccessLevel,
@@ -68110,7 +68110,7 @@ impl ::serde::ser::Serialize for SharedContentChangeInviteeRoleDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentChangeInviteeRoleType {
     pub description: String,
 }
@@ -68200,7 +68200,7 @@ impl ::serde::ser::Serialize for SharedContentChangeInviteeRoleType {
 }
 
 /// Changed link audience of shared file/folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentChangeLinkAudienceDetails {
     /// New link audience value.
     pub new_value: super::sharing::LinkAudience,
@@ -68308,7 +68308,7 @@ impl ::serde::ser::Serialize for SharedContentChangeLinkAudienceDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentChangeLinkAudienceType {
     pub description: String,
 }
@@ -68398,7 +68398,7 @@ impl ::serde::ser::Serialize for SharedContentChangeLinkAudienceType {
 }
 
 /// Changed link expiration of shared file/folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentChangeLinkExpiryDetails {
     /// New shared content link expiration date. Might be missing due to historical data gap.
     pub new_value: Option<super::common::DropboxTimestamp>,
@@ -68489,7 +68489,7 @@ impl ::serde::ser::Serialize for SharedContentChangeLinkExpiryDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentChangeLinkExpiryType {
     pub description: String,
 }
@@ -68579,7 +68579,7 @@ impl ::serde::ser::Serialize for SharedContentChangeLinkExpiryType {
 }
 
 /// Changed link password of shared file/folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentChangeLinkPasswordDetails {
 }
 
@@ -68628,7 +68628,7 @@ impl ::serde::ser::Serialize for SharedContentChangeLinkPasswordDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentChangeLinkPasswordType {
     pub description: String,
 }
@@ -68718,7 +68718,7 @@ impl ::serde::ser::Serialize for SharedContentChangeLinkPasswordType {
 }
 
 /// Changed access type of shared file/folder member.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentChangeMemberRoleDetails {
     /// New access level.
     pub new_access_level: super::sharing::AccessLevel,
@@ -68829,7 +68829,7 @@ impl ::serde::ser::Serialize for SharedContentChangeMemberRoleDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentChangeMemberRoleType {
     pub description: String,
 }
@@ -68919,7 +68919,7 @@ impl ::serde::ser::Serialize for SharedContentChangeMemberRoleType {
 }
 
 /// Changed whether members can see who viewed shared file/folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentChangeViewerInfoPolicyDetails {
     /// New viewer info policy.
     pub new_value: super::sharing::ViewerInfoPolicy,
@@ -69027,7 +69027,7 @@ impl ::serde::ser::Serialize for SharedContentChangeViewerInfoPolicyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentChangeViewerInfoPolicyType {
     pub description: String,
 }
@@ -69117,7 +69117,7 @@ impl ::serde::ser::Serialize for SharedContentChangeViewerInfoPolicyType {
 }
 
 /// Acquired membership of shared file/folder by accepting invite.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentClaimInvitationDetails {
     /// Shared content link.
     pub shared_content_link: Option<String>,
@@ -69195,7 +69195,7 @@ impl ::serde::ser::Serialize for SharedContentClaimInvitationDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentClaimInvitationType {
     pub description: String,
 }
@@ -69285,7 +69285,7 @@ impl ::serde::ser::Serialize for SharedContentClaimInvitationType {
 }
 
 /// Copied shared file/folder to own Dropbox.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentCopyDetails {
     /// Shared content link.
     pub shared_content_link: String,
@@ -69423,7 +69423,7 @@ impl ::serde::ser::Serialize for SharedContentCopyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentCopyType {
     pub description: String,
 }
@@ -69513,7 +69513,7 @@ impl ::serde::ser::Serialize for SharedContentCopyType {
 }
 
 /// Downloaded shared file/folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentDownloadDetails {
     /// Shared content link.
     pub shared_content_link: String,
@@ -69637,7 +69637,7 @@ impl ::serde::ser::Serialize for SharedContentDownloadDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentDownloadType {
     pub description: String,
 }
@@ -69727,7 +69727,7 @@ impl ::serde::ser::Serialize for SharedContentDownloadType {
 }
 
 /// Left shared file/folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentRelinquishMembershipDetails {
 }
 
@@ -69776,7 +69776,7 @@ impl ::serde::ser::Serialize for SharedContentRelinquishMembershipDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentRelinquishMembershipType {
     pub description: String,
 }
@@ -69866,7 +69866,7 @@ impl ::serde::ser::Serialize for SharedContentRelinquishMembershipType {
 }
 
 /// Removed invitee from shared file/folder before invite was accepted.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentRemoveInviteesDetails {
     /// A list of invitees.
     pub invitees: Vec<EmailAddress>,
@@ -69956,7 +69956,7 @@ impl ::serde::ser::Serialize for SharedContentRemoveInviteesDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentRemoveInviteesType {
     pub description: String,
 }
@@ -70046,7 +70046,7 @@ impl ::serde::ser::Serialize for SharedContentRemoveInviteesType {
 }
 
 /// Removed link expiration date of shared file/folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentRemoveLinkExpiryDetails {
     /// Previous shared content link expiration date. Might be missing due to historical data gap.
     pub previous_value: Option<super::common::DropboxTimestamp>,
@@ -70124,7 +70124,7 @@ impl ::serde::ser::Serialize for SharedContentRemoveLinkExpiryDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentRemoveLinkExpiryType {
     pub description: String,
 }
@@ -70214,7 +70214,7 @@ impl ::serde::ser::Serialize for SharedContentRemoveLinkExpiryType {
 }
 
 /// Removed link password of shared file/folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentRemoveLinkPasswordDetails {
 }
 
@@ -70263,7 +70263,7 @@ impl ::serde::ser::Serialize for SharedContentRemoveLinkPasswordDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentRemoveLinkPasswordType {
     pub description: String,
 }
@@ -70353,7 +70353,7 @@ impl ::serde::ser::Serialize for SharedContentRemoveLinkPasswordType {
 }
 
 /// Removed user/group from shared file/folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentRemoveMemberDetails {
     /// Shared content access level.
     pub shared_content_access_level: Option<super::sharing::AccessLevel>,
@@ -70431,7 +70431,7 @@ impl ::serde::ser::Serialize for SharedContentRemoveMemberDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentRemoveMemberType {
     pub description: String,
 }
@@ -70521,7 +70521,7 @@ impl ::serde::ser::Serialize for SharedContentRemoveMemberType {
 }
 
 /// Requested access to shared file/folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentRequestAccessDetails {
     /// Shared content link.
     pub shared_content_link: Option<String>,
@@ -70599,7 +70599,7 @@ impl ::serde::ser::Serialize for SharedContentRequestAccessDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentRequestAccessType {
     pub description: String,
 }
@@ -70689,7 +70689,7 @@ impl ::serde::ser::Serialize for SharedContentRequestAccessType {
 }
 
 /// Restored shared file/folder invitees.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentRestoreInviteesDetails {
     /// Shared content access level.
     pub shared_content_access_level: super::sharing::AccessLevel,
@@ -70795,7 +70795,7 @@ impl ::serde::ser::Serialize for SharedContentRestoreInviteesDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentRestoreInviteesType {
     pub description: String,
 }
@@ -70885,7 +70885,7 @@ impl ::serde::ser::Serialize for SharedContentRestoreInviteesType {
 }
 
 /// Restored users and/or groups to membership of shared file/folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentRestoreMemberDetails {
     /// Shared content access level.
     pub shared_content_access_level: super::sharing::AccessLevel,
@@ -70975,7 +70975,7 @@ impl ::serde::ser::Serialize for SharedContentRestoreMemberDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentRestoreMemberType {
     pub description: String,
 }
@@ -71065,7 +71065,7 @@ impl ::serde::ser::Serialize for SharedContentRestoreMemberType {
 }
 
 /// Unshared file/folder by clearing membership.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentUnshareDetails {
 }
 
@@ -71114,7 +71114,7 @@ impl ::serde::ser::Serialize for SharedContentUnshareDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentUnshareType {
     pub description: String,
 }
@@ -71204,7 +71204,7 @@ impl ::serde::ser::Serialize for SharedContentUnshareType {
 }
 
 /// Previewed shared file/folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentViewDetails {
     /// Shared content link.
     pub shared_content_link: String,
@@ -71328,7 +71328,7 @@ impl ::serde::ser::Serialize for SharedContentViewDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentViewType {
     pub description: String,
 }
@@ -71418,7 +71418,7 @@ impl ::serde::ser::Serialize for SharedContentViewType {
 }
 
 /// Changed who can access shared folder via link.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedFolderChangeLinkPolicyDetails {
     /// New shared folder link policy.
     pub new_value: super::sharing::SharedLinkPolicy,
@@ -71526,7 +71526,7 @@ impl ::serde::ser::Serialize for SharedFolderChangeLinkPolicyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedFolderChangeLinkPolicyType {
     pub description: String,
 }
@@ -71616,7 +71616,7 @@ impl ::serde::ser::Serialize for SharedFolderChangeLinkPolicyType {
 }
 
 /// Changed whether shared folder inherits members from parent folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedFolderChangeMembersInheritancePolicyDetails {
     /// New member inheritance policy.
     pub new_value: SharedFolderMembersInheritancePolicy,
@@ -71727,7 +71727,7 @@ impl ::serde::ser::Serialize for SharedFolderChangeMembersInheritancePolicyDetai
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedFolderChangeMembersInheritancePolicyType {
     pub description: String,
 }
@@ -71817,7 +71817,7 @@ impl ::serde::ser::Serialize for SharedFolderChangeMembersInheritancePolicyType 
 }
 
 /// Changed who can add/remove members of shared folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedFolderChangeMembersManagementPolicyDetails {
     /// New members management policy.
     pub new_value: super::sharing::AclUpdatePolicy,
@@ -71925,7 +71925,7 @@ impl ::serde::ser::Serialize for SharedFolderChangeMembersManagementPolicyDetail
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedFolderChangeMembersManagementPolicyType {
     pub description: String,
 }
@@ -72015,7 +72015,7 @@ impl ::serde::ser::Serialize for SharedFolderChangeMembersManagementPolicyType {
 }
 
 /// Changed who can become member of shared folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedFolderChangeMembersPolicyDetails {
     /// New external invite policy.
     pub new_value: super::sharing::MemberPolicy,
@@ -72123,7 +72123,7 @@ impl ::serde::ser::Serialize for SharedFolderChangeMembersPolicyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedFolderChangeMembersPolicyType {
     pub description: String,
 }
@@ -72213,7 +72213,7 @@ impl ::serde::ser::Serialize for SharedFolderChangeMembersPolicyType {
 }
 
 /// Created shared folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedFolderCreateDetails {
     /// Target namespace ID. Might be missing due to historical data gap.
     pub target_ns_id: Option<NamespaceId>,
@@ -72291,7 +72291,7 @@ impl ::serde::ser::Serialize for SharedFolderCreateDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedFolderCreateType {
     pub description: String,
 }
@@ -72381,7 +72381,7 @@ impl ::serde::ser::Serialize for SharedFolderCreateType {
 }
 
 /// Declined team member's invite to shared folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedFolderDeclineInvitationDetails {
 }
 
@@ -72430,7 +72430,7 @@ impl ::serde::ser::Serialize for SharedFolderDeclineInvitationDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedFolderDeclineInvitationType {
     pub description: String,
 }
@@ -72520,7 +72520,7 @@ impl ::serde::ser::Serialize for SharedFolderDeclineInvitationType {
 }
 
 /// Specifies if a shared folder inherits its members from the parent folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SharedFolderMembersInheritancePolicy {
     InheritMembers,
     DontInheritMembers,
@@ -72590,7 +72590,7 @@ impl ::serde::ser::Serialize for SharedFolderMembersInheritancePolicy {
 }
 
 /// Added shared folder to own Dropbox.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedFolderMountDetails {
 }
 
@@ -72639,7 +72639,7 @@ impl ::serde::ser::Serialize for SharedFolderMountDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedFolderMountType {
     pub description: String,
 }
@@ -72729,7 +72729,7 @@ impl ::serde::ser::Serialize for SharedFolderMountType {
 }
 
 /// Changed parent of shared folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedFolderNestDetails {
     /// Previous parent namespace ID. Might be missing due to historical data gap.
     pub previous_parent_ns_id: Option<NamespaceId>,
@@ -72846,7 +72846,7 @@ impl ::serde::ser::Serialize for SharedFolderNestDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedFolderNestType {
     pub description: String,
 }
@@ -72936,7 +72936,7 @@ impl ::serde::ser::Serialize for SharedFolderNestType {
 }
 
 /// Transferred ownership of shared folder to another member.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedFolderTransferOwnershipDetails {
     /// The email address of the new shared folder owner.
     pub new_owner_email: EmailAddress,
@@ -73044,7 +73044,7 @@ impl ::serde::ser::Serialize for SharedFolderTransferOwnershipDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedFolderTransferOwnershipType {
     pub description: String,
 }
@@ -73134,7 +73134,7 @@ impl ::serde::ser::Serialize for SharedFolderTransferOwnershipType {
 }
 
 /// Deleted shared folder from Dropbox.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedFolderUnmountDetails {
 }
 
@@ -73183,7 +73183,7 @@ impl ::serde::ser::Serialize for SharedFolderUnmountDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedFolderUnmountType {
     pub description: String,
 }
@@ -73273,7 +73273,7 @@ impl ::serde::ser::Serialize for SharedFolderUnmountType {
 }
 
 /// Shared link access level.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SharedLinkAccessLevel {
     None,
     Reader,
@@ -73355,7 +73355,7 @@ impl ::serde::ser::Serialize for SharedLinkAccessLevel {
 }
 
 /// Added shared link expiration date.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedLinkAddExpiryDetails {
     /// New shared link expiration date.
     pub new_value: super::common::DropboxTimestamp,
@@ -73445,7 +73445,7 @@ impl ::serde::ser::Serialize for SharedLinkAddExpiryDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedLinkAddExpiryType {
     pub description: String,
 }
@@ -73535,7 +73535,7 @@ impl ::serde::ser::Serialize for SharedLinkAddExpiryType {
 }
 
 /// Changed shared link expiration date.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedLinkChangeExpiryDetails {
     /// New shared link expiration date. Might be missing due to historical data gap.
     pub new_value: Option<super::common::DropboxTimestamp>,
@@ -73626,7 +73626,7 @@ impl ::serde::ser::Serialize for SharedLinkChangeExpiryDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedLinkChangeExpiryType {
     pub description: String,
 }
@@ -73716,7 +73716,7 @@ impl ::serde::ser::Serialize for SharedLinkChangeExpiryType {
 }
 
 /// Changed visibility of shared link.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedLinkChangeVisibilityDetails {
     /// New shared link visibility.
     pub new_value: SharedLinkVisibility,
@@ -73824,7 +73824,7 @@ impl ::serde::ser::Serialize for SharedLinkChangeVisibilityDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedLinkChangeVisibilityType {
     pub description: String,
 }
@@ -73914,7 +73914,7 @@ impl ::serde::ser::Serialize for SharedLinkChangeVisibilityType {
 }
 
 /// Added file/folder to Dropbox from shared link.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedLinkCopyDetails {
     /// Shared link owner details. Might be missing due to historical data gap.
     pub shared_link_owner: Option<UserLogInfo>,
@@ -73992,7 +73992,7 @@ impl ::serde::ser::Serialize for SharedLinkCopyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedLinkCopyType {
     pub description: String,
 }
@@ -74082,7 +74082,7 @@ impl ::serde::ser::Serialize for SharedLinkCopyType {
 }
 
 /// Created shared link.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedLinkCreateDetails {
     /// Defines who can access the shared link. Might be missing due to historical data gap.
     pub shared_link_access_level: Option<SharedLinkAccessLevel>,
@@ -74160,7 +74160,7 @@ impl ::serde::ser::Serialize for SharedLinkCreateDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedLinkCreateType {
     pub description: String,
 }
@@ -74250,7 +74250,7 @@ impl ::serde::ser::Serialize for SharedLinkCreateType {
 }
 
 /// Removed shared link.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedLinkDisableDetails {
     /// Shared link owner details. Might be missing due to historical data gap.
     pub shared_link_owner: Option<UserLogInfo>,
@@ -74328,7 +74328,7 @@ impl ::serde::ser::Serialize for SharedLinkDisableDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedLinkDisableType {
     pub description: String,
 }
@@ -74418,7 +74418,7 @@ impl ::serde::ser::Serialize for SharedLinkDisableType {
 }
 
 /// Downloaded file/folder from shared link.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedLinkDownloadDetails {
     /// Shared link owner details. Might be missing due to historical data gap.
     pub shared_link_owner: Option<UserLogInfo>,
@@ -74496,7 +74496,7 @@ impl ::serde::ser::Serialize for SharedLinkDownloadDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedLinkDownloadType {
     pub description: String,
 }
@@ -74586,7 +74586,7 @@ impl ::serde::ser::Serialize for SharedLinkDownloadType {
 }
 
 /// Removed shared link expiration date.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedLinkRemoveExpiryDetails {
     /// Previous shared link expiration date. Might be missing due to historical data gap.
     pub previous_value: Option<super::common::DropboxTimestamp>,
@@ -74664,7 +74664,7 @@ impl ::serde::ser::Serialize for SharedLinkRemoveExpiryDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedLinkRemoveExpiryType {
     pub description: String,
 }
@@ -74754,7 +74754,7 @@ impl ::serde::ser::Serialize for SharedLinkRemoveExpiryType {
 }
 
 /// Added an expiration date to the shared link.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedLinkSettingsAddExpirationDetails {
     /// Shared content access level.
     pub shared_content_access_level: super::sharing::AccessLevel,
@@ -74880,7 +74880,7 @@ impl ::serde::ser::Serialize for SharedLinkSettingsAddExpirationDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedLinkSettingsAddExpirationType {
     pub description: String,
 }
@@ -74970,7 +74970,7 @@ impl ::serde::ser::Serialize for SharedLinkSettingsAddExpirationType {
 }
 
 /// Added a password to the shared link.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedLinkSettingsAddPasswordDetails {
     /// Shared content access level.
     pub shared_content_access_level: super::sharing::AccessLevel,
@@ -75078,7 +75078,7 @@ impl ::serde::ser::Serialize for SharedLinkSettingsAddPasswordDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedLinkSettingsAddPasswordType {
     pub description: String,
 }
@@ -75168,7 +75168,7 @@ impl ::serde::ser::Serialize for SharedLinkSettingsAddPasswordType {
 }
 
 /// Disabled downloads.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedLinkSettingsAllowDownloadDisabledDetails {
     /// Shared content access level.
     pub shared_content_access_level: super::sharing::AccessLevel,
@@ -75276,7 +75276,7 @@ impl ::serde::ser::Serialize for SharedLinkSettingsAllowDownloadDisabledDetails 
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedLinkSettingsAllowDownloadDisabledType {
     pub description: String,
 }
@@ -75366,7 +75366,7 @@ impl ::serde::ser::Serialize for SharedLinkSettingsAllowDownloadDisabledType {
 }
 
 /// Enabled downloads.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedLinkSettingsAllowDownloadEnabledDetails {
     /// Shared content access level.
     pub shared_content_access_level: super::sharing::AccessLevel,
@@ -75474,7 +75474,7 @@ impl ::serde::ser::Serialize for SharedLinkSettingsAllowDownloadEnabledDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedLinkSettingsAllowDownloadEnabledType {
     pub description: String,
 }
@@ -75564,7 +75564,7 @@ impl ::serde::ser::Serialize for SharedLinkSettingsAllowDownloadEnabledType {
 }
 
 /// Changed the audience of the shared link.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedLinkSettingsChangeAudienceDetails {
     /// Shared content access level.
     pub shared_content_access_level: super::sharing::AccessLevel,
@@ -75706,7 +75706,7 @@ impl ::serde::ser::Serialize for SharedLinkSettingsChangeAudienceDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedLinkSettingsChangeAudienceType {
     pub description: String,
 }
@@ -75796,7 +75796,7 @@ impl ::serde::ser::Serialize for SharedLinkSettingsChangeAudienceType {
 }
 
 /// Changed the expiration date of the shared link.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedLinkSettingsChangeExpirationDetails {
     /// Shared content access level.
     pub shared_content_access_level: super::sharing::AccessLevel,
@@ -75940,7 +75940,7 @@ impl ::serde::ser::Serialize for SharedLinkSettingsChangeExpirationDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedLinkSettingsChangeExpirationType {
     pub description: String,
 }
@@ -76030,7 +76030,7 @@ impl ::serde::ser::Serialize for SharedLinkSettingsChangeExpirationType {
 }
 
 /// Changed the password of the shared link.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedLinkSettingsChangePasswordDetails {
     /// Shared content access level.
     pub shared_content_access_level: super::sharing::AccessLevel,
@@ -76138,7 +76138,7 @@ impl ::serde::ser::Serialize for SharedLinkSettingsChangePasswordDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedLinkSettingsChangePasswordType {
     pub description: String,
 }
@@ -76228,7 +76228,7 @@ impl ::serde::ser::Serialize for SharedLinkSettingsChangePasswordType {
 }
 
 /// Removed the expiration date from the shared link.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedLinkSettingsRemoveExpirationDetails {
     /// Shared content access level.
     pub shared_content_access_level: super::sharing::AccessLevel,
@@ -76354,7 +76354,7 @@ impl ::serde::ser::Serialize for SharedLinkSettingsRemoveExpirationDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedLinkSettingsRemoveExpirationType {
     pub description: String,
 }
@@ -76444,7 +76444,7 @@ impl ::serde::ser::Serialize for SharedLinkSettingsRemoveExpirationType {
 }
 
 /// Removed the password from the shared link.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedLinkSettingsRemovePasswordDetails {
     /// Shared content access level.
     pub shared_content_access_level: super::sharing::AccessLevel,
@@ -76552,7 +76552,7 @@ impl ::serde::ser::Serialize for SharedLinkSettingsRemovePasswordDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedLinkSettingsRemovePasswordType {
     pub description: String,
 }
@@ -76642,7 +76642,7 @@ impl ::serde::ser::Serialize for SharedLinkSettingsRemovePasswordType {
 }
 
 /// Added members as audience of shared link.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedLinkShareDetails {
     /// Shared link owner details. Might be missing due to historical data gap.
     pub shared_link_owner: Option<UserLogInfo>,
@@ -76733,7 +76733,7 @@ impl ::serde::ser::Serialize for SharedLinkShareDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedLinkShareType {
     pub description: String,
 }
@@ -76823,7 +76823,7 @@ impl ::serde::ser::Serialize for SharedLinkShareType {
 }
 
 /// Opened shared link.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedLinkViewDetails {
     /// Shared link owner details. Might be missing due to historical data gap.
     pub shared_link_owner: Option<UserLogInfo>,
@@ -76901,7 +76901,7 @@ impl ::serde::ser::Serialize for SharedLinkViewDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedLinkViewType {
     pub description: String,
 }
@@ -76991,7 +76991,7 @@ impl ::serde::ser::Serialize for SharedLinkViewType {
 }
 
 /// Defines who has access to a shared link.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SharedLinkVisibility {
     Password,
     Public,
@@ -77073,7 +77073,7 @@ impl ::serde::ser::Serialize for SharedLinkVisibility {
 }
 
 /// Opened shared Paper doc.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedNoteOpenedDetails {
 }
 
@@ -77122,7 +77122,7 @@ impl ::serde::ser::Serialize for SharedNoteOpenedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedNoteOpenedType {
     pub description: String,
 }
@@ -77212,7 +77212,7 @@ impl ::serde::ser::Serialize for SharedNoteOpenedType {
 }
 
 /// Changed whether team members can join shared folders owned outside team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharingChangeFolderJoinPolicyDetails {
     /// New external join policy.
     pub new_value: SharingFolderJoinPolicy,
@@ -77320,7 +77320,7 @@ impl ::serde::ser::Serialize for SharingChangeFolderJoinPolicyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharingChangeFolderJoinPolicyType {
     pub description: String,
 }
@@ -77411,7 +77411,7 @@ impl ::serde::ser::Serialize for SharingChangeFolderJoinPolicyType {
 
 /// Changed whether members can share links outside team, and if links are accessible only by team
 /// members or anyone by default.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharingChangeLinkPolicyDetails {
     /// New external link accessibility policy.
     pub new_value: SharingLinkPolicy,
@@ -77519,7 +77519,7 @@ impl ::serde::ser::Serialize for SharingChangeLinkPolicyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharingChangeLinkPolicyType {
     pub description: String,
 }
@@ -77609,7 +77609,7 @@ impl ::serde::ser::Serialize for SharingChangeLinkPolicyType {
 }
 
 /// Changed whether members can share files/folders outside team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharingChangeMemberPolicyDetails {
     /// New external invite policy.
     pub new_value: SharingMemberPolicy,
@@ -77717,7 +77717,7 @@ impl ::serde::ser::Serialize for SharingChangeMemberPolicyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharingChangeMemberPolicyType {
     pub description: String,
 }
@@ -77807,7 +77807,7 @@ impl ::serde::ser::Serialize for SharingChangeMemberPolicyType {
 }
 
 /// Policy for controlling if team members can join shared folders owned by non team members.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SharingFolderJoinPolicy {
     FromAnyone,
     FromTeamOnly,
@@ -77877,7 +77877,7 @@ impl ::serde::ser::Serialize for SharingFolderJoinPolicy {
 }
 
 /// Policy for controlling if team members can share links externally
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SharingLinkPolicy {
     DefaultPrivate,
     DefaultPublic,
@@ -77959,7 +77959,7 @@ impl ::serde::ser::Serialize for SharingLinkPolicy {
 }
 
 /// External sharing policy
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SharingMemberPolicy {
     Allow,
     Forbid,
@@ -78041,7 +78041,7 @@ impl ::serde::ser::Serialize for SharingMemberPolicy {
 }
 
 /// Shared link with group.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShmodelGroupShareDetails {
 }
 
@@ -78090,7 +78090,7 @@ impl ::serde::ser::Serialize for ShmodelGroupShareDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShmodelGroupShareType {
     pub description: String,
 }
@@ -78180,7 +78180,7 @@ impl ::serde::ser::Serialize for ShmodelGroupShareType {
 }
 
 /// Granted access to showcase.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseAccessGrantedDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -78270,7 +78270,7 @@ impl ::serde::ser::Serialize for ShowcaseAccessGrantedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseAccessGrantedType {
     pub description: String,
 }
@@ -78360,7 +78360,7 @@ impl ::serde::ser::Serialize for ShowcaseAccessGrantedType {
 }
 
 /// Added member to showcase.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseAddMemberDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -78450,7 +78450,7 @@ impl ::serde::ser::Serialize for ShowcaseAddMemberDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseAddMemberType {
     pub description: String,
 }
@@ -78540,7 +78540,7 @@ impl ::serde::ser::Serialize for ShowcaseAddMemberType {
 }
 
 /// Archived showcase.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseArchivedDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -78630,7 +78630,7 @@ impl ::serde::ser::Serialize for ShowcaseArchivedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseArchivedType {
     pub description: String,
 }
@@ -78720,7 +78720,7 @@ impl ::serde::ser::Serialize for ShowcaseArchivedType {
 }
 
 /// Enabled/disabled downloading files from Dropbox Showcase for team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseChangeDownloadPolicyDetails {
     /// New Dropbox Showcase download policy.
     pub new_value: ShowcaseDownloadPolicy,
@@ -78823,7 +78823,7 @@ impl ::serde::ser::Serialize for ShowcaseChangeDownloadPolicyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseChangeDownloadPolicyType {
     pub description: String,
 }
@@ -78913,7 +78913,7 @@ impl ::serde::ser::Serialize for ShowcaseChangeDownloadPolicyType {
 }
 
 /// Enabled/disabled Dropbox Showcase for team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseChangeEnabledPolicyDetails {
     /// New Dropbox Showcase policy.
     pub new_value: ShowcaseEnabledPolicy,
@@ -79016,7 +79016,7 @@ impl ::serde::ser::Serialize for ShowcaseChangeEnabledPolicyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseChangeEnabledPolicyType {
     pub description: String,
 }
@@ -79106,7 +79106,7 @@ impl ::serde::ser::Serialize for ShowcaseChangeEnabledPolicyType {
 }
 
 /// Enabled/disabled sharing Dropbox Showcase externally for team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseChangeExternalSharingPolicyDetails {
     /// New Dropbox Showcase external sharing policy.
     pub new_value: ShowcaseExternalSharingPolicy,
@@ -79212,7 +79212,7 @@ impl ::serde::ser::Serialize for ShowcaseChangeExternalSharingPolicyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseChangeExternalSharingPolicyType {
     pub description: String,
 }
@@ -79302,7 +79302,7 @@ impl ::serde::ser::Serialize for ShowcaseChangeExternalSharingPolicyType {
 }
 
 /// Created showcase.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseCreatedDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -79392,7 +79392,7 @@ impl ::serde::ser::Serialize for ShowcaseCreatedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseCreatedType {
     pub description: String,
 }
@@ -79482,7 +79482,7 @@ impl ::serde::ser::Serialize for ShowcaseCreatedType {
 }
 
 /// Deleted showcase comment.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseDeleteCommentDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -79590,7 +79590,7 @@ impl ::serde::ser::Serialize for ShowcaseDeleteCommentDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseDeleteCommentType {
     pub description: String,
 }
@@ -79680,7 +79680,7 @@ impl ::serde::ser::Serialize for ShowcaseDeleteCommentType {
 }
 
 /// Showcase document's logged information.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseDocumentLogInfo {
     /// Showcase document Id.
     pub showcase_id: String,
@@ -79784,7 +79784,7 @@ impl ::serde::ser::Serialize for ShowcaseDocumentLogInfo {
 }
 
 /// Policy for controlling if files can be downloaded from Showcases by team members
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ShowcaseDownloadPolicy {
     Disabled,
     Enabled,
@@ -79854,7 +79854,7 @@ impl ::serde::ser::Serialize for ShowcaseDownloadPolicy {
 }
 
 /// Edited showcase comment.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseEditCommentDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -79962,7 +79962,7 @@ impl ::serde::ser::Serialize for ShowcaseEditCommentDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseEditCommentType {
     pub description: String,
 }
@@ -80052,7 +80052,7 @@ impl ::serde::ser::Serialize for ShowcaseEditCommentType {
 }
 
 /// Edited showcase.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseEditedDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -80142,7 +80142,7 @@ impl ::serde::ser::Serialize for ShowcaseEditedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseEditedType {
     pub description: String,
 }
@@ -80232,7 +80232,7 @@ impl ::serde::ser::Serialize for ShowcaseEditedType {
 }
 
 /// Policy for controlling whether Showcase is enabled.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ShowcaseEnabledPolicy {
     Disabled,
     Enabled,
@@ -80302,7 +80302,7 @@ impl ::serde::ser::Serialize for ShowcaseEnabledPolicy {
 }
 
 /// Policy for controlling if team members can share Showcases externally.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ShowcaseExternalSharingPolicy {
     Disabled,
     Enabled,
@@ -80372,7 +80372,7 @@ impl ::serde::ser::Serialize for ShowcaseExternalSharingPolicy {
 }
 
 /// Added file to showcase.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseFileAddedDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -80462,7 +80462,7 @@ impl ::serde::ser::Serialize for ShowcaseFileAddedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseFileAddedType {
     pub description: String,
 }
@@ -80552,7 +80552,7 @@ impl ::serde::ser::Serialize for ShowcaseFileAddedType {
 }
 
 /// Downloaded file from showcase.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseFileDownloadDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -80655,7 +80655,7 @@ impl ::serde::ser::Serialize for ShowcaseFileDownloadDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseFileDownloadType {
     pub description: String,
 }
@@ -80745,7 +80745,7 @@ impl ::serde::ser::Serialize for ShowcaseFileDownloadType {
 }
 
 /// Removed file from showcase.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseFileRemovedDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -80835,7 +80835,7 @@ impl ::serde::ser::Serialize for ShowcaseFileRemovedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseFileRemovedType {
     pub description: String,
 }
@@ -80925,7 +80925,7 @@ impl ::serde::ser::Serialize for ShowcaseFileRemovedType {
 }
 
 /// Viewed file in showcase.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseFileViewDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -81015,7 +81015,7 @@ impl ::serde::ser::Serialize for ShowcaseFileViewDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseFileViewType {
     pub description: String,
 }
@@ -81105,7 +81105,7 @@ impl ::serde::ser::Serialize for ShowcaseFileViewType {
 }
 
 /// Permanently deleted showcase.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcasePermanentlyDeletedDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -81195,7 +81195,7 @@ impl ::serde::ser::Serialize for ShowcasePermanentlyDeletedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcasePermanentlyDeletedType {
     pub description: String,
 }
@@ -81285,7 +81285,7 @@ impl ::serde::ser::Serialize for ShowcasePermanentlyDeletedType {
 }
 
 /// Added showcase comment.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcasePostCommentDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -81393,7 +81393,7 @@ impl ::serde::ser::Serialize for ShowcasePostCommentDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcasePostCommentType {
     pub description: String,
 }
@@ -81483,7 +81483,7 @@ impl ::serde::ser::Serialize for ShowcasePostCommentType {
 }
 
 /// Removed member from showcase.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseRemoveMemberDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -81573,7 +81573,7 @@ impl ::serde::ser::Serialize for ShowcaseRemoveMemberDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseRemoveMemberType {
     pub description: String,
 }
@@ -81663,7 +81663,7 @@ impl ::serde::ser::Serialize for ShowcaseRemoveMemberType {
 }
 
 /// Renamed showcase.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseRenamedDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -81753,7 +81753,7 @@ impl ::serde::ser::Serialize for ShowcaseRenamedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseRenamedType {
     pub description: String,
 }
@@ -81843,7 +81843,7 @@ impl ::serde::ser::Serialize for ShowcaseRenamedType {
 }
 
 /// Requested access to showcase.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseRequestAccessDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -81933,7 +81933,7 @@ impl ::serde::ser::Serialize for ShowcaseRequestAccessDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseRequestAccessType {
     pub description: String,
 }
@@ -82023,7 +82023,7 @@ impl ::serde::ser::Serialize for ShowcaseRequestAccessType {
 }
 
 /// Resolved showcase comment.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseResolveCommentDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -82131,7 +82131,7 @@ impl ::serde::ser::Serialize for ShowcaseResolveCommentDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseResolveCommentType {
     pub description: String,
 }
@@ -82221,7 +82221,7 @@ impl ::serde::ser::Serialize for ShowcaseResolveCommentType {
 }
 
 /// Unarchived showcase.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseRestoredDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -82311,7 +82311,7 @@ impl ::serde::ser::Serialize for ShowcaseRestoredDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseRestoredType {
     pub description: String,
 }
@@ -82401,7 +82401,7 @@ impl ::serde::ser::Serialize for ShowcaseRestoredType {
 }
 
 /// Deleted showcase (old version).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseTrashedDeprecatedDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -82491,7 +82491,7 @@ impl ::serde::ser::Serialize for ShowcaseTrashedDeprecatedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseTrashedDeprecatedType {
     pub description: String,
 }
@@ -82581,7 +82581,7 @@ impl ::serde::ser::Serialize for ShowcaseTrashedDeprecatedType {
 }
 
 /// Deleted showcase.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseTrashedDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -82671,7 +82671,7 @@ impl ::serde::ser::Serialize for ShowcaseTrashedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseTrashedType {
     pub description: String,
 }
@@ -82761,7 +82761,7 @@ impl ::serde::ser::Serialize for ShowcaseTrashedType {
 }
 
 /// Unresolved showcase comment.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseUnresolveCommentDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -82869,7 +82869,7 @@ impl ::serde::ser::Serialize for ShowcaseUnresolveCommentDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseUnresolveCommentType {
     pub description: String,
 }
@@ -82959,7 +82959,7 @@ impl ::serde::ser::Serialize for ShowcaseUnresolveCommentType {
 }
 
 /// Restored showcase (old version).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseUntrashedDeprecatedDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -83049,7 +83049,7 @@ impl ::serde::ser::Serialize for ShowcaseUntrashedDeprecatedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseUntrashedDeprecatedType {
     pub description: String,
 }
@@ -83139,7 +83139,7 @@ impl ::serde::ser::Serialize for ShowcaseUntrashedDeprecatedType {
 }
 
 /// Restored showcase.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseUntrashedDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -83229,7 +83229,7 @@ impl ::serde::ser::Serialize for ShowcaseUntrashedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseUntrashedType {
     pub description: String,
 }
@@ -83319,7 +83319,7 @@ impl ::serde::ser::Serialize for ShowcaseUntrashedType {
 }
 
 /// Viewed showcase.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseViewDetails {
     /// Event unique identifier.
     pub event_uuid: String,
@@ -83409,7 +83409,7 @@ impl ::serde::ser::Serialize for ShowcaseViewDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShowcaseViewType {
     pub description: String,
 }
@@ -83499,7 +83499,7 @@ impl ::serde::ser::Serialize for ShowcaseViewType {
 }
 
 /// Ended admin sign-in-as session.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SignInAsSessionEndDetails {
 }
 
@@ -83548,7 +83548,7 @@ impl ::serde::ser::Serialize for SignInAsSessionEndDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SignInAsSessionEndType {
     pub description: String,
 }
@@ -83638,7 +83638,7 @@ impl ::serde::ser::Serialize for SignInAsSessionEndType {
 }
 
 /// Started admin sign-in-as session.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SignInAsSessionStartDetails {
 }
 
@@ -83687,7 +83687,7 @@ impl ::serde::ser::Serialize for SignInAsSessionStartDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SignInAsSessionStartType {
     pub description: String,
 }
@@ -83777,7 +83777,7 @@ impl ::serde::ser::Serialize for SignInAsSessionStartType {
 }
 
 /// Changed default Smart Sync setting for team members.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SmartSyncChangePolicyDetails {
     /// New smart sync policy.
     pub new_value: Option<super::team_policies::SmartSyncPolicy>,
@@ -83868,7 +83868,7 @@ impl ::serde::ser::Serialize for SmartSyncChangePolicyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SmartSyncChangePolicyType {
     pub description: String,
 }
@@ -83958,7 +83958,7 @@ impl ::serde::ser::Serialize for SmartSyncChangePolicyType {
 }
 
 /// Created Smart Sync non-admin devices report.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SmartSyncCreateAdminPrivilegeReportDetails {
 }
 
@@ -84007,7 +84007,7 @@ impl ::serde::ser::Serialize for SmartSyncCreateAdminPrivilegeReportDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SmartSyncCreateAdminPrivilegeReportType {
     pub description: String,
 }
@@ -84097,7 +84097,7 @@ impl ::serde::ser::Serialize for SmartSyncCreateAdminPrivilegeReportType {
 }
 
 /// Opted team into Smart Sync.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SmartSyncNotOptOutDetails {
     /// Previous Smart Sync opt out policy.
     pub previous_value: SmartSyncOptOutPolicy,
@@ -84200,7 +84200,7 @@ impl ::serde::ser::Serialize for SmartSyncNotOptOutDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SmartSyncNotOptOutType {
     pub description: String,
 }
@@ -84290,7 +84290,7 @@ impl ::serde::ser::Serialize for SmartSyncNotOptOutType {
 }
 
 /// Opted team out of Smart Sync.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SmartSyncOptOutDetails {
     /// Previous Smart Sync opt out policy.
     pub previous_value: SmartSyncOptOutPolicy,
@@ -84393,7 +84393,7 @@ impl ::serde::ser::Serialize for SmartSyncOptOutDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SmartSyncOptOutPolicy {
     Default,
     OptedOut,
@@ -84462,7 +84462,7 @@ impl ::serde::ser::Serialize for SmartSyncOptOutPolicy {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SmartSyncOptOutType {
     pub description: String,
 }
@@ -84552,7 +84552,7 @@ impl ::serde::ser::Serialize for SmartSyncOptOutType {
 }
 
 /// Changed automatic Smart Sync setting for team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SmarterSmartSyncPolicyChangedDetails {
     /// Previous automatic Smart Sync setting.
     pub previous_value: super::team_policies::SmarterSmartSyncPolicyState,
@@ -84658,7 +84658,7 @@ impl ::serde::ser::Serialize for SmarterSmartSyncPolicyChangedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SmarterSmartSyncPolicyChangedType {
     pub description: String,
 }
@@ -84748,7 +84748,7 @@ impl ::serde::ser::Serialize for SmarterSmartSyncPolicyChangedType {
 }
 
 /// Space limit alert policy
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SpaceCapsType {
     Hard,
     Off,
@@ -84829,7 +84829,7 @@ impl ::serde::ser::Serialize for SpaceCapsType {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SpaceLimitsStatus {
     WithinQuota,
     NearQuota,
@@ -84911,7 +84911,7 @@ impl ::serde::ser::Serialize for SpaceLimitsStatus {
 }
 
 /// Added X.509 certificate for SSO.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SsoAddCertDetails {
     /// SSO certificate details.
     pub certificate_details: Certificate,
@@ -85001,7 +85001,7 @@ impl ::serde::ser::Serialize for SsoAddCertDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SsoAddCertType {
     pub description: String,
 }
@@ -85091,7 +85091,7 @@ impl ::serde::ser::Serialize for SsoAddCertType {
 }
 
 /// Added sign-in URL for SSO.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SsoAddLoginUrlDetails {
     /// New single sign-on login URL.
     pub new_value: String,
@@ -85181,7 +85181,7 @@ impl ::serde::ser::Serialize for SsoAddLoginUrlDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SsoAddLoginUrlType {
     pub description: String,
 }
@@ -85271,7 +85271,7 @@ impl ::serde::ser::Serialize for SsoAddLoginUrlType {
 }
 
 /// Added sign-out URL for SSO.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SsoAddLogoutUrlDetails {
     /// New single sign-on logout URL. Might be missing due to historical data gap.
     pub new_value: Option<String>,
@@ -85349,7 +85349,7 @@ impl ::serde::ser::Serialize for SsoAddLogoutUrlDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SsoAddLogoutUrlType {
     pub description: String,
 }
@@ -85439,7 +85439,7 @@ impl ::serde::ser::Serialize for SsoAddLogoutUrlType {
 }
 
 /// Changed X.509 certificate for SSO.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SsoChangeCertDetails {
     /// New SSO certificate details.
     pub new_certificate_details: Certificate,
@@ -85547,7 +85547,7 @@ impl ::serde::ser::Serialize for SsoChangeCertDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SsoChangeCertType {
     pub description: String,
 }
@@ -85637,7 +85637,7 @@ impl ::serde::ser::Serialize for SsoChangeCertType {
 }
 
 /// Changed sign-in URL for SSO.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SsoChangeLoginUrlDetails {
     /// Previous single sign-on login URL.
     pub previous_value: String,
@@ -85740,7 +85740,7 @@ impl ::serde::ser::Serialize for SsoChangeLoginUrlDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SsoChangeLoginUrlType {
     pub description: String,
 }
@@ -85830,7 +85830,7 @@ impl ::serde::ser::Serialize for SsoChangeLoginUrlType {
 }
 
 /// Changed sign-out URL for SSO.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SsoChangeLogoutUrlDetails {
     /// Previous single sign-on logout URL. Might be missing due to historical data gap.
     pub previous_value: Option<String>,
@@ -85921,7 +85921,7 @@ impl ::serde::ser::Serialize for SsoChangeLogoutUrlDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SsoChangeLogoutUrlType {
     pub description: String,
 }
@@ -86011,7 +86011,7 @@ impl ::serde::ser::Serialize for SsoChangeLogoutUrlType {
 }
 
 /// Changed single sign-on setting for team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SsoChangePolicyDetails {
     /// New single sign-on policy.
     pub new_value: super::team_policies::SsoPolicy,
@@ -86119,7 +86119,7 @@ impl ::serde::ser::Serialize for SsoChangePolicyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SsoChangePolicyType {
     pub description: String,
 }
@@ -86209,7 +86209,7 @@ impl ::serde::ser::Serialize for SsoChangePolicyType {
 }
 
 /// Changed SAML identity mode for SSO.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SsoChangeSamlIdentityModeDetails {
     /// Previous single sign-on identity mode.
     pub previous_value: i64,
@@ -86312,7 +86312,7 @@ impl ::serde::ser::Serialize for SsoChangeSamlIdentityModeDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SsoChangeSamlIdentityModeType {
     pub description: String,
 }
@@ -86402,7 +86402,7 @@ impl ::serde::ser::Serialize for SsoChangeSamlIdentityModeType {
 }
 
 /// Failed to sign in via SSO.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SsoErrorDetails {
     /// Error details.
     pub error_details: FailureDetailsLogInfo,
@@ -86492,7 +86492,7 @@ impl ::serde::ser::Serialize for SsoErrorDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SsoErrorType {
     pub description: String,
 }
@@ -86582,7 +86582,7 @@ impl ::serde::ser::Serialize for SsoErrorType {
 }
 
 /// Removed X.509 certificate for SSO.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SsoRemoveCertDetails {
 }
 
@@ -86631,7 +86631,7 @@ impl ::serde::ser::Serialize for SsoRemoveCertDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SsoRemoveCertType {
     pub description: String,
 }
@@ -86721,7 +86721,7 @@ impl ::serde::ser::Serialize for SsoRemoveCertType {
 }
 
 /// Removed sign-in URL for SSO.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SsoRemoveLoginUrlDetails {
     /// Previous single sign-on login URL.
     pub previous_value: String,
@@ -86811,7 +86811,7 @@ impl ::serde::ser::Serialize for SsoRemoveLoginUrlDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SsoRemoveLoginUrlType {
     pub description: String,
 }
@@ -86901,7 +86901,7 @@ impl ::serde::ser::Serialize for SsoRemoveLoginUrlType {
 }
 
 /// Removed sign-out URL for SSO.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SsoRemoveLogoutUrlDetails {
     /// Previous single sign-on logout URL.
     pub previous_value: String,
@@ -86991,7 +86991,7 @@ impl ::serde::ser::Serialize for SsoRemoveLogoutUrlDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SsoRemoveLogoutUrlType {
     pub description: String,
 }
@@ -87081,7 +87081,7 @@ impl ::serde::ser::Serialize for SsoRemoveLogoutUrlType {
 }
 
 /// Started enterprise admin session.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct StartedEnterpriseAdminSessionDetails {
     /// More information about the organization or team.
     pub federation_extra_details: FedExtraDetails,
@@ -87171,7 +87171,7 @@ impl ::serde::ser::Serialize for StartedEnterpriseAdminSessionDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct StartedEnterpriseAdminSessionType {
     pub description: String,
 }
@@ -87261,7 +87261,7 @@ impl ::serde::ser::Serialize for StartedEnterpriseAdminSessionType {
 }
 
 /// Created team activity report.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamActivityCreateReportDetails {
     /// Report start date.
     pub start_date: super::common::DropboxTimestamp,
@@ -87368,7 +87368,7 @@ impl ::serde::ser::Serialize for TeamActivityCreateReportDetails {
 }
 
 /// Couldn't generate team activity report.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamActivityCreateReportFailDetails {
     /// Failure reason.
     pub failure_reason: super::team::TeamReportFailureReason,
@@ -87458,7 +87458,7 @@ impl ::serde::ser::Serialize for TeamActivityCreateReportFailDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamActivityCreateReportFailType {
     pub description: String,
 }
@@ -87547,7 +87547,7 @@ impl ::serde::ser::Serialize for TeamActivityCreateReportFailType {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamActivityCreateReportType {
     pub description: String,
 }
@@ -87637,7 +87637,7 @@ impl ::serde::ser::Serialize for TeamActivityCreateReportType {
 }
 
 /// More details about the team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamDetails {
     /// The name of the team.
     pub team: String,
@@ -87728,7 +87728,7 @@ impl ::serde::ser::Serialize for TeamDetails {
 }
 
 /// An audit log event.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamEvent {
     /// The Dropbox timestamp representing when the action was taken.
     pub timestamp: super::common::DropboxTimestamp,
@@ -87979,7 +87979,7 @@ impl ::serde::ser::Serialize for TeamEvent {
 }
 
 /// Policy for controlling whether App Integrations are enabled for the team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TeamExtensionsPolicy {
     Disabled,
     Enabled,
@@ -88049,7 +88049,7 @@ impl ::serde::ser::Serialize for TeamExtensionsPolicy {
 }
 
 /// Changed App Integrations setting for team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamExtensionsPolicyChangedDetails {
     /// New Extensions policy.
     pub new_value: TeamExtensionsPolicy,
@@ -88152,7 +88152,7 @@ impl ::serde::ser::Serialize for TeamExtensionsPolicyChangedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamExtensionsPolicyChangedType {
     pub description: String,
 }
@@ -88242,7 +88242,7 @@ impl ::serde::ser::Serialize for TeamExtensionsPolicyChangedType {
 }
 
 /// Changed archival status of team folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamFolderChangeStatusDetails {
     /// New team folder status.
     pub new_value: super::team::TeamFolderStatus,
@@ -88350,7 +88350,7 @@ impl ::serde::ser::Serialize for TeamFolderChangeStatusDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamFolderChangeStatusType {
     pub description: String,
 }
@@ -88440,7 +88440,7 @@ impl ::serde::ser::Serialize for TeamFolderChangeStatusType {
 }
 
 /// Created team folder in active status.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamFolderCreateDetails {
 }
 
@@ -88489,7 +88489,7 @@ impl ::serde::ser::Serialize for TeamFolderCreateDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamFolderCreateType {
     pub description: String,
 }
@@ -88579,7 +88579,7 @@ impl ::serde::ser::Serialize for TeamFolderCreateType {
 }
 
 /// Downgraded team folder to regular shared folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamFolderDowngradeDetails {
     /// Target asset position in the Assets list.
     pub target_asset_index: u64,
@@ -88669,7 +88669,7 @@ impl ::serde::ser::Serialize for TeamFolderDowngradeDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamFolderDowngradeType {
     pub description: String,
 }
@@ -88759,7 +88759,7 @@ impl ::serde::ser::Serialize for TeamFolderDowngradeType {
 }
 
 /// Permanently deleted archived team folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamFolderPermanentlyDeleteDetails {
 }
 
@@ -88808,7 +88808,7 @@ impl ::serde::ser::Serialize for TeamFolderPermanentlyDeleteDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamFolderPermanentlyDeleteType {
     pub description: String,
 }
@@ -88898,7 +88898,7 @@ impl ::serde::ser::Serialize for TeamFolderPermanentlyDeleteType {
 }
 
 /// Renamed active/archived team folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamFolderRenameDetails {
     /// Previous folder name.
     pub previous_folder_name: String,
@@ -89001,7 +89001,7 @@ impl ::serde::ser::Serialize for TeamFolderRenameDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamFolderRenameType {
     pub description: String,
 }
@@ -89091,7 +89091,7 @@ impl ::serde::ser::Serialize for TeamFolderRenameType {
 }
 
 /// Details about team invites
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamInviteDetails {
     /// How the user was invited to the team.
     pub invite_method: InviteMethod,
@@ -89182,7 +89182,7 @@ impl ::serde::ser::Serialize for TeamInviteDetails {
 }
 
 /// Team linked app
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamLinkedAppLogInfo {
     /// App unique ID. Might be missing due to historical data gap.
     pub app_id: Option<AppId>,
@@ -89274,7 +89274,7 @@ impl ::serde::ser::Serialize for TeamLinkedAppLogInfo {
 }
 
 /// Team's logged information.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamLogInfo {
     /// Team display name.
     pub display_name: String,
@@ -89365,7 +89365,7 @@ impl ::serde::ser::Serialize for TeamLogInfo {
 }
 
 /// Team member's logged information.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMemberLogInfo {
     /// User unique ID. Might be missing due to historical data gap.
     pub account_id: Option<super::users_common::AccountId>,
@@ -89508,7 +89508,7 @@ impl ::serde::ser::Serialize for TeamMemberLogInfo {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TeamMembershipType {
     Free,
     Full,
@@ -89578,7 +89578,7 @@ impl ::serde::ser::Serialize for TeamMembershipType {
 }
 
 /// Merged another team into this team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMergeFromDetails {
     /// The name of the team that was merged into this team.
     pub team_name: String,
@@ -89668,7 +89668,7 @@ impl ::serde::ser::Serialize for TeamMergeFromDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMergeFromType {
     pub description: String,
 }
@@ -89758,7 +89758,7 @@ impl ::serde::ser::Serialize for TeamMergeFromType {
 }
 
 /// Accepted a team merge request.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMergeRequestAcceptedDetails {
     /// Team merge request acceptance details.
     pub request_accepted_details: TeamMergeRequestAcceptedExtraDetails,
@@ -89849,7 +89849,7 @@ impl ::serde::ser::Serialize for TeamMergeRequestAcceptedDetails {
 }
 
 /// Team merge request acceptance details
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TeamMergeRequestAcceptedExtraDetails {
     /// Team merge request accepted details shown to the primary team.
     PrimaryTeam(PrimaryTeamRequestAcceptedDetails),
@@ -89917,7 +89917,7 @@ impl ::serde::ser::Serialize for TeamMergeRequestAcceptedExtraDetails {
 }
 
 /// Accepted a team merge request.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMergeRequestAcceptedShownToPrimaryTeamDetails {
     /// The secondary team name.
     pub secondary_team: String,
@@ -90020,7 +90020,7 @@ impl ::serde::ser::Serialize for TeamMergeRequestAcceptedShownToPrimaryTeamDetai
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMergeRequestAcceptedShownToPrimaryTeamType {
     pub description: String,
 }
@@ -90110,7 +90110,7 @@ impl ::serde::ser::Serialize for TeamMergeRequestAcceptedShownToPrimaryTeamType 
 }
 
 /// Accepted a team merge request.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMergeRequestAcceptedShownToSecondaryTeamDetails {
     /// The primary team name.
     pub primary_team: String,
@@ -90213,7 +90213,7 @@ impl ::serde::ser::Serialize for TeamMergeRequestAcceptedShownToSecondaryTeamDet
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMergeRequestAcceptedShownToSecondaryTeamType {
     pub description: String,
 }
@@ -90302,7 +90302,7 @@ impl ::serde::ser::Serialize for TeamMergeRequestAcceptedShownToSecondaryTeamTyp
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMergeRequestAcceptedType {
     pub description: String,
 }
@@ -90392,7 +90392,7 @@ impl ::serde::ser::Serialize for TeamMergeRequestAcceptedType {
 }
 
 /// Automatically canceled team merge request.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMergeRequestAutoCanceledDetails {
     /// The cancellation reason.
     pub details: Option<String>,
@@ -90470,7 +90470,7 @@ impl ::serde::ser::Serialize for TeamMergeRequestAutoCanceledDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMergeRequestAutoCanceledType {
     pub description: String,
 }
@@ -90560,7 +90560,7 @@ impl ::serde::ser::Serialize for TeamMergeRequestAutoCanceledType {
 }
 
 /// Canceled a team merge request.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMergeRequestCanceledDetails {
     /// Team merge request cancellation details.
     pub request_canceled_details: TeamMergeRequestCanceledExtraDetails,
@@ -90651,7 +90651,7 @@ impl ::serde::ser::Serialize for TeamMergeRequestCanceledDetails {
 }
 
 /// Team merge request cancellation details
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TeamMergeRequestCanceledExtraDetails {
     /// Team merge request cancellation details shown to the primary team.
     PrimaryTeam(PrimaryTeamRequestCanceledDetails),
@@ -90719,7 +90719,7 @@ impl ::serde::ser::Serialize for TeamMergeRequestCanceledExtraDetails {
 }
 
 /// Canceled a team merge request.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMergeRequestCanceledShownToPrimaryTeamDetails {
     /// The secondary team name.
     pub secondary_team: String,
@@ -90822,7 +90822,7 @@ impl ::serde::ser::Serialize for TeamMergeRequestCanceledShownToPrimaryTeamDetai
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMergeRequestCanceledShownToPrimaryTeamType {
     pub description: String,
 }
@@ -90912,7 +90912,7 @@ impl ::serde::ser::Serialize for TeamMergeRequestCanceledShownToPrimaryTeamType 
 }
 
 /// Canceled a team merge request.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMergeRequestCanceledShownToSecondaryTeamDetails {
     /// The email of the primary team admin that the request was sent to.
     pub sent_to: String,
@@ -91015,7 +91015,7 @@ impl ::serde::ser::Serialize for TeamMergeRequestCanceledShownToSecondaryTeamDet
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMergeRequestCanceledShownToSecondaryTeamType {
     pub description: String,
 }
@@ -91104,7 +91104,7 @@ impl ::serde::ser::Serialize for TeamMergeRequestCanceledShownToSecondaryTeamTyp
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMergeRequestCanceledType {
     pub description: String,
 }
@@ -91194,7 +91194,7 @@ impl ::serde::ser::Serialize for TeamMergeRequestCanceledType {
 }
 
 /// Team merge request expired.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMergeRequestExpiredDetails {
     /// Team merge request expiration details.
     pub request_expired_details: TeamMergeRequestExpiredExtraDetails,
@@ -91285,7 +91285,7 @@ impl ::serde::ser::Serialize for TeamMergeRequestExpiredDetails {
 }
 
 /// Team merge request expiration details
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TeamMergeRequestExpiredExtraDetails {
     /// Team merge request canceled details shown to the primary team.
     PrimaryTeam(PrimaryTeamRequestExpiredDetails),
@@ -91353,7 +91353,7 @@ impl ::serde::ser::Serialize for TeamMergeRequestExpiredExtraDetails {
 }
 
 /// Team merge request expired.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMergeRequestExpiredShownToPrimaryTeamDetails {
     /// The secondary team name.
     pub secondary_team: String,
@@ -91456,7 +91456,7 @@ impl ::serde::ser::Serialize for TeamMergeRequestExpiredShownToPrimaryTeamDetail
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMergeRequestExpiredShownToPrimaryTeamType {
     pub description: String,
 }
@@ -91546,7 +91546,7 @@ impl ::serde::ser::Serialize for TeamMergeRequestExpiredShownToPrimaryTeamType {
 }
 
 /// Team merge request expired.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMergeRequestExpiredShownToSecondaryTeamDetails {
     /// The email of the primary team admin the request was sent to.
     pub sent_to: String,
@@ -91636,7 +91636,7 @@ impl ::serde::ser::Serialize for TeamMergeRequestExpiredShownToSecondaryTeamDeta
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMergeRequestExpiredShownToSecondaryTeamType {
     pub description: String,
 }
@@ -91725,7 +91725,7 @@ impl ::serde::ser::Serialize for TeamMergeRequestExpiredShownToSecondaryTeamType
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMergeRequestExpiredType {
     pub description: String,
 }
@@ -91815,7 +91815,7 @@ impl ::serde::ser::Serialize for TeamMergeRequestExpiredType {
 }
 
 /// Rejected a team merge request.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMergeRequestRejectedShownToPrimaryTeamDetails {
     /// The secondary team name.
     pub secondary_team: String,
@@ -91918,7 +91918,7 @@ impl ::serde::ser::Serialize for TeamMergeRequestRejectedShownToPrimaryTeamDetai
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMergeRequestRejectedShownToPrimaryTeamType {
     pub description: String,
 }
@@ -92008,7 +92008,7 @@ impl ::serde::ser::Serialize for TeamMergeRequestRejectedShownToPrimaryTeamType 
 }
 
 /// Rejected a team merge request.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMergeRequestRejectedShownToSecondaryTeamDetails {
     /// The name of the secondary team admin who sent the request originally.
     pub sent_by: String,
@@ -92098,7 +92098,7 @@ impl ::serde::ser::Serialize for TeamMergeRequestRejectedShownToSecondaryTeamDet
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMergeRequestRejectedShownToSecondaryTeamType {
     pub description: String,
 }
@@ -92188,7 +92188,7 @@ impl ::serde::ser::Serialize for TeamMergeRequestRejectedShownToSecondaryTeamTyp
 }
 
 /// Sent a team merge request reminder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMergeRequestReminderDetails {
     /// Team merge request reminder details.
     pub request_reminder_details: TeamMergeRequestReminderExtraDetails,
@@ -92279,7 +92279,7 @@ impl ::serde::ser::Serialize for TeamMergeRequestReminderDetails {
 }
 
 /// Team merge request reminder details
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TeamMergeRequestReminderExtraDetails {
     /// Team merge request reminder details shown to the primary team.
     PrimaryTeam(PrimaryTeamRequestReminderDetails),
@@ -92347,7 +92347,7 @@ impl ::serde::ser::Serialize for TeamMergeRequestReminderExtraDetails {
 }
 
 /// Sent a team merge request reminder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMergeRequestReminderShownToPrimaryTeamDetails {
     /// The secondary team name.
     pub secondary_team: String,
@@ -92450,7 +92450,7 @@ impl ::serde::ser::Serialize for TeamMergeRequestReminderShownToPrimaryTeamDetai
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMergeRequestReminderShownToPrimaryTeamType {
     pub description: String,
 }
@@ -92540,7 +92540,7 @@ impl ::serde::ser::Serialize for TeamMergeRequestReminderShownToPrimaryTeamType 
 }
 
 /// Sent a team merge request reminder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMergeRequestReminderShownToSecondaryTeamDetails {
     /// The email of the primary team admin the request was sent to.
     pub sent_to: String,
@@ -92630,7 +92630,7 @@ impl ::serde::ser::Serialize for TeamMergeRequestReminderShownToSecondaryTeamDet
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMergeRequestReminderShownToSecondaryTeamType {
     pub description: String,
 }
@@ -92719,7 +92719,7 @@ impl ::serde::ser::Serialize for TeamMergeRequestReminderShownToSecondaryTeamTyp
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMergeRequestReminderType {
     pub description: String,
 }
@@ -92809,7 +92809,7 @@ impl ::serde::ser::Serialize for TeamMergeRequestReminderType {
 }
 
 /// Canceled the team merge.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMergeRequestRevokedDetails {
     /// The name of the other team.
     pub team: String,
@@ -92899,7 +92899,7 @@ impl ::serde::ser::Serialize for TeamMergeRequestRevokedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMergeRequestRevokedType {
     pub description: String,
 }
@@ -92989,7 +92989,7 @@ impl ::serde::ser::Serialize for TeamMergeRequestRevokedType {
 }
 
 /// Requested to merge their Dropbox team into yours.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMergeRequestSentShownToPrimaryTeamDetails {
     /// The secondary team name.
     pub secondary_team: String,
@@ -93092,7 +93092,7 @@ impl ::serde::ser::Serialize for TeamMergeRequestSentShownToPrimaryTeamDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMergeRequestSentShownToPrimaryTeamType {
     pub description: String,
 }
@@ -93182,7 +93182,7 @@ impl ::serde::ser::Serialize for TeamMergeRequestSentShownToPrimaryTeamType {
 }
 
 /// Requested to merge your team into another Dropbox team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMergeRequestSentShownToSecondaryTeamDetails {
     /// The email of the primary team admin the request was sent to.
     pub sent_to: String,
@@ -93272,7 +93272,7 @@ impl ::serde::ser::Serialize for TeamMergeRequestSentShownToSecondaryTeamDetails
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMergeRequestSentShownToSecondaryTeamType {
     pub description: String,
 }
@@ -93362,7 +93362,7 @@ impl ::serde::ser::Serialize for TeamMergeRequestSentShownToSecondaryTeamType {
 }
 
 /// Merged this team into another team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMergeToDetails {
     /// The name of the team that this team was merged into.
     pub team_name: String,
@@ -93452,7 +93452,7 @@ impl ::serde::ser::Serialize for TeamMergeToDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMergeToType {
     pub description: String,
 }
@@ -93542,7 +93542,7 @@ impl ::serde::ser::Serialize for TeamMergeToType {
 }
 
 /// Team name details
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamName {
     /// Team's display name.
     pub team_display_name: String,
@@ -93646,7 +93646,7 @@ impl ::serde::ser::Serialize for TeamName {
 }
 
 /// Added team logo to display on shared link headers.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamProfileAddLogoDetails {
 }
 
@@ -93695,7 +93695,7 @@ impl ::serde::ser::Serialize for TeamProfileAddLogoDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamProfileAddLogoType {
     pub description: String,
 }
@@ -93785,7 +93785,7 @@ impl ::serde::ser::Serialize for TeamProfileAddLogoType {
 }
 
 /// Changed default language for team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamProfileChangeDefaultLanguageDetails {
     /// New team's default language.
     pub new_value: super::common::LanguageCode,
@@ -93891,7 +93891,7 @@ impl ::serde::ser::Serialize for TeamProfileChangeDefaultLanguageDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamProfileChangeDefaultLanguageType {
     pub description: String,
 }
@@ -93981,7 +93981,7 @@ impl ::serde::ser::Serialize for TeamProfileChangeDefaultLanguageType {
 }
 
 /// Changed team logo displayed on shared link headers.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamProfileChangeLogoDetails {
 }
 
@@ -94030,7 +94030,7 @@ impl ::serde::ser::Serialize for TeamProfileChangeLogoDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamProfileChangeLogoType {
     pub description: String,
 }
@@ -94120,7 +94120,7 @@ impl ::serde::ser::Serialize for TeamProfileChangeLogoType {
 }
 
 /// Changed team name.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamProfileChangeNameDetails {
     /// New team name.
     pub new_value: TeamName,
@@ -94228,7 +94228,7 @@ impl ::serde::ser::Serialize for TeamProfileChangeNameDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamProfileChangeNameType {
     pub description: String,
 }
@@ -94318,7 +94318,7 @@ impl ::serde::ser::Serialize for TeamProfileChangeNameType {
 }
 
 /// Removed team logo displayed on shared link headers.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamProfileRemoveLogoDetails {
 }
 
@@ -94367,7 +94367,7 @@ impl ::serde::ser::Serialize for TeamProfileRemoveLogoDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamProfileRemoveLogoType {
     pub description: String,
 }
@@ -94457,7 +94457,7 @@ impl ::serde::ser::Serialize for TeamProfileRemoveLogoType {
 }
 
 /// Policy for controlling whether team selective sync is enabled for team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TeamSelectiveSyncPolicy {
     Disabled,
     Enabled,
@@ -94527,7 +94527,7 @@ impl ::serde::ser::Serialize for TeamSelectiveSyncPolicy {
 }
 
 /// Enabled/disabled Team Selective Sync for team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamSelectiveSyncPolicyChangedDetails {
     /// New Team Selective Sync policy.
     pub new_value: TeamSelectiveSyncPolicy,
@@ -94633,7 +94633,7 @@ impl ::serde::ser::Serialize for TeamSelectiveSyncPolicyChangedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamSelectiveSyncPolicyChangedType {
     pub description: String,
 }
@@ -94723,7 +94723,7 @@ impl ::serde::ser::Serialize for TeamSelectiveSyncPolicyChangedType {
 }
 
 /// Changed sync default.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamSelectiveSyncSettingsChangedDetails {
     /// Previous value.
     pub previous_value: super::files::SyncSetting,
@@ -94829,7 +94829,7 @@ impl ::serde::ser::Serialize for TeamSelectiveSyncSettingsChangedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamSelectiveSyncSettingsChangedType {
     pub description: String,
 }
@@ -94919,7 +94919,7 @@ impl ::serde::ser::Serialize for TeamSelectiveSyncSettingsChangedType {
 }
 
 /// Edited the approved list for sharing externally.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamSharingWhitelistSubjectsChangedDetails {
     /// Domains or emails added to the approved list for sharing externally.
     pub added_whitelist_subjects: Vec<String>,
@@ -95025,7 +95025,7 @@ impl ::serde::ser::Serialize for TeamSharingWhitelistSubjectsChangedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamSharingWhitelistSubjectsChangedType {
     pub description: String,
 }
@@ -95115,7 +95115,7 @@ impl ::serde::ser::Serialize for TeamSharingWhitelistSubjectsChangedType {
 }
 
 /// Added backup phone for two-step verification.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TfaAddBackupPhoneDetails {
 }
 
@@ -95164,7 +95164,7 @@ impl ::serde::ser::Serialize for TfaAddBackupPhoneDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TfaAddBackupPhoneType {
     pub description: String,
 }
@@ -95254,7 +95254,7 @@ impl ::serde::ser::Serialize for TfaAddBackupPhoneType {
 }
 
 /// Added members to two factor authentication exception list.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TfaAddExceptionDetails {
 }
 
@@ -95303,7 +95303,7 @@ impl ::serde::ser::Serialize for TfaAddExceptionDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TfaAddExceptionType {
     pub description: String,
 }
@@ -95393,7 +95393,7 @@ impl ::serde::ser::Serialize for TfaAddExceptionType {
 }
 
 /// Added security key for two-step verification.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TfaAddSecurityKeyDetails {
 }
 
@@ -95442,7 +95442,7 @@ impl ::serde::ser::Serialize for TfaAddSecurityKeyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TfaAddSecurityKeyType {
     pub description: String,
 }
@@ -95532,7 +95532,7 @@ impl ::serde::ser::Serialize for TfaAddSecurityKeyType {
 }
 
 /// Changed backup phone for two-step verification.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TfaChangeBackupPhoneDetails {
 }
 
@@ -95581,7 +95581,7 @@ impl ::serde::ser::Serialize for TfaChangeBackupPhoneDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TfaChangeBackupPhoneType {
     pub description: String,
 }
@@ -95671,7 +95671,7 @@ impl ::serde::ser::Serialize for TfaChangeBackupPhoneType {
 }
 
 /// Changed two-step verification setting for team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TfaChangePolicyDetails {
     /// New change policy.
     pub new_value: super::team_policies::TwoStepVerificationPolicy,
@@ -95782,7 +95782,7 @@ impl ::serde::ser::Serialize for TfaChangePolicyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TfaChangePolicyType {
     pub description: String,
 }
@@ -95872,7 +95872,7 @@ impl ::serde::ser::Serialize for TfaChangePolicyType {
 }
 
 /// Enabled/disabled/changed two-step verification setting.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TfaChangeStatusDetails {
     /// The new two factor authentication configuration.
     pub new_value: TfaConfiguration,
@@ -96000,7 +96000,7 @@ impl ::serde::ser::Serialize for TfaChangeStatusDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TfaChangeStatusType {
     pub description: String,
 }
@@ -96090,7 +96090,7 @@ impl ::serde::ser::Serialize for TfaChangeStatusType {
 }
 
 /// Two factor authentication configuration. Note: the enabled option is deprecated.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TfaConfiguration {
     Disabled,
     Enabled,
@@ -96184,7 +96184,7 @@ impl ::serde::ser::Serialize for TfaConfiguration {
 }
 
 /// Removed backup phone for two-step verification.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TfaRemoveBackupPhoneDetails {
 }
 
@@ -96233,7 +96233,7 @@ impl ::serde::ser::Serialize for TfaRemoveBackupPhoneDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TfaRemoveBackupPhoneType {
     pub description: String,
 }
@@ -96323,7 +96323,7 @@ impl ::serde::ser::Serialize for TfaRemoveBackupPhoneType {
 }
 
 /// Removed members from two factor authentication exception list.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TfaRemoveExceptionDetails {
 }
 
@@ -96372,7 +96372,7 @@ impl ::serde::ser::Serialize for TfaRemoveExceptionDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TfaRemoveExceptionType {
     pub description: String,
 }
@@ -96462,7 +96462,7 @@ impl ::serde::ser::Serialize for TfaRemoveExceptionType {
 }
 
 /// Removed security key for two-step verification.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TfaRemoveSecurityKeyDetails {
 }
 
@@ -96511,7 +96511,7 @@ impl ::serde::ser::Serialize for TfaRemoveSecurityKeyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TfaRemoveSecurityKeyType {
     pub description: String,
 }
@@ -96601,7 +96601,7 @@ impl ::serde::ser::Serialize for TfaRemoveSecurityKeyType {
 }
 
 /// Reset two-step verification for team member.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TfaResetDetails {
 }
 
@@ -96650,7 +96650,7 @@ impl ::serde::ser::Serialize for TfaResetDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TfaResetType {
     pub description: String,
 }
@@ -96739,7 +96739,7 @@ impl ::serde::ser::Serialize for TfaResetType {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TimeUnit {
     Milliseconds,
     Seconds,
@@ -96881,7 +96881,7 @@ impl ::serde::ser::Serialize for TimeUnit {
 }
 
 /// User that is not a member of the team but considered trusted.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TrustedNonTeamMemberLogInfo {
     /// Indicates the type of the member of a trusted team.
     pub trusted_non_team_member_type: TrustedNonTeamMemberType,
@@ -97043,7 +97043,7 @@ impl ::serde::ser::Serialize for TrustedNonTeamMemberLogInfo {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TrustedNonTeamMemberType {
     MultiInstanceAdmin,
     EnterpriseAdmin,
@@ -97112,7 +97112,7 @@ impl ::serde::ser::Serialize for TrustedNonTeamMemberType {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TrustedTeamsRequestAction {
     Invited,
     Expired,
@@ -97217,7 +97217,7 @@ impl ::serde::ser::Serialize for TrustedTeamsRequestAction {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TrustedTeamsRequestState {
     Invited,
     Linked,
@@ -97300,7 +97300,7 @@ impl ::serde::ser::Serialize for TrustedTeamsRequestState {
 
 /// Enabled/disabled option for members to link personal Dropbox account and team account to same
 /// computer.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TwoAccountChangePolicyDetails {
     /// New two account policy.
     pub new_value: TwoAccountPolicy,
@@ -97408,7 +97408,7 @@ impl ::serde::ser::Serialize for TwoAccountChangePolicyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TwoAccountChangePolicyType {
     pub description: String,
 }
@@ -97498,7 +97498,7 @@ impl ::serde::ser::Serialize for TwoAccountChangePolicyType {
 }
 
 /// Policy for pairing personal account to work account
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TwoAccountPolicy {
     Disabled,
     Enabled,
@@ -97568,7 +97568,7 @@ impl ::serde::ser::Serialize for TwoAccountPolicy {
 }
 
 /// User linked app
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UserLinkedAppLogInfo {
     /// App unique ID. Might be missing due to historical data gap.
     pub app_id: Option<AppId>,
@@ -97660,7 +97660,7 @@ impl ::serde::ser::Serialize for UserLinkedAppLogInfo {
 }
 
 /// User's logged information.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum UserLogInfo {
     TeamMember(TeamMemberLogInfo),
     TrustedNonTeamMember(TrustedNonTeamMemberLogInfo),
@@ -97741,7 +97741,7 @@ impl ::serde::ser::Serialize for UserLogInfo {
 }
 
 /// User's name logged information
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UserNameLogInfo {
     /// Given name.
     pub given_name: String,
@@ -97863,7 +97863,7 @@ impl ::serde::ser::Serialize for UserNameLogInfo {
 }
 
 /// User or team linked app. Used when linked type is missing due to historical data gap.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UserOrTeamLinkedAppLogInfo {
     /// App unique ID. Might be missing due to historical data gap.
     pub app_id: Option<AppId>,
@@ -97955,7 +97955,7 @@ impl ::serde::ser::Serialize for UserOrTeamLinkedAppLogInfo {
 }
 
 /// Changed team policy for viewer info.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ViewerInfoPolicyChangedDetails {
     /// Previous Viewer Info policy.
     pub previous_value: PassPolicy,
@@ -98058,7 +98058,7 @@ impl ::serde::ser::Serialize for ViewerInfoPolicyChangedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ViewerInfoPolicyChangedType {
     pub description: String,
 }
@@ -98148,7 +98148,7 @@ impl ::serde::ser::Serialize for ViewerInfoPolicyChangedType {
 }
 
 /// Policy for controlling team access to watermarking feature
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum WatermarkingPolicy {
     Disabled,
     Enabled,
@@ -98218,7 +98218,7 @@ impl ::serde::ser::Serialize for WatermarkingPolicy {
 }
 
 /// Changed watermarking policy for team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct WatermarkingPolicyChangedDetails {
     /// New watermarking policy.
     pub new_value: WatermarkingPolicy,
@@ -98321,7 +98321,7 @@ impl ::serde::ser::Serialize for WatermarkingPolicyChangedDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct WatermarkingPolicyChangedType {
     pub description: String,
 }
@@ -98411,7 +98411,7 @@ impl ::serde::ser::Serialize for WatermarkingPolicyChangedType {
 }
 
 /// Information on active web sessions
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct WebDeviceSessionLogInfo {
     /// Information on the hosting device.
     pub user_agent: String,
@@ -98602,7 +98602,7 @@ impl ::serde::ser::Serialize for WebDeviceSessionLogInfo {
 }
 
 /// Web session.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct WebSessionLogInfo {
     /// Session ID. Might be missing due to historical data gap.
     pub session_id: Option<super::common::SessionId>,
@@ -98681,7 +98681,7 @@ impl ::serde::ser::Serialize for WebSessionLogInfo {
 }
 
 /// Changed limit on active sessions per member.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct WebSessionsChangeActiveSessionLimitDetails {
     /// Previous max number of concurrent active sessions policy.
     pub previous_value: String,
@@ -98784,7 +98784,7 @@ impl ::serde::ser::Serialize for WebSessionsChangeActiveSessionLimitDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct WebSessionsChangeActiveSessionLimitType {
     pub description: String,
 }
@@ -98874,7 +98874,7 @@ impl ::serde::ser::Serialize for WebSessionsChangeActiveSessionLimitType {
 }
 
 /// Changed how long members can stay signed in to Dropbox.com.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct WebSessionsChangeFixedLengthPolicyDetails {
     /// New session length policy. Might be missing due to historical data gap.
     pub new_value: Option<WebSessionsFixedLengthPolicy>,
@@ -98965,7 +98965,7 @@ impl ::serde::ser::Serialize for WebSessionsChangeFixedLengthPolicyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct WebSessionsChangeFixedLengthPolicyType {
     pub description: String,
 }
@@ -99055,7 +99055,7 @@ impl ::serde::ser::Serialize for WebSessionsChangeFixedLengthPolicyType {
 }
 
 /// Changed how long team members can be idle while signed in to Dropbox.com.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct WebSessionsChangeIdleLengthPolicyDetails {
     /// New idle length policy. Might be missing due to historical data gap.
     pub new_value: Option<WebSessionsIdleLengthPolicy>,
@@ -99146,7 +99146,7 @@ impl ::serde::ser::Serialize for WebSessionsChangeIdleLengthPolicyDetails {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct WebSessionsChangeIdleLengthPolicyType {
     pub description: String,
 }
@@ -99236,7 +99236,7 @@ impl ::serde::ser::Serialize for WebSessionsChangeIdleLengthPolicyType {
 }
 
 /// Web sessions fixed length policy.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum WebSessionsFixedLengthPolicy {
     /// Defined fixed session length.
     Defined(DurationLogInfo),
@@ -99306,7 +99306,7 @@ impl ::serde::ser::Serialize for WebSessionsFixedLengthPolicy {
 }
 
 /// Web sessions idle length policy.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum WebSessionsIdleLengthPolicy {
     /// Defined idle session length.
     Defined(DurationLogInfo),

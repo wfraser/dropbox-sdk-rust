@@ -11,12 +11,12 @@
 
 /// Fetch the binary content of the requested document. This route requires Cloud Docs auth. Please
 /// make a request to cloud_docs/authorize and supply that token in the Authorization header.
-pub async fn get_content<'a>(
-    client: &'a dyn crate::client_trait::HttpClient,
-    arg: &GetContentArg,
+pub async fn get_content(
+    client: &dyn crate::client_trait::HttpClient,
+    arg: GetContentArg,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> crate::Result<crate::client_trait::HttpRequestResult<'a, ()>, CloudDocsAccessError> {
+) -> crate::Result<crate::client_trait::HttpRequestResult<()>, CloudDocsAccessError> {
     crate::client_helpers::request_with_body(
         client,
         crate::client_trait::Endpoint::Content,
@@ -34,7 +34,7 @@ pub async fn get_content<'a>(
 /// Please make a request to cloud_docs/authorize and supply that token in the Authorization header.
 pub async fn get_metadata(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &GetMetadataArg,
+    arg: GetMetadataArg,
 ) -> crate::Result<GetMetadataResult, GetMetadataError> {
     crate::client_helpers::request(
         client,
@@ -51,7 +51,7 @@ pub async fn get_metadata(
 /// cloud_docs/authorize and supply that token in the Authorization header.
 pub async fn lock(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &LockArg,
+    arg: LockArg,
 ) -> crate::Result<LockResult, LockingError> {
     crate::client_helpers::request(
         client,
@@ -68,7 +68,7 @@ pub async fn lock(
 /// cloud_docs/authorize and supply that token in the Authorization header.
 pub async fn rename(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &RenameArg,
+    arg: RenameArg,
 ) -> crate::Result<RenameResult, RenameError> {
     crate::client_helpers::request(
         client,
@@ -85,7 +85,7 @@ pub async fn rename(
 /// cloud_docs/authorize and supply that token in the Authorization header.
 pub async fn unlock(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &UnlockArg,
+    arg: UnlockArg,
 ) -> crate::Result<UnlockResult, LockingError> {
     crate::client_helpers::request(
         client,
@@ -103,8 +103,8 @@ pub async fn unlock(
 /// that token in the Authorization header.
 pub async fn update_content(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &UpdateContentArg,
-    body: Vec<u8>,
+    arg: UpdateContentArg,
+    body: crate::client_trait::RequestBodyStream,
 ) -> crate::Result<UpdateContentResult, UpdateContentError> {
     crate::client_helpers::request(
         client,
@@ -117,7 +117,7 @@ pub async fn update_content(
         .await
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum CloudDocsAccessError {
     /// The Cloud Doc ID is invalid.
     InvalidDocId,
@@ -213,7 +213,7 @@ impl ::std::fmt::Display for CloudDocsAccessError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Content {
     pub purpose: ContentPurpose,
     /// The key returned from an upload_additional_content response.
@@ -315,7 +315,7 @@ impl ::serde::ser::Serialize for Content {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ContentPurpose {
     Search,
     Preview,
@@ -384,7 +384,7 @@ impl ::serde::ser::Serialize for ContentPurpose {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum GenericErrorTag {
     /// Invalid argument supplied.
     InvalidArgument,
@@ -481,7 +481,7 @@ impl ::serde::ser::Serialize for GenericErrorTag {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GetContentArg {
     pub file_id: super::files::FileId,
 }
@@ -570,7 +570,7 @@ impl ::serde::ser::Serialize for GetContentArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GetMetadataArg {
     /// API ID ("id:...") associated with the Cloud Doc.
     pub file_id: String,
@@ -648,7 +648,7 @@ impl ::serde::ser::Serialize for GetMetadataArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GetMetadataError {
     pub get_metadata_error_tag: Option<GetMetadataErrorTagUnion>,
 }
@@ -725,7 +725,7 @@ impl ::serde::ser::Serialize for GetMetadataError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GetMetadataResult {
     pub file_id: String,
     /// Title of the Cloud Doc without extension.
@@ -896,7 +896,7 @@ impl ::serde::ser::Serialize for GetMetadataResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LockArg {
     /// The API ID ("id:...") associated with the Cloud Doc
     pub file_id: String,
@@ -974,7 +974,7 @@ impl ::serde::ser::Serialize for LockArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LockResult {
     pub file_id: String,
     /// The timestamp after which the lock will expire, measured in seconds since 1970-01-01
@@ -1065,7 +1065,7 @@ impl ::serde::ser::Serialize for LockResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LockingError {
     pub locking_error_tag: Option<LockingErrorTagUnion>,
 }
@@ -1142,7 +1142,7 @@ impl ::serde::ser::Serialize for LockingError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum LockingErrorTag {
     /// A lock on the doc is held by another editor
     Conflict,
@@ -1200,7 +1200,7 @@ impl ::serde::ser::Serialize for LockingErrorTag {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct RenameArg {
     /// The API ID ("id:...") associated with the Cloud Doc
     pub file_id: String,
@@ -1291,7 +1291,7 @@ impl ::serde::ser::Serialize for RenameArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct RenameError {
     pub rename_error_tag: Option<RenameErrorTagUnion>,
 }
@@ -1368,7 +1368,7 @@ impl ::serde::ser::Serialize for RenameError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum RenameErrorTag {
     /// The supplied title is invalid, e.g. the length of the title is longer than max length (255
     /// characters); the title contains illegal characters.
@@ -1427,7 +1427,7 @@ impl ::serde::ser::Serialize for RenameErrorTag {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct RenameResult {
     /// The updated title of the doc without extension, which could be different from the supplied
     /// title in the request because Dropbox may remove/replace charaters that are not supported in
@@ -1507,7 +1507,7 @@ impl ::serde::ser::Serialize for RenameResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UnlockArg {
     /// The API ID ("id:...") associated with the Cloud Doc
     pub file_id: String,
@@ -1586,7 +1586,7 @@ impl ::serde::ser::Serialize for UnlockArg {
 }
 
 /// Empty message for unlock
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UnlockResult {
 }
 
@@ -1635,7 +1635,7 @@ impl ::serde::ser::Serialize for UnlockResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UpdateContentArg {
     pub file_id: super::files::FileId,
     /// A list of auth_tokens, one for each editor who made changes to the document since the last
@@ -1756,7 +1756,7 @@ impl ::serde::ser::Serialize for UpdateContentArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum UpdateContentError {
     /// The Cloud Doc ID is invalid.
     InvalidDocId,
@@ -1892,7 +1892,7 @@ impl ::std::fmt::Display for UpdateContentError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UpdateContentResult {
     /// Version of the document stored in Dropbox.
     pub version: String,
@@ -1982,7 +1982,7 @@ impl ::serde::ser::Serialize for UpdateContentResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UserInfo {
     /// ID associated with the user.
     pub id: String,
@@ -2073,7 +2073,7 @@ impl ::serde::ser::Serialize for UserInfo {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UserPermissions {
     /// true if the user can edit the content of this document
     pub can_edit: bool,
@@ -2191,7 +2191,7 @@ impl ::serde::ser::Serialize for UserPermissions {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum GetMetadataErrorTagUnion {
     GenericError(GenericErrorTag),
     /// Catch-all used for unrecognized values returned from the server. Encountering this value
@@ -2252,7 +2252,7 @@ impl ::serde::ser::Serialize for GetMetadataErrorTagUnion {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum LockingErrorTagUnion {
     LockingError(LockingErrorTag),
     GenericError(GenericErrorTag),
@@ -2329,7 +2329,7 @@ impl ::serde::ser::Serialize for LockingErrorTagUnion {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum RenameErrorTagUnion {
     RenameError(RenameErrorTag),
     GenericError(GenericErrorTag),

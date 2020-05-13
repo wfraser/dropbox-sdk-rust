@@ -88,7 +88,7 @@ class RustBackend(RustHelperBackend):
     def _emit_struct(self, struct):
         struct_name = self.struct_name(struct)
         self._emit_doc(struct.doc)
-        self.emit(u'#[derive(Debug)]')
+        self.emit(u'#[derive(Debug, Clone)]')
         with self.block(u'pub struct {}'.format(struct_name)):
             for field in struct.all_fields:
                 self._emit_doc(field.doc)
@@ -113,7 +113,7 @@ class RustBackend(RustHelperBackend):
     def _emit_polymorphic_struct(self, struct):
         enum_name = self.enum_name(struct)
         self._emit_doc(struct.doc)
-        self.emit(u'#[derive(Debug)]')
+        self.emit(u'#[derive(Debug, Clone)]')
         with self.block(u'pub enum {}'.format(enum_name)):
             for subtype in struct.get_enumerated_subtypes():
                 self.emit(u'{}({}),'.format(
@@ -128,7 +128,7 @@ class RustBackend(RustHelperBackend):
     def _emit_union(self, union):
         enum_name = self.enum_name(union)
         self._emit_doc(union.doc)
-        self.emit(u'#[derive(Debug)]')
+        self.emit(u'#[derive(Debug, Clone)]')
         with self.block(u'pub enum {}'.format(enum_name)):
             for field in union.all_fields:
                 if field.catch_all:
@@ -179,7 +179,7 @@ class RustBackend(RustHelperBackend):
                     route_name,
                     [u'client: &dyn crate::client_trait::HttpClient']
                         + ([] if arg_void else
-                            [u'arg: &{}'.format(self._rust_type(fn.arg_data_type))]),
+                            [u'arg: {}'.format(self._rust_type(fn.arg_data_type))]),
                     u'crate::Result<{}, {}>'.format(
                         self._rust_type(fn.result_data_type),
                         self._rust_type(fn.error_data_type)),
@@ -194,13 +194,13 @@ class RustBackend(RustHelperBackend):
                         u'None'])
         elif style == 'download':
             with self.emit_rust_function_def(
-                    route_name + '<\'a>',
-                    [u'client: &\'a dyn crate::client_trait::HttpClient']
+                    route_name,
+                    [u'client: &dyn crate::client_trait::HttpClient']
                         + ([] if arg_void else
-                            [u'arg: &{}'.format(self._rust_type(fn.arg_data_type))])
+                            [u'arg: {}'.format(self._rust_type(fn.arg_data_type))])
                         + [u'range_start: Option<u64>',
                             u'range_end: Option<u64>'],
-                    u'crate::Result<crate::client_trait::HttpRequestResult<\'a, {}>, {}>'.format(
+                    u'crate::Result<crate::client_trait::HttpRequestResult<{}>, {}>'.format(
                         self._rust_type(fn.result_data_type),
                         self._rust_type(fn.error_data_type)),
                     access=u'pub async'):
@@ -219,8 +219,8 @@ class RustBackend(RustHelperBackend):
                     route_name,
                     [u'client: &dyn crate::client_trait::HttpClient']
                         + ([] if arg_void else
-                            [u'arg: &{}'.format(self._rust_type(fn.arg_data_type))])
-                        + [u'body: Vec<u8>'],
+                            [u'arg: {}'.format(self._rust_type(fn.arg_data_type))])
+                        + [u'body: crate::client_trait::RequestBodyStream'],
                     u'crate::Result<{}, {}>'.format(
                         self._rust_type(fn.result_data_type),
                         self._rust_type(fn.error_data_type)),

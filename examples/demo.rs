@@ -100,7 +100,7 @@ async fn main() {
         let stdout = io::stdout();
         let mut stdout_lock = stdout.lock();
         'download: loop {
-            let result = files::download(&client, &download_arg, Some(bytes_out), None).await;
+            let result = files::download(&client, download_arg.clone(), Some(bytes_out), None).await;
             match result {
                 Ok(download_result) => {
                     let mut body = download_result.body.expect("no body received!");
@@ -184,7 +184,7 @@ async fn list_directory<'a>(client: &'a dyn HttpClient, path: &str, recursive: b
     };
     match files::list_folder(
         client,
-        &files::ListFolderArg::new(requested_path.to_owned())
+        files::ListFolderArg::new(requested_path.to_owned())
             .with_recursive(recursive))
         .await
     {
@@ -216,7 +216,7 @@ impl<'a> DirectoryIterator<'a> {
         if let Some(entry) = self.buffer.pop_front() {
             Some(Ok(entry))
         } else if let Some(cursor) = self.cursor.take() {
-            match files::list_folder_continue(self.client, &files::ListFolderContinueArg::new(cursor)).await {
+            match files::list_folder_continue(self.client, files::ListFolderContinueArg::new(cursor)).await {
                 Ok(result) => {
                     self.buffer.extend(result.entries.into_iter());
                     if result.has_more {

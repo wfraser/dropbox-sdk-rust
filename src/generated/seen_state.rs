@@ -8,7 +8,7 @@
 )]
 
 /// Possible platforms on which a user may view content.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum PlatformType {
     /// The content was viewed on the web.
     Web,

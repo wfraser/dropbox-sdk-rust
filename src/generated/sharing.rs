@@ -22,7 +22,7 @@ pub type TeamInfo = super::users::Team;
 /// Adds specified members to a file.
 pub async fn add_file_member(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &AddFileMemberArgs,
+    arg: AddFileMemberArgs,
 ) -> crate::Result<Vec<FileMemberActionResult>, AddFileMemberError> {
     crate::client_helpers::request(
         client,
@@ -40,7 +40,7 @@ pub async fn add_file_member(
 /// to call [`mount_folder()`](mount_folder) on their behalf.
 pub async fn add_folder_member(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &AddFolderMemberArg,
+    arg: AddFolderMemberArg,
 ) -> crate::Result<(), AddFolderMemberError> {
     crate::client_helpers::request(
         client,
@@ -56,7 +56,7 @@ pub async fn add_folder_member(
 /// Identical to update_file_member but with less information returned.
 pub async fn change_file_member_access(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &ChangeFileMemberAccessArgs,
+    arg: ChangeFileMemberAccessArgs,
 ) -> crate::Result<FileMemberActionResult, FileMemberActionError> {
     crate::client_helpers::request(
         client,
@@ -72,7 +72,7 @@ pub async fn change_file_member_access(
 /// Returns the status of an asynchronous job.
 pub async fn check_job_status(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &super::dbx_async::PollArg,
+    arg: super::dbx_async::PollArg,
 ) -> crate::Result<JobStatus, super::dbx_async::PollError> {
     crate::client_helpers::request(
         client,
@@ -88,7 +88,7 @@ pub async fn check_job_status(
 /// Returns the status of an asynchronous job for sharing a folder.
 pub async fn check_remove_member_job_status(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &super::dbx_async::PollArg,
+    arg: super::dbx_async::PollArg,
 ) -> crate::Result<RemoveMemberJobStatus, super::dbx_async::PollError> {
     crate::client_helpers::request(
         client,
@@ -104,7 +104,7 @@ pub async fn check_remove_member_job_status(
 /// Returns the status of an asynchronous job for sharing a folder.
 pub async fn check_share_job_status(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &super::dbx_async::PollArg,
+    arg: super::dbx_async::PollArg,
 ) -> crate::Result<ShareFolderJobStatus, super::dbx_async::PollError> {
     crate::client_helpers::request(
         client,
@@ -127,7 +127,7 @@ pub async fn check_share_job_status(
 /// [`revoke_shared_link()`](revoke_shared_link).
 pub async fn create_shared_link(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &CreateSharedLinkArg,
+    arg: CreateSharedLinkArg,
 ) -> crate::Result<PathLinkMetadata, CreateSharedLinkError> {
     crate::client_helpers::request(
         client,
@@ -145,7 +145,7 @@ pub async fn create_shared_link(
 /// though, may depend on other aspects such as team and shared folder settings).
 pub async fn create_shared_link_with_settings(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &CreateSharedLinkWithSettingsArg,
+    arg: CreateSharedLinkWithSettingsArg,
 ) -> crate::Result<SharedLinkMetadata, CreateSharedLinkWithSettingsError> {
     crate::client_helpers::request(
         client,
@@ -161,7 +161,7 @@ pub async fn create_shared_link_with_settings(
 /// Returns shared file metadata.
 pub async fn get_file_metadata(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &GetFileMetadataArg,
+    arg: GetFileMetadataArg,
 ) -> crate::Result<SharedFileMetadata, GetFileMetadataError> {
     crate::client_helpers::request(
         client,
@@ -177,7 +177,7 @@ pub async fn get_file_metadata(
 /// Returns shared file metadata.
 pub async fn get_file_metadata_batch(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &GetFileMetadataBatchArg,
+    arg: GetFileMetadataBatchArg,
 ) -> crate::Result<Vec<GetFileMetadataBatchResult>, SharingUserError> {
     crate::client_helpers::request(
         client,
@@ -193,7 +193,7 @@ pub async fn get_file_metadata_batch(
 /// Returns shared folder metadata by its folder ID.
 pub async fn get_folder_metadata(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &GetMetadataArgs,
+    arg: GetMetadataArgs,
 ) -> crate::Result<SharedFolderMetadata, SharedFolderAccessError> {
     crate::client_helpers::request(
         client,
@@ -207,12 +207,12 @@ pub async fn get_folder_metadata(
 }
 
 /// Download the shared link's file from a user's Dropbox.
-pub async fn get_shared_link_file<'a>(
-    client: &'a dyn crate::client_trait::HttpClient,
-    arg: &GetSharedLinkFileArg,
+pub async fn get_shared_link_file(
+    client: &dyn crate::client_trait::HttpClient,
+    arg: GetSharedLinkFileArg,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> crate::Result<crate::client_trait::HttpRequestResult<'a, SharedLinkMetadata>, GetSharedLinkFileError> {
+) -> crate::Result<crate::client_trait::HttpRequestResult<SharedLinkMetadata>, GetSharedLinkFileError> {
     crate::client_helpers::request_with_body(
         client,
         crate::client_trait::Endpoint::Content,
@@ -229,7 +229,7 @@ pub async fn get_shared_link_file<'a>(
 /// Get the shared link's metadata.
 pub async fn get_shared_link_metadata(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &GetSharedLinkMetadataArg,
+    arg: GetSharedLinkMetadataArg,
 ) -> crate::Result<SharedLinkMetadata, SharedLinkError> {
     crate::client_helpers::request(
         client,
@@ -249,7 +249,7 @@ pub async fn get_shared_link_metadata(
 /// this case. Note that the url field in the response is never the shortened URL.
 pub async fn get_shared_links(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &GetSharedLinksArg,
+    arg: GetSharedLinksArg,
 ) -> crate::Result<GetSharedLinksResult, GetSharedLinksError> {
     crate::client_helpers::request(
         client,
@@ -266,7 +266,7 @@ pub async fn get_shared_links(
 /// members.
 pub async fn list_file_members(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &ListFileMembersArg,
+    arg: ListFileMembersArg,
 ) -> crate::Result<SharedFileMembers, ListFileMembersError> {
     crate::client_helpers::request(
         client,
@@ -285,7 +285,7 @@ pub async fn list_file_members(
 /// permissions are not returned for this endpoint.
 pub async fn list_file_members_batch(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &ListFileMembersBatchArg,
+    arg: ListFileMembersBatchArg,
 ) -> crate::Result<Vec<ListFileMembersBatchResult>, SharingUserError> {
     crate::client_helpers::request(
         client,
@@ -303,7 +303,7 @@ pub async fn list_file_members_batch(
 /// file members.
 pub async fn list_file_members_continue(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &ListFileMembersContinueArg,
+    arg: ListFileMembersContinueArg,
 ) -> crate::Result<SharedFileMembers, ListFileMembersContinueError> {
     crate::client_helpers::request(
         client,
@@ -319,7 +319,7 @@ pub async fn list_file_members_continue(
 /// Returns shared folder membership by its folder ID.
 pub async fn list_folder_members(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &ListFolderMembersArgs,
+    arg: ListFolderMembersArgs,
 ) -> crate::Result<SharedFolderMembers, SharedFolderAccessError> {
     crate::client_helpers::request(
         client,
@@ -336,7 +336,7 @@ pub async fn list_folder_members(
 /// to paginate through all shared folder members.
 pub async fn list_folder_members_continue(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &ListFolderMembersContinueArg,
+    arg: ListFolderMembersContinueArg,
 ) -> crate::Result<SharedFolderMembers, ListFolderMembersContinueError> {
     crate::client_helpers::request(
         client,
@@ -352,7 +352,7 @@ pub async fn list_folder_members_continue(
 /// Return the list of all shared folders the current user has access to.
 pub async fn list_folders(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &ListFoldersArgs,
+    arg: ListFoldersArgs,
 ) -> crate::Result<ListFoldersResult, ()> {
     crate::client_helpers::request(
         client,
@@ -370,7 +370,7 @@ pub async fn list_folders(
 /// [`list_folders()`](list_folders) or [`list_folders_continue()`](list_folders_continue).
 pub async fn list_folders_continue(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &ListFoldersContinueArg,
+    arg: ListFoldersContinueArg,
 ) -> crate::Result<ListFoldersResult, ListFoldersContinueError> {
     crate::client_helpers::request(
         client,
@@ -386,7 +386,7 @@ pub async fn list_folders_continue(
 /// Return the list of all shared folders the current user can mount or unmount.
 pub async fn list_mountable_folders(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &ListFoldersArgs,
+    arg: ListFoldersArgs,
 ) -> crate::Result<ListFoldersResult, ()> {
     crate::client_helpers::request(
         client,
@@ -405,7 +405,7 @@ pub async fn list_mountable_folders(
 /// [`list_mountable_folders_continue()`](list_mountable_folders_continue).
 pub async fn list_mountable_folders_continue(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &ListFoldersContinueArg,
+    arg: ListFoldersContinueArg,
 ) -> crate::Result<ListFoldersResult, ListFoldersContinueError> {
     crate::client_helpers::request(
         client,
@@ -422,7 +422,7 @@ pub async fn list_mountable_folders_continue(
 /// received via shared folders, and does  not include unclaimed invitations.
 pub async fn list_received_files(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &ListFilesArg,
+    arg: ListFilesArg,
 ) -> crate::Result<ListFilesResult, SharingUserError> {
     crate::client_helpers::request(
         client,
@@ -438,7 +438,7 @@ pub async fn list_received_files(
 /// Get more results with a cursor from [`list_received_files()`](list_received_files).
 pub async fn list_received_files_continue(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &ListFilesContinueArg,
+    arg: ListFilesContinueArg,
 ) -> crate::Result<ListFilesResult, ListFilesContinueError> {
     crate::client_helpers::request(
         client,
@@ -457,7 +457,7 @@ pub async fn list_received_files_continue(
 /// path. Links to parent folders can be suppressed by setting direct_only to true.
 pub async fn list_shared_links(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &ListSharedLinksArg,
+    arg: ListSharedLinksArg,
 ) -> crate::Result<ListSharedLinksResult, ListSharedLinksError> {
     crate::client_helpers::request(
         client,
@@ -478,7 +478,7 @@ pub async fn list_shared_links(
 /// visibility.
 pub async fn modify_shared_link_settings(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &ModifySharedLinkSettingsArgs,
+    arg: ModifySharedLinkSettingsArgs,
 ) -> crate::Result<SharedLinkMetadata, ModifySharedLinkSettingsError> {
     crate::client_helpers::request(
         client,
@@ -495,7 +495,7 @@ pub async fn modify_shared_link_settings(
 /// been added as a member. Once mounted, the shared folder will appear in their Dropbox.
 pub async fn mount_folder(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &MountFolderArg,
+    arg: MountFolderArg,
 ) -> crate::Result<SharedFolderMetadata, MountFolderError> {
     crate::client_helpers::request(
         client,
@@ -512,7 +512,7 @@ pub async fn mount_folder(
 /// user may still have inherited access to this file through the parent folder.
 pub async fn relinquish_file_membership(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &RelinquishFileMembershipArg,
+    arg: RelinquishFileMembershipArg,
 ) -> crate::Result<(), RelinquishFileMembershipError> {
     crate::client_helpers::request(
         client,
@@ -531,7 +531,7 @@ pub async fn relinquish_file_membership(
 /// is true.
 pub async fn relinquish_folder_membership(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &RelinquishFolderMembershipArg,
+    arg: RelinquishFolderMembershipArg,
 ) -> crate::Result<super::dbx_async::LaunchEmptyResult, RelinquishFolderMembershipError> {
     crate::client_helpers::request(
         client,
@@ -547,7 +547,7 @@ pub async fn relinquish_folder_membership(
 /// Identical to remove_file_member_2 but with less information returned.
 pub async fn remove_file_member(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &RemoveFileMemberArg,
+    arg: RemoveFileMemberArg,
 ) -> crate::Result<FileMemberActionIndividualResult, RemoveFileMemberError> {
     crate::client_helpers::request(
         client,
@@ -563,7 +563,7 @@ pub async fn remove_file_member(
 /// Removes a specified member from the file.
 pub async fn remove_file_member_2(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &RemoveFileMemberArg,
+    arg: RemoveFileMemberArg,
 ) -> crate::Result<FileMemberRemoveActionResult, RemoveFileMemberError> {
     crate::client_helpers::request(
         client,
@@ -580,7 +580,7 @@ pub async fn remove_file_member_2(
 /// member.
 pub async fn remove_folder_member(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &RemoveFolderMemberArg,
+    arg: RemoveFolderMemberArg,
 ) -> crate::Result<super::dbx_async::LaunchResultBase, RemoveFolderMemberError> {
     crate::client_helpers::request(
         client,
@@ -600,7 +600,7 @@ pub async fn remove_folder_member(
 /// [`ListSharedLinksArg::path`](ListSharedLinksArg) argument.
 pub async fn revoke_shared_link(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &RevokeSharedLinkArg,
+    arg: RevokeSharedLinkArg,
 ) -> crate::Result<(), RevokeSharedLinkError> {
     crate::client_helpers::request(
         client,
@@ -619,7 +619,7 @@ pub async fn revoke_shared_link(
 /// action completes to get the metadata for the folder.
 pub async fn set_access_inheritance(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &SetAccessInheritanceArg,
+    arg: SetAccessInheritanceArg,
 ) -> crate::Result<ShareFolderLaunch, SetAccessInheritanceError> {
     crate::client_helpers::request(
         client,
@@ -640,7 +640,7 @@ pub async fn set_access_inheritance(
 /// metadata for the folder.
 pub async fn share_folder(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &ShareFolderArg,
+    arg: ShareFolderArg,
 ) -> crate::Result<ShareFolderLaunch, ShareFolderError> {
     crate::client_helpers::request(
         client,
@@ -657,7 +657,7 @@ pub async fn share_folder(
 /// [`AccessLevel::Owner`](AccessLevel::Owner) access to the shared folder to perform a transfer.
 pub async fn transfer_folder(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &TransferFolderArg,
+    arg: TransferFolderArg,
 ) -> crate::Result<(), TransferFolderError> {
     crate::client_helpers::request(
         client,
@@ -674,7 +674,7 @@ pub async fn transfer_folder(
 /// using [`mount_folder()`](mount_folder).
 pub async fn unmount_folder(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &UnmountFolderArg,
+    arg: UnmountFolderArg,
 ) -> crate::Result<(), UnmountFolderError> {
     crate::client_helpers::request(
         client,
@@ -690,7 +690,7 @@ pub async fn unmount_folder(
 /// Remove all members from this file. Does not remove inherited members.
 pub async fn unshare_file(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &UnshareFileArg,
+    arg: UnshareFileArg,
 ) -> crate::Result<(), UnshareFileError> {
     crate::client_helpers::request(
         client,
@@ -707,7 +707,7 @@ pub async fn unshare_file(
 /// [`check_job_status()`](check_job_status) to determine if the action has completed successfully.
 pub async fn unshare_folder(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &UnshareFolderArg,
+    arg: UnshareFolderArg,
 ) -> crate::Result<super::dbx_async::LaunchEmptyResult, UnshareFolderError> {
     crate::client_helpers::request(
         client,
@@ -723,7 +723,7 @@ pub async fn unshare_folder(
 /// Changes a member's access on a shared file.
 pub async fn update_file_member(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &UpdateFileMemberArgs,
+    arg: UpdateFileMemberArgs,
 ) -> crate::Result<MemberAccessLevelResult, FileMemberActionError> {
     crate::client_helpers::request(
         client,
@@ -739,7 +739,7 @@ pub async fn update_file_member(
 /// Allows an owner or editor of a shared folder to update another member's permissions.
 pub async fn update_folder_member(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &UpdateFolderMemberArg,
+    arg: UpdateFolderMemberArg,
 ) -> crate::Result<MemberAccessLevelResult, UpdateFolderMemberError> {
     crate::client_helpers::request(
         client,
@@ -756,7 +756,7 @@ pub async fn update_folder_member(
 /// [`AccessLevel::Owner`](AccessLevel::Owner) access to the shared folder to update its policies.
 pub async fn update_folder_policy(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &UpdateFolderPolicyArg,
+    arg: UpdateFolderPolicyArg,
 ) -> crate::Result<SharedFolderMetadata, UpdateFolderPolicyError> {
     crate::client_helpers::request(
         client,
@@ -770,7 +770,7 @@ pub async fn update_folder_policy(
 }
 
 /// Information about the inheritance policy of a shared folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum AccessInheritance {
     /// The shared folder inherits its members from the parent folder.
     Inherit,
@@ -842,7 +842,7 @@ impl ::serde::ser::Serialize for AccessInheritance {
 }
 
 /// Defines the access levels for collaborators.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum AccessLevel {
     /// The collaborator is the owner of the shared folder. Owners can view and edit the shared
     /// folder as well as set the folder's policies using
@@ -943,7 +943,7 @@ impl ::serde::ser::Serialize for AccessLevel {
 
 /// Who can change a shared folder's access control list (ACL). In other words, who can add, remove,
 /// or change the privileges of members.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum AclUpdatePolicy {
     /// Only the owner can update the ACL.
     Owner,
@@ -1015,7 +1015,7 @@ impl ::serde::ser::Serialize for AclUpdatePolicy {
 }
 
 /// Arguments for [`add_file_member()`](add_file_member).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AddFileMemberArgs {
     /// File to which to add members.
     pub file: PathOrId,
@@ -1192,7 +1192,7 @@ impl ::serde::ser::Serialize for AddFileMemberArgs {
 }
 
 /// Errors for [`add_file_member()`](add_file_member).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum AddFileMemberError {
     UserError(SharingUserError),
     AccessError(SharingFileAccessError),
@@ -1307,7 +1307,7 @@ impl ::std::fmt::Display for AddFileMemberError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AddFolderMemberArg {
     /// The ID for the shared folder.
     pub shared_folder_id: super::common::SharedFolderId,
@@ -1447,7 +1447,7 @@ impl ::serde::ser::Serialize for AddFolderMemberArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum AddFolderMemberError {
     /// Unable to access shared folder.
     AccessError(SharedFolderAccessError),
@@ -1679,7 +1679,7 @@ impl ::std::fmt::Display for AddFolderMemberError {
 }
 
 /// The member and type of access the member should have when added to a shared folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AddMember {
     /// The member to add to the shared folder.
     pub member: MemberSelector,
@@ -1788,7 +1788,7 @@ impl ::serde::ser::Serialize for AddMember {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum AddMemberSelectorError {
     /// Automatically created groups can only be added to team folders.
     AutomaticGroup,
@@ -1938,7 +1938,7 @@ impl ::std::fmt::Display for AddMemberSelectorError {
 }
 
 /// Information about the content that has a link audience different than that of this folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AudienceExceptionContentInfo {
     /// The name of the content, which is either a file or a folder.
     pub name: String,
@@ -2030,7 +2030,7 @@ impl ::serde::ser::Serialize for AudienceExceptionContentInfo {
 
 /// The total count and truncated list of information of content inside this folder that has a
 /// different audience than the link on this folder. This is only returned for folders.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AudienceExceptions {
     pub count: u32,
     /// A truncated list of some of the content that is an exception. The length of this list could
@@ -2136,7 +2136,7 @@ impl ::serde::ser::Serialize for AudienceExceptions {
 
 /// Information about the shared folder that prevents the link audience for this link from being
 /// more restrictive.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AudienceRestrictingSharedFolder {
     /// The ID of the shared folder.
     pub shared_folder_id: super::common::SharedFolderId,
@@ -2257,7 +2257,7 @@ impl ::serde::ser::Serialize for AudienceRestrictingSharedFolder {
 }
 
 /// Arguments for [`change_file_member_access()`](change_file_member_access).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ChangeFileMemberAccessArgs {
     /// File for which we are changing a member's access.
     pub file: PathOrId,
@@ -2374,7 +2374,7 @@ impl ::serde::ser::Serialize for ChangeFileMemberAccessArgs {
 }
 
 /// Metadata for a collection-based shared link.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct CollectionLinkMetadata {
     /// URL of the shared link.
     pub url: String,
@@ -2495,7 +2495,7 @@ impl ::serde::ser::Serialize for CollectionLinkMetadata {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct CreateSharedLinkArg {
     /// The path to share.
     pub path: String,
@@ -2624,7 +2624,7 @@ impl ::serde::ser::Serialize for CreateSharedLinkArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum CreateSharedLinkError {
     Path(super::files::LookupError),
     /// Catch-all used for unrecognized values returned from the server. Encountering this value
@@ -2697,7 +2697,7 @@ impl ::std::fmt::Display for CreateSharedLinkError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct CreateSharedLinkWithSettingsArg {
     /// The path to be shared by the shared link.
     pub path: ReadPath,
@@ -2805,7 +2805,7 @@ impl ::serde::ser::Serialize for CreateSharedLinkWithSettingsArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum CreateSharedLinkWithSettingsError {
     Path(super::files::LookupError),
     /// User's email should be verified.
@@ -2933,7 +2933,7 @@ impl ::std::fmt::Display for CreateSharedLinkWithSettingsError {
 
 /// The expected metadata of a shared link for a file or folder when a link is first created for the
 /// content. Absent if the link already exists.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ExpectedSharedContentLinkMetadata {
     /// The audience options that are available for the content. Some audience options may be
     /// unavailable. For example, team_only may be unavailable if the content is not owned by a user
@@ -3129,7 +3129,7 @@ impl ::serde::ser::Serialize for ExpectedSharedContentLinkMetadata {
 }
 
 /// Sharing actions that may be taken on files.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum FileAction {
     /// Disable viewer information on the file.
     DisableViewerInfo,
@@ -3330,7 +3330,7 @@ impl ::serde::ser::Serialize for FileAction {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum FileErrorResult {
     /// File specified by id was not found.
     FileNotFoundError(super::files::Id),
@@ -3427,7 +3427,7 @@ impl ::serde::ser::Serialize for FileErrorResult {
 }
 
 /// The metadata of a file shared link.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileLinkMetadata {
     /// URL of the shared link.
     pub url: String,
@@ -3701,7 +3701,7 @@ impl ::serde::ser::Serialize for FileLinkMetadata {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum FileMemberActionError {
     /// Specified member was not found.
     InvalidMember,
@@ -3814,7 +3814,7 @@ impl ::std::fmt::Display for FileMemberActionError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum FileMemberActionIndividualResult {
     /// Member was successfully removed from this file. If AccessLevel is given, the member still
     /// has access via a parent shared folder.
@@ -3888,7 +3888,7 @@ impl ::serde::ser::Serialize for FileMemberActionIndividualResult {
 
 /// Per-member result for [`add_file_member()`](add_file_member) or
 /// [`change_file_member_access()`](change_file_member_access).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FileMemberActionResult {
     /// One of specified input members.
     pub member: MemberSelector,
@@ -3991,7 +3991,7 @@ impl ::serde::ser::Serialize for FileMemberActionResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum FileMemberRemoveActionResult {
     /// Member was successfully removed from this file.
     Success(MemberAccessLevelResult),
@@ -4065,7 +4065,7 @@ impl ::serde::ser::Serialize for FileMemberRemoveActionResult {
 }
 
 /// Whether the user is allowed to take the sharing action on the file.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FilePermission {
     /// The action that the user may wish to take on the file.
     pub action: FileAction,
@@ -4187,7 +4187,7 @@ impl ::serde::ser::Serialize for FilePermission {
 }
 
 /// Actions that may be taken on shared folders.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum FolderAction {
     /// Change folder options, such as who can be invited to join the folder.
     ChangeOptions,
@@ -4415,7 +4415,7 @@ impl ::serde::ser::Serialize for FolderAction {
 }
 
 /// The metadata of a folder shared link.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FolderLinkMetadata {
     /// URL of the shared link.
     pub url: String,
@@ -4626,7 +4626,7 @@ impl ::serde::ser::Serialize for FolderLinkMetadata {
 }
 
 /// Whether the user is allowed to take the action on the shared folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FolderPermission {
     /// The action that the user may wish to take on the folder.
     pub action: FolderAction,
@@ -4749,7 +4749,7 @@ impl ::serde::ser::Serialize for FolderPermission {
 }
 
 /// A set of policies governing membership and privileges for a shared folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FolderPolicy {
     /// Who can add and remove members from this shared folder.
     pub acl_update_policy: AclUpdatePolicy,
@@ -4911,7 +4911,7 @@ impl ::serde::ser::Serialize for FolderPolicy {
 }
 
 /// Arguments of [`get_file_metadata()`](get_file_metadata).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GetFileMetadataArg {
     /// The file to query.
     pub file: PathOrId,
@@ -5022,7 +5022,7 @@ impl ::serde::ser::Serialize for GetFileMetadataArg {
 }
 
 /// Arguments of [`get_file_metadata_batch()`](get_file_metadata_batch).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GetFileMetadataBatchArg {
     /// The files to query.
     pub files: Vec<PathOrId>,
@@ -5133,7 +5133,7 @@ impl ::serde::ser::Serialize for GetFileMetadataBatchArg {
 }
 
 /// Per file results of [`get_file_metadata_batch()`](get_file_metadata_batch).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GetFileMetadataBatchResult {
     /// This is the input file identifier corresponding to one of
     /// [`GetFileMetadataBatchArg::files`](GetFileMetadataBatchArg).
@@ -5238,7 +5238,7 @@ impl ::serde::ser::Serialize for GetFileMetadataBatchResult {
 }
 
 /// Error result for [`get_file_metadata()`](get_file_metadata).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum GetFileMetadataError {
     UserError(SharingUserError),
     AccessError(SharingFileAccessError),
@@ -5327,7 +5327,7 @@ impl ::std::fmt::Display for GetFileMetadataError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum GetFileMetadataIndividualResult {
     /// The result for this file if it was successful.
     Metadata(SharedFileMetadata),
@@ -5400,7 +5400,7 @@ impl ::serde::ser::Serialize for GetFileMetadataIndividualResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GetMetadataArgs {
     /// The ID for the shared folder.
     pub shared_folder_id: super::common::SharedFolderId,
@@ -5510,7 +5510,7 @@ impl ::serde::ser::Serialize for GetMetadataArgs {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum GetSharedLinkFileError {
     /// The shared link wasn't found.
     SharedLinkNotFound,
@@ -5619,7 +5619,7 @@ impl ::std::fmt::Display for GetSharedLinkFileError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GetSharedLinkMetadataArg {
     /// URL of the shared link.
     pub url: String,
@@ -5746,7 +5746,7 @@ impl ::serde::ser::Serialize for GetSharedLinkMetadataArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GetSharedLinksArg {
     /// See [`get_shared_links()`](get_shared_links) description.
     pub path: Option<String>,
@@ -5824,7 +5824,7 @@ impl ::serde::ser::Serialize for GetSharedLinksArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum GetSharedLinksError {
     Path(super::files::MalformedPathError),
     /// Catch-all used for unrecognized values returned from the server. Encountering this value
@@ -5900,7 +5900,7 @@ impl ::std::fmt::Display for GetSharedLinksError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GetSharedLinksResult {
     /// Shared links applicable to the path argument.
     pub links: Vec<LinkMetadata>,
@@ -5992,7 +5992,7 @@ impl ::serde::ser::Serialize for GetSharedLinksResult {
 
 /// The information about a group. Groups is a way to manage a list of users  who need same access
 /// permission to the shared folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupInfo {
     pub group_name: String,
     pub group_id: super::team_common::GroupId,
@@ -6206,7 +6206,7 @@ impl ::serde::ser::Serialize for GroupInfo {
 }
 
 /// The information about a group member of the shared content.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GroupMembershipInfo {
     /// The access type for this member. It contains inherited access type from parent folder, and
     /// acquired access type from this folder.
@@ -6365,7 +6365,7 @@ impl ::serde::ser::Serialize for GroupMembershipInfo {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct InsufficientPlan {
     /// A message to tell the user to upgrade in order to support expected action.
     pub message: String,
@@ -6474,7 +6474,7 @@ impl ::serde::ser::Serialize for InsufficientPlan {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct InsufficientQuotaAmounts {
     /// The amount of space needed to add the item (the size of the item).
     pub space_needed: u64,
@@ -6591,7 +6591,7 @@ impl ::serde::ser::Serialize for InsufficientQuotaAmounts {
 }
 
 /// Information about the recipient of a shared content invitation.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum InviteeInfo {
     /// E-mail address of invited user.
     Email(super::common::EmailAddress),
@@ -6654,7 +6654,7 @@ impl ::serde::ser::Serialize for InviteeInfo {
 }
 
 /// Information about an invited member of a shared content.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct InviteeMembershipInfo {
     /// The access type for this member. It contains inherited access type from parent folder, and
     /// acquired access type from this folder.
@@ -6833,7 +6833,7 @@ impl ::serde::ser::Serialize for InviteeMembershipInfo {
 
 /// Error occurred while performing an asynchronous job from [`unshare_folder()`](unshare_folder) or
 /// [`remove_folder_member()`](remove_folder_member).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum JobError {
     /// Error occurred while performing [`unshare_folder()`](unshare_folder) action.
     UnshareFolderError(UnshareFolderError),
@@ -6942,7 +6942,7 @@ impl ::std::fmt::Display for JobError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum JobStatus {
     /// The asynchronous job is still in progress.
     InProgress,
@@ -7022,7 +7022,7 @@ impl ::serde::ser::Serialize for JobStatus {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum LinkAccessLevel {
     /// Users who use the link can view and comment on the content.
     Viewer,
@@ -7094,7 +7094,7 @@ impl ::serde::ser::Serialize for LinkAccessLevel {
 }
 
 /// Actions that can be performed on a link.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum LinkAction {
     /// Change the access level of the link.
     ChangeAccessLevel,
@@ -7217,7 +7217,7 @@ impl ::serde::ser::Serialize for LinkAction {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum LinkAudience {
     /// Link is accessible by anyone.
     Public,
@@ -7329,7 +7329,7 @@ impl ::serde::ser::Serialize for LinkAudience {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum LinkExpiry {
     /// Remove the currently set expiry for the link.
     RemoveExpiry,
@@ -7406,7 +7406,7 @@ impl ::serde::ser::Serialize for LinkExpiry {
 
 /// Metadata for a shared link. This can be either a [`PathLinkMetadata`](PathLinkMetadata) or
 /// [`CollectionLinkMetadata`](CollectionLinkMetadata).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum LinkMetadata {
     Path(PathLinkMetadata),
     Collection(CollectionLinkMetadata),
@@ -7471,7 +7471,7 @@ impl ::serde::ser::Serialize for LinkMetadata {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum LinkPassword {
     /// Remove the currently set password for the link.
     RemovePassword,
@@ -7547,7 +7547,7 @@ impl ::serde::ser::Serialize for LinkPassword {
 }
 
 /// Permissions for actions that can be performed on a link.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LinkPermission {
     pub action: LinkAction,
     pub allow: bool,
@@ -7665,7 +7665,7 @@ impl ::serde::ser::Serialize for LinkPermission {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LinkPermissions {
     /// Whether the caller can revoke the shared link.
     pub can_revoke: bool,
@@ -7863,7 +7863,7 @@ impl ::serde::ser::Serialize for LinkPermissions {
 }
 
 /// Settings that apply to a link.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct LinkSettings {
     /// The access level on the link for this file. Currently, it only accepts 'viewer' and
     /// 'viewer_no_comment'.
@@ -7982,7 +7982,7 @@ impl ::serde::ser::Serialize for LinkSettings {
 }
 
 /// Arguments for [`list_file_members()`](list_file_members).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListFileMembersArg {
     /// The file for which you want to see members.
     pub file: PathOrId,
@@ -8127,7 +8127,7 @@ impl ::serde::ser::Serialize for ListFileMembersArg {
 }
 
 /// Arguments for [`list_file_members_batch()`](list_file_members_batch).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListFileMembersBatchArg {
     /// Files for which to return members.
     pub files: Vec<PathOrId>,
@@ -8236,7 +8236,7 @@ impl ::serde::ser::Serialize for ListFileMembersBatchArg {
 }
 
 /// Per-file result for [`list_file_members_batch()`](list_file_members_batch).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListFileMembersBatchResult {
     /// This is the input file identifier, whether an ID or a path.
     pub file: PathOrId,
@@ -8340,7 +8340,7 @@ impl ::serde::ser::Serialize for ListFileMembersBatchResult {
 }
 
 /// Arguments for [`list_file_members_continue()`](list_file_members_continue).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListFileMembersContinueArg {
     /// The cursor returned by your last call to [`list_file_members()`](list_file_members),
     /// [`list_file_members_continue()`](list_file_members_continue), or
@@ -8433,7 +8433,7 @@ impl ::serde::ser::Serialize for ListFileMembersContinueArg {
 }
 
 /// Error for [`list_file_members_continue()`](list_file_members_continue).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ListFileMembersContinueError {
     UserError(SharingUserError),
     AccessError(SharingFileAccessError),
@@ -8535,7 +8535,7 @@ impl ::std::fmt::Display for ListFileMembersContinueError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListFileMembersCountResult {
     /// A list of members on this file.
     pub members: SharedFileMembers,
@@ -8639,7 +8639,7 @@ impl ::serde::ser::Serialize for ListFileMembersCountResult {
 }
 
 /// Error for [`list_file_members()`](list_file_members).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ListFileMembersError {
     UserError(SharingUserError),
     AccessError(SharingFileAccessError),
@@ -8728,7 +8728,7 @@ impl ::std::fmt::Display for ListFileMembersError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ListFileMembersIndividualResult {
     /// The results of the query for this file if it was successful.
     Result(ListFileMembersCountResult),
@@ -8802,7 +8802,7 @@ impl ::serde::ser::Serialize for ListFileMembersIndividualResult {
 }
 
 /// Arguments for [`list_received_files()`](list_received_files).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListFilesArg {
     /// Number of files to return max per query. Defaults to 100 if no limit is specified.
     pub limit: u32,
@@ -8896,7 +8896,7 @@ impl ::serde::ser::Serialize for ListFilesArg {
 }
 
 /// Arguments for [`list_received_files_continue()`](list_received_files_continue).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListFilesContinueArg {
     /// Cursor in [`ListFilesResult::cursor`](ListFilesResult).
     pub cursor: String,
@@ -8987,7 +8987,7 @@ impl ::serde::ser::Serialize for ListFilesContinueArg {
 }
 
 /// Error results for [`list_received_files_continue()`](list_received_files_continue).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ListFilesContinueError {
     /// User account had a problem.
     UserError(SharingUserError),
@@ -9075,7 +9075,7 @@ impl ::std::fmt::Display for ListFilesContinueError {
 }
 
 /// Success results for [`list_received_files()`](list_received_files).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListFilesResult {
     /// Information about the files shared with current user.
     pub entries: Vec<SharedFileMetadata>,
@@ -9183,7 +9183,7 @@ impl ::serde::ser::Serialize for ListFilesResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListFolderMembersArgs {
     /// The ID for the shared folder.
     pub shared_folder_id: super::common::SharedFolderId,
@@ -9312,7 +9312,7 @@ impl ::serde::ser::Serialize for ListFolderMembersArgs {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListFolderMembersContinueArg {
     /// The cursor returned by your last call to [`list_folder_members()`](list_folder_members) or
     /// [`list_folder_members_continue()`](list_folder_members_continue).
@@ -9403,7 +9403,7 @@ impl ::serde::ser::Serialize for ListFolderMembersContinueArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ListFolderMembersContinueError {
     AccessError(SharedFolderAccessError),
     /// [`ListFolderMembersContinueArg::cursor`](ListFolderMembersContinueArg) is invalid.
@@ -9489,7 +9489,7 @@ impl ::std::fmt::Display for ListFolderMembersContinueError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListFolderMembersCursorArg {
     /// This is a list indicating whether each returned member will include a boolean value
     /// [`MemberPermission::allow`](MemberPermission) that describes whether the current user can
@@ -9583,7 +9583,7 @@ impl ::serde::ser::Serialize for ListFolderMembersCursorArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListFoldersArgs {
     /// The maximum number of results to return per request.
     pub limit: u32,
@@ -9676,7 +9676,7 @@ impl ::serde::ser::Serialize for ListFoldersArgs {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListFoldersContinueArg {
     /// The cursor returned by the previous API call specified in the endpoint description.
     pub cursor: String,
@@ -9766,7 +9766,7 @@ impl ::serde::ser::Serialize for ListFoldersContinueArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ListFoldersContinueError {
     /// [`ListFoldersContinueArg::cursor`](ListFoldersContinueArg) is invalid.
     InvalidCursor,
@@ -9840,7 +9840,7 @@ impl ::std::fmt::Display for ListFoldersContinueError {
 /// [`list_mountable_folders()`](list_mountable_folders), depending on which endpoint was requested.
 /// Unmounted shared folders can be identified by the absence of
 /// [`SharedFolderMetadata::path_lower`](SharedFolderMetadata).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListFoldersResult {
     /// List of all shared folders the authenticated user has access to.
     pub entries: Vec<SharedFolderMetadata>,
@@ -9952,7 +9952,7 @@ impl ::serde::ser::Serialize for ListFoldersResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListSharedLinksArg {
     /// See [`list_shared_links()`](list_shared_links) description.
     pub path: Option<ReadPath>,
@@ -10056,7 +10056,7 @@ impl ::serde::ser::Serialize for ListSharedLinksArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ListSharedLinksError {
     Path(super::files::LookupError),
     /// Indicates that the cursor has been invalidated. Call
@@ -10143,7 +10143,7 @@ impl ::std::fmt::Display for ListSharedLinksError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListSharedLinksResult {
     /// Shared links applicable to the path argument.
     pub links: Vec<SharedLinkMetadata>,
@@ -10267,7 +10267,7 @@ impl ::serde::ser::Serialize for ListSharedLinksResult {
 }
 
 /// Contains information about a member's access level to content after an operation.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberAccessLevelResult {
     /// The member still has this level of access to the content through a parent folder.
     pub access_level: Option<AccessLevel>,
@@ -10374,7 +10374,7 @@ impl ::serde::ser::Serialize for MemberAccessLevelResult {
 }
 
 /// Actions that may be taken on members of a shared folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum MemberAction {
     /// Allow the member to keep a copy of the folder when removing.
     LeaveACopy,
@@ -10498,7 +10498,7 @@ impl ::serde::ser::Serialize for MemberAction {
 }
 
 /// Whether the user is allowed to take the action on the associated member.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MemberPermission {
     /// The action that the user may wish to take on the member.
     pub action: MemberAction,
@@ -10621,7 +10621,7 @@ impl ::serde::ser::Serialize for MemberPermission {
 
 /// Policy governing who can be a member of a shared folder. Only applicable to folders owned by a
 /// user on a team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum MemberPolicy {
     /// Only a teammate can become a member.
     Team,
@@ -10693,7 +10693,7 @@ impl ::serde::ser::Serialize for MemberPolicy {
 }
 
 /// Includes different ways to identify a member of a shared folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum MemberSelector {
     /// Dropbox account, team member, or group ID of member.
     DropboxId(DropboxId),
@@ -10773,7 +10773,7 @@ impl ::serde::ser::Serialize for MemberSelector {
 }
 
 /// The information about a member of the shared content.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MembershipInfo {
     /// The access type for this member. It contains inherited access type from parent folder, and
     /// acquired access type from this folder.
@@ -10919,7 +10919,7 @@ impl ::serde::ser::Serialize for MembershipInfo {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ModifySharedLinkSettingsArgs {
     /// URL of the shared link to change its settings.
     pub url: String,
@@ -11040,7 +11040,7 @@ impl ::serde::ser::Serialize for ModifySharedLinkSettingsArgs {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ModifySharedLinkSettingsError {
     /// The shared link wasn't found.
     SharedLinkNotFound,
@@ -11166,7 +11166,7 @@ impl ::std::fmt::Display for ModifySharedLinkSettingsError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct MountFolderArg {
     /// The ID of the shared folder to mount.
     pub shared_folder_id: super::common::SharedFolderId,
@@ -11256,7 +11256,7 @@ impl ::serde::ser::Serialize for MountFolderArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum MountFolderError {
     AccessError(SharedFolderAccessError),
     /// Mounting would cause a shared folder to be inside another, which is disallowed.
@@ -11394,7 +11394,7 @@ impl ::std::fmt::Display for MountFolderError {
 }
 
 /// Contains information about a parent folder that a member has access to.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ParentFolderAccessInfo {
     /// Display name for the folder.
     pub folder_name: String,
@@ -11529,7 +11529,7 @@ impl ::serde::ser::Serialize for ParentFolderAccessInfo {
 }
 
 /// Metadata for a path-based shared link.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PathLinkMetadata {
     /// URL of the shared link.
     pub url: String,
@@ -11664,7 +11664,7 @@ impl ::serde::ser::Serialize for PathLinkMetadata {
 }
 
 /// Flag to indicate pending upload default (for linking to not-yet-existing paths).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum PendingUploadMode {
     /// Assume pending uploads are files.
     File,
@@ -11728,7 +11728,7 @@ impl ::serde::ser::Serialize for PendingUploadMode {
 }
 
 /// Possible reasons the user is denied a permission.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum PermissionDeniedReason {
     /// User is not on the same team as the folder owner.
     UserNotSameTeamAsOwner,
@@ -11965,7 +11965,7 @@ impl ::serde::ser::Serialize for PermissionDeniedReason {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct RelinquishFileMembershipArg {
     /// The path or id for the file.
     pub file: PathOrId,
@@ -12055,7 +12055,7 @@ impl ::serde::ser::Serialize for RelinquishFileMembershipArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum RelinquishFileMembershipError {
     AccessError(SharingFileAccessError),
     /// The current user has access to the shared file via a group.  You can't relinquish membership
@@ -12155,7 +12155,7 @@ impl ::std::fmt::Display for RelinquishFileMembershipError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct RelinquishFolderMembershipArg {
     /// The ID for the shared folder.
     pub shared_folder_id: super::common::SharedFolderId,
@@ -12263,7 +12263,7 @@ impl ::serde::ser::Serialize for RelinquishFolderMembershipArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum RelinquishFolderMembershipError {
     AccessError(SharedFolderAccessError),
     /// The current user is the owner of the shared folder. Owners cannot relinquish membership to
@@ -12419,7 +12419,7 @@ impl ::std::fmt::Display for RelinquishFolderMembershipError {
 }
 
 /// Arguments for [`remove_file_member_2()`](remove_file_member_2).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct RemoveFileMemberArg {
     /// File from which to remove members.
     pub file: PathOrId,
@@ -12525,7 +12525,7 @@ impl ::serde::ser::Serialize for RemoveFileMemberArg {
 }
 
 /// Errors for [`remove_file_member_2()`](remove_file_member_2).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum RemoveFileMemberError {
     UserError(SharingUserError),
     AccessError(SharingFileAccessError),
@@ -12626,7 +12626,7 @@ impl ::std::fmt::Display for RemoveFileMemberError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct RemoveFolderMemberArg {
     /// The ID for the shared folder.
     pub shared_folder_id: super::common::SharedFolderId,
@@ -12748,7 +12748,7 @@ impl ::serde::ser::Serialize for RemoveFolderMemberArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum RemoveFolderMemberError {
     AccessError(SharedFolderAccessError),
     MemberError(SharedFolderMemberError),
@@ -12904,7 +12904,7 @@ impl ::std::fmt::Display for RemoveFolderMemberError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum RemoveMemberJobStatus {
     /// The asynchronous job is still in progress.
     InProgress,
@@ -12982,7 +12982,7 @@ impl ::serde::ser::Serialize for RemoveMemberJobStatus {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum RequestedLinkAccessLevel {
     /// Users who use the link can view and comment on the content.
     Viewer,
@@ -13071,7 +13071,7 @@ impl ::serde::ser::Serialize for RequestedLinkAccessLevel {
 /// final resolved visibility of the shared link takes into account other aspects, such as team and
 /// shared folder settings. Check the [`ResolvedVisibility`](ResolvedVisibility) for more info on
 /// the possible resolved visibility values of shared links.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum RequestedVisibility {
     /// Anyone who has received the link can access it. No login required.
     Public,
@@ -13150,7 +13150,7 @@ impl ::serde::ser::Serialize for RequestedVisibility {
 /// The actual access permissions values of shared links after taking into account user preferences
 /// and the team and shared folder settings. Check the [`RequestedVisibility`](RequestedVisibility)
 /// for more info on the possible visibility values that can be set by the shared link's owner.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ResolvedVisibility {
     /// Anyone who has received the link can access it. No login required.
     Public,
@@ -13262,7 +13262,7 @@ impl ::serde::ser::Serialize for ResolvedVisibility {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct RevokeSharedLinkArg {
     /// URL of the shared link.
     pub url: String,
@@ -13352,7 +13352,7 @@ impl ::serde::ser::Serialize for RevokeSharedLinkArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum RevokeSharedLinkError {
     /// The shared link wasn't found.
     SharedLinkNotFound,
@@ -13461,7 +13461,7 @@ impl ::std::fmt::Display for RevokeSharedLinkError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SetAccessInheritanceArg {
     /// The ID for the shared folder.
     pub shared_folder_id: super::common::SharedFolderId,
@@ -13569,7 +13569,7 @@ impl ::serde::ser::Serialize for SetAccessInheritanceArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SetAccessInheritanceError {
     /// Unable to access shared folder.
     AccessError(SharedFolderAccessError),
@@ -13656,7 +13656,7 @@ impl ::std::fmt::Display for SetAccessInheritanceError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShareFolderArg {
     /// The path to the folder to share. If it does not exist, then a new one is created.
     pub path: super::files::WritePath,
@@ -13894,7 +13894,7 @@ impl ::serde::ser::Serialize for ShareFolderArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ShareFolderArgBase {
     /// The path to the folder to share. If it does not exist, then a new one is created.
     pub path: super::files::WritePath,
@@ -14094,7 +14094,7 @@ impl ::serde::ser::Serialize for ShareFolderArgBase {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ShareFolderError {
     /// The current user's e-mail address is unverified.
     EmailUnverified,
@@ -14221,7 +14221,7 @@ impl ::std::fmt::Display for ShareFolderError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ShareFolderErrorBase {
     /// The current user's e-mail address is unverified.
     EmailUnverified,
@@ -14323,7 +14323,7 @@ impl ::serde::ser::Serialize for ShareFolderErrorBase {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ShareFolderJobStatus {
     /// The asynchronous job is still in progress.
     InProgress,
@@ -14400,7 +14400,7 @@ impl ::serde::ser::Serialize for ShareFolderJobStatus {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ShareFolderLaunch {
     /// This response indicates that the processing is asynchronous. The string is an id that can be
     /// used to obtain the status of the asynchronous job.
@@ -14465,7 +14465,7 @@ impl ::serde::ser::Serialize for ShareFolderLaunch {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SharePathError {
     /// A file is at the specified path.
     IsFile,
@@ -14690,7 +14690,7 @@ impl ::std::fmt::Display for SharePathError {
 }
 
 /// Metadata of a shared link for a file or folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentLinkMetadata {
     /// The audience options that are available for the content. Some audience options may be
     /// unavailable. For example, team_only may be unavailable if the content is not owned by a user
@@ -14919,7 +14919,7 @@ impl ::serde::ser::Serialize for SharedContentLinkMetadata {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedContentLinkMetadataBase {
     /// The audience options that are available for the content. Some audience options may be
     /// unavailable. For example, team_only may be unavailable if the content is not owned by a user
@@ -15118,7 +15118,7 @@ impl ::serde::ser::Serialize for SharedContentLinkMetadataBase {
 /// [`list_file_members()`](list_file_members) and
 /// [`list_file_members_continue()`](list_file_members_continue), and used as part of the results
 /// for [`list_file_members_batch()`](list_file_members_batch).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedFileMembers {
     /// The list of user members of the shared file.
     pub users: Vec<UserFileMembershipInfo>,
@@ -15259,7 +15259,7 @@ impl ::serde::ser::Serialize for SharedFileMembers {
 }
 
 /// Properties of the shared file.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedFileMetadata {
     /// The ID of the file.
     pub id: super::files::FileId,
@@ -15591,7 +15591,7 @@ impl ::serde::ser::Serialize for SharedFileMetadata {
 }
 
 /// There is an error accessing the shared folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SharedFolderAccessError {
     /// This shared folder ID is invalid.
     InvalidId,
@@ -15700,7 +15700,7 @@ impl ::std::fmt::Display for SharedFolderAccessError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SharedFolderMemberError {
     /// The target dropbox_id is invalid.
     InvalidDropboxId,
@@ -15795,7 +15795,7 @@ impl ::std::fmt::Display for SharedFolderMemberError {
 }
 
 /// Shared folder user and group membership.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedFolderMembers {
     /// The list of user members of the shared folder.
     pub users: Vec<UserMembershipInfo>,
@@ -15936,7 +15936,7 @@ impl ::serde::ser::Serialize for SharedFolderMembers {
 }
 
 /// The metadata which includes basic information about the shared folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedFolderMetadata {
     /// The current user's access level for this shared folder.
     pub access_type: AccessLevel,
@@ -16280,7 +16280,7 @@ impl ::serde::ser::Serialize for SharedFolderMetadata {
 }
 
 /// Properties of the shared folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedFolderMetadataBase {
     /// The current user's access level for this shared folder.
     pub access_type: AccessLevel,
@@ -16497,7 +16497,7 @@ impl ::serde::ser::Serialize for SharedFolderMetadataBase {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SharedLinkAccessFailureReason {
     /// User is not logged in.
     LoginRequired,
@@ -16607,7 +16607,7 @@ impl ::serde::ser::Serialize for SharedLinkAccessFailureReason {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SharedLinkAlreadyExistsMetadata {
     /// Metadata of the shared link that already exists.
     Metadata(SharedLinkMetadata),
@@ -16669,7 +16669,7 @@ impl ::serde::ser::Serialize for SharedLinkAlreadyExistsMetadata {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SharedLinkError {
     /// The shared link wasn't found.
     SharedLinkNotFound,
@@ -16766,7 +16766,7 @@ impl ::std::fmt::Display for SharedLinkError {
 }
 
 /// The metadata of a shared link.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SharedLinkMetadata {
     File(FileLinkMetadata),
     Folder(FolderLinkMetadata),
@@ -16845,7 +16845,7 @@ impl ::serde::ser::Serialize for SharedLinkMetadata {
 }
 
 /// Who can view shared links in this folder.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SharedLinkPolicy {
     /// Links can be shared with anyone.
     Anyone,
@@ -16929,7 +16929,7 @@ impl ::serde::ser::Serialize for SharedLinkPolicy {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SharedLinkSettings {
     /// The requested access for this shared link.
     pub requested_visibility: Option<RequestedVisibility>,
@@ -17065,7 +17065,7 @@ impl ::serde::ser::Serialize for SharedLinkSettings {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SharedLinkSettingsError {
     /// The given settings are invalid (for example, all attributes of the
     /// [`SharedLinkSettings`](SharedLinkSettings) are empty, the requested visibility is
@@ -17148,7 +17148,7 @@ impl ::std::fmt::Display for SharedLinkSettingsError {
 }
 
 /// User could not access this file.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SharingFileAccessError {
     /// Current user does not have sufficient privileges to perform the desired action.
     NoPermission,
@@ -17271,7 +17271,7 @@ impl ::std::fmt::Display for SharingFileAccessError {
 }
 
 /// User account had a problem preventing this action.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SharingUserError {
     /// The current user must verify the account e-mail address before performing this action.
     EmailUnverified,
@@ -17342,7 +17342,7 @@ impl ::std::fmt::Display for SharingUserError {
 }
 
 /// Information about a team member.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamMemberInfo {
     /// Information about the member's team.
     pub team_info: TeamInfo,
@@ -17464,7 +17464,7 @@ impl ::serde::ser::Serialize for TeamMemberInfo {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TransferFolderArg {
     /// The ID for the shared folder.
     pub shared_folder_id: super::common::SharedFolderId,
@@ -17567,7 +17567,7 @@ impl ::serde::ser::Serialize for TransferFolderArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TransferFolderError {
     AccessError(SharedFolderAccessError),
     /// [`TransferFolderArg::to_dropbox_id`](TransferFolderArg) is invalid.
@@ -17718,7 +17718,7 @@ impl ::std::fmt::Display for TransferFolderError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UnmountFolderArg {
     /// The ID for the shared folder.
     pub shared_folder_id: super::common::SharedFolderId,
@@ -17808,7 +17808,7 @@ impl ::serde::ser::Serialize for UnmountFolderArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum UnmountFolderError {
     AccessError(SharedFolderAccessError),
     /// The current user does not have permission to perform this action.
@@ -17909,7 +17909,7 @@ impl ::std::fmt::Display for UnmountFolderError {
 }
 
 /// Arguments for [`unshare_file()`](unshare_file).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UnshareFileArg {
     /// The file to unshare.
     pub file: PathOrId,
@@ -18000,7 +18000,7 @@ impl ::serde::ser::Serialize for UnshareFileArg {
 }
 
 /// Error result for [`unshare_file()`](unshare_file).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum UnshareFileError {
     UserError(SharingUserError),
     AccessError(SharingFileAccessError),
@@ -18089,7 +18089,7 @@ impl ::std::fmt::Display for UnshareFileError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UnshareFolderArg {
     /// The ID for the shared folder.
     pub shared_folder_id: super::common::SharedFolderId,
@@ -18199,7 +18199,7 @@ impl ::serde::ser::Serialize for UnshareFolderArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum UnshareFolderError {
     AccessError(SharedFolderAccessError),
     /// This action cannot be performed on a team shared folder.
@@ -18312,7 +18312,7 @@ impl ::std::fmt::Display for UnshareFolderError {
 }
 
 /// Arguments for [`update_file_member()`](update_file_member).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UpdateFileMemberArgs {
     /// File for which we are changing a member's access.
     pub file: PathOrId,
@@ -18428,7 +18428,7 @@ impl ::serde::ser::Serialize for UpdateFileMemberArgs {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UpdateFolderMemberArg {
     /// The ID for the shared folder.
     pub shared_folder_id: super::common::SharedFolderId,
@@ -18549,7 +18549,7 @@ impl ::serde::ser::Serialize for UpdateFolderMemberArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum UpdateFolderMemberError {
     AccessError(SharedFolderAccessError),
     MemberError(SharedFolderMemberError),
@@ -18685,7 +18685,7 @@ impl ::std::fmt::Display for UpdateFolderMemberError {
 }
 
 /// If any of the policies are unset, then they retain their current setting.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UpdateFolderPolicyArg {
     /// The ID for the shared folder.
     pub shared_folder_id: super::common::SharedFolderId,
@@ -18887,7 +18887,7 @@ impl ::serde::ser::Serialize for UpdateFolderPolicyArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum UpdateFolderPolicyError {
     AccessError(SharedFolderAccessError),
     /// [`UpdateFolderPolicyArg::member_policy`](UpdateFolderPolicyArg) was set even though user is
@@ -19028,7 +19028,7 @@ impl ::std::fmt::Display for UpdateFolderPolicyError {
 }
 
 /// The information about a user member of the shared content with an appended last seen timestamp.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UserFileMembershipInfo {
     /// The access type for this member. It contains inherited access type from parent folder, and
     /// acquired access type from this folder.
@@ -19226,7 +19226,7 @@ impl ::serde::ser::Serialize for UserFileMembershipInfo {
 /// Basic information about a user. Use [`users::get_account()`](super::users::get_account) and
 /// [`users::get_account_batch()`](super::users::get_account_batch) to obtain more detailed
 /// information.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UserInfo {
     /// The account ID of the user.
     pub account_id: super::users_common::AccountId,
@@ -19379,7 +19379,7 @@ impl ::serde::ser::Serialize for UserInfo {
 }
 
 /// The information about a user member of the shared content.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UserMembershipInfo {
     /// The access type for this member. It contains inherited access type from parent folder, and
     /// acquired access type from this folder.
@@ -19538,7 +19538,7 @@ impl ::serde::ser::Serialize for UserMembershipInfo {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ViewerInfoPolicy {
     /// Viewer information is available on this file.
     Enabled,
@@ -19611,7 +19611,7 @@ impl ::serde::ser::Serialize for ViewerInfoPolicy {
 
 /// Who can access a shared link. The most open visibility is [`Public`](Visibility::Public). The
 /// default depends on many aspects, such as team and user preferences and shared folder settings.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum Visibility {
     /// Anyone who has received the link can access it. No login required.
     Public,

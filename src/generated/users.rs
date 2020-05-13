@@ -14,7 +14,7 @@ pub type GetAccountBatchResult = Vec<BasicAccount>;
 /// Get a list of feature values that may be configured for the current account.
 pub async fn features_get_values(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &UserFeaturesGetValuesBatchArg,
+    arg: UserFeaturesGetValuesBatchArg,
 ) -> crate::Result<UserFeaturesGetValuesBatchResult, UserFeaturesGetValuesBatchError> {
     crate::client_helpers::request(
         client,
@@ -30,7 +30,7 @@ pub async fn features_get_values(
 /// Get information about a user's account.
 pub async fn get_account(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &GetAccountArg,
+    arg: GetAccountArg,
 ) -> crate::Result<BasicAccount, GetAccountError> {
     crate::client_helpers::request(
         client,
@@ -46,7 +46,7 @@ pub async fn get_account(
 /// Get information about multiple user accounts.  At most 300 accounts may be queried per request.
 pub async fn get_account_batch(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &GetAccountBatchArg,
+    arg: GetAccountBatchArg,
 ) -> crate::Result<GetAccountBatchResult, GetAccountBatchError> {
     crate::client_helpers::request(
         client,
@@ -91,7 +91,7 @@ pub async fn get_space_usage(
 
 /// The amount of detail revealed about an account depends on the user being queried and the user
 /// making the query.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Account {
     /// The user's unique Dropbox ID.
     pub account_id: super::users_common::AccountId,
@@ -259,7 +259,7 @@ impl ::serde::ser::Serialize for Account {
 }
 
 /// Basic information about any account.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct BasicAccount {
     /// The user's unique Dropbox ID.
     pub account_id: super::users_common::AccountId,
@@ -461,7 +461,7 @@ impl ::serde::ser::Serialize for BasicAccount {
 }
 
 /// The value for [`UserFeature::FileLocking`](UserFeature::FileLocking).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum FileLockingValue {
     /// When this value is True, the user can lock files in shared directories. When the value is
     /// False the user can unlock the files they have locked or request to unlock files locked by
@@ -526,7 +526,7 @@ impl ::serde::ser::Serialize for FileLockingValue {
 }
 
 /// Detailed information about the current user's account.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FullAccount {
     /// The user's unique Dropbox ID.
     pub account_id: super::users_common::AccountId,
@@ -821,7 +821,7 @@ impl ::serde::ser::Serialize for FullAccount {
 }
 
 /// Detailed information about a team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct FullTeam {
     /// The team's unique ID.
     pub id: String,
@@ -955,7 +955,7 @@ impl ::serde::ser::Serialize for FullTeam {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GetAccountArg {
     /// A user's account identifier.
     pub account_id: super::users_common::AccountId,
@@ -1045,7 +1045,7 @@ impl ::serde::ser::Serialize for GetAccountArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GetAccountBatchArg {
     /// List of user account identifiers.  Should not contain any duplicate account IDs.
     pub account_ids: Vec<super::users_common::AccountId>,
@@ -1135,7 +1135,7 @@ impl ::serde::ser::Serialize for GetAccountBatchArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum GetAccountBatchError {
     /// The value is an account ID specified in
     /// [`GetAccountBatchArg::account_ids`](GetAccountBatchArg) that does not exist.
@@ -1210,7 +1210,7 @@ impl ::std::fmt::Display for GetAccountBatchError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum GetAccountError {
     /// The specified [`GetAccountArg::account_id`](GetAccountArg) does not exist.
     NoAccount,
@@ -1280,7 +1280,7 @@ impl ::std::fmt::Display for GetAccountError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct IndividualSpaceAllocation {
     /// The total space allocated to the user's account (bytes).
     pub allocated: u64,
@@ -1371,7 +1371,7 @@ impl ::serde::ser::Serialize for IndividualSpaceAllocation {
 }
 
 /// Representations for a person's name to assist with internationalization.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Name {
     /// Also known as a first name.
     pub given_name: String,
@@ -1521,7 +1521,7 @@ impl ::serde::ser::Serialize for Name {
 }
 
 /// The value for [`UserFeature::PaperAsFiles`](UserFeature::PaperAsFiles).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum PaperAsFilesValue {
     /// When this value is true, the user's Paper docs are accessible in Dropbox with the .paper
     /// extension and must be accessed via the /files endpoints.  When this value is false, the
@@ -1587,7 +1587,7 @@ impl ::serde::ser::Serialize for PaperAsFilesValue {
 }
 
 /// Space is allocated differently based on the type of account.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum SpaceAllocation {
     /// The user's space allocation applies only to their individual account.
     Individual(IndividualSpaceAllocation),
@@ -1655,7 +1655,7 @@ impl ::serde::ser::Serialize for SpaceAllocation {
 }
 
 /// Information about a user's space usage and quota.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct SpaceUsage {
     /// The user's total space usage (bytes).
     pub used: u64,
@@ -1759,7 +1759,7 @@ impl ::serde::ser::Serialize for SpaceUsage {
 }
 
 /// Information about a team.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Team {
     /// The team's unique ID.
     pub id: String,
@@ -1862,7 +1862,7 @@ impl ::serde::ser::Serialize for Team {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct TeamSpaceAllocation {
     /// The total space currently used by the user's team (bytes).
     pub used: u64,
@@ -2012,7 +2012,7 @@ impl ::serde::ser::Serialize for TeamSpaceAllocation {
 }
 
 /// A set of features that a Dropbox User account may have configured.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum UserFeature {
     /// This feature contains information about how the user's Paper files are stored.
     PaperAsFiles,
@@ -2084,7 +2084,7 @@ impl ::serde::ser::Serialize for UserFeature {
 }
 
 /// Values that correspond to entries in [`UserFeature`](UserFeature).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum UserFeatureValue {
     PaperAsFiles(PaperAsFilesValue),
     FileLocking(FileLockingValue),
@@ -2161,7 +2161,7 @@ impl ::serde::ser::Serialize for UserFeatureValue {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UserFeaturesGetValuesBatchArg {
     /// A list of features in [`UserFeature`](UserFeature). If the list is empty, this route will
     /// return [`UserFeaturesGetValuesBatchError`](UserFeaturesGetValuesBatchError).
@@ -2252,7 +2252,7 @@ impl ::serde::ser::Serialize for UserFeaturesGetValuesBatchArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum UserFeaturesGetValuesBatchError {
     /// At least one [`UserFeature`](UserFeature) must be included in the
     /// [`UserFeaturesGetValuesBatchArg`](UserFeaturesGetValuesBatchArg).features list.
@@ -2323,7 +2323,7 @@ impl ::std::fmt::Display for UserFeaturesGetValuesBatchError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UserFeaturesGetValuesBatchResult {
     pub values: Vec<UserFeatureValue>,
 }

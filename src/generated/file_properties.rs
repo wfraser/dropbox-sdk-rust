@@ -49,7 +49,7 @@ pub type TemplateId = String;
 /// or [`templates_add_for_team()`](templates_add_for_team) to create new templates.
 pub async fn properties_add(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &AddPropertiesArg,
+    arg: AddPropertiesArg,
 ) -> crate::Result<(), AddPropertiesError> {
     crate::client_helpers::request(
         client,
@@ -69,7 +69,7 @@ pub async fn properties_add(
 /// delete fields that are explicitly marked for deletion.
 pub async fn properties_overwrite(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &OverwritePropertyGroupArg,
+    arg: OverwritePropertyGroupArg,
 ) -> crate::Result<(), InvalidPropertyGroupError> {
     crate::client_helpers::request(
         client,
@@ -90,7 +90,7 @@ pub async fn properties_overwrite(
 /// [`templates_remove_for_team()`](templates_remove_for_team).
 pub async fn properties_remove(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &RemovePropertiesArg,
+    arg: RemovePropertiesArg,
 ) -> crate::Result<(), RemovePropertiesError> {
     crate::client_helpers::request(
         client,
@@ -106,7 +106,7 @@ pub async fn properties_remove(
 /// Search across property templates for particular property field values.
 pub async fn properties_search(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &PropertiesSearchArg,
+    arg: PropertiesSearchArg,
 ) -> crate::Result<PropertiesSearchResult, PropertiesSearchError> {
     crate::client_helpers::request(
         client,
@@ -123,7 +123,7 @@ pub async fn properties_search(
 /// paginate through all search results.
 pub async fn properties_search_continue(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &PropertiesSearchContinueArg,
+    arg: PropertiesSearchContinueArg,
 ) -> crate::Result<PropertiesSearchResult, PropertiesSearchContinueError> {
     crate::client_helpers::request(
         client,
@@ -144,7 +144,7 @@ pub async fn properties_search_continue(
 /// property group.
 pub async fn properties_update(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &UpdatePropertiesArg,
+    arg: UpdatePropertiesArg,
 ) -> crate::Result<(), UpdatePropertiesError> {
     crate::client_helpers::request(
         client,
@@ -161,7 +161,7 @@ pub async fn properties_update(
 /// properties to a file or folder. Note: this endpoint will create team-owned templates.
 pub async fn templates_add_for_team(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &AddTemplateArg,
+    arg: AddTemplateArg,
 ) -> crate::Result<AddTemplateResult, ModifyTemplateError> {
     crate::client_helpers::request(
         client,
@@ -178,7 +178,7 @@ pub async fn templates_add_for_team(
 /// properties to a file. This endpoint can't be called on a team member or admin's behalf.
 pub async fn templates_add_for_user(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &AddTemplateArg,
+    arg: AddTemplateArg,
 ) -> crate::Result<AddTemplateResult, ModifyTemplateError> {
     crate::client_helpers::request(
         client,
@@ -194,7 +194,7 @@ pub async fn templates_add_for_user(
 /// Get the schema for a specified template.
 pub async fn templates_get_for_team(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &GetTemplateArg,
+    arg: GetTemplateArg,
 ) -> crate::Result<GetTemplateResult, TemplateError> {
     crate::client_helpers::request(
         client,
@@ -211,7 +211,7 @@ pub async fn templates_get_for_team(
 /// admin's behalf.
 pub async fn templates_get_for_user(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &GetTemplateArg,
+    arg: GetTemplateArg,
 ) -> crate::Result<GetTemplateResult, TemplateError> {
     crate::client_helpers::request(
         client,
@@ -262,7 +262,7 @@ pub async fn templates_list_for_user(
 /// template will also be removed. This action cannot be undone.
 pub async fn templates_remove_for_team(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &RemoveTemplateArg,
+    arg: RemoveTemplateArg,
 ) -> crate::Result<(), TemplateError> {
     crate::client_helpers::request(
         client,
@@ -280,7 +280,7 @@ pub async fn templates_remove_for_team(
 /// template will also be removed. This action cannot be undone.
 pub async fn templates_remove_for_user(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &RemoveTemplateArg,
+    arg: RemoveTemplateArg,
 ) -> crate::Result<(), TemplateError> {
     crate::client_helpers::request(
         client,
@@ -297,7 +297,7 @@ pub async fn templates_remove_for_user(
 /// description and add optional properties to templates.
 pub async fn templates_update_for_team(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &UpdateTemplateArg,
+    arg: UpdateTemplateArg,
 ) -> crate::Result<UpdateTemplateResult, ModifyTemplateError> {
     crate::client_helpers::request(
         client,
@@ -315,7 +315,7 @@ pub async fn templates_update_for_team(
 /// member or admin's behalf.
 pub async fn templates_update_for_user(
     client: &dyn crate::client_trait::HttpClient,
-    arg: &UpdateTemplateArg,
+    arg: UpdateTemplateArg,
 ) -> crate::Result<UpdateTemplateResult, ModifyTemplateError> {
     crate::client_helpers::request(
         client,
@@ -328,7 +328,7 @@ pub async fn templates_update_for_user(
         .await
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AddPropertiesArg {
     /// A unique identifier for the file or folder.
     pub path: PathOrId,
@@ -432,7 +432,7 @@ impl ::serde::ser::Serialize for AddPropertiesArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum AddPropertiesError {
     /// Template does not exist for the given identifier.
     TemplateNotFound(TemplateId),
@@ -600,7 +600,7 @@ impl ::std::fmt::Display for AddPropertiesError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AddTemplateArg {
     /// Display name for the template. Template names can be up to 256 bytes.
     pub name: String,
@@ -717,7 +717,7 @@ impl ::serde::ser::Serialize for AddTemplateArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct AddTemplateResult {
     /// An identifier for template added by  See
     /// [`templates_add_for_user()`](templates_add_for_user) or
@@ -809,7 +809,7 @@ impl ::serde::ser::Serialize for AddTemplateResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GetTemplateArg {
     /// An identifier for template added by route  See
     /// [`templates_add_for_user()`](templates_add_for_user) or
@@ -901,7 +901,7 @@ impl ::serde::ser::Serialize for GetTemplateArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct GetTemplateResult {
     /// Display name for the template. Template names can be up to 256 bytes.
     pub name: String,
@@ -1018,7 +1018,7 @@ impl ::serde::ser::Serialize for GetTemplateResult {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum InvalidPropertyGroupError {
     /// Template does not exist for the given identifier.
     TemplateNotFound(TemplateId),
@@ -1173,7 +1173,7 @@ impl ::std::fmt::Display for InvalidPropertyGroupError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct ListTemplateResult {
     /// List of identifiers for templates added by  See
     /// [`templates_add_for_user()`](templates_add_for_user) or
@@ -1266,7 +1266,7 @@ impl ::serde::ser::Serialize for ListTemplateResult {
 }
 
 /// Logical operator to join search queries together.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum LogicalOperator {
     /// Append a query with an "or" operator.
     OrOperator,
@@ -1324,7 +1324,7 @@ impl ::serde::ser::Serialize for LogicalOperator {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum LookUpPropertiesError {
     /// No property group was found.
     PropertyGroupNotFound,
@@ -1394,7 +1394,7 @@ impl ::std::fmt::Display for LookUpPropertiesError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum LookupError {
     MalformedPath(String),
     /// There is nothing at the given path.
@@ -1520,7 +1520,7 @@ impl ::std::fmt::Display for LookupError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum ModifyTemplateError {
     /// Template does not exist for the given identifier.
     TemplateNotFound(TemplateId),
@@ -1660,7 +1660,7 @@ impl ::std::fmt::Display for ModifyTemplateError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct OverwritePropertyGroupArg {
     /// A unique identifier for the file or folder.
     pub path: PathOrId,
@@ -1764,7 +1764,7 @@ impl ::serde::ser::Serialize for OverwritePropertyGroupArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum PropertiesError {
     /// Template does not exist for the given identifier.
     TemplateNotFound(TemplateId),
@@ -1880,7 +1880,7 @@ impl ::std::fmt::Display for PropertiesError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PropertiesSearchArg {
     /// Queries to search.
     pub queries: Vec<PropertiesSearchQuery>,
@@ -1988,7 +1988,7 @@ impl ::serde::ser::Serialize for PropertiesSearchArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PropertiesSearchContinueArg {
     /// The cursor returned by your last call to [`properties_search()`](properties_search) or
     /// [`properties_search_continue()`](properties_search_continue).
@@ -2079,7 +2079,7 @@ impl ::serde::ser::Serialize for PropertiesSearchContinueArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum PropertiesSearchContinueError {
     /// Indicates that the cursor has been invalidated. Call
     /// [`properties_search()`](properties_search) to obtain a new cursor.
@@ -2150,7 +2150,7 @@ impl ::std::fmt::Display for PropertiesSearchContinueError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum PropertiesSearchError {
     PropertyGroupLookup(LookUpPropertiesError),
     /// Catch-all used for unrecognized values returned from the server. Encountering this value
@@ -2223,7 +2223,7 @@ impl ::std::fmt::Display for PropertiesSearchError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PropertiesSearchMatch {
     /// The ID for the matched file or folder.
     pub id: Id,
@@ -2357,7 +2357,7 @@ impl ::serde::ser::Serialize for PropertiesSearchMatch {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum PropertiesSearchMode {
     /// Search for a value associated with this field name.
     FieldName(String),
@@ -2419,7 +2419,7 @@ impl ::serde::ser::Serialize for PropertiesSearchMode {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PropertiesSearchQuery {
     /// The property field value for which to search across templates.
     pub query: String,
@@ -2540,7 +2540,7 @@ impl ::serde::ser::Serialize for PropertiesSearchQuery {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PropertiesSearchResult {
     /// A list (possibly empty) of matches for the query.
     pub matches: Vec<PropertiesSearchMatch>,
@@ -2651,7 +2651,7 @@ impl ::serde::ser::Serialize for PropertiesSearchResult {
 
 /// Raw key/value data to be associated with a Dropbox file. Property fields are added to Dropbox
 /// files as a [`PropertyGroup`](PropertyGroup).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PropertyField {
     /// Key of the property field associated with a file and template. Keys can be up to 256 bytes.
     pub name: String,
@@ -2757,7 +2757,7 @@ impl ::serde::ser::Serialize for PropertyField {
 
 /// Defines how a single property field may be structured. Used exclusively by
 /// [`PropertyGroupTemplate`](PropertyGroupTemplate).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PropertyFieldTemplate {
     /// Key of the property field being described. Property field keys can be up to 256 bytes.
     pub name: String,
@@ -2878,7 +2878,7 @@ impl ::serde::ser::Serialize for PropertyFieldTemplate {
 /// [`PropertyGroupTemplate`](PropertyGroupTemplate). Properties are always added to a Dropbox file
 /// as a [`PropertyGroup`](PropertyGroup). The possible key names and value types in this group are
 /// defined by the corresponding [`PropertyGroupTemplate`](PropertyGroupTemplate).
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PropertyGroup {
     /// A unique identifier for the associated template.
     pub template_id: TemplateId,
@@ -2983,7 +2983,7 @@ impl ::serde::ser::Serialize for PropertyGroup {
 }
 
 /// Defines how a property group may be structured.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PropertyGroupTemplate {
     /// Display name for the template. Template names can be up to 256 bytes.
     pub name: String,
@@ -3100,7 +3100,7 @@ impl ::serde::ser::Serialize for PropertyGroupTemplate {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct PropertyGroupUpdate {
     /// A unique identifier for a property template.
     pub template_id: TemplateId,
@@ -3228,7 +3228,7 @@ impl ::serde::ser::Serialize for PropertyGroupUpdate {
 }
 
 /// Data type of the given property field added.
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum PropertyType {
     /// The associated property field will be of type string. Unicode is supported.
     String,
@@ -3286,7 +3286,7 @@ impl ::serde::ser::Serialize for PropertyType {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct RemovePropertiesArg {
     /// A unique identifier for the file or folder.
     pub path: PathOrId,
@@ -3391,7 +3391,7 @@ impl ::serde::ser::Serialize for RemovePropertiesArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum RemovePropertiesError {
     /// Template does not exist for the given identifier.
     TemplateNotFound(TemplateId),
@@ -3523,7 +3523,7 @@ impl ::std::fmt::Display for RemovePropertiesError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct RemoveTemplateArg {
     /// An identifier for a template created by [`templates_add_for_user()`](templates_add_for_user)
     /// or [`templates_add_for_team()`](templates_add_for_team).
@@ -3614,7 +3614,7 @@ impl ::serde::ser::Serialize for RemoveTemplateArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TemplateError {
     /// Template does not exist for the given identifier.
     TemplateNotFound(TemplateId),
@@ -3701,7 +3701,7 @@ impl ::std::fmt::Display for TemplateError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TemplateFilter {
     /// Only templates with an ID in the supplied list will be returned (a subset of templates will
     /// be returned).
@@ -3777,7 +3777,7 @@ impl ::serde::ser::Serialize for TemplateFilter {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TemplateFilterBase {
     /// Only templates with an ID in the supplied list will be returned (a subset of templates will
     /// be returned).
@@ -3840,7 +3840,7 @@ impl ::serde::ser::Serialize for TemplateFilterBase {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum TemplateOwnerType {
     /// Template will be associated with a user.
     User,
@@ -3911,7 +3911,7 @@ impl ::serde::ser::Serialize for TemplateOwnerType {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UpdatePropertiesArg {
     /// A unique identifier for the file or folder.
     pub path: PathOrId,
@@ -4014,7 +4014,7 @@ impl ::serde::ser::Serialize for UpdatePropertiesArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum UpdatePropertiesError {
     /// Template does not exist for the given identifier.
     TemplateNotFound(TemplateId),
@@ -4185,7 +4185,7 @@ impl ::std::fmt::Display for UpdatePropertiesError {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UpdateTemplateArg {
     /// An identifier for template added by  See
     /// [`templates_add_for_user()`](templates_add_for_user) or
@@ -4332,7 +4332,7 @@ impl ::serde::ser::Serialize for UpdateTemplateArg {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct UpdateTemplateResult {
     /// An identifier for template added by route  See
     /// [`templates_add_for_user()`](templates_add_for_user) or
