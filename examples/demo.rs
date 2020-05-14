@@ -3,7 +3,7 @@
 
 use dropbox_sdk::{files, HyperClient, Oauth2AuthorizeUrlBuilder, Oauth2Type};
 use dropbox_sdk::client_trait::HttpClient;
-use futures::stream::StreamExt;
+use futures::io::AsyncReadExt;
 use std::collections::VecDeque;
 use std::env;
 use std::io::{self, Write};
@@ -104,14 +104,17 @@ async fn main() {
             match result {
                 Ok(download_result) => {
                     let mut body = download_result.body.expect("no body received!");
+                    let mut buf = Vec::with_capacity(1024 * 1024);
                     loop {
-                        match body.next().await {
-                            None => {
+                        // Read in chunks of 1M so we can print progress.
+                        buf.truncate(0);
+                        match (&mut body).take(1024 * 1024).read_to_end(&mut buf).await {
+                            Ok(0) => {
                                 eprint!("\r");
                                 break 'download;
                             }
-                            Some(Ok(ref buf)) => {
-                                stdout_lock.write_all(buf).expect("write error");
+                            Ok(_) => {
+                                stdout_lock.write_all(&buf).expect("write error");
                                 bytes_out += buf.len() as u64;
                                 if let Some(total) = download_result.content_length {
                                     eprint!("\r{:.01}%",
@@ -120,7 +123,7 @@ async fn main() {
                                     eprint!("\r{} bytes", bytes_out);
                                 }
                             }
-                            Some(Err(e)) => {
+                            Err(e) => {
                                 eprintln!("Read error: {:?}", e);
                                 continue 'download; // do another request and resume
                             }

@@ -3,8 +3,6 @@
 use dropbox_sdk::{HyperClient, Oauth2AuthorizeUrlBuilder, Oauth2Type};
 use dropbox_sdk::files;
 
-use bytes::Bytes;
-use futures::stream;
 use std::fs::File;
 use std::path::PathBuf;
 use std::io::{self, Read, Write, Seek, SeekFrom};
@@ -233,7 +231,7 @@ async fn main() {
         Some(ref resume) => resume.session_id.clone(),
         None => {
             match files::upload_session_start(
-                &client, files::UploadSessionStartArg::default(), Box::pin(stream::empty()))
+                &client, files::UploadSessionStartArg::default(), Box::pin(futures::io::empty()))
                 .await
             {
                 Ok(result) => result.session_id,
@@ -298,9 +296,9 @@ async fn main() {
         succeeded = false;
         let mut consecutive_errors = 0u8;
         while consecutive_errors < 3 {
-            let chunk = Bytes::from((&buf[0..nread]).to_vec()); // FIXME: avoid this copy
+            let chunk = (&buf[0..nread]).to_vec(); // FIXME: avoid this copy
             if let Err(e) = files::upload_session_append_v2(
-                &client, append_arg.clone(), Box::pin(stream::once(async { Ok(chunk) })))
+                &client, append_arg.clone(), Box::pin(futures::io::Cursor::new(chunk)))
                 .await
             {
                 eprintln!("Error appending data: {}", e);
@@ -348,7 +346,8 @@ async fn main() {
         let mut retry = 0u8;
         succeeded = false;
         while retry < 3 {
-            match files::upload_session_finish(&client, finish.clone(), Box::pin(stream::empty()))
+            match files::upload_session_finish(
+                &client, finish.clone(), Box::pin(futures::io::empty()))
                 .await
             {
                 Ok(filemetadata) => {

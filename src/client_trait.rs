@@ -3,8 +3,7 @@
 //! Everything needed to implement your HTTP client.
 
 use async_trait::async_trait;
-use bytes::Bytes;
-use futures::stream::Stream;
+use futures::io::AsyncRead;
 use std::pin::Pin;
 
 #[async_trait]
@@ -16,16 +15,17 @@ pub trait HttpClient {
         style: Style,
         function: &'static str,
         params_json: String,
-        body: Option<RequestBodyStream>,
+        body: Option<BodyStream<'static>>,
         range_start: Option<u64>,
         range_end: Option<u64>,
-    ) -> Result<HttpRequestResultRaw, HttpClientError>;
+    ) -> Result<HttpRequestResultRaw<'static>, HttpClientError>;
 }
 
-type AnyError = Box<dyn std::error::Error + Send + Sync + 'static>;
-pub type BodyStream<E> = Pin<Box<dyn Stream<Item = Result<Bytes, E>> + Send + Sync + 'static>>;
-pub type RequestBodyStream = BodyStream<AnyError>;
-pub type ResponseBodyStream = BodyStream<HttpClientError>;
+//type AnyError = Box<dyn std::error::Error + Send + Sync + 'static>;
+//pub type BodyStream<'a, E> = Pin<Box<dyn Stream<Item = Result<Bytes, E>> + Send + Sync + 'a>>;
+pub type BodyStream<'a> = Pin<Box<dyn AsyncRead + Send + Sync + 'a>>;
+//pub type RequestBodyStream<'a> = BodyStream<'a, AnyError>;
+//pub type ResponseBodyStream<'a> = BodyStream<'a, HttpClientError>;
 
 /// An error returned by the HTTP client.
 #[derive(Debug)]
@@ -45,16 +45,16 @@ impl<E: std::error::Error + Send + Sync + 'static> From<E> for HttpClientError {
     }
 }
 
-pub struct HttpRequestResultRaw {
+pub struct HttpRequestResultRaw<'a> {
     pub result_json: String,
     pub content_length: Option<u64>,
-    pub body: Option<ResponseBodyStream>,
+    pub body: Option<BodyStream<'a>>,
 }
 
-pub struct HttpRequestResult<T> {
+pub struct HttpRequestResult<'a, T> {
     pub result: T,
     pub content_length: Option<u64>,
-    pub body: Option<ResponseBodyStream>,
+    pub body: Option<BodyStream<'a>>,
 }
 
 #[derive(Debug, Copy, Clone, PartialEq)]

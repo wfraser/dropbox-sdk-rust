@@ -1,14 +1,19 @@
 // Copyright (c) 2019-2020 Dropbox, Inc.
 
 use async_trait::async_trait;
+use bytes::{Bytes, BytesMut};
 use crate::Error;
 use crate::client_trait::{Endpoint, Style, HttpClient, HttpClientError, HttpRequestResultRaw};
-use crate::client_trait::RequestBodyStream;
-use futures::stream::StreamExt;
+use crate::client_trait::BodyStream;
+use futures::io::AsyncRead;
+use futures::stream::{Stream, StreamExt};
 use hyper::{Body, Request, Uri};
 use hyper::header::{self, HeaderValue};
+use pin_project::pin_project;
 use std::convert::TryFrom;
 use std::str;
+use std::pin::Pin;
+use std::task::{Context, Poll};
 use url::form_urlencoded::Serializer as UrlEncoder;
 
 const USER_AGENT: &str = concat!("Dropbox-APIv2-Rust/", env!("CARGO_PKG_VERSION"));
@@ -111,10 +116,10 @@ impl HttpClient for HyperClient {
         style: Style,
         function: &'static str,
         params_json: String,
-        body: Option<RequestBodyStream>,
+        body: Option<BodyStream<'static>>,
         range_start: Option<u64>,
         range_end: Option<u64>,
-    ) -> Result<HttpRequestResultRaw, HttpClientError> {
+    ) -> Result<HttpRequestResultRaw<'static>, HttpClientError> {
 
         let uri = Uri::try_from(endpoint.url().to_owned() + function)
             .expect("invalid request URL");
@@ -163,7 +168,7 @@ impl HttpClient for HyperClient {
                     if style == Style::Upload {
                         builder = builder.header(header::CONTENT_TYPE, "application/octet-stream");
                         match body {
-                            Some(body) => Body::wrap_stream(body),
+                            Some(body) => Body::wrap_stream(HyperBody(body)),
                             None => Body::empty(),
                         }
                     } else {
@@ -224,20 +229,116 @@ impl HttpClient for HyperClient {
                     .and_then(|val| val.to_str().ok())
                     .and_then(|val| val.parse::<u64>().ok());
 
-                let response_body = Box::pin(
-                    response.into_body()
-                        .map(|chunk| {
-                            chunk.map_err(|e| {
-                                HttpClientError::Other(Box::new(e))
-                            })
-                        })
-                );
+                let response_body = Box::pin(AsyncReadBody::new(response.into_body().fuse()));
 
                 Ok(HttpRequestResultRaw {
                     result_json: s,
                     content_length: len,
                     body: Some(response_body),
                 })
+            }
+        }
+    }
+}
+
+#[pin_project]
+#[must_use]
+struct HyperBody<R>(#[pin] R);
+
+impl<R: AsyncRead> Stream for HyperBody<R> {
+    type Item = Result<Bytes, futures::io::Error>;
+
+    fn poll_next(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
+        let mut buf = BytesMut::new();
+        buf.resize(1usize, 0u8);
+        loop {
+            let inner = self.as_mut().project().0;
+            let mut len = buf.len();
+            return match inner.poll_read(cx, &mut buf[len-1 .. len]) {
+                Poll::Ready(Ok(0)) => {
+                    // Stream is done.
+                    len -= 1;
+                    buf.truncate(len);
+                    if buf.is_empty() {
+                        Poll::Ready(None)
+                    } else {
+                        Poll::Ready(Some(Ok(buf.freeze())))
+                    }
+                }
+                Poll::Ready(Ok(_)) => {
+                    buf.extend_from_slice(&[0u8]);
+                    continue;
+                }
+                Poll::Ready(Err(e)) => {
+                    // Note: this will lose any buffered-up data. Oh well. Probably safe to assume
+                    // a partial response is garbage anyway.
+                    Poll::Ready(Some(Err(e)))
+                }
+                Poll::Pending => {
+                    len -= 1;
+                    buf.truncate(len);
+                    if buf.is_empty() {
+                        Poll::Pending
+                    } else {
+                        Poll::Ready(Some(Ok(buf.freeze())))
+                    }
+                }
+            }
+        }
+    }
+}
+
+#[pin_project]
+#[must_use]
+struct AsyncReadBody<S> {
+    #[pin]
+    stream: S,
+    chunk: Option<Bytes>,
+}
+
+impl<S> AsyncReadBody<S> {
+    pub fn new(stream: S) -> Self {
+        Self {
+            stream,
+            chunk: None,
+        }
+    }
+}
+
+impl<S> AsyncRead for AsyncReadBody<S>
+    where S: Stream<Item = Result<Bytes, hyper::Error>>
+{
+    fn poll_read(self: Pin<&mut Self>, cx: &mut Context<'_>, buf: &mut [u8])
+        -> Poll<Result<usize, futures::io::Error>>
+    {
+        fn handle_chunk(this_chunk: &mut Option<Bytes>, mut chunk: Bytes, buf: &mut [u8])
+            -> Poll<Result<usize, futures::io::Error>>
+        {
+            let len = std::cmp::min(buf.len(), chunk.len());
+            (&mut buf[0..len]).copy_from_slice(&chunk.split_to(len));
+            if !chunk.is_empty() {
+                *this_chunk = Some(chunk);
+            }
+            Poll::Ready(Ok(len))
+        }
+
+        let mut this = self.project();
+
+        if let Some(chunk) = this.chunk.take() {
+            handle_chunk(&mut this.chunk, chunk, buf)
+        } else {
+            match this.stream.poll_next(cx) {
+                Poll::Ready(Some(Ok(chunk))) => {
+                    handle_chunk(&mut this.chunk, chunk, buf)
+                }
+                Poll::Ready(Some(Err(e))) => {
+                    // TODO: map the error better
+                    Poll::Ready(Err(futures::io::Error::new(
+                                futures::io::ErrorKind::Other,
+                                e)))
+                }
+                Poll::Ready(None) => Poll::Ready(Ok(0)),
+                Poll::Pending => Poll::Pending,
             }
         }
     }
