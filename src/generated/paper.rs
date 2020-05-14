@@ -47,7 +47,7 @@ pub async fn docs_archive(
 pub async fn docs_create(
     client: &dyn crate::client_trait::HttpClient,
     arg: PaperDocCreateArgs,
-    body: crate::client_trait::RequestBodyStream,
+    body: crate::client_trait::BodyStream<'static>,
 ) -> crate::Result<Result<PaperDocCreateUpdateResult, PaperDocCreateError>> {
     crate::client_helpers::request(
         client,
@@ -71,7 +71,7 @@ pub async fn docs_download(
     arg: PaperDocExport,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> crate::Result<Result<crate::client_trait::HttpRequestResult<PaperDocExportResult>, DocLookupError>> {
+) -> crate::Result<Result<crate::client_trait::HttpRequestResult<'_, PaperDocExportResult>, DocLookupError>> {
     crate::client_helpers::request_with_body(
         client,
         crate::client_trait::Endpoint::Api,
@@ -278,7 +278,7 @@ pub async fn docs_sharing_policy_set(
 pub async fn docs_update(
     client: &dyn crate::client_trait::HttpClient,
     arg: PaperDocUpdateArgs,
-    body: crate::client_trait::RequestBodyStream,
+    body: crate::client_trait::BodyStream<'static>,
 ) -> crate::Result<Result<PaperDocCreateUpdateResult, PaperDocUpdateError>> {
     crate::client_helpers::request(
         client,

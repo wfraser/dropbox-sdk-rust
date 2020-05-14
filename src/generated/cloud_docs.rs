@@ -16,7 +16,7 @@ pub async fn get_content(
     arg: GetContentArg,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> crate::Result<Result<crate::client_trait::HttpRequestResult<()>, CloudDocsAccessError>> {
+) -> crate::Result<Result<crate::client_trait::HttpRequestResult<'_, ()>, CloudDocsAccessError>> {
     crate::client_helpers::request_with_body(
         client,
         crate::client_trait::Endpoint::Content,
@@ -104,7 +104,7 @@ pub async fn unlock(
 pub async fn update_content(
     client: &dyn crate::client_trait::HttpClient,
     arg: UpdateContentArg,
-    body: crate::client_trait::RequestBodyStream,
+    body: crate::client_trait::BodyStream<'static>,
 ) -> crate::Result<Result<UpdateContentResult, UpdateContentError>> {
     crate::client_helpers::request(
         client,

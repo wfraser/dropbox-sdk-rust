@@ -200,7 +200,7 @@ class RustBackend(RustHelperBackend):
                             [u'arg: {}'.format(self._rust_type(fn.arg_data_type))])
                         + [u'range_start: Option<u64>',
                             u'range_end: Option<u64>'],
-                    u'crate::Result<Result<crate::client_trait::HttpRequestResult<{}>, {}>>'.format(
+                    u'crate::Result<Result<crate::client_trait::HttpRequestResult<\'_, {}>, {}>>'.format(
                         self._rust_type(fn.result_data_type),
                         self._rust_type(fn.error_data_type)),
                     access=u'pub async'):
@@ -216,11 +216,11 @@ class RustBackend(RustHelperBackend):
                         u'range_end'])
         elif style == 'upload':
             with self.emit_rust_function_def(
-                    route_name,
+                    route_name, #+ '<\'a>',
                     [u'client: &dyn crate::client_trait::HttpClient']
                         + ([] if arg_void else
                             [u'arg: {}'.format(self._rust_type(fn.arg_data_type))])
-                        + [u'body: crate::client_trait::RequestBodyStream'],
+                        + [u'body: crate::client_trait::BodyStream<\'static>'],
                     u'crate::Result<Result<{}, {}>>'.format(
                         self._rust_type(fn.result_data_type),
                         self._rust_type(fn.error_data_type)),
