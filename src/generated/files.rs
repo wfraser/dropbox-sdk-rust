@@ -358,7 +358,7 @@ pub async fn download(
     arg: DownloadArg,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> crate::Result<Result<crate::client_trait::HttpRequestResult<'_, FileMetadata>, DownloadError>> {
+) -> crate::Result<Result<crate::client_trait::HttpRequestResult<FileMetadata>, DownloadError>> {
     crate::client_helpers::request_with_body(
         client,
         crate::client_trait::Endpoint::Content,
@@ -380,7 +380,7 @@ pub async fn download_zip(
     arg: DownloadZipArg,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> crate::Result<Result<crate::client_trait::HttpRequestResult<'_, DownloadZipResult>, DownloadZipError>> {
+) -> crate::Result<Result<crate::client_trait::HttpRequestResult<DownloadZipResult>, DownloadZipError>> {
     crate::client_helpers::request_with_body(
         client,
         crate::client_trait::Endpoint::Content,
@@ -402,7 +402,7 @@ pub async fn export(
     arg: ExportArg,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> crate::Result<Result<crate::client_trait::HttpRequestResult<'_, ExportResult>, ExportError>> {
+) -> crate::Result<Result<crate::client_trait::HttpRequestResult<ExportResult>, ExportError>> {
     crate::client_helpers::request_with_body(
         client,
         crate::client_trait::Endpoint::Content,
@@ -458,7 +458,7 @@ pub async fn get_preview(
     arg: PreviewArg,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> crate::Result<Result<crate::client_trait::HttpRequestResult<'_, FileMetadata>, PreviewError>> {
+) -> crate::Result<Result<crate::client_trait::HttpRequestResult<FileMetadata>, PreviewError>> {
     crate::client_helpers::request_with_body(
         client,
         crate::client_trait::Endpoint::Content,
@@ -549,7 +549,7 @@ pub async fn get_thumbnail(
     arg: ThumbnailArg,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> crate::Result<Result<crate::client_trait::HttpRequestResult<'_, FileMetadata>, ThumbnailError>> {
+) -> crate::Result<Result<crate::client_trait::HttpRequestResult<FileMetadata>, ThumbnailError>> {
     crate::client_helpers::request_with_body(
         client,
         crate::client_trait::Endpoint::Content,
@@ -569,7 +569,7 @@ pub async fn get_thumbnail_v2(
     arg: ThumbnailV2Arg,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> crate::Result<Result<crate::client_trait::HttpRequestResult<'_, PreviewResult>, ThumbnailV2Error>> {
+) -> crate::Result<Result<crate::client_trait::HttpRequestResult<PreviewResult>, ThumbnailV2Error>> {
     crate::client_helpers::request_with_body(
         client,
         crate::client_trait::Endpoint::Content,

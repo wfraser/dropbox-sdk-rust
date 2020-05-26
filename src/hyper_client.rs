@@ -151,7 +151,7 @@ impl HttpClient for HyperClient {
         body: Option<BodyStream<'static>>,
         range_start: Option<u64>,
         range_end: Option<u64>,
-    ) -> Result<HttpRequestResultRaw<'static>, HttpClientError> {
+    ) -> Result<HttpRequestResultRaw, HttpClientError> {
 
         let uri = Uri::try_from(endpoint.url().to_owned() + function)
             .expect("invalid request URL");
