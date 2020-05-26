@@ -71,7 +71,7 @@ pub async fn docs_download(
     arg: PaperDocExport,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> crate::Result<crate::client_trait::HttpRequestResult<'_, PaperDocExportResult>, DocLookupError> {
+) -> crate::Result<crate::client_trait::HttpRequestResult<PaperDocExportResult>, DocLookupError> {
     crate::client_helpers::request_with_body(
         client,
         crate::client_trait::Endpoint::Api,

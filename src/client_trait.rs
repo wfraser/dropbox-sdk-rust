@@ -18,14 +18,10 @@ pub trait HttpClient {
         body: Option<BodyStream<'static>>,
         range_start: Option<u64>,
         range_end: Option<u64>,
-    ) -> Result<HttpRequestResultRaw<'static>, HttpClientError>;
+    ) -> Result<HttpRequestResultRaw, HttpClientError>;
 }
 
-//type AnyError = Box<dyn std::error::Error + Send + Sync + 'static>;
-//pub type BodyStream<'a, E> = Pin<Box<dyn Stream<Item = Result<Bytes, E>> + Send + Sync + 'a>>;
 pub type BodyStream<'a> = Pin<Box<dyn AsyncBufRead + Send + Sync + 'a>>;
-//pub type RequestBodyStream<'a> = BodyStream<'a, AnyError>;
-//pub type ResponseBodyStream<'a> = BodyStream<'a, HttpClientError>;
 
 /// An error returned by the HTTP client.
 #[derive(Debug)]
@@ -45,16 +41,16 @@ impl<E: std::error::Error + Send + Sync + 'static> From<E> for HttpClientError {
     }
 }
 
-pub struct HttpRequestResultRaw<'a> {
+pub struct HttpRequestResultRaw {
     pub result_json: String,
     pub content_length: Option<u64>,
-    pub body: Option<BodyStream<'a>>,
+    pub body: Option<BodyStream<'static>>,
 }
 
-pub struct HttpRequestResult<'a, T> {
+pub struct HttpRequestResult<T> {
     pub result: T,
     pub content_length: Option<u64>,
-    pub body: Option<BodyStream<'a>>,
+    pub body: Option<BodyStream<'static>>,
 }
 
 #[derive(Debug, Copy, Clone, PartialEq)]

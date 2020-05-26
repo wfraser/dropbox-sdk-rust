@@ -79,7 +79,7 @@ pub async fn request_with_body<ReturnType, ErrorType, ParamsType>(
     body: Option<BodyStream<'static>>,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> crate::Result<HttpRequestResult<'static, ReturnType>, ErrorType>
+) -> crate::Result<HttpRequestResult<ReturnType>, ErrorType>
     where ReturnType: DeserializeOwned,
           ErrorType: DeserializeOwned + Debug + Send + Sync + 'static,
           ParamsType: Serialize,

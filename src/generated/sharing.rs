@@ -212,7 +212,7 @@ pub async fn get_shared_link_file(
     arg: GetSharedLinkFileArg,
     range_start: Option<u64>,
     range_end: Option<u64>,
-) -> crate::Result<crate::client_trait::HttpRequestResult<'_, SharedLinkMetadata>, GetSharedLinkFileError> {
+) -> crate::Result<crate::client_trait::HttpRequestResult<SharedLinkMetadata>, GetSharedLinkFileError> {
     crate::client_helpers::request_with_body(
         client,
         crate::client_trait::Endpoint::Content,
