@@ -3,7 +3,7 @@
 //! Everything needed to implement your HTTP client.
 
 use async_trait::async_trait;
-use futures::io::AsyncRead;
+use futures::io::AsyncBufRead;
 use std::pin::Pin;
 
 #[async_trait]
@@ -23,7 +23,7 @@ pub trait HttpClient {
 
 //type AnyError = Box<dyn std::error::Error + Send + Sync + 'static>;
 //pub type BodyStream<'a, E> = Pin<Box<dyn Stream<Item = Result<Bytes, E>> + Send + Sync + 'a>>;
-pub type BodyStream<'a> = Pin<Box<dyn AsyncRead + Send + Sync + 'a>>;
+pub type BodyStream<'a> = Pin<Box<dyn AsyncBufRead + Send + Sync + 'a>>;
 //pub type RequestBodyStream<'a> = BodyStream<'a, AnyError>;
 //pub type ResponseBodyStream<'a> = BodyStream<'a, HttpClientError>;
 

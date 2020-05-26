@@ -1,11 +1,11 @@
 // Copyright (c) 2019-2020 Dropbox, Inc.
 
 use async_trait::async_trait;
-use bytes::{Bytes, BytesMut};
+use bytes::{Buf, Bytes};
 use crate::Error;
 use crate::client_trait::{Endpoint, Style, HttpClient, HttpClientError, HttpRequestResultRaw};
 use crate::client_trait::BodyStream;
-use futures::io::AsyncRead;
+use futures::io::{AsyncRead, AsyncBufRead};
 use futures::stream::{Stream, StreamExt};
 use hyper::{Body, Request, Uri};
 use hyper::header::{self, HeaderValue};
@@ -260,7 +260,9 @@ impl HttpClient for HyperClient {
                     .and_then(|val| val.to_str().ok())
                     .and_then(|val| val.parse::<u64>().ok());
 
-                let response_body = Box::pin(AsyncReadBody::new(response.into_body().fuse()));
+                let response_body = Box::pin(
+                    BytesStreamToAsyncRead::new(response.into_body().fuse())
+                    );
 
                 Ok(HttpRequestResultRaw {
                     result_json: s,
@@ -276,105 +278,118 @@ impl HttpClient for HyperClient {
 #[must_use]
 struct HyperBody<R>(#[pin] R);
 
-impl<R: AsyncRead> Stream for HyperBody<R> {
+impl<R: AsyncBufRead> Stream for HyperBody<R> {
     type Item = Result<Bytes, futures::io::Error>;
 
     fn poll_next(mut self: Pin<&mut Self>, cx: &mut Context<'_>) -> Poll<Option<Self::Item>> {
-        let mut buf = BytesMut::new();
-        buf.resize(1usize, 0u8);
-        loop {
-            let inner = self.as_mut().project().0;
-            let mut len = buf.len();
-            return match inner.poll_read(cx, &mut buf[len-1 .. len]) {
-                Poll::Ready(Ok(0)) => {
-                    // Stream is done.
-                    len -= 1;
-                    buf.truncate(len);
-                    if buf.is_empty() {
-                        Poll::Ready(None)
-                    } else {
-                        Poll::Ready(Some(Ok(buf.freeze())))
-                    }
-                }
-                Poll::Ready(Ok(_)) => {
-                    buf.extend_from_slice(&[0u8]);
-                    continue;
-                }
-                Poll::Ready(Err(e)) => {
-                    // Note: this will lose any buffered-up data. Oh well. Probably safe to assume
-                    // a partial response is garbage anyway.
-                    Poll::Ready(Some(Err(e)))
-                }
-                Poll::Pending => {
-                    len -= 1;
-                    buf.truncate(len);
-                    if buf.is_empty() {
-                        Poll::Pending
-                    } else {
-                        Poll::Ready(Some(Ok(buf.freeze())))
-                    }
+        let mut inner = self.as_mut().project().0;
+        let result = match Pin::new(&mut inner).poll_fill_buf(cx) {
+            Poll::Ready(Ok(buf_in)) => {
+                if buf_in.is_empty() {
+                    Poll::Ready(None)
+                } else {
+                    Poll::Ready(Some(Ok(Bytes::copy_from_slice(buf_in))))
                 }
             }
+            Poll::Ready(Err(e)) => {
+                Poll::Ready(Some(Err(e)))
+            }
+            Poll::Pending => Poll::Pending,
+        };
+
+        if let Poll::Ready(Some(Ok(ref buf))) = result {
+            inner.consume(buf.len());
         }
+
+        result
     }
 }
 
+/// Adapts a Hyper body (a stream of Bytes buffers) into an AsyncRead and AsyncBufRead.
+/// The AsyncBufRead implementation does not require any copying and should be used if possible.
 #[pin_project]
 #[must_use]
-struct AsyncReadBody<S> {
+struct BytesStreamToAsyncRead<S> {
     #[pin]
     stream: S,
-    chunk: Option<Bytes>,
+
+    buf: Bytes,
 }
 
-impl<S> AsyncReadBody<S> {
+impl<S> BytesStreamToAsyncRead<S> {
     pub fn new(stream: S) -> Self {
         Self {
             stream,
-            chunk: None,
+            buf: Bytes::new(),
         }
     }
 }
 
-impl<S> AsyncRead for AsyncReadBody<S>
+impl<S> AsyncRead for BytesStreamToAsyncRead<S>
     where S: Stream<Item = Result<Bytes, hyper::Error>>
 {
-    fn poll_read(self: Pin<&mut Self>, cx: &mut Context<'_>, buf: &mut [u8])
+    fn poll_read(mut self: Pin<&mut Self>, cx: &mut Context<'_>, buf_out: &mut [u8])
         -> Poll<Result<usize, futures::io::Error>>
     {
-        fn handle_chunk(this_chunk: &mut Option<Bytes>, mut chunk: Bytes, buf: &mut [u8])
-            -> Poll<Result<usize, futures::io::Error>>
-        {
-            let len = std::cmp::min(buf.len(), chunk.len());
-            (&mut buf[0..len]).copy_from_slice(&chunk.split_to(len));
-            if !chunk.is_empty() {
-                *this_chunk = Some(chunk);
+        let result = match Pin::new(&mut self).poll_fill_buf(cx) {
+            Poll::Ready(Ok(buf_in)) => {
+                // Copy the returned buffer into the caller's buffer.
+                let len = std::cmp::min(buf_in.len(), buf_out.len());
+                (&mut buf_out[0..len]).copy_from_slice(&buf_in[0..len]);
+                Poll::Ready(Ok(len))
             }
-            Poll::Ready(Ok(len))
+            Poll::Ready(Err(e)) => Poll::Ready(Err(e)),
+            Poll::Pending => Poll::Pending,
+        };
+
+        if let Poll::Ready(Ok(len)) = result {
+            self.consume(len);
         }
 
-        let mut this = self.project();
+        result
+    }
+}
 
-        if let Some(chunk) = this.chunk.take() {
-            handle_chunk(&mut this.chunk, chunk, buf)
-        } else {
-            match this.stream.poll_next(cx) {
-                Poll::Ready(Some(Ok(chunk))) => {
-                    handle_chunk(&mut this.chunk, chunk, buf)
+impl<S> AsyncBufRead for BytesStreamToAsyncRead<S>
+    where S: Stream<Item = Result<Bytes, hyper::Error>>
+{
+    fn poll_fill_buf<'a>(self: Pin<&'a mut Self>, cx: &mut Context<'_>)
+        -> Poll<Result<&'a [u8], futures::io::Error>>
+    {
+        // Can't use pin-project here because we need to return a reference to Self at the end, and
+        // using pin-project results in an error that we returned a reference to a local.
+        // Instead: do basically what pin-project does, but separate out the members.
+        let this: &'a mut Self = unsafe { self.get_unchecked_mut() };
+        let stream = unsafe { Pin::new_unchecked(&mut this.stream) };
+
+        if this.buf.is_empty() {
+            // Attempt to fill the buffer.
+            match stream.poll_next(cx) {
+                Poll::Ready(Some(Ok(new_buf))) => {
+                    // Take over the returned buffer.
+                    this.buf = new_buf;
                 }
                 Poll::Ready(Some(Err(e))) => {
                     // TODO: map the error better
-                    Poll::Ready(Err(futures::io::Error::new(
+                    return Poll::Ready(Err(futures::io::Error::new(
                                 futures::io::ErrorKind::Other,
-                                e)))
+                                e)));
                 }
-                Poll::Ready(None) => Poll::Ready(Ok(0)),
-                Poll::Pending => Poll::Pending,
+                Poll::Ready(None) => return Poll::Ready(Ok(&[])),
+                Poll::Pending => return Poll::Pending,
             }
         }
+
+        // Return the buffer as a byte slice.
+        Poll::Ready(Ok(&this.buf))
+    }
+
+    fn consume(self: Pin<&mut Self>, amt: usize) {
+        self.project().buf.advance(amt);
     }
 }
 
+// Read a full Hyper body into a String.
 async fn response_body_to_string(response: hyper::Response<hyper::Body>)
     -> Result<String, Box<dyn std::error::Error + Send + Sync + 'static>>
 {
