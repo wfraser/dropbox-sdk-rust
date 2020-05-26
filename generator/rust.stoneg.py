@@ -220,7 +220,7 @@ class RustBackend(RustHelperBackend):
                     [u'client: &dyn crate::client_trait::HttpClient']
                         + ([] if arg_void else
                             [u'arg: {}'.format(self._rust_type(fn.arg_data_type))])
-                        + [u'body: crate::client_trait::BodyStream<\'static>'],
+                        + [u'body: crate::client_trait::BodyStream'],
                     u'crate::Result<Result<{}, {}>>'.format(
                         self._rust_type(fn.result_data_type),
                         self._rust_type(fn.error_data_type)),

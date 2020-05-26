@@ -47,7 +47,7 @@ pub async fn docs_archive(
 pub async fn docs_create(
     client: &dyn crate::client_trait::HttpClient,
     arg: PaperDocCreateArgs,
-    body: crate::client_trait::BodyStream<'static>,
+    body: crate::client_trait::BodyStream,
 ) -> crate::Result<Result<PaperDocCreateUpdateResult, PaperDocCreateError>> {
     crate::client_helpers::request(
         client,
@@ -278,7 +278,7 @@ pub async fn docs_sharing_policy_set(
 pub async fn docs_update(
     client: &dyn crate::client_trait::HttpClient,
     arg: PaperDocUpdateArgs,
-    body: crate::client_trait::BodyStream<'static>,
+    body: crate::client_trait::BodyStream,
 ) -> crate::Result<Result<PaperDocCreateUpdateResult, PaperDocUpdateError>> {
     crate::client_helpers::request(
         client,

@@ -148,7 +148,7 @@ impl HttpClient for HyperClient {
         style: Style,
         function: &'static str,
         params_json: String,
-        body: Option<BodyStream<'static>>,
+        body: Option<BodyStream>,
         range_start: Option<u64>,
         range_end: Option<u64>,
     ) -> Result<HttpRequestResultRaw, HttpClientError> {
