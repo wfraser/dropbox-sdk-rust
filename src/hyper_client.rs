@@ -307,14 +307,13 @@ impl<R: AsyncBufRead> Stream for HyperBody<R> {
 
 /// Adapts a Hyper body (a stream of Bytes buffers) into an AsyncRead and AsyncBufRead.
 /// The AsyncBufRead implementation does not require any copying and should be used if possible.
-#[pin_project]
 #[must_use]
 struct BytesStreamToAsyncRead<S> {
-    #[pin]
     stream: S,
-
     buf: Bytes,
 }
+
+impl<S> Unpin for BytesStreamToAsyncRead<S> {}
 
 impl<S> BytesStreamToAsyncRead<S> {
     pub fn new(stream: S) -> Self {
@@ -326,7 +325,7 @@ impl<S> BytesStreamToAsyncRead<S> {
 }
 
 impl<S> AsyncRead for BytesStreamToAsyncRead<S>
-    where S: Stream<Item = Result<Bytes, hyper::Error>>
+    where S: Stream<Item = Result<Bytes, hyper::Error>> + Unpin
 {
     fn poll_read(mut self: Pin<&mut Self>, cx: &mut Context<'_>, buf_out: &mut [u8])
         -> Poll<Result<usize, futures::io::Error>>
@@ -351,23 +350,17 @@ impl<S> AsyncRead for BytesStreamToAsyncRead<S>
 }
 
 impl<S> AsyncBufRead for BytesStreamToAsyncRead<S>
-    where S: Stream<Item = Result<Bytes, hyper::Error>>
+    where S: Stream<Item = Result<Bytes, hyper::Error>> + Unpin
 {
-    fn poll_fill_buf<'a>(self: Pin<&'a mut Self>, cx: &mut Context<'_>)
+    fn poll_fill_buf<'a>(mut self: Pin<&'a mut Self>, cx: &mut Context<'_>)
         -> Poll<Result<&'a [u8], futures::io::Error>>
     {
-        // Can't use pin-project here because we need to return a reference to Self at the end, and
-        // using pin-project results in an error that we returned a reference to a local.
-        // Instead: do basically what pin-project does, but separate out the members.
-        let this: &'a mut Self = unsafe { self.get_unchecked_mut() };
-        let stream = unsafe { Pin::new_unchecked(&mut this.stream) };
-
-        if this.buf.is_empty() {
+        if self.buf.is_empty() {
             // Attempt to fill the buffer.
-            match stream.poll_next(cx) {
+            match Pin::new(&mut self.stream).poll_next(cx) {
                 Poll::Ready(Some(Ok(new_buf))) => {
                     // Take over the returned buffer.
-                    this.buf = new_buf;
+                    self.buf = new_buf;
                 }
                 Poll::Ready(Some(Err(e))) => {
                     // TODO: map the error better
@@ -381,11 +374,11 @@ impl<S> AsyncBufRead for BytesStreamToAsyncRead<S>
         }
 
         // Return the buffer as a byte slice.
-        Poll::Ready(Ok(&this.buf))
+        Poll::Ready(Ok(&self.into_ref().get_ref().buf))
     }
 
-    fn consume(self: Pin<&mut Self>, amt: usize) {
-        self.project().buf.advance(amt);
+    fn consume(mut self: Pin<&mut Self>, amt: usize) {
+        self.buf.advance(amt);
     }
 }
 
