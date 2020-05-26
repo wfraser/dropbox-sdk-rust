@@ -15,13 +15,13 @@ pub trait HttpClient {
         style: Style,
         function: &'static str,
         params_json: String,
-        body: Option<BodyStream<'static>>,
+        body: Option<BodyStream>,
         range_start: Option<u64>,
         range_end: Option<u64>,
     ) -> Result<HttpRequestResultRaw, HttpClientError>;
 }
 
-pub type BodyStream<'a> = Pin<Box<dyn AsyncBufRead + Send + Sync + 'a>>;
+pub type BodyStream = Pin<Box<dyn AsyncBufRead + Send + Sync>>;
 
 /// An error returned by the HTTP client.
 #[derive(Debug)]
@@ -44,13 +44,13 @@ impl<E: std::error::Error + Send + Sync + 'static> From<E> for HttpClientError {
 pub struct HttpRequestResultRaw {
     pub result_json: String,
     pub content_length: Option<u64>,
-    pub body: Option<BodyStream<'static>>,
+    pub body: Option<BodyStream>,
 }
 
 pub struct HttpRequestResult<T> {
     pub result: T,
     pub content_length: Option<u64>,
-    pub body: Option<BodyStream<'static>>,
+    pub body: Option<BodyStream>,
 }
 
 #[derive(Debug, Copy, Clone, PartialEq)]

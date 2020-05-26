@@ -104,7 +104,7 @@ pub async fn unlock(
 pub async fn update_content(
     client: &dyn crate::client_trait::HttpClient,
     arg: UpdateContentArg,
-    body: crate::client_trait::BodyStream<'static>,
+    body: crate::client_trait::BodyStream,
 ) -> crate::Result<UpdateContentResult, UpdateContentError> {
     crate::client_helpers::request(
         client,

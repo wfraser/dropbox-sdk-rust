@@ -50,7 +50,7 @@ pub async fn alpha_get_metadata(
 pub async fn alpha_upload(
     client: &dyn crate::client_trait::HttpClient,
     arg: CommitInfoWithProperties,
-    body: crate::client_trait::BodyStream<'static>,
+    body: crate::client_trait::BodyStream,
 ) -> crate::Result<FileMetadata, UploadErrorWithProperties> {
     crate::client_helpers::request(
         client,
@@ -1082,7 +1082,7 @@ pub async fn unlock_file_batch(
 pub async fn upload(
     client: &dyn crate::client_trait::HttpClient,
     arg: CommitInfo,
-    body: crate::client_trait::BodyStream<'static>,
+    body: crate::client_trait::BodyStream,
 ) -> crate::Result<FileMetadata, UploadError> {
     crate::client_helpers::request(
         client,
@@ -1104,7 +1104,7 @@ pub async fn upload(
 pub async fn upload_session_append_v2(
     client: &dyn crate::client_trait::HttpClient,
     arg: UploadSessionAppendArg,
-    body: crate::client_trait::BodyStream<'static>,
+    body: crate::client_trait::BodyStream,
 ) -> crate::Result<(), UploadSessionLookupError> {
     crate::client_helpers::request(
         client,
@@ -1125,7 +1125,7 @@ pub async fn upload_session_append_v2(
 pub async fn upload_session_append(
     client: &dyn crate::client_trait::HttpClient,
     arg: UploadSessionCursor,
-    body: crate::client_trait::BodyStream<'static>,
+    body: crate::client_trait::BodyStream,
 ) -> crate::Result<(), UploadSessionLookupError> {
     crate::client_helpers::request(
         client,
@@ -1147,7 +1147,7 @@ pub async fn upload_session_append(
 pub async fn upload_session_finish(
     client: &dyn crate::client_trait::HttpClient,
     arg: UploadSessionFinishArg,
-    body: crate::client_trait::BodyStream<'static>,
+    body: crate::client_trait::BodyStream,
 ) -> crate::Result<FileMetadata, UploadSessionFinishError> {
     crate::client_helpers::request(
         client,
@@ -1227,7 +1227,7 @@ pub async fn upload_session_finish_batch_check(
 pub async fn upload_session_start(
     client: &dyn crate::client_trait::HttpClient,
     arg: UploadSessionStartArg,
-    body: crate::client_trait::BodyStream<'static>,
+    body: crate::client_trait::BodyStream,
 ) -> crate::Result<UploadSessionStartResult, ()> {
     crate::client_helpers::request(
         client,
