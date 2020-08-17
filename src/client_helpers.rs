@@ -2,7 +2,7 @@
 
 use std::fmt::Debug;
 use std::marker::PhantomData;
-use crate::{GeneralError, Error};
+use crate::{MiscError, Error};
 use crate::client_trait::*;
 use serde::de::{self, Deserialize, DeserializeOwned, Deserializer, MapAccess, Visitor};
 use serde::ser::Serialize;
@@ -96,10 +96,10 @@ pub fn request_with_body<T: DeserializeOwned, E: DeserializeOwned + Debug + Send
             error!("HTTP {}: {}", code, response_body);
             match code {
                 400 => {
-                    Err(GeneralError::BadRequest(response_body).into())
+                    Err(MiscError::BadRequest(response_body).into())
                 },
                 401 => {
-                    Err(GeneralError::InvalidToken(response_body).into())
+                    Err(MiscError::InvalidToken(response_body).into())
                 },
                 409 => {
                     // Response should be JSON-deseraializable into the strongly-typed
@@ -116,19 +116,19 @@ pub fn request_with_body<T: DeserializeOwned, E: DeserializeOwned + Debug + Send
                     }
                 },
                 429 => {
-                    Err(GeneralError::RateLimited(response_body).into())
+                    Err(MiscError::RateLimited(response_body).into())
                 },
                 500 ..= 599 => {
-                    Err(GeneralError::ServerError(response_body).into())
+                    Err(MiscError::ServerError(response_body).into())
                 },
                 _ => {
-                    Err(GeneralError::UnexpectedHttpError { code, response_body }.into())
+                    Err(MiscError::UnexpectedHttpError { code, response_body }.into())
                 }
             }
         }
         Err(HttpClientError::Other(e)) => {
             error!("HTTP request error: {}", e);
-            Err(GeneralError::HttpClient(e).into())
+            Err(MiscError::HttpClient(e).into())
         }
     }
 }

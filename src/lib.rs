@@ -14,11 +14,11 @@ pub enum Error<E: std::fmt::Debug + Send + Sync + 'static> {
 
     /// Some other error not specific to the API route called.
     #[error("{0}")]
-    Other(GeneralError),
+    Other(MiscError),
 }
 
 #[derive(Error, Debug)]
-pub enum GeneralError {
+pub enum MiscError {
 
     /// An error occurred in the course of making the HTTP request.
     #[error("error from HTTP client: {0}")]
@@ -60,16 +60,22 @@ pub enum GeneralError {
 pub type Result<T, E> = std::result::Result<T, Error<E>>;
 
 impl<E: std::fmt::Debug + Send + Sync + 'static> Error<E> {
+    /// Return the inner API error if it is one.
     pub fn api_err(&self) -> Option<&E> {
         match self {
             Error::API(ref e) => Some(e),
             Error::Other(_) => None,
         }
     }
+
+    /// Returns `true` if this is the `Error::API` variant.
+    pub fn is_api(&self) -> bool {
+        matches!(self, Error::API(_))
+    }
 }
 
-impl<E: std::fmt::Debug + Send + Sync + 'static> From<GeneralError> for Error<E> {
-    fn from(e: GeneralError) -> Error<E> {
+impl<E: std::fmt::Debug + Send + Sync + 'static> From<MiscError> for Error<E> {
+    fn from(e: MiscError) -> Error<E> {
         Error::Other(e)
     }
 }
@@ -77,7 +83,7 @@ impl<E: std::fmt::Debug + Send + Sync + 'static> From<GeneralError> for Error<E>
 // Some hax to forward the various From impls into the Other variant.
 impl<E: std::fmt::Debug + Send + Sync + 'static> From<serde_json::Error> for Error<E> {
     fn from(e: serde_json::Error) -> Error<E> {
-        Error::Other(GeneralError::from(e))
+        Error::Other(MiscError::from(e))
     }
 }
 

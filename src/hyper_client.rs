@@ -3,7 +3,7 @@
 use std::io::{self, Read};
 use std::str;
 
-use crate::GeneralError;
+use crate::MiscError;
 use crate::client_trait::{Endpoint, Style, HttpClient, HttpClientError, HttpRequestResultRaw};
 use hyper::{self, Url};
 use hyper::header::Headers;
@@ -31,11 +31,11 @@ pub enum HyperClientError {
 }
 
 // Implement From for some errors so that they get wrapped in a HyperClientError and then
-// propogated via GeneralError::HttpClient. Note that this only works for types that don't already
-// have a variant in the GeneralError type, because doing so would produce a conflicting impl.
+// propogated via MiscError::HttpClient. Note that this only works for types that don't already
+// have a variant in the MiscError type, because doing so would produce a conflicting impl.
 macro_rules! hyper_error {
     ($e:ty) => {
-        impl From<$e> for crate::GeneralError {
+        impl From<$e> for crate::MiscError {
             fn from(e: $e) -> Self {
                 Self::HttpClient(Box::new(HyperClientError::from(e)))
             }
@@ -63,7 +63,7 @@ impl HyperClient {
         client_secret: &str,
         authorization_code: &str,
         redirect_uri: Option<&str>,
-    ) -> Result<String, GeneralError> {
+    ) -> Result<String, MiscError> {
 
         let client = Self::http_client();
         let url = Url::parse("https://api.dropboxapi.com/oauth2/token").unwrap();
@@ -90,7 +90,7 @@ impl HyperClient {
                     let mut body = String::new();
                     resp.read_to_string(&mut body)?;
                     debug!("error body: {}", body);
-                    Err(GeneralError::UnexpectedHttpError { code, response_body: body })
+                    Err(MiscError::UnexpectedHttpError { code, response_body: body })
                 } else {
                     let body = serde_json::from_reader(resp)?;
                     debug!("response: {:?}", body);
@@ -98,18 +98,18 @@ impl HyperClient {
                         serde_json::Value::Object(mut map) => {
                             match map.remove("access_token") {
                                 Some(serde_json::Value::String(token)) => Ok(token),
-                                _ => Err(GeneralError::UnexpectedResponse(
+                                _ => Err(MiscError::UnexpectedResponse(
                                         "no access token in response!")),
                             }
                         },
-                        _ => Err(GeneralError::UnexpectedResponse(
+                        _ => Err(MiscError::UnexpectedResponse(
                             "response is not a JSON object")),
                     }
                 }
             },
             Err(e) => {
                 error!("error getting OAuth2 token: {}", e);
-                Err(GeneralError::HttpClient(Box::new(e)))
+                Err(MiscError::HttpClient(Box::new(e)))
             }
         }
     }
@@ -222,7 +222,9 @@ impl HttpClient for HyperClient {
                             String::from_utf8(values[0].clone())?
                         },
                         None => {
-                            return Err(HttpClientError::Other(Box::new(GeneralError::UnexpectedResponse("missing Dropbox-API-Result header"))));
+                            return Err(HttpClientError::Other(Box::new(
+                                MiscError::UnexpectedResponse(
+                                    "missing Dropbox-API-Result header"))));
                         }
                     };
 
