@@ -375,7 +375,9 @@ impl Authorization {
 
     /// Obtain an access token. Use this to complete the authorization process, or to obtain an
     /// updated token when a short-lived access token has expired.
-    pub fn obtain_access_token(&mut self, client: impl NoauthClient) -> crate::Result<String> {
+    pub fn obtain_access_token(&mut self, client: &impl NoauthClient)
+        -> crate::Result<String>
+    {
         let client_id: String;
         let mut redirect_uri = None;
         let mut client_secret = None;
@@ -502,7 +504,7 @@ impl TokenCache {
     /// Get the current token, or obtain one if no cached token is set yet.
     ///
     /// Unless the token has not been obtained yet, this does not do any HTTP request.
-    pub fn get_token(&self, client: impl NoauthClient) -> crate::Result<Arc<String>> {
+    pub fn get_token(&self, client: &impl NoauthClient) -> crate::Result<Arc<String>> {
         let read = self.auth.read().unwrap();
         if read.1.is_empty() {
             let empty = Arc::clone(&read.1);
@@ -516,7 +518,7 @@ impl TokenCache {
     /// Forces an update to the token, for when it is detected that the token is expired.
     ///
     /// To avoid double-updating the token in a race, requires the token which is being replaced.
-    pub fn update_token(&self, client: impl NoauthClient, old_token: Arc<String>)
+    pub fn update_token(&self, client: &impl NoauthClient, old_token: Arc<String>)
         -> crate::Result<Arc<String>>
     {
         let mut write = self.auth.write().unwrap();

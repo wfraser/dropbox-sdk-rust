@@ -52,7 +52,7 @@ macro_rules! forward_authed_request {
             range_start: Option<u64>,
             range_end: Option<u64>,
         ) -> crate::Result<HttpRequestResultRaw> {
-            let mut token = $tokens.get_token(TokenUpdateClient { inner: &$inner })?;
+            let mut token = $tokens.get_token(&TokenUpdateClient { inner: &$inner })?;
 
             let mut retried = false;
             loop {
@@ -67,7 +67,7 @@ macro_rules! forward_authed_request {
                     info!("refreshing auth token");
                     let old_token = token;
                     token = $tokens.update_token(
-                        TokenUpdateClient { inner: &$inner },
+                        &TokenUpdateClient { inner: &$inner },
                         old_token,
                     )?;
                     retried = true;
@@ -255,7 +255,7 @@ impl UreqClient {
                     // escaped per the HTTP spec.
                     req = req.set(
                         "Dropbox-API-Arg",
-                        json_escape_header(&params).as_ref());
+                        json_escape_header(params).as_ref());
                     if style == Style::Upload {
                         req = req.set("Content-Type", "application/octet-stream");
                         if let Some(body) = body {
