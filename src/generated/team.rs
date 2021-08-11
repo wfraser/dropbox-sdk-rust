@@ -24,7 +24,7 @@ pub type UserQuota = u32;
 
 /// List all device sessions of a team's member.
 pub fn devices_list_member_devices(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &ListMemberDevicesArg,
 ) -> crate::Result<Result<ListMemberDevicesResult, ListMemberDevicesError>> {
     crate::client_helpers::request(
@@ -38,7 +38,7 @@ pub fn devices_list_member_devices(
 
 /// List all device sessions of a team. Permission : Team member file access.
 pub fn devices_list_members_devices(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &ListMembersDevicesArg,
 ) -> crate::Result<Result<ListMembersDevicesResult, ListMembersDevicesError>> {
     crate::client_helpers::request(
@@ -53,7 +53,7 @@ pub fn devices_list_members_devices(
 /// List all device sessions of a team. Permission : Team member file access.
 #[deprecated(note = "replaced by devices_list_members_devices")]
 pub fn devices_list_team_devices(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &ListTeamDevicesArg,
 ) -> crate::Result<Result<ListTeamDevicesResult, ListTeamDevicesError>> {
     crate::client_helpers::request(
@@ -67,7 +67,7 @@ pub fn devices_list_team_devices(
 
 /// Revoke a device session of a team's member.
 pub fn devices_revoke_device_session(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &RevokeDeviceSessionArg,
 ) -> crate::Result<Result<(), RevokeDeviceSessionError>> {
     crate::client_helpers::request(
@@ -81,7 +81,7 @@ pub fn devices_revoke_device_session(
 
 /// Revoke a list of device sessions of team members.
 pub fn devices_revoke_device_session_batch(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &RevokeDeviceSessionBatchArg,
 ) -> crate::Result<Result<RevokeDeviceSessionBatchResult, RevokeDeviceSessionBatchError>> {
     crate::client_helpers::request(
@@ -97,7 +97,7 @@ pub fn devices_revoke_device_session_batch(
 /// for what feature you can access or what value you have for certain features. Permission : Team
 /// information.
 pub fn features_get_values(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &FeaturesGetValuesBatchArg,
 ) -> crate::Result<Result<FeaturesGetValuesBatchResult, FeaturesGetValuesBatchError>> {
     crate::client_helpers::request(
@@ -111,7 +111,7 @@ pub fn features_get_values(
 
 /// Retrieves information about a team.
 pub fn get_info(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
 ) -> crate::Result<Result<TeamGetInfoResult, crate::NoError>> {
     crate::client_helpers::request(
         client,
@@ -124,7 +124,7 @@ pub fn get_info(
 
 /// Creates a new, empty group, with a requested name. Permission : Team member management.
 pub fn groups_create(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &GroupCreateArg,
 ) -> crate::Result<Result<GroupFullInfo, GroupCreateError>> {
     crate::client_helpers::request(
@@ -140,7 +140,7 @@ pub fn groups_create(
 /// may take additional time. Use the [`groups_job_status_get()`](groups_job_status_get) to
 /// determine whether this process has completed. Permission : Team member management.
 pub fn groups_delete(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &GroupSelector,
 ) -> crate::Result<Result<super::dbx_async::LaunchEmptyResult, GroupDeleteError>> {
     crate::client_helpers::request(
@@ -156,7 +156,7 @@ pub fn groups_delete(
 /// [`GroupFullInfo::members`](GroupFullInfo) is not returned for system-managed groups. Permission
 /// : Team Information.
 pub fn groups_get_info(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &GroupsSelector,
 ) -> crate::Result<Result<GroupsGetInfoResult, GroupsGetInfoError>> {
     crate::client_helpers::request(
@@ -174,7 +174,7 @@ pub fn groups_get_info(
 /// granting/revoking group members' access to group-owned resources. Permission : Team member
 /// management.
 pub fn groups_job_status_get(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &super::dbx_async::PollArg,
 ) -> crate::Result<Result<super::dbx_async::PollEmptyResult, GroupsPollError>> {
     crate::client_helpers::request(
@@ -188,7 +188,7 @@ pub fn groups_job_status_get(
 
 /// Lists groups on a team. Permission : Team Information.
 pub fn groups_list(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &GroupsListArg,
 ) -> crate::Result<Result<GroupsListResult, crate::NoError>> {
     crate::client_helpers::request(
@@ -203,7 +203,7 @@ pub fn groups_list(
 /// Once a cursor has been retrieved from [`groups_list()`](groups_list), use this to paginate
 /// through all groups. Permission : Team Information.
 pub fn groups_list_continue(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &GroupsListContinueArg,
 ) -> crate::Result<Result<GroupsListResult, GroupsListContinueError>> {
     crate::client_helpers::request(
@@ -219,7 +219,7 @@ pub fn groups_list_continue(
 /// resources may take additional time. Use the [`groups_job_status_get()`](groups_job_status_get)
 /// to determine whether this process has completed. Permission : Team member management.
 pub fn groups_members_add(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &GroupMembersAddArg,
 ) -> crate::Result<Result<GroupMembersChangeResult, GroupMembersAddError>> {
     crate::client_helpers::request(
@@ -233,7 +233,7 @@ pub fn groups_members_add(
 
 /// Lists members of a group. Permission : Team Information.
 pub fn groups_members_list(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &GroupsMembersListArg,
 ) -> crate::Result<Result<GroupsMembersListResult, GroupSelectorError>> {
     crate::client_helpers::request(
@@ -248,7 +248,7 @@ pub fn groups_members_list(
 /// Once a cursor has been retrieved from [`groups_members_list()`](groups_members_list), use this
 /// to paginate through all members of the group. Permission : Team information.
 pub fn groups_members_list_continue(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &GroupsMembersListContinueArg,
 ) -> crate::Result<Result<GroupsMembersListResult, GroupsMembersListContinueError>> {
     crate::client_helpers::request(
@@ -266,7 +266,7 @@ pub fn groups_members_list_continue(
 /// completed. This method permits removing the only owner of a group, even in cases where this is
 /// not possible via the web client. Permission : Team member management.
 pub fn groups_members_remove(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &GroupMembersRemoveArg,
 ) -> crate::Result<Result<GroupMembersChangeResult, GroupMembersRemoveError>> {
     crate::client_helpers::request(
@@ -280,7 +280,7 @@ pub fn groups_members_remove(
 
 /// Sets a member's access type in a group. Permission : Team member management.
 pub fn groups_members_set_access_type(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &GroupMembersSetAccessTypeArg,
 ) -> crate::Result<Result<GroupsGetInfoResult, GroupMemberSetAccessTypeError>> {
     crate::client_helpers::request(
@@ -294,7 +294,7 @@ pub fn groups_members_set_access_type(
 
 /// Updates a group's name and/or external ID. Permission : Team member management.
 pub fn groups_update(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &GroupUpdateArgs,
 ) -> crate::Result<Result<GroupFullInfo, GroupUpdateError>> {
     crate::client_helpers::request(
@@ -309,7 +309,7 @@ pub fn groups_update(
 /// Creates new legal hold policy. Note: Legal Holds is a paid add-on. Not all teams have the
 /// feature. Permission : Team member file access.
 pub fn legal_holds_create_policy(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &LegalHoldsPolicyCreateArg,
 ) -> crate::Result<Result<LegalHoldsPolicyCreateResult, LegalHoldsPolicyCreateError>> {
     crate::client_helpers::request(
@@ -324,7 +324,7 @@ pub fn legal_holds_create_policy(
 /// Gets a legal hold by Id. Note: Legal Holds is a paid add-on. Not all teams have the feature.
 /// Permission : Team member file access.
 pub fn legal_holds_get_policy(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &LegalHoldsGetPolicyArg,
 ) -> crate::Result<Result<LegalHoldsGetPolicyResult, LegalHoldsGetPolicyError>> {
     crate::client_helpers::request(
@@ -339,7 +339,7 @@ pub fn legal_holds_get_policy(
 /// List the file metadata that's under the hold. Note: Legal Holds is a paid add-on. Not all teams
 /// have the feature. Permission : Team member file access.
 pub fn legal_holds_list_held_revisions(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &LegalHoldsListHeldRevisionsArg,
 ) -> crate::Result<Result<LegalHoldsListHeldRevisionResult, LegalHoldsListHeldRevisionsError>> {
     crate::client_helpers::request(
@@ -354,7 +354,7 @@ pub fn legal_holds_list_held_revisions(
 /// Continue listing the file metadata that's under the hold. Note: Legal Holds is a paid add-on.
 /// Not all teams have the feature. Permission : Team member file access.
 pub fn legal_holds_list_held_revisions_continue(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &LegalHoldsListHeldRevisionsContinueArg,
 ) -> crate::Result<Result<LegalHoldsListHeldRevisionResult, LegalHoldsListHeldRevisionsError>> {
     crate::client_helpers::request(
@@ -369,7 +369,7 @@ pub fn legal_holds_list_held_revisions_continue(
 /// Lists legal holds on a team. Note: Legal Holds is a paid add-on. Not all teams have the feature.
 /// Permission : Team member file access.
 pub fn legal_holds_list_policies(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &LegalHoldsListPoliciesArg,
 ) -> crate::Result<Result<LegalHoldsListPoliciesResult, LegalHoldsListPoliciesError>> {
     crate::client_helpers::request(
@@ -384,7 +384,7 @@ pub fn legal_holds_list_policies(
 /// Releases a legal hold by Id. Note: Legal Holds is a paid add-on. Not all teams have the feature.
 /// Permission : Team member file access.
 pub fn legal_holds_release_policy(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &LegalHoldsPolicyReleaseArg,
 ) -> crate::Result<Result<(), LegalHoldsPolicyReleaseError>> {
     crate::client_helpers::request(
@@ -399,7 +399,7 @@ pub fn legal_holds_release_policy(
 /// Updates a legal hold. Note: Legal Holds is a paid add-on. Not all teams have the feature.
 /// Permission : Team member file access.
 pub fn legal_holds_update_policy(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &LegalHoldsPolicyUpdateArg,
 ) -> crate::Result<Result<LegalHoldsPolicyUpdateResult, LegalHoldsPolicyUpdateError>> {
     crate::client_helpers::request(
@@ -414,7 +414,7 @@ pub fn legal_holds_update_policy(
 /// List all linked applications of the team member. Note, this endpoint does not list any
 /// team-linked applications.
 pub fn linked_apps_list_member_linked_apps(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &ListMemberAppsArg,
 ) -> crate::Result<Result<ListMemberAppsResult, ListMemberAppsError>> {
     crate::client_helpers::request(
@@ -429,7 +429,7 @@ pub fn linked_apps_list_member_linked_apps(
 /// List all applications linked to the team members' accounts. Note, this endpoint does not list
 /// any team-linked applications.
 pub fn linked_apps_list_members_linked_apps(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &ListMembersAppsArg,
 ) -> crate::Result<Result<ListMembersAppsResult, ListMembersAppsError>> {
     crate::client_helpers::request(
@@ -445,7 +445,7 @@ pub fn linked_apps_list_members_linked_apps(
 /// team-linked applications.
 #[deprecated(note = "replaced by linked_apps_list_members_linked_apps")]
 pub fn linked_apps_list_team_linked_apps(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &ListTeamAppsArg,
 ) -> crate::Result<Result<ListTeamAppsResult, ListTeamAppsError>> {
     crate::client_helpers::request(
@@ -459,7 +459,7 @@ pub fn linked_apps_list_team_linked_apps(
 
 /// Revoke a linked application of the team member.
 pub fn linked_apps_revoke_linked_app(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &RevokeLinkedApiAppArg,
 ) -> crate::Result<Result<(), RevokeLinkedAppError>> {
     crate::client_helpers::request(
@@ -473,7 +473,7 @@ pub fn linked_apps_revoke_linked_app(
 
 /// Revoke a list of linked applications of the team members.
 pub fn linked_apps_revoke_linked_app_batch(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &RevokeLinkedApiAppBatchArg,
 ) -> crate::Result<Result<RevokeLinkedAppBatchResult, RevokeLinkedAppBatchError>> {
     crate::client_helpers::request(
@@ -487,7 +487,7 @@ pub fn linked_apps_revoke_linked_app_batch(
 
 /// Add users to member space limits excluded users list.
 pub fn member_space_limits_excluded_users_add(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &ExcludedUsersUpdateArg,
 ) -> crate::Result<Result<ExcludedUsersUpdateResult, ExcludedUsersUpdateError>> {
     crate::client_helpers::request(
@@ -501,7 +501,7 @@ pub fn member_space_limits_excluded_users_add(
 
 /// List member space limits excluded users.
 pub fn member_space_limits_excluded_users_list(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &ExcludedUsersListArg,
 ) -> crate::Result<Result<ExcludedUsersListResult, ExcludedUsersListError>> {
     crate::client_helpers::request(
@@ -515,7 +515,7 @@ pub fn member_space_limits_excluded_users_list(
 
 /// Continue listing member space limits excluded users.
 pub fn member_space_limits_excluded_users_list_continue(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &ExcludedUsersListContinueArg,
 ) -> crate::Result<Result<ExcludedUsersListResult, ExcludedUsersListContinueError>> {
     crate::client_helpers::request(
@@ -529,7 +529,7 @@ pub fn member_space_limits_excluded_users_list_continue(
 
 /// Remove users from member space limits excluded users list.
 pub fn member_space_limits_excluded_users_remove(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &ExcludedUsersUpdateArg,
 ) -> crate::Result<Result<ExcludedUsersUpdateResult, ExcludedUsersUpdateError>> {
     crate::client_helpers::request(
@@ -544,7 +544,7 @@ pub fn member_space_limits_excluded_users_remove(
 /// Get users custom quota. Returns none as the custom quota if none was set. A maximum of 1000
 /// members can be specified in a single call.
 pub fn member_space_limits_get_custom_quota(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &CustomQuotaUsersArg,
 ) -> crate::Result<Result<Vec<CustomQuotaResult>, CustomQuotaError>> {
     crate::client_helpers::request(
@@ -558,7 +558,7 @@ pub fn member_space_limits_get_custom_quota(
 
 /// Remove users custom quota. A maximum of 1000 members can be specified in a single call.
 pub fn member_space_limits_remove_custom_quota(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &CustomQuotaUsersArg,
 ) -> crate::Result<Result<Vec<RemoveCustomQuotaResult>, CustomQuotaError>> {
     crate::client_helpers::request(
@@ -573,7 +573,7 @@ pub fn member_space_limits_remove_custom_quota(
 /// Set users custom quota. Custom quota has to be at least 15GB. A maximum of 1000 members can be
 /// specified in a single call.
 pub fn member_space_limits_set_custom_quota(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &SetCustomQuotaArg,
 ) -> crate::Result<Result<Vec<CustomQuotaResult>, SetCustomQuotaError>> {
     crate::client_helpers::request(
@@ -595,7 +595,7 @@ pub fn member_space_limits_set_custom_quota(
 /// team invitation and for 'Perform as team member' actions taken on the user before they become
 /// 'active'.
 pub fn members_add_v2(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &MembersAddV2Arg,
 ) -> crate::Result<Result<MembersAddLaunchV2Result, crate::NoError>> {
     crate::client_helpers::request(
@@ -617,7 +617,7 @@ pub fn members_add_v2(
 /// team invitation and for 'Perform as team member' actions taken on the user before they become
 /// 'active'.
 pub fn members_add(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &MembersAddArg,
 ) -> crate::Result<Result<MembersAddLaunch, crate::NoError>> {
     crate::client_helpers::request(
@@ -632,7 +632,7 @@ pub fn members_add(
 /// Once an async_job_id is returned from [`members_add_v2()`](members_add_v2) , use this to poll
 /// the status of the asynchronous request. Permission : Team member management.
 pub fn members_add_job_status_get_v2(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &super::dbx_async::PollArg,
 ) -> crate::Result<Result<MembersAddJobStatusV2Result, super::dbx_async::PollError>> {
     crate::client_helpers::request(
@@ -647,7 +647,7 @@ pub fn members_add_job_status_get_v2(
 /// Once an async_job_id is returned from [`members_add()`](members_add) , use this to poll the
 /// status of the asynchronous request. Permission : Team member management.
 pub fn members_add_job_status_get(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &super::dbx_async::PollArg,
 ) -> crate::Result<Result<MembersAddJobStatus, super::dbx_async::PollError>> {
     crate::client_helpers::request(
@@ -661,7 +661,7 @@ pub fn members_add_job_status_get(
 
 /// Deletes a team member's profile photo. Permission : Team member management.
 pub fn members_delete_profile_photo_v2(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &MembersDeleteProfilePhotoArg,
 ) -> crate::Result<Result<TeamMemberInfoV2Result, MembersDeleteProfilePhotoError>> {
     crate::client_helpers::request(
@@ -675,7 +675,7 @@ pub fn members_delete_profile_photo_v2(
 
 /// Deletes a team member's profile photo. Permission : Team member management.
 pub fn members_delete_profile_photo(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &MembersDeleteProfilePhotoArg,
 ) -> crate::Result<Result<TeamMemberInfo, MembersDeleteProfilePhotoError>> {
     crate::client_helpers::request(
@@ -691,7 +691,7 @@ pub fn members_delete_profile_photo(
 /// [`members_set_admin_permissions_v2()`](members_set_admin_permissions_v2). Permission : Team
 /// member management.
 pub fn members_get_available_team_member_roles(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
 ) -> crate::Result<Result<MembersGetAvailableTeamMemberRolesResult, crate::NoError>> {
     crate::client_helpers::request(
         client,
@@ -706,7 +706,7 @@ pub fn members_get_available_team_member_roles(
 /// will return [`MembersGetInfoItem::IdNotFound`](MembersGetInfoItem::IdNotFound), for IDs (or
 /// emails) that cannot be matched to a valid team member.
 pub fn members_get_info_v2(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &MembersGetInfoV2Arg,
 ) -> crate::Result<Result<MembersGetInfoV2Result, MembersGetInfoError>> {
     crate::client_helpers::request(
@@ -722,7 +722,7 @@ pub fn members_get_info_v2(
 /// will return [`MembersGetInfoItem::IdNotFound`](MembersGetInfoItem::IdNotFound), for IDs (or
 /// emails) that cannot be matched to a valid team member.
 pub fn members_get_info(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &MembersGetInfoArgs,
 ) -> crate::Result<Result<MembersGetInfoResult, MembersGetInfoError>> {
     crate::client_helpers::request(
@@ -736,7 +736,7 @@ pub fn members_get_info(
 
 /// Lists members of a team. Permission : Team information.
 pub fn members_list_v2(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &MembersListArg,
 ) -> crate::Result<Result<MembersListV2Result, MembersListError>> {
     crate::client_helpers::request(
@@ -750,7 +750,7 @@ pub fn members_list_v2(
 
 /// Lists members of a team. Permission : Team information.
 pub fn members_list(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &MembersListArg,
 ) -> crate::Result<Result<MembersListResult, MembersListError>> {
     crate::client_helpers::request(
@@ -765,7 +765,7 @@ pub fn members_list(
 /// Once a cursor has been retrieved from [`members_list_v2()`](members_list_v2), use this to
 /// paginate through all team members. Permission : Team information.
 pub fn members_list_continue_v2(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &MembersListContinueArg,
 ) -> crate::Result<Result<MembersListV2Result, MembersListContinueError>> {
     crate::client_helpers::request(
@@ -780,7 +780,7 @@ pub fn members_list_continue_v2(
 /// Once a cursor has been retrieved from [`members_list()`](members_list), use this to paginate
 /// through all team members. Permission : Team information.
 pub fn members_list_continue(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &MembersListContinueArg,
 ) -> crate::Result<Result<MembersListResult, MembersListContinueError>> {
     crate::client_helpers::request(
@@ -797,7 +797,7 @@ pub fn members_list_continue(
 /// [`members_move_former_member_files_job_status_check()`](members_move_former_member_files_job_status_check).
 /// Permission : Team member management.
 pub fn members_move_former_member_files(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &MembersDataTransferArg,
 ) -> crate::Result<Result<super::dbx_async::LaunchEmptyResult, MembersTransferFormerMembersFilesError>> {
     crate::client_helpers::request(
@@ -813,7 +813,7 @@ pub fn members_move_former_member_files(
 /// [`members_move_former_member_files()`](members_move_former_member_files) , use this to poll the
 /// status of the asynchronous request. Permission : Team member management.
 pub fn members_move_former_member_files_job_status_check(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &super::dbx_async::PollArg,
 ) -> crate::Result<Result<super::dbx_async::PollEmptyResult, super::dbx_async::PollError>> {
     crate::client_helpers::request(
@@ -828,7 +828,7 @@ pub fn members_move_former_member_files_job_status_check(
 /// Recover a deleted member. Permission : Team member management Exactly one of team_member_id,
 /// email, or external_id must be provided to identify the user account.
 pub fn members_recover(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &MembersRecoverArg,
 ) -> crate::Result<Result<(), MembersRecoverError>> {
     crate::client_helpers::request(
@@ -851,7 +851,7 @@ pub fn members_recover(
 /// asynchronous job. To obtain the final result of the job, the client should periodically poll
 /// [`members_remove_job_status_get()`](members_remove_job_status_get).
 pub fn members_remove(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &MembersRemoveArg,
 ) -> crate::Result<Result<super::dbx_async::LaunchEmptyResult, MembersRemoveError>> {
     crate::client_helpers::request(
@@ -866,7 +866,7 @@ pub fn members_remove(
 /// Once an async_job_id is returned from [`members_remove()`](members_remove) , use this to poll
 /// the status of the asynchronous request. Permission : Team member management.
 pub fn members_remove_job_status_get(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &super::dbx_async::PollArg,
 ) -> crate::Result<Result<super::dbx_async::PollEmptyResult, super::dbx_async::PollError>> {
     crate::client_helpers::request(
@@ -882,7 +882,7 @@ pub fn members_remove_job_status_get(
 /// domains will be verified automatically. For each email address not on a verified domain a
 /// verification email will be sent.
 pub fn members_secondary_emails_add(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &AddSecondaryEmailsArg,
 ) -> crate::Result<Result<AddSecondaryEmailsResult, AddSecondaryEmailsError>> {
     crate::client_helpers::request(
@@ -897,7 +897,7 @@ pub fn members_secondary_emails_add(
 /// Delete secondary emails from users Permission : Team member management. Users will be notified
 /// of deletions of verified secondary emails at both the secondary email and their primary email.
 pub fn members_secondary_emails_delete(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &DeleteSecondaryEmailsArg,
 ) -> crate::Result<Result<DeleteSecondaryEmailsResult, crate::NoError>> {
     crate::client_helpers::request(
@@ -911,7 +911,7 @@ pub fn members_secondary_emails_delete(
 
 /// Resend secondary email verification emails. Permission : Team member management.
 pub fn members_secondary_emails_resend_verification_emails(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &ResendVerificationEmailArg,
 ) -> crate::Result<Result<ResendVerificationEmailResult, crate::NoError>> {
     crate::client_helpers::request(
@@ -927,7 +927,7 @@ pub fn members_secondary_emails_resend_verification_emails(
 /// team_member_id, email, or external_id must be provided to identify the user account. No-op if
 /// team member is not pending.
 pub fn members_send_welcome_email(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &UserSelectorArg,
 ) -> crate::Result<Result<(), MembersSendWelcomeError>> {
     crate::client_helpers::request(
@@ -941,7 +941,7 @@ pub fn members_send_welcome_email(
 
 /// Updates a team member's permissions. Permission : Team member management.
 pub fn members_set_admin_permissions_v2(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &MembersSetPermissions2Arg,
 ) -> crate::Result<Result<MembersSetPermissions2Result, MembersSetPermissions2Error>> {
     crate::client_helpers::request(
@@ -955,7 +955,7 @@ pub fn members_set_admin_permissions_v2(
 
 /// Updates a team member's permissions. Permission : Team member management.
 pub fn members_set_admin_permissions(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &MembersSetPermissionsArg,
 ) -> crate::Result<Result<MembersSetPermissionsResult, MembersSetPermissionsError>> {
     crate::client_helpers::request(
@@ -969,7 +969,7 @@ pub fn members_set_admin_permissions(
 
 /// Updates a team member's profile. Permission : Team member management.
 pub fn members_set_profile_v2(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &MembersSetProfileArg,
 ) -> crate::Result<Result<TeamMemberInfoV2Result, MembersSetProfileError>> {
     crate::client_helpers::request(
@@ -983,7 +983,7 @@ pub fn members_set_profile_v2(
 
 /// Updates a team member's profile. Permission : Team member management.
 pub fn members_set_profile(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &MembersSetProfileArg,
 ) -> crate::Result<Result<TeamMemberInfo, MembersSetProfileError>> {
     crate::client_helpers::request(
@@ -997,7 +997,7 @@ pub fn members_set_profile(
 
 /// Updates a team member's profile photo. Permission : Team member management.
 pub fn members_set_profile_photo_v2(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &MembersSetProfilePhotoArg,
 ) -> crate::Result<Result<TeamMemberInfoV2Result, MembersSetProfilePhotoError>> {
     crate::client_helpers::request(
@@ -1011,7 +1011,7 @@ pub fn members_set_profile_photo_v2(
 
 /// Updates a team member's profile photo. Permission : Team member management.
 pub fn members_set_profile_photo(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &MembersSetProfilePhotoArg,
 ) -> crate::Result<Result<TeamMemberInfo, MembersSetProfilePhotoError>> {
     crate::client_helpers::request(
@@ -1026,7 +1026,7 @@ pub fn members_set_profile_photo(
 /// Suspend a member from a team. Permission : Team member management Exactly one of team_member_id,
 /// email, or external_id must be provided to identify the user account.
 pub fn members_suspend(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &MembersDeactivateArg,
 ) -> crate::Result<Result<(), MembersSuspendError>> {
     crate::client_helpers::request(
@@ -1041,7 +1041,7 @@ pub fn members_suspend(
 /// Unsuspend a member from a team. Permission : Team member management Exactly one of
 /// team_member_id, email, or external_id must be provided to identify the user account.
 pub fn members_unsuspend(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &MembersUnsuspendArg,
 ) -> crate::Result<Result<(), MembersUnsuspendError>> {
     crate::client_helpers::request(
@@ -1058,7 +1058,7 @@ pub fn members_unsuspend(
 /// Home namespaces and app folders are always owned by this team or members of the team, but shared
 /// folders may be owned by other users or other teams. Duplicates may occur in the list.
 pub fn namespaces_list(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &TeamNamespacesListArg,
 ) -> crate::Result<Result<TeamNamespacesListResult, TeamNamespacesListError>> {
     crate::client_helpers::request(
@@ -1073,7 +1073,7 @@ pub fn namespaces_list(
 /// Once a cursor has been retrieved from [`namespaces_list()`](namespaces_list), use this to
 /// paginate through all team-accessible namespaces. Duplicates may occur in the list.
 pub fn namespaces_list_continue(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &TeamNamespacesListContinueArg,
 ) -> crate::Result<Result<TeamNamespacesListResult, TeamNamespacesListContinueError>> {
     crate::client_helpers::request(
@@ -1088,7 +1088,7 @@ pub fn namespaces_list_continue(
 /// Permission : Team member file access.
 #[deprecated]
 pub fn properties_template_add(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &super::file_properties::AddTemplateArg,
 ) -> crate::Result<Result<super::file_properties::AddTemplateResult, super::file_properties::ModifyTemplateError>> {
     crate::client_helpers::request(
@@ -1103,7 +1103,7 @@ pub fn properties_template_add(
 /// Permission : Team member file access. The scope for the route is files.team_metadata.write.
 #[deprecated]
 pub fn properties_template_get(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &super::file_properties::GetTemplateArg,
 ) -> crate::Result<Result<super::file_properties::GetTemplateResult, super::file_properties::TemplateError>> {
     crate::client_helpers::request(
@@ -1118,7 +1118,7 @@ pub fn properties_template_get(
 /// Permission : Team member file access. The scope for the route is files.team_metadata.write.
 #[deprecated]
 pub fn properties_template_list(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
 ) -> crate::Result<Result<super::file_properties::ListTemplateResult, super::file_properties::TemplateError>> {
     crate::client_helpers::request(
         client,
@@ -1132,7 +1132,7 @@ pub fn properties_template_list(
 /// Permission : Team member file access.
 #[deprecated]
 pub fn properties_template_update(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &super::file_properties::UpdateTemplateArg,
 ) -> crate::Result<Result<super::file_properties::UpdateTemplateResult, super::file_properties::ModifyTemplateError>> {
     crate::client_helpers::request(
@@ -1148,7 +1148,7 @@ pub fn properties_template_update(
 /// 2021.
 #[deprecated]
 pub fn reports_get_activity(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &DateRange,
 ) -> crate::Result<Result<GetActivityReport, DateRangeError>> {
     crate::client_helpers::request(
@@ -1164,7 +1164,7 @@ pub fn reports_get_activity(
 /// 2021.
 #[deprecated]
 pub fn reports_get_devices(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &DateRange,
 ) -> crate::Result<Result<GetDevicesReport, DateRangeError>> {
     crate::client_helpers::request(
@@ -1180,7 +1180,7 @@ pub fn reports_get_devices(
 /// 2021.
 #[deprecated]
 pub fn reports_get_membership(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &DateRange,
 ) -> crate::Result<Result<GetMembershipReport, DateRangeError>> {
     crate::client_helpers::request(
@@ -1196,7 +1196,7 @@ pub fn reports_get_membership(
 /// 2021.
 #[deprecated]
 pub fn reports_get_storage(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &DateRange,
 ) -> crate::Result<Result<GetStorageReport, DateRangeError>> {
     crate::client_helpers::request(
@@ -1210,7 +1210,7 @@ pub fn reports_get_storage(
 
 /// Sets an archived team folder's status to active. Permission : Team member file access.
 pub fn team_folder_activate(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &TeamFolderIdArg,
 ) -> crate::Result<Result<TeamFolderMetadata, TeamFolderActivateError>> {
     crate::client_helpers::request(
@@ -1225,7 +1225,7 @@ pub fn team_folder_activate(
 /// Sets an active team folder's status to archived and removes all folder and file members.
 /// Permission : Team member file access.
 pub fn team_folder_archive(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &TeamFolderArchiveArg,
 ) -> crate::Result<Result<TeamFolderArchiveLaunch, TeamFolderArchiveError>> {
     crate::client_helpers::request(
@@ -1240,7 +1240,7 @@ pub fn team_folder_archive(
 /// Returns the status of an asynchronous job for archiving a team folder. Permission : Team member
 /// file access.
 pub fn team_folder_archive_check(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &super::dbx_async::PollArg,
 ) -> crate::Result<Result<TeamFolderArchiveJobStatus, super::dbx_async::PollError>> {
     crate::client_helpers::request(
@@ -1254,7 +1254,7 @@ pub fn team_folder_archive_check(
 
 /// Creates a new, active, team folder with no members. Permission : Team member file access.
 pub fn team_folder_create(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &TeamFolderCreateArg,
 ) -> crate::Result<Result<TeamFolderMetadata, TeamFolderCreateError>> {
     crate::client_helpers::request(
@@ -1268,7 +1268,7 @@ pub fn team_folder_create(
 
 /// Retrieves metadata for team folders. Permission : Team member file access.
 pub fn team_folder_get_info(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &TeamFolderIdListArg,
 ) -> crate::Result<Result<Vec<TeamFolderGetInfoItem>, crate::NoError>> {
     crate::client_helpers::request(
@@ -1282,7 +1282,7 @@ pub fn team_folder_get_info(
 
 /// Lists all team folders. Permission : Team member file access.
 pub fn team_folder_list(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &TeamFolderListArg,
 ) -> crate::Result<Result<TeamFolderListResult, TeamFolderListError>> {
     crate::client_helpers::request(
@@ -1297,7 +1297,7 @@ pub fn team_folder_list(
 /// Once a cursor has been retrieved from [`team_folder_list()`](team_folder_list), use this to
 /// paginate through all team folders. Permission : Team member file access.
 pub fn team_folder_list_continue(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &TeamFolderListContinueArg,
 ) -> crate::Result<Result<TeamFolderListResult, TeamFolderListContinueError>> {
     crate::client_helpers::request(
@@ -1311,7 +1311,7 @@ pub fn team_folder_list_continue(
 
 /// Permanently deletes an archived team folder. Permission : Team member file access.
 pub fn team_folder_permanently_delete(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &TeamFolderIdArg,
 ) -> crate::Result<Result<(), TeamFolderPermanentlyDeleteError>> {
     crate::client_helpers::request(
@@ -1325,7 +1325,7 @@ pub fn team_folder_permanently_delete(
 
 /// Changes an active team folder's name. Permission : Team member file access.
 pub fn team_folder_rename(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &TeamFolderRenameArg,
 ) -> crate::Result<Result<TeamFolderMetadata, TeamFolderRenameError>> {
     crate::client_helpers::request(
@@ -1340,7 +1340,7 @@ pub fn team_folder_rename(
 /// Updates the sync settings on a team folder or its contents.  Use of this endpoint requires that
 /// the team has team selective sync enabled.
 pub fn team_folder_update_sync_settings(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
     arg: &TeamFolderUpdateSyncSettingsArg,
 ) -> crate::Result<Result<TeamFolderMetadata, TeamFolderUpdateSyncSettingsError>> {
     crate::client_helpers::request(
@@ -1355,7 +1355,7 @@ pub fn team_folder_update_sync_settings(
 /// Returns the member profile of the admin who generated the team access token used to make the
 /// call.
 pub fn token_get_authenticated_admin(
-    client: &impl crate::client_trait::TeamAuthClient,
+    client: &crate::client::TeamAuthClient<impl crate::client_trait::HttpClient>,
 ) -> crate::Result<Result<TokenGetAuthenticatedAdminResult, TokenGetAuthenticatedAdminError>> {
     crate::client_helpers::request(
         client,

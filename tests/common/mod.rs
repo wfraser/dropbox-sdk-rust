@@ -1,12 +1,12 @@
-use dropbox_sdk::files;
-use dropbox_sdk::client_trait::UserAuthClient;
+use dropbox_sdk::{files, UserAuthClient};
+use dropbox_sdk::client_trait::HttpClient;
 use std::sync::Arc;
 use std::thread;
 use std::time::Duration;
 use threadpool::ThreadPool;
 
 pub fn create_files(
-    client: Arc<impl UserAuthClient + Send + Sync + 'static>,
+    client: Arc<UserAuthClient<impl HttpClient + Send + Sync + 'static>>,
     path: &'static str,
     num_files: u32,
     size: usize,
@@ -50,7 +50,7 @@ pub fn create_files(
     (Box::new(file_path), Box::new(file_bytes))
 }
 
-pub fn create_clean_folder(client: &impl UserAuthClient, path: &str) {
+pub fn create_clean_folder(client: &UserAuthClient<impl HttpClient>, path: &str) {
     println!("Deleting any existing {} folder", path);
     match files::delete_v2(client, &files::DeleteArg::new(path.to_owned())) {
         Ok(Ok(_)) | Ok(Err(files::DeleteError::PathLookup(files::LookupError::NotFound))) => (),

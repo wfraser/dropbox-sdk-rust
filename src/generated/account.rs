@@ -9,7 +9,7 @@
 
 /// Sets a user's profile photo.
 pub fn set_profile_photo(
-    client: &impl crate::client_trait::UserAuthClient,
+    client: &crate::client::UserAuthClient<impl crate::client_trait::HttpClient>,
     arg: &SetProfilePhotoArg,
 ) -> crate::Result<Result<SetProfilePhotoResult, SetProfilePhotoError>> {
     crate::client_helpers::request(

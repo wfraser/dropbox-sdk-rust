@@ -186,7 +186,7 @@ class RustBackend(RustHelperBackend):
         elif union.name == "RateLimitReason":
             print(self._rust_type(union))
 
-    def _emit_route(self, ns, fn, auth_trait = None):
+    def _emit_route(self, ns, fn, client_type = None):
         route_name = self.route_name(fn)
         host = fn.attrs.get('host', 'api')
         if host == 'api':
@@ -198,28 +198,28 @@ class RustBackend(RustHelperBackend):
         else:
             raise RuntimeError(u'ERROR: unsupported endpoint: {}'.format(host))
 
-        if auth_trait is None:
+        if client_type is None:
             auths_str = fn.attrs.get('auth', 'user')
             auths = list(map(lambda s: s.strip(), auths_str.split(',')))
             auths.sort()
             if auths == ['user']:
-                auth_trait = u'crate::client_trait::UserAuthClient'
+                client_type = u'crate::client::UserAuthClient'
             elif auths == ['team']:
-                auth_trait = u'crate::client_trait::TeamAuthClient'
+                client_type = u'crate::client::TeamAuthClient'
             elif auths == ['app']:
-                auth_trait = u'crate::client_trait::AppAuthClient'
+                client_type = u'crate::client::AppAuthClient'
             elif auths == ['app', 'user']:
                 # This is kind of lame, but there's no way to have a marker trait for either User
                 # OR App auth, so to get around this, we'll emit two functions, one for each.
 
                 # Emit the User auth route with no suffix via a recursive call.
-                self._emit_route(ns, fn, u'crate::client_trait::UserAuthClient')
+                self._emit_route(ns, fn, u'crate::client::UserAuthClient')
 
                 # Now modify the name to add a suffix, and emit the App auth version by continuing.
                 route_name += "_app_auth"
-                auth_trait = u'crate::client_trait::AppAuthClient'
+                client_type = u'crate::client::AppAuthClient'
             elif auths == ['noauth']:
-                auth_trait = u'crate::client_trait::NoauthClient'
+                client_type = u'crate::client::NoauthClient'
             else:
                 raise Exception('route {}/{}: unsupported auth type(s): {}'.format(
                     ns, route_name, auths_str))
@@ -247,7 +247,7 @@ class RustBackend(RustHelperBackend):
         if style == 'rpc':
             with self.emit_rust_function_def(
                     route_name,
-                    [u'client: &impl {}'.format(auth_trait)]
+                    [u'client: &{}<impl crate::client_trait::HttpClient>'.format(client_type)]
                         + ([] if arg_void else
                             [u'arg: &{}'.format(self._rust_type(fn.arg_data_type))]),
                     u'crate::Result<Result<{}, {}>>'.format(
@@ -265,7 +265,7 @@ class RustBackend(RustHelperBackend):
         elif style == 'download':
             with self.emit_rust_function_def(
                     route_name,
-                    [u'client: &impl {}'.format(auth_trait)]
+                    [u'client: &{}<impl crate::client_trait::HttpClient>'.format(client_type)]
                         + ([] if arg_void else
                             [u'arg: &{}'.format(self._rust_type(fn.arg_data_type))])
                         + [u'range_start: Option<u64>',
@@ -287,7 +287,7 @@ class RustBackend(RustHelperBackend):
         elif style == 'upload':
             with self.emit_rust_function_def(
                     route_name,
-                    [u'client: &impl {}'.format(auth_trait)]
+                    [u'client: &{}<impl crate::client_trait::HttpClient>'.format(client_type)]
                         + ([] if arg_void else
                             [u'arg: &{}'.format(self._rust_type(fn.arg_data_type))])
                         + [u'body: &[u8]'],

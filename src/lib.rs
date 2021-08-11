@@ -93,8 +93,10 @@ pub type Result<T> = std::result::Result<T, Error>;
 
 if_feature! { "default_client", pub mod default_client; }
 
+pub mod client;
+pub use client::{AppAuthClient, NoauthClient, UserAuthClient, TeamAuthClient};
+
 pub mod client_trait;
-pub use client_trait::{AppAuthClient, NoauthClient, UserAuthClient, TeamAuthClient};
 pub(crate) mod client_helpers;
 pub mod oauth2;
 

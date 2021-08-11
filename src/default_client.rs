@@ -7,195 +7,25 @@
 //!
 //! If you have a need for a specific HTTP client implementation, or your program is already using
 //! some HTTP client crate, you probably want to have this Dropbox SDK crate use it as well. To do
-//! that, you should implement the traits in `crate::client_trait` for it and use it instead.
+//! that, you should implement the [`HttpClient`](crate::client_trait::HttpClient) trait for it and
+//! use it instead.
 //!
 //! This code (and its dependencies) are only built if you use the `default_client` Cargo feature.
 
 use crate::Error;
-use crate::auth::AuthError;
 use crate::client_trait::*;
-use crate::oauth2::{Authorization, TokenCache};
 use std::borrow::Cow;
-use std::sync::Arc;
 
 const USER_AGENT: &str = concat!("Dropbox-APIv2-Rust/", env!("CARGO_PKG_VERSION"));
 
-macro_rules! forward_noauth_request {
-    ($self:ident, $inner:expr, $path_root:expr) => {
-        fn request(
-            &$self,
-            endpoint: Endpoint,
-            style: Style,
-            function: &str,
-            params: String,
-            params_type: ParamsType,
-            body: Option<&[u8]>,
-            range_start: Option<u64>,
-            range_end: Option<u64>,
-        ) -> crate::Result<HttpRequestResultRaw> {
-            $inner.request(endpoint, style, function, &params, params_type, body, range_start,
-                range_end, None, $path_root, None)
-        }
-    }
-}
-
-macro_rules! forward_authed_request {
-    ($self:ident, $tokens:expr, $inner:expr, $path_root:expr, $team_select:expr) => {
-        fn request(
-            &$self,
-            endpoint: Endpoint,
-            style: Style,
-            function: &str,
-            params: String,
-            params_type: ParamsType,
-            body: Option<&[u8]>,
-            range_start: Option<u64>,
-            range_end: Option<u64>,
-        ) -> crate::Result<HttpRequestResultRaw> {
-            let mut token = $tokens.get_token(TokenUpdateClient { inner: &$inner })?;
-
-            let mut retried = false;
-            loop {
-                let result = $inner.request(endpoint, style, function, &params, params_type, body,
-                    range_start, range_end, Some(&token), $path_root, $team_select);
-
-                if retried {
-                    break result;
-                }
-
-                if let Err(crate::Error::Authentication(AuthError::ExpiredAccessToken)) = &result {
-                    info!("refreshing auth token");
-                    let old_token = token;
-                    token = $tokens.update_token(
-                        TokenUpdateClient { inner: &$inner },
-                        old_token,
-                    )?;
-                    retried = true;
-                    continue;
-                }
-
-                break result;
-            }
-        }
-    }
-}
-
-macro_rules! impl_set_path_root {
-    ($self:ident) => {
-        /// Set a root which all subsequent paths are evaluated relative to.
-        ///
-        /// The default, if this function is not called, is to behave as if it was called with
-        /// [`PathRoot::Home`](crate::common::PathRoot::Home).
-        ///
-        /// See <https://www.dropbox.com/developers/reference/path-root-header-modes> for more
-        /// information.
-        #[cfg(feature = "dbx_common")]
-        pub fn set_path_root(&mut $self, path_root: &crate::common::PathRoot) {
-            // Only way this can fail is if PathRoot::Other was specified, which is a programmer
-            // error, so panic if that happens.
-            $self.path_root = Some(serde_json::to_string(path_root).expect("invalid path root"));
-        }
-    }
-}
-
-/// Default HTTP client using User authorization.
-pub struct UserAuthDefaultClient {
-    inner: UreqClient,
-    tokens: Arc<TokenCache>,
-    path_root: Option<String>, // a serialized PathRoot enum
-}
-
-impl UserAuthDefaultClient {
-    /// Create a new client using the given OAuth2 authorization.
-    pub fn new(auth: Authorization) -> Self {
-        Self::from_token_cache(Arc::new(TokenCache::new(auth)))
-    }
-
-    /// Create a new client from a [`TokenCache`], which lets you share the same tokens between
-    /// multiple clients.
-    pub fn from_token_cache(tokens: Arc<TokenCache>) -> Self {
-        Self {
-            inner: UreqClient::default(),
-            tokens,
-            path_root: None,
-        }
-    }
-
-    impl_set_path_root!(self);
-}
-
-impl HttpClient for UserAuthDefaultClient {
-    forward_authed_request! { self, self.tokens, self.inner, self.path_root.as_deref(), None }
-}
-
-impl UserAuthClient for UserAuthDefaultClient {}
-
-/// Default HTTP client using Team authorization.
-pub struct TeamAuthDefaultClient {
-    inner: UreqClient,
-    tokens: Arc<TokenCache>,
-    path_root: Option<String>, // a serialized PathRoot enum
-    team_select: Option<TeamSelect>,
-}
-
-impl TeamAuthDefaultClient {
-    /// Create a new client using the given OAuth2 token, with no user/admin context selected.
-    pub fn new(tokens: impl Into<Arc<TokenCache>>) -> Self {
-        Self {
-            inner: UreqClient::default(),
-            tokens: tokens.into(),
-            path_root: None,
-            team_select: None,
-        }
-    }
-
-    /// Select a user or team context to operate in.
-    pub fn select(&mut self, team_select: Option<TeamSelect>) {
-        self.team_select = team_select;
-    }
-
-    impl_set_path_root!(self);
-}
-
-impl HttpClient for TeamAuthDefaultClient {
-    forward_authed_request! { self, self.tokens, self.inner, self.path_root.as_deref(), self.team_select.as_ref() }
-}
-
-impl TeamAuthClient for TeamAuthDefaultClient {}
-
-/// Default HTTP client for unauthenticated API calls.
+/// A default HTTP client implementation.
+///
+/// This implementation currently uses the `ureq` crate, but this is subject to change in the
+/// future.
 #[derive(Debug, Default)]
-pub struct NoauthDefaultClient {
-    inner: UreqClient,
-    path_root: Option<String>,
-}
+pub struct DefaultClient {}
 
-impl NoauthDefaultClient {
-    impl_set_path_root!(self);
-}
-
-impl HttpClient for NoauthDefaultClient {
-    forward_noauth_request! { self, self.inner, self.path_root.as_deref() }
-}
-
-impl NoauthClient for NoauthDefaultClient {}
-
-/// Same as NoauthDefaultClient but with inner by reference and no path_root.
-/// Only used for updating authorization tokens.
-struct TokenUpdateClient<'a> {
-    inner: &'a UreqClient,
-}
-
-impl<'a> HttpClient for TokenUpdateClient<'a> {
-    forward_noauth_request! { self, self.inner, None }
-}
-
-impl<'a> NoauthClient for TokenUpdateClient<'a> {}
-
-#[derive(Debug, Default)]
-struct UreqClient {}
-
-impl UreqClient {
+impl HttpClient for DefaultClient {
     #[allow(clippy::too_many_arguments)]
     fn request(
         &self,
@@ -207,7 +37,7 @@ impl UreqClient {
         body: Option<&[u8]>,
         range_start: Option<u64>,
         range_end: Option<u64>,
-        token: Option<&str>,
+        token: Option<(TokenType, &str)>,
         path_root: Option<&str>,
         team_select: Option<&TeamSelect>,
     ) -> crate::Result<HttpRequestResultRaw> {
@@ -218,8 +48,8 @@ impl UreqClient {
         let mut req = ureq::post(&url)
             .set("User-Agent", USER_AGENT);
 
-        if let Some(token) = token {
-            req = req.set("Authorization", &format!("Bearer {}", token));
+        if let Some((typ, token)) = token {
+            req = req.set("Authorization", &format!("{} {}", typ.authorization_type(), token));
         }
 
         if let Some(path_root) = path_root {
@@ -255,7 +85,7 @@ impl UreqClient {
                     // escaped per the HTTP spec.
                     req = req.set(
                         "Dropbox-API-Arg",
-                        json_escape_header(&params).as_ref());
+                        json_escape_header(params).as_ref());
                     if style == Style::Upload {
                         req = req.set("Content-Type", "application/octet-stream");
                         if let Some(body) = body {

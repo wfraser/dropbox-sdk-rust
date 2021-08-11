@@ -1,5 +1,5 @@
-use dropbox_sdk::files;
-use dropbox_sdk::default_client::UserAuthDefaultClient;
+use dropbox_sdk::{files, UserAuthClient};
+use dropbox_sdk::default_client::DefaultClient;
 use std::sync::Arc;
 use std::thread;
 use std::time::{Duration, Instant};
@@ -12,7 +12,7 @@ mod common;
 #[ignore] // very time-consuming to run; should be run separately
 fn fetch_files() {
     let auth = dropbox_sdk::oauth2::get_auth_from_env_or_prompt();
-    let client = Arc::new(UserAuthDefaultClient::new(auth));
+    let client = Arc::new(UserAuthClient::from_auth(DefaultClient::default(), auth));
     let threadpool = ThreadPool::new(20);
 
     const FOLDER: &str = "/fetch_small_files";

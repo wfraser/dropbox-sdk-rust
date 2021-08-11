@@ -1,5 +1,5 @@
-use dropbox_sdk::files;
-use dropbox_sdk::default_client::UserAuthDefaultClient;
+use dropbox_sdk::{files, UserAuthClient};
+use dropbox_sdk::default_client::DefaultClient;
 use std::collections::HashSet;
 use std::sync::Arc;
 
@@ -9,7 +9,7 @@ mod common;
 #[ignore] // very time-consuming to run; should be run separately
 fn list_folder_recursive() {
     let auth = dropbox_sdk::oauth2::get_auth_from_env_or_prompt();
-    let client = Arc::new(UserAuthDefaultClient::new(auth));
+    let client = Arc::new(UserAuthClient::from_auth(DefaultClient::default(), auth));
 
     const FOLDER: &str = "/list_folder_recursive";
     const FOLDER_INNER: &str = "/list_folder_recursive/subfolder";

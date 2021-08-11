@@ -9,7 +9,7 @@
 
 /// Creates an OAuth 2.0 access token from the supplied OAuth 1.0 access token.
 pub fn token_from_oauth1(
-    client: &impl crate::client_trait::AppAuthClient,
+    client: &crate::client::AppAuthClient<impl crate::client_trait::HttpClient>,
     arg: &TokenFromOAuth1Arg,
 ) -> crate::Result<Result<TokenFromOAuth1Result, TokenFromOAuth1Error>> {
     crate::client_helpers::request(
@@ -25,7 +25,7 @@ pub fn token_from_oauth1(
 /// token for the access token, this disables that refresh token, as well as any other access tokens
 /// for that refresh token.
 pub fn token_revoke(
-    client: &impl crate::client_trait::UserAuthClient,
+    client: &crate::client::UserAuthClient<impl crate::client_trait::HttpClient>,
 ) -> crate::Result<Result<(), crate::NoError>> {
     crate::client_helpers::request(
         client,

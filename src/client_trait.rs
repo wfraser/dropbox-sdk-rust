@@ -7,36 +7,61 @@ use std::io::Read;
 /// The base HTTP client trait.
 pub trait HttpClient {
     /// Make a HTTP request.
+    ///
+    /// The parameters:
+    /// * `endpoint`: Which hostname the request should go to
+    /// * `style`: How parameters should be passed and how the response will be returned. See
+    ///            [`Style`] for details.
+    /// * `function`: The name of the endpoint.
+    /// * `params`: The function's parameters serialized to string.
+    /// * `params_type`: The content type of the serialized parameters.
+    /// * `body`: The request body, if any.
+    /// * `range_start`: The byte range start of the request, if any. Used for the HTTP `Range`
+    ///                  header.
+    /// * `range_end`: The byte range end of the request, if any. Used for the HTTP `Range` header.
+    /// * `token`: The type of auth token and the string value of the token, if an authenticated
+    ///            request.
+    /// * `path_root`: The value to set for the `Dropbox-API-Path-Root` header, if any.
+    /// * `team_select`: The value to set for the `Dropbox-API-Select-User` or
+    ///                  `Dropbox-API-Select-Admin` header, depending. See [`TeamSelect`] for
+    ///                  details.
     #[allow(clippy::too_many_arguments)]
     fn request(
         &self,
         endpoint: Endpoint,
         style: Style,
         function: &str,
-        params: String,
+        params: &str,
         params_type: ParamsType,
         body: Option<&[u8]>,
         range_start: Option<u64>,
         range_end: Option<u64>,
+        token: Option<(TokenType, &str)>,
+        path_root: Option<&str>,
+        team_select: Option<&TeamSelect>,
     ) -> crate::Result<HttpRequestResultRaw>;
 }
 
-/// Marker trait to indicate that a HTTP client supports unauthenticated routes.
-pub trait NoauthClient: HttpClient {}
-
-/// Marker trait to indicate that a HTTP client supports User authentication.
-/// Team authentication works by adding a `Authorization: Bearer <TOKEN>` header.
-pub trait UserAuthClient: HttpClient {}
-
-/// Marker trait to indicate that a HTTP client supports Team authentication.
-/// Team authentication works by adding a `Authorization: Bearer <TOKEN>` header, and optionally a
-/// `Dropbox-API-Select-Admin` or `Dropbox-API-Select-User` header.
-pub trait TeamAuthClient: HttpClient {}
-
-/// Marker trait to indicate that a HTTP client supports App authentication.
-/// App authentication works by adding a `Authorization: Basic <base64(APP_KEY:APP_SECRET)>` header
-/// to the HTTP request.
-pub trait AppAuthClient: HttpClient {}
+// Allow using a reference, Arc, etc. for the HTTP client impl.
+impl<T: HttpClient, R: std::ops::Deref<Target=T>> HttpClient for R {
+    fn request(
+        &self,
+        endpoint: Endpoint,
+        style: Style,
+        function: &str,
+        params: &str,
+        params_type: ParamsType,
+        body: Option<&[u8]>,
+        range_start: Option<u64>,
+        range_end: Option<u64>,
+        token: Option<(TokenType, &str)>,
+        path_root: Option<&str>,
+        team_select: Option<&TeamSelect>,
+    ) -> crate::Result<HttpRequestResultRaw> {
+        self.deref().request(endpoint, style, function, params, params_type, body, range_start,
+            range_end, token, path_root, team_select)
+    }
+}
 
 /// The raw response from the server, containing the result from either a header or the body, as
 /// appropriate to the request style, and a body stream if it is from a Download style request.
@@ -104,12 +129,13 @@ pub enum Style {
     /// body content stream.
     Rpc,
 
-    /// Arguments are passed in a HTTP header; response is in the body; request body is the upload
-    /// content; no response body content stream.
+    /// Arguments are passed in a `Dropbox-API-Arg` HTTP header; response is in the body; request
+    /// body is the upload content; no response body content stream.
     Upload,
 
-    /// Arguments are passed in a HTTP header; response is in a HTTP header; no request content
-    /// body; response body contains the content stream.
+    /// Arguments are passed in a `Dropbox-API-Arg` HTTP header; response is in a
+    /// `Dropbox-API-Result` HTTP header; no request content body; response body contains the
+    /// content stream.
     Download,
 }
 
@@ -129,6 +155,26 @@ impl ParamsType {
         match self {
             ParamsType::Json => "application/json",
             ParamsType::Form => "application/x-www-form-urlencoded",
+        }
+    }
+}
+
+/// The type of authorization token being sent in a request.
+#[derive(Debug, Copy, Clone, PartialEq)]
+pub enum TokenType {
+    /// For OAuth2 tokens.
+    Bearer,
+
+    /// For app authentication.
+    Basic,
+}
+
+impl TokenType {
+    /// The value for the first value of the HTTP Authorization header for the given token type.
+    pub fn authorization_type(self) -> &'static str {
+        match self {
+            TokenType::Bearer => "Bearer",
+            TokenType::Basic => "Basic",
         }
     }
 }

@@ -4,7 +4,8 @@
 //! the contents of a folder recursively, and fetching a file given its path.
 
 use dropbox_sdk::{files, UserAuthClient};
-use dropbox_sdk::default_client::UserAuthDefaultClient;
+use dropbox_sdk::client_trait::HttpClient;
+use dropbox_sdk::default_client::DefaultClient;
 
 use std::collections::VecDeque;
 use std::io::{self, Read};
@@ -49,7 +50,7 @@ fn main() {
     };
 
     let auth = dropbox_sdk::oauth2::get_auth_from_env_or_prompt();
-    let client = UserAuthDefaultClient::new(auth);
+    let client = UserAuthClient::from_auth(DefaultClient::default(), auth);
 
     if let Some(path) = download_path {
         eprintln!("downloading file {}", path);
@@ -132,7 +133,7 @@ fn main() {
     }
 }
 
-fn list_directory<'a, T: UserAuthClient>(client: &'a T, path: &str, recursive: bool)
+fn list_directory<'a, T: HttpClient>(client: &'a UserAuthClient<T>, path: &str, recursive: bool)
     -> dropbox_sdk::Result<Result<DirectoryIterator<'a, T>, files::ListFolderError>>
 {
     assert!(path.starts_with('/'), "path needs to be absolute (start with a '/')");
@@ -165,13 +166,13 @@ fn list_directory<'a, T: UserAuthClient>(client: &'a T, path: &str, recursive: b
     }
 }
 
-struct DirectoryIterator<'a, T: UserAuthClient> {
-    client: &'a T,
+struct DirectoryIterator<'a, T: HttpClient> {
+    client: &'a UserAuthClient<T>,
     buffer: VecDeque<files::Metadata>,
     cursor: Option<String>,
 }
 
-impl<'a, T: UserAuthClient> Iterator for DirectoryIterator<'a, T> {
+impl<'a, T: HttpClient> Iterator for DirectoryIterator<'a, T> {
     type Item = dropbox_sdk::Result<Result<files::Metadata, files::ListFolderContinueError>>;
 
     fn next(&mut self) -> Option<Self::Item> {

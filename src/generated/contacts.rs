@@ -10,7 +10,7 @@
 /// Removes all manually added contacts. You'll still keep contacts who are on your team or who you
 /// imported. New contacts will be added when you share.
 pub fn delete_manual_contacts(
-    client: &impl crate::client_trait::UserAuthClient,
+    client: &crate::client::UserAuthClient<impl crate::client_trait::HttpClient>,
 ) -> crate::Result<Result<(), crate::NoError>> {
     crate::client_helpers::request(
         client,
@@ -23,7 +23,7 @@ pub fn delete_manual_contacts(
 
 /// Removes manually added contacts from the given list.
 pub fn delete_manual_contacts_batch(
-    client: &impl crate::client_trait::UserAuthClient,
+    client: &crate::client::UserAuthClient<impl crate::client_trait::HttpClient>,
     arg: &DeleteManualContactsArg,
 ) -> crate::Result<Result<(), DeleteManualContactsError>> {
     crate::client_helpers::request(

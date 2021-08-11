@@ -24,7 +24,7 @@ pub type PaperDocId = String;
 /// information.
 #[deprecated]
 pub fn docs_archive(
-    client: &impl crate::client_trait::UserAuthClient,
+    client: &crate::client::UserAuthClient<impl crate::client_trait::HttpClient>,
     arg: &RefPaperDoc,
 ) -> crate::Result<Result<(), DocLookupError>> {
     crate::client_helpers::request(
@@ -45,7 +45,7 @@ pub fn docs_archive(
 /// information.
 #[deprecated]
 pub fn docs_create(
-    client: &impl crate::client_trait::UserAuthClient,
+    client: &crate::client::UserAuthClient<impl crate::client_trait::HttpClient>,
     arg: &PaperDocCreateArgs,
     body: &[u8],
 ) -> crate::Result<Result<PaperDocCreateUpdateResult, PaperDocCreateError>> {
@@ -66,7 +66,7 @@ pub fn docs_create(
 /// information.
 #[deprecated]
 pub fn docs_download(
-    client: &impl crate::client_trait::UserAuthClient,
+    client: &crate::client::UserAuthClient<impl crate::client_trait::HttpClient>,
     arg: &PaperDocExport,
     range_start: Option<u64>,
     range_end: Option<u64>,
@@ -92,7 +92,7 @@ pub fn docs_download(
 /// information.
 #[deprecated]
 pub fn docs_folder_users_list(
-    client: &impl crate::client_trait::UserAuthClient,
+    client: &crate::client::UserAuthClient<impl crate::client_trait::HttpClient>,
     arg: &ListUsersOnFolderArgs,
 ) -> crate::Result<Result<ListUsersOnFolderResponse, DocLookupError>> {
     crate::client_helpers::request(
@@ -113,7 +113,7 @@ pub fn docs_folder_users_list(
 /// information.
 #[deprecated]
 pub fn docs_folder_users_list_continue(
-    client: &impl crate::client_trait::UserAuthClient,
+    client: &crate::client::UserAuthClient<impl crate::client_trait::HttpClient>,
     arg: &ListUsersOnFolderContinueArgs,
 ) -> crate::Result<Result<ListUsersOnFolderResponse, ListUsersCursorError>> {
     crate::client_helpers::request(
@@ -138,7 +138,7 @@ pub fn docs_folder_users_list_continue(
 /// migration information.
 #[deprecated]
 pub fn docs_get_folder_info(
-    client: &impl crate::client_trait::UserAuthClient,
+    client: &crate::client::UserAuthClient<impl crate::client_trait::HttpClient>,
     arg: &RefPaperDoc,
 ) -> crate::Result<Result<FoldersContainingPaperDoc, DocLookupError>> {
     crate::client_helpers::request(
@@ -160,7 +160,7 @@ pub fn docs_get_folder_info(
 /// information.
 #[deprecated]
 pub fn docs_list(
-    client: &impl crate::client_trait::UserAuthClient,
+    client: &crate::client::UserAuthClient<impl crate::client_trait::HttpClient>,
     arg: &ListPaperDocsArgs,
 ) -> crate::Result<Result<ListPaperDocsResponse, crate::NoError>> {
     crate::client_helpers::request(
@@ -181,7 +181,7 @@ pub fn docs_list(
 /// information.
 #[deprecated]
 pub fn docs_list_continue(
-    client: &impl crate::client_trait::UserAuthClient,
+    client: &crate::client::UserAuthClient<impl crate::client_trait::HttpClient>,
     arg: &ListPaperDocsContinueArgs,
 ) -> crate::Result<Result<ListPaperDocsResponse, ListDocsCursorError>> {
     crate::client_helpers::request(
@@ -202,7 +202,7 @@ pub fn docs_list_continue(
 /// information.
 #[deprecated]
 pub fn docs_permanently_delete(
-    client: &impl crate::client_trait::UserAuthClient,
+    client: &crate::client::UserAuthClient<impl crate::client_trait::HttpClient>,
     arg: &RefPaperDoc,
 ) -> crate::Result<Result<(), DocLookupError>> {
     crate::client_helpers::request(
@@ -222,7 +222,7 @@ pub fn docs_permanently_delete(
 /// information.
 #[deprecated]
 pub fn docs_sharing_policy_get(
-    client: &impl crate::client_trait::UserAuthClient,
+    client: &crate::client::UserAuthClient<impl crate::client_trait::HttpClient>,
     arg: &RefPaperDoc,
 ) -> crate::Result<Result<SharingPolicy, DocLookupError>> {
     crate::client_helpers::request(
@@ -245,7 +245,7 @@ pub fn docs_sharing_policy_get(
 /// information.
 #[deprecated]
 pub fn docs_sharing_policy_set(
-    client: &impl crate::client_trait::UserAuthClient,
+    client: &crate::client::UserAuthClient<impl crate::client_trait::HttpClient>,
     arg: &PaperDocSharingPolicy,
 ) -> crate::Result<Result<(), DocLookupError>> {
     crate::client_helpers::request(
@@ -266,7 +266,7 @@ pub fn docs_sharing_policy_set(
 /// information.
 #[deprecated]
 pub fn docs_update(
-    client: &impl crate::client_trait::UserAuthClient,
+    client: &crate::client::UserAuthClient<impl crate::client_trait::HttpClient>,
     arg: &PaperDocUpdateArgs,
     body: &[u8],
 ) -> crate::Result<Result<PaperDocCreateUpdateResult, PaperDocUpdateError>> {
@@ -289,7 +289,7 @@ pub fn docs_update(
 /// information.
 #[deprecated]
 pub fn docs_users_add(
-    client: &impl crate::client_trait::UserAuthClient,
+    client: &crate::client::UserAuthClient<impl crate::client_trait::HttpClient>,
     arg: &AddPaperDocUser,
 ) -> crate::Result<Result<Vec<AddPaperDocUserMemberResult>, DocLookupError>> {
     crate::client_helpers::request(
@@ -312,7 +312,7 @@ pub fn docs_users_add(
 /// information.
 #[deprecated]
 pub fn docs_users_list(
-    client: &impl crate::client_trait::UserAuthClient,
+    client: &crate::client::UserAuthClient<impl crate::client_trait::HttpClient>,
     arg: &ListUsersOnPaperDocArgs,
 ) -> crate::Result<Result<ListUsersOnPaperDocResponse, DocLookupError>> {
     crate::client_helpers::request(
@@ -333,7 +333,7 @@ pub fn docs_users_list(
 /// information.
 #[deprecated]
 pub fn docs_users_list_continue(
-    client: &impl crate::client_trait::UserAuthClient,
+    client: &crate::client::UserAuthClient<impl crate::client_trait::HttpClient>,
     arg: &ListUsersOnPaperDocContinueArgs,
 ) -> crate::Result<Result<ListUsersOnPaperDocResponse, ListUsersCursorError>> {
     crate::client_helpers::request(
@@ -354,7 +354,7 @@ pub fn docs_users_list_continue(
 /// information.
 #[deprecated]
 pub fn docs_users_remove(
-    client: &impl crate::client_trait::UserAuthClient,
+    client: &crate::client::UserAuthClient<impl crate::client_trait::HttpClient>,
     arg: &RemovePaperDocUser,
 ) -> crate::Result<Result<(), DocLookupError>> {
     crate::client_helpers::request(
@@ -374,7 +374,7 @@ pub fn docs_users_remove(
 /// information.
 #[deprecated]
 pub fn folders_create(
-    client: &impl crate::client_trait::UserAuthClient,
+    client: &crate::client::UserAuthClient<impl crate::client_trait::HttpClient>,
     arg: &PaperFolderCreateArg,
 ) -> crate::Result<Result<PaperFolderCreateResult, PaperFolderCreateError>> {
     crate::client_helpers::request(

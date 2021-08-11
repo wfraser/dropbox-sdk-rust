@@ -4,8 +4,9 @@
 //! files that would not fit in a single HTTP request, including allowing the user to resume
 //! interrupted uploads, and uploading blocks in parallel.
 
-use dropbox_sdk::files;
-use dropbox_sdk::default_client::UserAuthDefaultClient;
+use dropbox_sdk::{files, UserAuthClient};
+use dropbox_sdk::client_trait::HttpClient;
+use dropbox_sdk::default_client::DefaultClient;
 use std::collections::HashMap;
 use std::fs::File;
 use std::path::{Path, PathBuf};
@@ -106,7 +107,7 @@ fn parse_args() -> Operation {
 }
 
 /// Figure out if destination is a folder or not and change the destination path accordingly.
-fn get_destination_path(client: &UserAuthDefaultClient, given_path: &str, source_path: &Path)
+fn get_destination_path(client: &UserAuthClient<impl HttpClient>, given_path: &str, source_path: &Path)
     -> Result<String, String>
 {
     let filename = source_path.file_name()
@@ -161,7 +162,7 @@ struct UploadSession {
 
 impl UploadSession {
     /// Make a new upload session.
-    pub fn new(client: &UserAuthDefaultClient, file_size: u64) -> Result<Self, String> {
+    pub fn new(client: &UserAuthClient<impl HttpClient>, file_size: u64) -> Result<Self, String> {
         let session_id = match files::upload_session_start(
             client,
             &files::UploadSessionStartArg::default()
@@ -280,7 +281,7 @@ fn get_file_mtime_and_size(f: &File) -> Result<(SystemTime, u64), String> {
 
 /// This function does it all.
 fn upload_file(
-    client: Arc<UserAuthDefaultClient>,
+    client: Arc<UserAuthClient<impl HttpClient + Send + Sync + 'static>>,
     mut source_file: File,
     dest_path: String,
     resume: Option<Resume>,
@@ -384,7 +385,7 @@ fn upload_file(
 ///
 /// Prints progress and upload speed, and updates the UploadSession if successful.
 fn upload_block_with_retry(
-    client: &UserAuthDefaultClient,
+    client: &UserAuthClient<impl HttpClient>,
     arg: &files::UploadSessionAppendArg,
     buf: &[u8],
     start_time: Instant,
@@ -492,7 +493,7 @@ fn main() {
         });
 
     let auth = dropbox_sdk::oauth2::get_auth_from_env_or_prompt();
-    let client = Arc::new(UserAuthDefaultClient::new(auth));
+    let client = Arc::new(UserAuthClient::from_auth(DefaultClient::default(), auth));
 
     let dest_path = get_destination_path(client.as_ref(), &args.dest_path, &args.source_path)
         .unwrap_or_else(|e| {

@@ -3,6 +3,7 @@
 use std::error::Error as StdError;
 use crate::Error;
 use crate::auth;
+use crate::client::Client;
 use crate::client_trait::*;
 use serde::{Deserialize};
 use serde::de::DeserializeOwned;
@@ -33,8 +34,8 @@ struct RateLimitedError {
 /// etc.). The inner result has an error if the server returned one for the request, otherwise it
 /// has the deserialized JSON response and the body stream (if any).
 #[allow(clippy::too_many_arguments)]
-pub fn request_with_body<T: DeserializeOwned, E: DeserializeOwned + StdError, P: Serialize>(
-    client: &impl HttpClient,
+pub(crate) fn request_with_body<T: DeserializeOwned, E: DeserializeOwned + StdError, P: Serialize>(
+    client: &impl Client,
     endpoint: Endpoint,
     style: Style,
     function: &str,
@@ -44,7 +45,7 @@ pub fn request_with_body<T: DeserializeOwned, E: DeserializeOwned + StdError, P:
     range_end: Option<u64>,
 ) -> crate::Result<Result<HttpRequestResult<T>, E>> {
     let params_json = serde_json::to_string(params)?;
-    let result = client.request(endpoint, style, function, params_json, ParamsType::Json, body,
+    let result = client.request(endpoint, style, function, &params_json, ParamsType::Json, body,
         range_start, range_end);
     match result {
         Ok(HttpRequestResultRaw { result_json, content_length, body }) => {
@@ -142,8 +143,8 @@ pub fn request_with_body<T: DeserializeOwned, E: DeserializeOwned + StdError, P:
     }
 }
 
-pub fn request<T: DeserializeOwned, E: DeserializeOwned + StdError, P: Serialize>(
-    client: &impl HttpClient,
+pub(crate) fn request<T: DeserializeOwned, E: DeserializeOwned + StdError, P: Serialize>(
+    client: &impl Client,
     endpoint: Endpoint,
     style: Style,
     function: &str,
