@@ -1,0 +1,372 @@
+#![allow(missing_docs)] // FIXME
+
+use std::collections::HashMap;
+use std::fmt::{Display, self, Debug};
+use std::io::Read;
+use std::sync::{Arc, Mutex};
+use std::sync::atomic::{AtomicU64, Ordering::SeqCst};
+use std::thread::sleep;
+use std::time::{Instant, Duration};
+
+use crate::{UserAuthClient, files};
+
+/// The size of a block. This is a Dropbox constant, not adjustable.
+pub const BLOCK_SIZE: usize = 4 * 1024 * 1024;
+
+#[derive(Clone)]
+pub struct UploadOpts {
+    /// How many blocks to upload in parallel.
+    pub parallelism: usize,
+
+    /// How many blocks (of [`BLOCK_SIZE`] bytes each) are uploaded in each request.
+    ///
+    /// Uploading multiple blocks per request reduces the number of requests needed to complete the
+    /// upload and can reduce overhead and help avoid running into rate limits, at the cost of
+    /// increasing the cost of a request that has to be retried in the event of an error.
+    pub blocks_per_request: usize,
+
+    pub progress_handler: Option<Arc<Box<dyn ProgressHandler>>>,
+}
+
+impl Default for UploadOpts {
+    fn default() -> Self {
+        Self {
+            parallelism: 20,
+            blocks_per_request: 2,
+            progress_handler: None,
+        }
+    }
+}
+
+pub trait ProgressHandler: Sync + Send {
+    fn update(&self, bytes_uploaded: u64, instant_rate: f64, overall_rate: f64);
+}
+
+#[derive(Debug, Clone)]
+pub struct UploadResume {
+    pub session_id: String,
+    pub start_offset: u64,
+}
+
+pub enum Error {
+    Api(Box<dyn std::error::Error + Send + Sync>),
+    Other(crate::Error),
+}
+
+trait RRExt<T, E: std::error::Error> {
+    fn combine(self) -> Result<T, Error>;
+}
+
+impl<T, E: std::error::Error + Send + Sync + 'static> RRExt<T, E> for Result<Result<T, E>, crate::Error> {
+    fn combine(self) -> Result<T, Error> {
+        match self {
+            Ok(Ok(v)) => Ok(v),
+            Ok(Err(e)) => Err(Error::Api(Box::new(e))),
+            Err(e) => Err(Error::Other(e)),
+        }
+    }
+}
+
+impl Debug for Error {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::Api(ref e) => Debug::fmt(e, f),
+            Self::Other(ref e) => Debug::fmt(e, f),
+        }
+    }
+}
+
+impl Display for Error {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::Api(ref e) => Display::fmt(e, f),
+            Self::Other(ref e) => Display::fmt(e, f),
+        }
+    }
+}
+
+impl std::error::Error for Error {
+    fn cause(&self) -> Option<&dyn std::error::Error> {
+        match self {
+            Self::Api(e) => Some(e.as_ref()),
+            Self::Other(ref e) => Some(e),
+        }
+    }
+}
+
+pub struct UploadSession<C: UserAuthClient + Send + Sync + 'static> {
+    client: Arc<C>,
+    inner: Arc<SessionInner>,
+}
+
+struct SessionInner {
+    session_id: String,
+    start_offset: u64,
+    bytes_transferred: AtomicU64,
+    completion: Mutex<CompletionTracker>,
+}
+
+impl<C: UserAuthClient + Send + Sync + 'static> UploadSession<C> {
+    /// Make a new upload session.
+    pub fn new(client: Arc<C>) -> Result<Self, Error> {
+        let session_id = files::upload_session_start(
+            client.as_ref(),
+            &files::UploadSessionStartArg::default()
+                .with_session_type(files::UploadSessionType::Concurrent),
+            &[],
+        ).combine()?.session_id;
+
+        Ok(Self {
+            client,
+            inner: Arc::new(SessionInner {
+                session_id,
+                start_offset: 0,
+                bytes_transferred: AtomicU64::new(0),
+                completion: Mutex::new(CompletionTracker::default()),
+            }),
+        })
+    }
+
+    /// Resume a pre-existing (i.e. interrupted) upload session.
+    pub fn resume(client: Arc<C>, resume: UploadResume) -> Self {
+        Self {
+            client,
+            inner: Arc::new(SessionInner {
+                session_id: resume.session_id,
+                start_offset: resume.start_offset,
+                bytes_transferred: AtomicU64::new(0),
+                completion: Mutex::new(CompletionTracker::resume_from(resume.start_offset)),
+            }),
+        }
+    }
+
+    pub fn upload(&self, mut source: impl Read, opts: UploadOpts) -> Result<u64, Error> {
+        // Initially set to the start of the file and an empty block; if the file is an exact
+        // multiple of BLOCK_SIZE, we'll need to upload an empty buffer when closing the session.
+        let last_block = Arc::new(Mutex::new((0, vec![])));
+
+        let start_time = Instant::now();
+        let result = {
+            let client = self.client.clone();
+            let inner = self.inner.clone();
+            let opts = opts.clone();
+            let last_block = last_block.clone();
+            parallel_reader::read_stream_and_process_chunks_in_parallel(
+                &mut source,
+                BLOCK_SIZE * opts.blocks_per_request,
+                opts.parallelism,
+                Arc::new(move |block_offset, data: &[u8]| -> Result<(), Error> {
+                    let append_arg = inner.append_arg(block_offset);
+                    if data.len() != BLOCK_SIZE * opts.blocks_per_request {
+                        // This must be the last block. Only the last one is allowed to be not 4 MiB
+                        // exactly. Save the block and offset so it can be uploaded after all the
+                        // parallel uploads are done. This is because once the session is closed, we
+                        // can't resume it.
+                        let mut last_block = last_block.lock().unwrap();
+                        last_block.0 = block_offset + inner.start_offset;
+                        last_block.1 = data.to_vec();
+                        return Ok(());
+                    }
+                    let result = Self::upload_block_with_retry(
+                        client.as_ref(),
+                        inner.as_ref(),
+                        &append_arg,
+                        data,
+                        start_time,
+                        &opts,
+                    );
+                    if result.is_ok() {
+                        inner.mark_block_uploaded(block_offset, data.len() as u64);
+                    }
+                    result
+                }))
+        };
+
+        result.map_err(|e| match e {
+            parallel_reader::Error::Read(e) => Error::Other(e.into()),
+            parallel_reader::Error::Process { chunk_offset: _, error } => error,
+        })?;
+
+        // No threads better be running at this point, so this should succeed:
+        let (last_block_offset, last_block_data) = Arc::try_unwrap(last_block)
+            .expect("failed to unwrap Arc")
+            .into_inner()
+            .expect("failed to unwrap Mutex");
+
+        let mut arg = self.inner.append_arg(last_block_offset);
+        arg.close = true;
+        if let Err(e) = Self::upload_block_with_retry(
+            self.client.as_ref(),
+            self.inner.as_ref(),
+            &arg,
+            &last_block_data,
+            start_time,
+            &opts,
+        ) {
+            warn!("failed to close session: {}", e);
+            // But don't error out; try committing anyway. It could be we're resuming a file where
+            // we already closed it out but failed to commit.
+        }
+
+        Ok(last_block_offset + last_block_data.len() as u64)
+    }
+
+    pub fn commit(&self, commit_info: files::CommitInfo)
+        -> Result<files::FileMetadata, Error>
+    {
+        let finish = self.inner.commit_arg(commit_info);
+
+        let mut errors = 0;
+        loop {
+            match files::upload_session_finish(self.client.as_ref(), &finish, &[]) {
+                Ok(Ok(file_metadata)) => {
+                    info!("Upload succeeded: {}", file_metadata.path_display.as_deref().unwrap_or("?"));
+                    return Ok(file_metadata);
+                }
+                error => {
+                    errors += 1;
+                    if errors == 3 {
+                        error!("Error committing upload: {:?}, failing.", error);
+                        return error.combine();
+                    } else {
+                        warn!("Error committing upload: {:?}, retrying.", error);
+                        sleep(Duration::from_secs(1));
+                    }
+                }
+            }
+        }
+    }
+
+    pub fn get_resume(&self) -> UploadResume {
+        UploadResume {
+            start_offset: self.inner.complete_up_to(),
+            session_id: self.inner.session_id.clone(),
+        }
+    }
+
+    fn upload_block_with_retry(
+        client: &C,
+        inner: &SessionInner,
+        arg: &files::UploadSessionAppendArg,
+        buf: &[u8],
+        start_time: Instant,
+        opts: &UploadOpts,
+    ) -> Result<(), Error> {
+        let block_start_time = Instant::now();
+        let mut errors = 0;
+        loop {
+            match files::upload_session_append_v2(client, arg, buf) {
+                Ok(Ok(())) => { break; }
+                Err(crate::Error::RateLimited { reason, retry_after_seconds }) => {
+                    warn!("rate-limited ({}), waiting {} seconds", reason, retry_after_seconds);
+                    if retry_after_seconds > 0 {
+                        sleep(Duration::from_secs(u64::from(retry_after_seconds)));
+                    }
+                }
+                error => {
+                    errors += 1;
+                    if errors == 3 {
+                        warn!("Error calling upload_session_append: {:?}, failing.", error);
+                        return error.combine();
+                    } else {
+                        warn!("Error calling upload_session_append: {:?}, retrying.", error);
+                    }
+                }
+            }
+        }
+
+        let now = Instant::now();
+        let block_dur = now.duration_since(block_start_time);
+        let overall_dur = now.duration_since(start_time);
+
+        let block_bytes = buf.len() as u64;
+        let bytes_sofar = inner.bytes_transferred.fetch_add(block_bytes, SeqCst) + block_bytes;
+
+        // This assumes that we have `PARALLELISM` uploads going at the same time and at roughly the
+        // same upload speed:
+        let block_rate = block_bytes as f64 / block_dur.as_secs_f64() * opts.parallelism as f64;
+
+        let overall_rate = bytes_sofar as f64 / overall_dur.as_secs_f64();
+
+        if let Some(handler) = &opts.progress_handler {
+            handler.update(bytes_sofar, block_rate, overall_rate);
+        }
+
+        Ok(())
+    }
+}
+
+impl SessionInner {
+    /// Generate the argument to append a block at the given offset.
+    fn append_arg(&self, block_offset: u64) -> files::UploadSessionAppendArg {
+        files::UploadSessionAppendArg::new(
+            files::UploadSessionCursor::new(
+                self.session_id.clone(),
+                self.start_offset + block_offset))
+    }
+
+    /// Generate the argument to commit the upload at the given path with the given modification
+    /// time.
+    fn commit_arg(&self, commit_info: files::CommitInfo)
+        -> files::UploadSessionFinishArg
+    {
+        files::UploadSessionFinishArg::new(
+            files::UploadSessionCursor::new(
+                self.session_id.clone(),
+                self.bytes_transferred.load(SeqCst)),
+            commit_info)
+    }
+
+    /// Mark a block as uploaded.
+    fn mark_block_uploaded(&self, block_offset: u64, block_len: u64) {
+        let mut completion = self.completion.lock().unwrap();
+        completion.complete_block(self.start_offset + block_offset, block_len);
+    }
+
+    /// Return the offset up to which the file is completely uploaded. It can be resumed from this
+    /// position if something goes wrong.
+    fn complete_up_to(&self) -> u64 {
+        let completion = self.completion.lock().unwrap();
+        completion.complete_up_to
+    }
+}
+
+/// Because blocks can be uploaded out of order, if an error is encountered when uploading a given
+/// block, that is not necessarily the correct place to resume uploading from next time: there may
+/// be gaps before that block.
+///
+/// This struct is for keeping track of what offset the file has been completely uploaded to.
+///
+/// When a block is finished uploading, call `complete_block` with the offset and length.
+#[derive(Default)]
+struct CompletionTracker {
+    complete_up_to: u64,
+    uploaded_blocks: HashMap<u64, u64>,
+}
+
+impl CompletionTracker {
+    /// Make a new CompletionTracker that assumes everything up to the given offset is complete. Use
+    /// this if resuming a previously interrupted session.
+    pub fn resume_from(complete_up_to: u64) -> Self {
+        Self {
+            complete_up_to,
+            uploaded_blocks: HashMap::new(),
+        }
+    }
+
+    /// Mark a block as completely uploaded.
+    pub fn complete_block(&mut self, block_offset: u64, block_len: u64) {
+        if block_offset == self.complete_up_to {
+            // Advance the cursor.
+            self.complete_up_to += block_len;
+
+            // Also look if we can advance it further still.
+            while let Some(len) = self.uploaded_blocks.remove(&self.complete_up_to) {
+                self.complete_up_to += len;
+            }
+        } else {
+            // This block isn't at the low-water mark; there's a gap behind it. Save it for later.
+            self.uploaded_blocks.insert(block_offset, block_len);
+        }
+    }
+}

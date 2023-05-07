@@ -92,6 +92,7 @@ pub enum Error {
 pub type Result<T> = std::result::Result<T, Error>;
 
 if_feature! { "default_client", pub mod default_client; }
+if_feature! { "file_helpers", pub mod file_helpers; }
 
 pub mod client_trait;
 pub use client_trait::{AppAuthClient, NoauthClient, UserAuthClient, TeamAuthClient};
