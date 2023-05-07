@@ -56,13 +56,21 @@ only in which HTTP headers they add to the request.
 
 [authentication types]: https://www.dropbox.com/developers/reference/auth-types
 
+## High-Level Helpers
+
+To make the API easier to use, some helpers for common file operations are
+included in the `dropbox_sdk::file_helpers` module, enabled with the
+`file_helpers` Cargo feature.
+
 ## Feature Flags
 
-If you only use a subset of the API, and you want to cut down on the compile
-time, you can explicitly specify features corresponding to the namespaces you
-need. For each namespace there is a corresponding feature `dbx_{whatever}`. The
-set of features can be updated if needed using the `update_manifest.py` script.
-An example that only needs the 'files' and 'users' namespaces:
+The Dropbox SDK has a very large number of routes and types, so it's been split
+up by namespace with Cargo features to improve compile time and binary size.
+For each namespace there is a corresponding Cargo feature `dbx_{whatever}`
+which must be enabled to use those parts of the API. The set of features can be
+updated if needed using the `update_manifest.py` script.
+
+An example that only includes the 'files' and 'users' namespaces:
 ```
 [dependencies.dropbox-sdk]
 version = "*"

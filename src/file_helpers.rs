@@ -1,18 +1,19 @@
-#![allow(missing_docs)] // FIXME
+//! High-level helpers for common operations involving files.
 
 use std::collections::HashMap;
-use std::fmt::{Display, self, Debug};
+use std::fmt::{self, Debug, Display};
 use std::io::Read;
-use std::sync::{Arc, Mutex};
 use std::sync::atomic::{AtomicU64, Ordering::SeqCst};
+use std::sync::{Arc, Mutex};
 use std::thread::sleep;
-use std::time::{Instant, Duration};
+use std::time::{Duration, Instant};
 
-use crate::{UserAuthClient, files};
+use crate::{files, UserAuthClient};
 
 /// The size of a block. This is a Dropbox constant, not adjustable.
 pub const BLOCK_SIZE: usize = 4 * 1024 * 1024;
 
+/// Options for how to perform uploads.
 #[derive(Clone)]
 pub struct UploadOpts {
     /// How many blocks to upload in parallel.
@@ -25,6 +26,7 @@ pub struct UploadOpts {
     /// increasing the cost of a request that has to be retried in the event of an error.
     pub blocks_per_request: usize,
 
+    /// An optional callback to periodically receive progress updates as the file uploads.
     pub progress_handler: Option<Arc<Box<dyn ProgressHandler>>>,
 }
 
@@ -38,18 +40,32 @@ impl Default for UploadOpts {
     }
 }
 
+/// Implement to receive periodic progress updates as a file uploads.
 pub trait ProgressHandler: Sync + Send {
+    /// Invoked with the following parameters:
+    /// - total bytes uploaded so far
+    /// - the rate (bytes/sec) of the most recent chunk uploaded
+    /// - the overall rate (bytes/sec) of the whole upload
     fn update(&self, bytes_uploaded: u64, instant_rate: f64, overall_rate: f64);
 }
 
+/// Parameters to resume an incomplete upload.
 #[derive(Debug, Clone)]
 pub struct UploadResume {
+    /// The upload session ID.
     pub session_id: String,
+
+    /// The offset in bytes to resume from.
     pub start_offset: u64,
 }
 
+/// A composite error type representing an error from the API itself, or a client-side error
+/// encountered in making the API call.
 pub enum Error {
+    /// An error returned from the API.
     Api(Box<dyn std::error::Error + Send + Sync>),
+
+    /// A client-side error encountered in making an API call.
     Other(crate::Error),
 }
 
@@ -57,7 +73,9 @@ trait RRExt<T, E: std::error::Error> {
     fn combine(self) -> Result<T, Error>;
 }
 
-impl<T, E: std::error::Error + Send + Sync + 'static> RRExt<T, E> for Result<Result<T, E>, crate::Error> {
+impl<T, E: std::error::Error + Send + Sync + 'static> RRExt<T, E>
+    for Result<Result<T, E>, crate::Error>
+{
     fn combine(self) -> Result<T, Error> {
         match self {
             Ok(Ok(v)) => Ok(v),
@@ -94,6 +112,7 @@ impl std::error::Error for Error {
     }
 }
 
+/// An upload session for a file.
 pub struct UploadSession<C: UserAuthClient + Send + Sync + 'static> {
     client: Arc<C>,
     inner: Arc<SessionInner>,
@@ -114,7 +133,9 @@ impl<C: UserAuthClient + Send + Sync + 'static> UploadSession<C> {
             &files::UploadSessionStartArg::default()
                 .with_session_type(files::UploadSessionType::Concurrent),
             &[],
-        ).combine()?.session_id;
+        )
+        .combine()?
+        .session_id;
 
         Ok(Self {
             client,
@@ -140,6 +161,18 @@ impl<C: UserAuthClient + Send + Sync + 'static> UploadSession<C> {
         }
     }
 
+    /// Upload the given stream to the upload session, using the given
+    /// [upload parameters](UploadOpts). This may only be called once for a given
+    /// [`UploadSession`].
+    ///
+    /// This blocks the current thread until the entire source has been transferred, or an error
+    /// occurs.
+    ///
+    /// The return value is the number of bytes uploaded, or an error.
+    ///
+    /// If the upload fails, call [`UploadSession::get_resume`] to get the resume parameters which
+    /// can be passed to [`UploadSession::resume`] to make a new [`UploadSession`] which can be
+    /// used to retry the upload without re-uploading all the data.
     pub fn upload(&self, mut source: impl Read, opts: UploadOpts) -> Result<u64, Error> {
         // Initially set to the start of the file and an empty block; if the file is an exact
         // multiple of BLOCK_SIZE, we'll need to upload an empty buffer when closing the session.
@@ -179,12 +212,16 @@ impl<C: UserAuthClient + Send + Sync + 'static> UploadSession<C> {
                         inner.mark_block_uploaded(block_offset, data.len() as u64);
                     }
                     result
-                }))
+                }),
+            )
         };
 
         result.map_err(|e| match e {
             parallel_reader::Error::Read(e) => Error::Other(e.into()),
-            parallel_reader::Error::Process { chunk_offset: _, error } => error,
+            parallel_reader::Error::Process {
+                chunk_offset: _,
+                error,
+            } => error,
         })?;
 
         // No threads better be running at this point, so this should succeed:
@@ -211,16 +248,18 @@ impl<C: UserAuthClient + Send + Sync + 'static> UploadSession<C> {
         Ok(last_block_offset + last_block_data.len() as u64)
     }
 
-    pub fn commit(&self, commit_info: files::CommitInfo)
-        -> Result<files::FileMetadata, Error>
-    {
+    /// After calling [`UploadSession::upload`], commit the data to a file.
+    pub fn commit(&self, commit_info: files::CommitInfo) -> Result<files::FileMetadata, Error> {
         let finish = self.inner.commit_arg(commit_info);
 
         let mut errors = 0;
         loop {
             match files::upload_session_finish(self.client.as_ref(), &finish, &[]) {
                 Ok(Ok(file_metadata)) => {
-                    info!("Upload succeeded: {}", file_metadata.path_display.as_deref().unwrap_or("?"));
+                    info!(
+                        "Upload succeeded: {}",
+                        file_metadata.path_display.as_deref().unwrap_or("?")
+                    );
                     return Ok(file_metadata);
                 }
                 error => {
@@ -237,6 +276,9 @@ impl<C: UserAuthClient + Send + Sync + 'static> UploadSession<C> {
         }
     }
 
+    /// Get the session ID and offset to resume a partially-completed upload. Pass the result to
+    /// [`UploadSession::resume`] to create a new session and resume the upload from the
+    /// `start_offset` in the return value.
     pub fn get_resume(&self) -> UploadResume {
         UploadResume {
             start_offset: self.inner.complete_up_to(),
@@ -256,9 +298,17 @@ impl<C: UserAuthClient + Send + Sync + 'static> UploadSession<C> {
         let mut errors = 0;
         loop {
             match files::upload_session_append_v2(client, arg, buf) {
-                Ok(Ok(())) => { break; }
-                Err(crate::Error::RateLimited { reason, retry_after_seconds }) => {
-                    warn!("rate-limited ({}), waiting {} seconds", reason, retry_after_seconds);
+                Ok(Ok(())) => {
+                    break;
+                }
+                Err(crate::Error::RateLimited {
+                    reason,
+                    retry_after_seconds,
+                }) => {
+                    warn!(
+                        "rate-limited ({}), waiting {} seconds",
+                        reason, retry_after_seconds
+                    );
                     if retry_after_seconds > 0 {
                         sleep(Duration::from_secs(u64::from(retry_after_seconds)));
                     }
@@ -269,7 +319,10 @@ impl<C: UserAuthClient + Send + Sync + 'static> UploadSession<C> {
                         warn!("Error calling upload_session_append: {:?}, failing.", error);
                         return error.combine();
                     } else {
-                        warn!("Error calling upload_session_append: {:?}, retrying.", error);
+                        warn!(
+                            "Error calling upload_session_append: {:?}, retrying.",
+                            error
+                        );
                     }
                 }
             }
@@ -299,22 +352,22 @@ impl<C: UserAuthClient + Send + Sync + 'static> UploadSession<C> {
 impl SessionInner {
     /// Generate the argument to append a block at the given offset.
     fn append_arg(&self, block_offset: u64) -> files::UploadSessionAppendArg {
-        files::UploadSessionAppendArg::new(
-            files::UploadSessionCursor::new(
-                self.session_id.clone(),
-                self.start_offset + block_offset))
+        files::UploadSessionAppendArg::new(files::UploadSessionCursor::new(
+            self.session_id.clone(),
+            self.start_offset + block_offset,
+        ))
     }
 
     /// Generate the argument to commit the upload at the given path with the given modification
     /// time.
-    fn commit_arg(&self, commit_info: files::CommitInfo)
-        -> files::UploadSessionFinishArg
-    {
+    fn commit_arg(&self, commit_info: files::CommitInfo) -> files::UploadSessionFinishArg {
         files::UploadSessionFinishArg::new(
             files::UploadSessionCursor::new(
                 self.session_id.clone(),
-                self.bytes_transferred.load(SeqCst)),
-            commit_info)
+                self.bytes_transferred.load(SeqCst),
+            ),
+            commit_info,
+        )
     }
 
     /// Mark a block as uploaded.
