@@ -3,6 +3,7 @@
 use std::collections::HashMap;
 use std::fmt::{self, Debug, Display};
 use std::io::Read;
+use std::sync::atomic::AtomicBool;
 use std::sync::atomic::{AtomicU64, Ordering::SeqCst};
 use std::sync::{Arc, Mutex};
 use std::thread::sleep;
@@ -174,31 +175,24 @@ impl<C: UserAuthClient + Send + Sync + 'static> UploadSession<C> {
     /// can be passed to [`UploadSession::resume`] to make a new [`UploadSession`] which can be
     /// used to retry the upload without re-uploading all the data.
     pub fn upload(&self, mut source: impl Read, opts: UploadOpts) -> Result<u64, Error> {
-        // Initially set to the start of the file and an empty block; if the file is an exact
-        // multiple of BLOCK_SIZE, we'll need to upload an empty buffer when closing the session.
-        let last_block = Arc::new(Mutex::new((0, vec![])));
-
+        let closed = Arc::new(AtomicBool::new(false));
         let start_time = Instant::now();
         let result = {
             let client = self.client.clone();
             let inner = self.inner.clone();
             let opts = opts.clone();
-            let last_block = last_block.clone();
+            let closed = closed.clone();
             parallel_reader::read_stream_and_process_chunks_in_parallel(
                 &mut source,
                 BLOCK_SIZE * opts.blocks_per_request,
                 opts.parallelism,
                 Arc::new(move |block_offset, data: &[u8]| -> Result<(), Error> {
-                    let append_arg = inner.append_arg(block_offset);
+                    let mut append_arg = inner.append_arg(block_offset);
                     if data.len() != BLOCK_SIZE * opts.blocks_per_request {
                         // This must be the last block. Only the last one is allowed to be not 4 MiB
-                        // exactly. Save the block and offset so it can be uploaded after all the
-                        // parallel uploads are done. This is because once the session is closed, we
-                        // can't resume it.
-                        let mut last_block = last_block.lock().unwrap();
-                        last_block.0 = block_offset + inner.start_offset;
-                        last_block.1 = data.to_vec();
-                        return Ok(());
+                        // exactly.
+                        append_arg.close = true;
+                        closed.store(true, SeqCst);
                     }
                     let result = Self::upload_block_with_retry(
                         client.as_ref(),
@@ -224,28 +218,26 @@ impl<C: UserAuthClient + Send + Sync + 'static> UploadSession<C> {
             } => error,
         })?;
 
-        // No threads better be running at this point, so this should succeed:
-        let (last_block_offset, last_block_data) = Arc::try_unwrap(last_block)
-            .expect("failed to unwrap Arc")
-            .into_inner()
-            .expect("failed to unwrap Mutex");
-
-        let mut arg = self.inner.append_arg(last_block_offset);
-        arg.close = true;
-        if let Err(e) = Self::upload_block_with_retry(
-            self.client.as_ref(),
-            self.inner.as_ref(),
-            &arg,
-            &last_block_data,
-            start_time,
-            &opts,
-        ) {
-            warn!("failed to close session: {}", e);
-            // But don't error out; try committing anyway. It could be we're resuming a file where
-            // we already closed it out but failed to commit.
+        let final_len = self.inner.complete_up_to();
+        // If we didn't close it above, we need to upload an empty buffer now to mark the session as
+        // closed.
+        if !closed.load(SeqCst) {
+            let append_arg = self.inner.append_arg(final_len).with_close(true);
+            if let Err(e) = Self::upload_block_with_retry(
+                self.client.as_ref(),
+                self.inner.as_ref(),
+                &append_arg,
+                &[],
+                start_time,
+                &opts)
+            {
+                warn!("failed to close session: {}", e);
+                // But don't error out; try committing anyway. It could be we're resuming a file
+                // where we already closed it out but failed to commit.
+            }
         }
 
-        Ok(last_block_offset + last_block_data.len() as u64)
+        Ok(final_len)
     }
 
     /// After calling [`UploadSession::upload`], commit the data to a file.
