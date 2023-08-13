@@ -4,7 +4,7 @@
 //! files that would not fit in a single HTTP request, including allowing the user to resume
 //! interrupted uploads, and uploading blocks in parallel.
 
-use dropbox_sdk::file_helpers::{UploadResume, UploadSession, UploadOpts, ProgressHandler};
+use dropbox_sdk::file_helpers::upload::{UploadResume, UploadSession, UploadOpts, ProgressHandler};
 use dropbox_sdk::files;
 use dropbox_sdk::default_client::UserAuthDefaultClient;
 use std::fs::File;

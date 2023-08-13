@@ -3,10 +3,10 @@
 //! This example illustrates a few basic Dropbox API operations: getting an OAuth2 token, listing
 //! the contents of a folder recursively, and fetching a file given its path.
 
-use dropbox_sdk::{files, UserAuthClient};
+use dropbox_sdk::files;
+use dropbox_sdk::file_helpers::list::list_directory;
 use dropbox_sdk::default_client::UserAuthDefaultClient;
 
-use std::collections::VecDeque;
 use std::io::{self, Read};
 
 enum Operation {
@@ -100,98 +100,28 @@ fn main() {
     } else {
         eprintln!("listing all files");
         match list_directory(&client, "/", true) {
-            Ok(Ok(iterator)) => {
+            Ok(iterator) => {
                 for entry_result in iterator {
                     match entry_result {
-                        Ok(Ok(files::Metadata::Folder(entry))) => {
+                        Ok(files::Metadata::Folder(entry)) => {
                             println!("Folder: {}", entry.path_display.unwrap_or(entry.name));
                         },
-                        Ok(Ok(files::Metadata::File(entry))) => {
+                        Ok(files::Metadata::File(entry)) => {
                             println!("File: {}", entry.path_display.unwrap_or(entry.name));
                         },
-                        Ok(Ok(files::Metadata::Deleted(entry))) => {
+                        Ok(files::Metadata::Deleted(entry)) => {
                             panic!("unexpected deleted entry: {:?}", entry);
                         },
-                        Ok(Err(e)) => {
-                            eprintln!("Error from files/list_folder_continue: {}", e);
-                            break;
-                        },
                         Err(e) => {
-                            eprintln!("API request error: {}", e);
+                            eprintln!("Error listing files: {}", e);
                             break;
                         },
                     }
                 }
             },
-            Ok(Err(e)) => {
-                eprintln!("Error from files/list_folder: {}", e);
-            },
             Err(e) => {
-                eprintln!("API request error: {}", e);
+                eprintln!("Error listing files: {}", e);
             }
-        }
-    }
-}
-
-fn list_directory<'a, T: UserAuthClient>(client: &'a T, path: &str, recursive: bool)
-    -> dropbox_sdk::Result<Result<DirectoryIterator<'a, T>, files::ListFolderError>>
-{
-    assert!(path.starts_with('/'), "path needs to be absolute (start with a '/')");
-    let requested_path = if path == "/" {
-        // Root folder should be requested as empty string
-        String::new()
-    } else {
-        path.to_owned()
-    };
-    match files::list_folder(
-        client,
-        &files::ListFolderArg::new(requested_path)
-            .with_recursive(recursive))
-    {
-        Ok(Ok(result)) => {
-            let cursor = if result.has_more {
-                Some(result.cursor)
-            } else {
-                None
-            };
-
-            Ok(Ok(DirectoryIterator {
-                client,
-                cursor,
-                buffer: result.entries.into(),
-            }))
-        },
-        Ok(Err(e)) => Ok(Err(e)),
-        Err(e) => Err(e),
-    }
-}
-
-struct DirectoryIterator<'a, T: UserAuthClient> {
-    client: &'a T,
-    buffer: VecDeque<files::Metadata>,
-    cursor: Option<String>,
-}
-
-impl<'a, T: UserAuthClient> Iterator for DirectoryIterator<'a, T> {
-    type Item = dropbox_sdk::Result<Result<files::Metadata, files::ListFolderContinueError>>;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        if let Some(entry) = self.buffer.pop_front() {
-            Some(Ok(Ok(entry)))
-        } else if let Some(cursor) = self.cursor.take() {
-            match files::list_folder_continue(self.client, &files::ListFolderContinueArg::new(cursor)) {
-                Ok(Ok(result)) => {
-                    self.buffer.extend(result.entries);
-                    if result.has_more {
-                        self.cursor = Some(result.cursor);
-                    }
-                    self.buffer.pop_front().map(|entry| Ok(Ok(entry)))
-                },
-                Ok(Err(e)) => Some(Ok(Err(e))),
-                Err(e) => Some(Err(e)),
-            }
-        } else {
-            None
         }
     }
 }
