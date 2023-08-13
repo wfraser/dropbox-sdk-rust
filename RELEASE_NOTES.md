@@ -1,3 +1,12 @@
+# v0.17.0
+xxxx-yy-zz
+* BIG CHANGES:
+  * New high-level `file_helpers` module to make common file operations more straigtforward.
+  * By default, all features (API namespaces) are not enabled any more. Only the `default_client`
+    and `file_helpers` features (and the API namespaces they depend on) are built by default.
+    This should reduce the default compile time considerably; if you need less-common API
+    namespaces, specify them in the cargo features when depending on this crate (see README.md).
+
 # v0.16.1
 xxxx-yy-zz
 * MSRV raised to 1.63.0
