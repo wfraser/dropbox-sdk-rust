@@ -71,6 +71,17 @@ impl<'a, T: UserAuthClient> Iterator for DirectoryIterator<'a, T> {
             None
         }
     }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        (
+            self.buffer.len(),
+            if self.cursor.is_none() {
+                Some(self.buffer.len())
+            } else {
+                None
+            },
+        )
+    }
 }
 
 fn list_folder_internal<T, A, E>(
