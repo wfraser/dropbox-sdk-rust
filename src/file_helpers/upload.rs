@@ -27,6 +27,18 @@ pub struct UploadOpts {
     /// increasing the cost of a request that has to be retried in the event of an error.
     pub blocks_per_request: usize,
 
+    /// How many consecutive errors until retries are abandoned and the upload is failed?
+    pub retry_count: u32,
+
+    /// Errors when uploading are handled with retry and exponential backoff with jitter. The first
+    /// backoff will be this long, and subsequent backoffs will each be doubled in length (up to
+    /// [`max_backoff_time`]), until [`retry_count`] retries have been attempted, or the upload
+    /// request succeeds.
+    pub initial_backoff_time: Duration,
+
+    /// Exponential backoff duration won't increase past this time.
+    pub max_backoff_time: Duration,
+
     /// An optional callback to periodically receive progress updates as the file uploads.
     pub progress_handler: Option<Arc<Box<dyn ProgressHandler>>>,
 }
@@ -36,6 +48,9 @@ impl Default for UploadOpts {
         Self {
             parallelism: 20,
             blocks_per_request: 2,
+            retry_count: 3,
+            initial_backoff_time: Duration::from_millis(500), // 0.5 + 1 + 2 = 3.5 secs max (+/- jitter)
+            max_backoff_time: Duration::from_secs(2),
             progress_handler: None,
         }
     }
@@ -235,6 +250,7 @@ impl<C: UserAuthClient + Send + Sync + 'static> UploadSession<C> {
     ) -> Result<(), Error> {
         let block_start_time = Instant::now();
         let mut errors = 0;
+        let mut backoff = opts.initial_backoff_time;
         loop {
             match files::upload_session_append_v2(client, arg, buf) {
                 Ok(Ok(())) => {
@@ -254,7 +270,7 @@ impl<C: UserAuthClient + Send + Sync + 'static> UploadSession<C> {
                 }
                 error => {
                     errors += 1;
-                    if errors == 3 {
+                    if errors == opts.retry_count {
                         warn!("Error calling upload_session_append: {:?}, failing.", error);
                         return error.combine();
                     } else {
@@ -262,6 +278,10 @@ impl<C: UserAuthClient + Send + Sync + 'static> UploadSession<C> {
                             "Error calling upload_session_append: {:?}, retrying.",
                             error
                         );
+                    }
+                    sleep(jitter(backoff));
+                    if backoff < opts.max_backoff_time {
+                        backoff *= 2;
                     }
                 }
             }
@@ -360,5 +380,20 @@ impl CompletionTracker {
             // This block isn't at the low-water mark; there's a gap behind it. Save it for later.
             self.uploaded_blocks.insert(block_offset, block_len);
         }
+    }
+}
+
+// Add a random duration in the range [-duration/4, duration/4].
+fn jitter(duration: Duration) -> Duration {
+    use ring::rand::{generate, SystemRandom};
+    let rng = SystemRandom::new();
+    let bytes: [u8; 4] = generate(&rng).unwrap().expose();
+    let u = u32::from_ne_bytes(bytes);
+    let max = f64::from(u32::MAX);
+    let f = f64::from(u) / max / 4.;
+    if u % 2 == 0 {
+        duration + duration.mul_f64(f)
+    } else {
+        duration - duration.mul_f64(f)
     }
 }
