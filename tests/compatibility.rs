@@ -46,8 +46,8 @@ fn test_open_union_fields() {
         "some field": "some value",
         "another field": "another value"
     }"#;
-    let x = serde_json::from_str::<dropbox_sdk::users::SpaceAllocation>(json).unwrap();
-    if let dropbox_sdk::users::SpaceAllocation::Other = x {
+    let x = serde_json::from_str::<dropbox_sdk::files::DownloadError>(json).unwrap();
+    if let dropbox_sdk::files::DownloadError::Other = x {
         // yay
     } else {
         panic!("wrong variant");
@@ -57,13 +57,14 @@ fn test_open_union_fields() {
 #[test]
 fn test_open_union_new_field() {
     let json = r#"{
-        ".tag": "individual",
-        "allocated": 9999,
-        "something else": "some value"
+        ".tag": "single_user",
+        "created": "2020-04-08T20:38:00-0700",
+        "lock_holder_account_id": "aef123456",
+        "another field": "another value"
     }"#;
-    let x = serde_json::from_str::<dropbox_sdk::users::SpaceAllocation>(json).unwrap();
-    if let dropbox_sdk::users::SpaceAllocation::Individual(indiv) = x {
-        if indiv.allocated != 9999 {
+    let x = serde_json::from_str::<dropbox_sdk::files::FileLockContent>(json).unwrap();
+    if let dropbox_sdk::files::FileLockContent::SingleUser(inner) = x {
+        if inner.lock_holder_account_id != "aef123456" {
             panic!("wrong value");
         }
     } else {
