@@ -9,6 +9,7 @@ use std::thread::sleep;
 use std::time::{Duration, Instant};
 
 use crate::file_helpers::{BLOCK_SIZE, Error, RRExt};
+use crate::file_helpers::content_hash::ContentHash;
 use crate::{files, UserAuthClient};
 
 /// Options for how to perform uploads.
@@ -146,7 +147,9 @@ impl<C: UserAuthClient + Send + Sync + 'static> UploadSession<C> {
                 BLOCK_SIZE * opts.blocks_per_request,
                 opts.parallelism,
                 Arc::new(move |block_offset, data: &[u8]| -> Result<(), Error> {
-                    let mut append_arg = inner.append_arg(block_offset);
+                    let mut append_arg = inner
+                        .append_arg(block_offset)
+                        .with_content_hash(ContentHash::from(data).finish_hex());
                     if data.len() != BLOCK_SIZE * opts.blocks_per_request {
                         // This must be the last block. Only the last one is allowed to be not 4 MiB
                         // exactly.
