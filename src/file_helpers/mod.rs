@@ -1,9 +1,13 @@
 //! High-level helpers for common operations involving files.
 
+pub mod content_hash;
 pub mod list;
 pub mod upload;
 
 use std::fmt::{self, Debug, Display};
+
+/// The size of a block. This is a Dropbox constant, not adjustable.
+pub const BLOCK_SIZE: usize = 4 * 1024 * 1024;
 
 /// A composite error type representing an error from the API itself, or a client-side error
 /// encountered in making the API call.

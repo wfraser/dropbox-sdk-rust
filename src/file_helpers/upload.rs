@@ -8,11 +8,8 @@ use std::sync::{Arc, Mutex};
 use std::thread::sleep;
 use std::time::{Duration, Instant};
 
-use crate::file_helpers::{Error, RRExt};
+use crate::file_helpers::{BLOCK_SIZE, Error, RRExt};
 use crate::{files, UserAuthClient};
-
-/// The size of a block. This is a Dropbox constant, not adjustable.
-pub const BLOCK_SIZE: usize = 4 * 1024 * 1024;
 
 /// Options for how to perform uploads.
 #[derive(Clone)]
