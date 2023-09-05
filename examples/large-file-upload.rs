@@ -227,7 +227,7 @@ fn main() {
         }
     }
 
-    session.upload(source_file, UploadOpts {
+    let result = session.upload(source_file, UploadOpts {
         progress_handler: Some(Arc::new(Box::new(Progress {
             source_len,
             start_offset: args.resume.map(|r| r.0.start_offset).unwrap_or(0),
@@ -241,4 +241,5 @@ fn main() {
         fatal!("Upload failed. To retry, use --resume {},{}",
             resume.session_id, resume.start_offset);
     });
+    println!("{result:#?}");
 }
