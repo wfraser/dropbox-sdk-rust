@@ -55,7 +55,7 @@ fn main() {
         eprintln!("downloading file {}", path);
         eprintln!();
         let mut bytes_out = 0u64;
-        let download_arg = files::DownloadArg::new(path);
+        let download_arg = files::DownloadArg::new(path.clone());
         let stdout = io::stdout();
         let mut stdout_lock = stdout.lock();
         'download: loop {
@@ -87,6 +87,10 @@ fn main() {
                             }
                         }
                     }
+                },
+                Ok(Err(files::DownloadError::Path(files::LookupError::NotFile))) => {
+                    eprintln!("metadata for {path}: {:#?}",
+                        files::get_metadata(&client, &files::GetMetadataArg::new(path.clone())));
                 },
                 Ok(Err(download_error)) => {
                     eprintln!("Download error: {}", download_error);
