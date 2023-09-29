@@ -11,47 +11,58 @@ use std::io::{self, Read};
 
 enum Operation {
     Usage,
-    List,
+    List { path: String },
     Download { path: String },
 }
 
 fn parse_args() -> Operation {
-    match std::env::args().nth(1).as_deref() {
-        None | Some("--help") | Some("-h") => Operation::Usage,
-        Some("--list") => Operation::List,
-        Some(path) if path.starts_with('/') => Operation::Download { path: path.to_owned() },
-        Some(bogus) => {
-            eprintln!("Unrecognized option {:?}", bogus);
-            eprintln!();
-            Operation::Usage
+    let mut list = false;
+    let mut path: Option<String> = None;
+    for arg in std::env::args().skip(1) {
+        match arg.as_str() {
+            "--help" | "-h" => return Operation::Usage,
+            "--list" if !list => {
+                list = true;
+            }
+            s if s.starts_with('/') && path.is_none() => {
+                path = Some(arg);
+            }
+            _ => {
+                eprintln!("Unrecognized option {arg:?}");
+                eprintln!();
+                return Operation::Usage;
+            }
         }
+    }
+    match (list, path) {
+        (true, Some(path)) => Operation::List { path },
+        (true, None) => Operation::List { path: "/".to_owned() },
+        (false, Some(path)) => Operation::Download { path },
+        (false, None) => Operation::Usage,
     }
 }
 
 fn main() {
     env_logger::init();
 
-    let download_path = match parse_args() {
-        Operation::Usage => {
-            eprintln!("usage: {} [option]", std::env::args().next().unwrap());
-            eprintln!("    options:");
-            eprintln!("        --help | -h      view this text");
-            eprintln!("        --list           list all files in your Dropbox");
-            eprintln!("        <path>           print the file at the given path to stdout");
-            eprintln!();
-            eprintln!("    If a Dropbox OAuth token is given in the environment variable");
-            eprintln!("    DBX_OAUTH_TOKEN, it will be used, otherwise you will be prompted for");
-            eprintln!("    authentication interactively.");
-            std::process::exit(1);
-        },
-        Operation::List => None,
-        Operation::Download { path } => Some(path),
-    };
+    let operation = parse_args();
+    if let Operation::Usage = operation {
+        eprintln!("usage: {} [option]", std::env::args().next().unwrap());
+        eprintln!("    options:");
+        eprintln!("        --help | -h      view this text");
+        eprintln!("        --list [<path>]  list all files in your Dropbox under <path>");
+        eprintln!("        <path>           print the file at the given path to stdout");
+        eprintln!();
+        eprintln!("    If a Dropbox OAuth token is given in the environment variable");
+        eprintln!("    DBX_OAUTH_TOKEN, it will be used, otherwise you will be prompted for");
+        eprintln!("    authentication interactively.");
+        std::process::exit(1);
+    }
 
     let auth = dropbox_sdk::oauth2::get_auth_from_env_or_prompt();
     let client = UserAuthDefaultClient::new(auth);
 
-    if let Some(path) = download_path {
+    if let Operation::Download { path } = operation {
         eprintln!("downloading file {}", path);
         eprintln!();
         let mut bytes_out = 0u64;
@@ -101,9 +112,9 @@ fn main() {
             }
             break 'download;
         }
-    } else {
-        eprintln!("listing all files");
-        match list_directory(&client, "/", true) {
+    } else if let Operation::List { path } = operation {
+        eprintln!("listing all files under {path}");
+        match list_directory(&client, &path, true) {
             Ok(iterator) => {
                 for entry_result in iterator {
                     match entry_result {
