@@ -141,6 +141,12 @@ impl std::cmp::PartialEq<NoError> for NoError {
     }
 }
 
+impl DropboxError for NoError {
+    fn downcast_id(&self, _id: TypeId) -> Option<&dyn Any> {
+        unreachable(*self)
+    }
+}
+
 impl std::error::Error for NoError {
     fn source(&self) -> Option<&(dyn std::error::Error + 'static)> {
         unreachable(*self)
