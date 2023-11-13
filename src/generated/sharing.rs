@@ -1225,6 +1225,33 @@ impl ::std::error::Error for AddFileMemberError {
     }
 }
 
+impl crate::DropboxError for AddFileMemberError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        match self {
+            AddFileMemberError::UserError(inner) => {
+                if <dyn std::any::Any>::type_id(inner) == id {
+                    Some(inner)
+                }
+                else {
+                    crate::DropboxError::downcast_id(inner, id)
+                }
+            }
+            AddFileMemberError::AccessError(inner) => {
+                if <dyn std::any::Any>::type_id(inner) == id {
+                    Some(inner)
+                }
+                else {
+                    crate::DropboxError::downcast_id(inner, id)
+                }
+            }
+            _ => None,
+        }
+    }
+}
+
 impl ::std::fmt::Display for AddFileMemberError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -1599,6 +1626,33 @@ impl ::std::error::Error for AddFolderMemberError {
     }
 }
 
+impl crate::DropboxError for AddFolderMemberError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        match self {
+            AddFolderMemberError::AccessError(inner) => {
+                if <dyn std::any::Any>::type_id(inner) == id {
+                    Some(inner)
+                }
+                else {
+                    crate::DropboxError::downcast_id(inner, id)
+                }
+            }
+            AddFolderMemberError::BadMember(inner) => {
+                if <dyn std::any::Any>::type_id(inner) == id {
+                    Some(inner)
+                }
+                else {
+                    crate::DropboxError::downcast_id(inner, id)
+                }
+            }
+            _ => None,
+        }
+    }
+}
+
 impl ::std::fmt::Display for AddFolderMemberError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -1861,6 +1915,15 @@ impl ::serde::ser::Serialize for AddMemberSelectorError {
 }
 
 impl ::std::error::Error for AddMemberSelectorError {
+}
+
+impl crate::DropboxError for AddMemberSelectorError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        None
+    }
 }
 
 impl ::std::fmt::Display for AddMemberSelectorError {
@@ -2667,6 +2730,25 @@ impl ::std::error::Error for CreateSharedLinkError {
     }
 }
 
+impl crate::DropboxError for CreateSharedLinkError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        match self {
+            CreateSharedLinkError::Path(inner) => {
+                if <dyn std::any::Any>::type_id(inner) == id {
+                    Some(inner)
+                }
+                else {
+                    crate::DropboxError::downcast_id(inner, id)
+                }
+            }
+            _ => None,
+        }
+    }
+}
+
 impl ::std::fmt::Display for CreateSharedLinkError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -2906,6 +2988,33 @@ impl ::std::error::Error for CreateSharedLinkWithSettingsError {
         match self {
             CreateSharedLinkWithSettingsError::Path(inner) => Some(inner),
             CreateSharedLinkWithSettingsError::SettingsError(inner) => Some(inner),
+            _ => None,
+        }
+    }
+}
+
+impl crate::DropboxError for CreateSharedLinkWithSettingsError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        match self {
+            CreateSharedLinkWithSettingsError::Path(inner) => {
+                if <dyn std::any::Any>::type_id(inner) == id {
+                    Some(inner)
+                }
+                else {
+                    crate::DropboxError::downcast_id(inner, id)
+                }
+            }
+            CreateSharedLinkWithSettingsError::SettingsError(inner) => {
+                if <dyn std::any::Any>::type_id(inner) == id {
+                    Some(inner)
+                }
+                else {
+                    crate::DropboxError::downcast_id(inner, id)
+                }
+            }
             _ => None,
         }
     }
@@ -3794,6 +3903,25 @@ impl ::std::error::Error for FileMemberActionError {
     fn source(&self) -> Option<&(dyn ::std::error::Error + 'static)> {
         match self {
             FileMemberActionError::AccessError(inner) => Some(inner),
+            _ => None,
+        }
+    }
+}
+
+impl crate::DropboxError for FileMemberActionError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        match self {
+            FileMemberActionError::AccessError(inner) => {
+                if <dyn std::any::Any>::type_id(inner) == id {
+                    Some(inner)
+                }
+                else {
+                    crate::DropboxError::downcast_id(inner, id)
+                }
+            }
             _ => None,
         }
     }
@@ -5362,6 +5490,33 @@ impl ::std::error::Error for GetFileMetadataError {
     }
 }
 
+impl crate::DropboxError for GetFileMetadataError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        match self {
+            GetFileMetadataError::UserError(inner) => {
+                if <dyn std::any::Any>::type_id(inner) == id {
+                    Some(inner)
+                }
+                else {
+                    crate::DropboxError::downcast_id(inner, id)
+                }
+            }
+            GetFileMetadataError::AccessError(inner) => {
+                if <dyn std::any::Any>::type_id(inner) == id {
+                    Some(inner)
+                }
+                else {
+                    crate::DropboxError::downcast_id(inner, id)
+                }
+            }
+            _ => None,
+        }
+    }
+}
+
 impl ::std::fmt::Display for GetFileMetadataError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -5644,6 +5799,15 @@ impl ::serde::ser::Serialize for GetSharedLinkFileError {
 }
 
 impl ::std::error::Error for GetSharedLinkFileError {
+}
+
+impl crate::DropboxError for GetSharedLinkFileError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        None
+    }
 }
 
 impl ::std::fmt::Display for GetSharedLinkFileError {
@@ -5946,6 +6110,15 @@ impl ::serde::ser::Serialize for GetSharedLinksError {
 }
 
 impl ::std::error::Error for GetSharedLinksError {
+}
+
+impl crate::DropboxError for GetSharedLinksError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        None
+    }
 }
 
 impl ::std::fmt::Display for GetSharedLinksError {
@@ -7050,6 +7223,41 @@ impl ::std::error::Error for JobError {
             JobError::UnshareFolderError(inner) => Some(inner),
             JobError::RemoveFolderMemberError(inner) => Some(inner),
             JobError::RelinquishFolderMembershipError(inner) => Some(inner),
+            _ => None,
+        }
+    }
+}
+
+impl crate::DropboxError for JobError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        match self {
+            JobError::UnshareFolderError(inner) => {
+                if <dyn std::any::Any>::type_id(inner) == id {
+                    Some(inner)
+                }
+                else {
+                    crate::DropboxError::downcast_id(inner, id)
+                }
+            }
+            JobError::RemoveFolderMemberError(inner) => {
+                if <dyn std::any::Any>::type_id(inner) == id {
+                    Some(inner)
+                }
+                else {
+                    crate::DropboxError::downcast_id(inner, id)
+                }
+            }
+            JobError::RelinquishFolderMembershipError(inner) => {
+                if <dyn std::any::Any>::type_id(inner) == id {
+                    Some(inner)
+                }
+                else {
+                    crate::DropboxError::downcast_id(inner, id)
+                }
+            }
             _ => None,
         }
     }
@@ -9120,6 +9328,33 @@ impl ::std::error::Error for ListFileMembersContinueError {
     }
 }
 
+impl crate::DropboxError for ListFileMembersContinueError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        match self {
+            ListFileMembersContinueError::UserError(inner) => {
+                if <dyn std::any::Any>::type_id(inner) == id {
+                    Some(inner)
+                }
+                else {
+                    crate::DropboxError::downcast_id(inner, id)
+                }
+            }
+            ListFileMembersContinueError::AccessError(inner) => {
+                if <dyn std::any::Any>::type_id(inner) == id {
+                    Some(inner)
+                }
+                else {
+                    crate::DropboxError::downcast_id(inner, id)
+                }
+            }
+            _ => None,
+        }
+    }
+}
+
 impl ::std::fmt::Display for ListFileMembersContinueError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -9317,6 +9552,33 @@ impl ::std::error::Error for ListFileMembersError {
         match self {
             ListFileMembersError::UserError(inner) => Some(inner),
             ListFileMembersError::AccessError(inner) => Some(inner),
+            _ => None,
+        }
+    }
+}
+
+impl crate::DropboxError for ListFileMembersError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        match self {
+            ListFileMembersError::UserError(inner) => {
+                if <dyn std::any::Any>::type_id(inner) == id {
+                    Some(inner)
+                }
+                else {
+                    crate::DropboxError::downcast_id(inner, id)
+                }
+            }
+            ListFileMembersError::AccessError(inner) => {
+                if <dyn std::any::Any>::type_id(inner) == id {
+                    Some(inner)
+                }
+                else {
+                    crate::DropboxError::downcast_id(inner, id)
+                }
+            }
             _ => None,
         }
     }
@@ -9686,6 +9948,25 @@ impl ::std::error::Error for ListFilesContinueError {
     fn source(&self) -> Option<&(dyn ::std::error::Error + 'static)> {
         match self {
             ListFilesContinueError::UserError(inner) => Some(inner),
+            _ => None,
+        }
+    }
+}
+
+impl crate::DropboxError for ListFilesContinueError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        match self {
+            ListFilesContinueError::UserError(inner) => {
+                if <dyn std::any::Any>::type_id(inner) == id {
+                    Some(inner)
+                }
+                else {
+                    crate::DropboxError::downcast_id(inner, id)
+                }
+            }
             _ => None,
         }
     }
@@ -10127,6 +10408,25 @@ impl ::std::error::Error for ListFolderMembersContinueError {
     }
 }
 
+impl crate::DropboxError for ListFolderMembersContinueError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        match self {
+            ListFolderMembersContinueError::AccessError(inner) => {
+                if <dyn std::any::Any>::type_id(inner) == id {
+                    Some(inner)
+                }
+                else {
+                    crate::DropboxError::downcast_id(inner, id)
+                }
+            }
+            _ => None,
+        }
+    }
+}
+
 impl ::std::fmt::Display for ListFolderMembersContinueError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -10508,6 +10808,15 @@ impl ::serde::ser::Serialize for ListFoldersContinueError {
 impl ::std::error::Error for ListFoldersContinueError {
 }
 
+impl crate::DropboxError for ListFoldersContinueError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        None
+    }
+}
+
 impl ::std::fmt::Display for ListFoldersContinueError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         write!(f, "{:?}", *self)
@@ -10828,6 +11137,25 @@ impl ::std::error::Error for ListSharedLinksError {
     fn source(&self) -> Option<&(dyn ::std::error::Error + 'static)> {
         match self {
             ListSharedLinksError::Path(inner) => Some(inner),
+            _ => None,
+        }
+    }
+}
+
+impl crate::DropboxError for ListSharedLinksError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        match self {
+            ListSharedLinksError::Path(inner) => {
+                if <dyn std::any::Any>::type_id(inner) == id {
+                    Some(inner)
+                }
+                else {
+                    crate::DropboxError::downcast_id(inner, id)
+                }
+            }
             _ => None,
         }
     }
@@ -11859,6 +12187,25 @@ impl ::std::error::Error for ModifySharedLinkSettingsError {
     }
 }
 
+impl crate::DropboxError for ModifySharedLinkSettingsError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        match self {
+            ModifySharedLinkSettingsError::SettingsError(inner) => {
+                if <dyn std::any::Any>::type_id(inner) == id {
+                    Some(inner)
+                }
+                else {
+                    crate::DropboxError::downcast_id(inner, id)
+                }
+            }
+            _ => None,
+        }
+    }
+}
+
 impl ::std::fmt::Display for ModifySharedLinkSettingsError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -12089,6 +12436,25 @@ impl ::std::error::Error for MountFolderError {
     fn source(&self) -> Option<&(dyn ::std::error::Error + 'static)> {
         match self {
             MountFolderError::AccessError(inner) => Some(inner),
+            _ => None,
+        }
+    }
+}
+
+impl crate::DropboxError for MountFolderError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        match self {
+            MountFolderError::AccessError(inner) => {
+                if <dyn std::any::Any>::type_id(inner) == id {
+                    Some(inner)
+                }
+                else {
+                    crate::DropboxError::downcast_id(inner, id)
+                }
+            }
             _ => None,
         }
     }
@@ -12826,6 +13192,25 @@ impl ::std::error::Error for RelinquishFileMembershipError {
     }
 }
 
+impl crate::DropboxError for RelinquishFileMembershipError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        match self {
+            RelinquishFileMembershipError::AccessError(inner) => {
+                if <dyn std::any::Any>::type_id(inner) == id {
+                    Some(inner)
+                }
+                else {
+                    crate::DropboxError::downcast_id(inner, id)
+                }
+            }
+            _ => None,
+        }
+    }
+}
+
 impl ::std::fmt::Display for RelinquishFileMembershipError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -13083,6 +13468,25 @@ impl ::std::error::Error for RelinquishFolderMembershipError {
     }
 }
 
+impl crate::DropboxError for RelinquishFolderMembershipError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        match self {
+            RelinquishFolderMembershipError::AccessError(inner) => {
+                if <dyn std::any::Any>::type_id(inner) == id {
+                    Some(inner)
+                }
+                else {
+                    crate::DropboxError::downcast_id(inner, id)
+                }
+            }
+            _ => None,
+        }
+    }
+}
+
 impl ::std::fmt::Display for RelinquishFolderMembershipError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -13300,6 +13704,33 @@ impl ::std::error::Error for RemoveFileMemberError {
         match self {
             RemoveFileMemberError::UserError(inner) => Some(inner),
             RemoveFileMemberError::AccessError(inner) => Some(inner),
+            _ => None,
+        }
+    }
+}
+
+impl crate::DropboxError for RemoveFileMemberError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        match self {
+            RemoveFileMemberError::UserError(inner) => {
+                if <dyn std::any::Any>::type_id(inner) == id {
+                    Some(inner)
+                }
+                else {
+                    crate::DropboxError::downcast_id(inner, id)
+                }
+            }
+            RemoveFileMemberError::AccessError(inner) => {
+                if <dyn std::any::Any>::type_id(inner) == id {
+                    Some(inner)
+                }
+                else {
+                    crate::DropboxError::downcast_id(inner, id)
+                }
+            }
             _ => None,
         }
     }
@@ -13573,6 +14004,33 @@ impl ::std::error::Error for RemoveFolderMemberError {
         match self {
             RemoveFolderMemberError::AccessError(inner) => Some(inner),
             RemoveFolderMemberError::MemberError(inner) => Some(inner),
+            _ => None,
+        }
+    }
+}
+
+impl crate::DropboxError for RemoveFolderMemberError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        match self {
+            RemoveFolderMemberError::AccessError(inner) => {
+                if <dyn std::any::Any>::type_id(inner) == id {
+                    Some(inner)
+                }
+                else {
+                    crate::DropboxError::downcast_id(inner, id)
+                }
+            }
+            RemoveFolderMemberError::MemberError(inner) => {
+                if <dyn std::any::Any>::type_id(inner) == id {
+                    Some(inner)
+                }
+                else {
+                    crate::DropboxError::downcast_id(inner, id)
+                }
+            }
             _ => None,
         }
     }
@@ -14148,6 +14606,15 @@ impl ::serde::ser::Serialize for RevokeSharedLinkError {
 impl ::std::error::Error for RevokeSharedLinkError {
 }
 
+impl crate::DropboxError for RevokeSharedLinkError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        None
+    }
+}
+
 impl ::std::fmt::Display for RevokeSharedLinkError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -14357,6 +14824,25 @@ impl ::std::error::Error for SetAccessInheritanceError {
     fn source(&self) -> Option<&(dyn ::std::error::Error + 'static)> {
         match self {
             SetAccessInheritanceError::AccessError(inner) => Some(inner),
+            _ => None,
+        }
+    }
+}
+
+impl crate::DropboxError for SetAccessInheritanceError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        match self {
+            SetAccessInheritanceError::AccessError(inner) => {
+                if <dyn std::any::Any>::type_id(inner) == id {
+                    Some(inner)
+                }
+                else {
+                    crate::DropboxError::downcast_id(inner, id)
+                }
+            }
             _ => None,
         }
     }
@@ -14970,6 +15456,25 @@ impl ::std::error::Error for ShareFolderError {
     }
 }
 
+impl crate::DropboxError for ShareFolderError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        match self {
+            ShareFolderError::BadPath(inner) => {
+                if <dyn std::any::Any>::type_id(inner) == id {
+                    Some(inner)
+                }
+                else {
+                    crate::DropboxError::downcast_id(inner, id)
+                }
+            }
+            _ => None,
+        }
+    }
+}
+
 impl ::std::fmt::Display for ShareFolderError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -15453,6 +15958,15 @@ impl ::serde::ser::Serialize for SharePathError {
 }
 
 impl ::std::error::Error for SharePathError {
+}
+
+impl crate::DropboxError for SharePathError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        None
+    }
 }
 
 impl ::std::fmt::Display for SharePathError {
@@ -16530,6 +17044,15 @@ impl ::serde::ser::Serialize for SharedFolderAccessError {
 impl ::std::error::Error for SharedFolderAccessError {
 }
 
+impl crate::DropboxError for SharedFolderAccessError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        None
+    }
+}
+
 impl ::std::fmt::Display for SharedFolderAccessError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -16620,6 +17143,15 @@ impl ::serde::ser::Serialize for SharedFolderMemberError {
 }
 
 impl ::std::error::Error for SharedFolderMemberError {
+}
+
+impl crate::DropboxError for SharedFolderMemberError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        None
+    }
 }
 
 impl ::std::fmt::Display for SharedFolderMemberError {
@@ -17654,6 +18186,15 @@ impl ::serde::ser::Serialize for SharedLinkError {
 impl ::std::error::Error for SharedLinkError {
 }
 
+impl crate::DropboxError for SharedLinkError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        None
+    }
+}
+
 impl ::std::fmt::Display for SharedLinkError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -18072,6 +18613,15 @@ impl ::serde::ser::Serialize for SharedLinkSettingsError {
 impl ::std::error::Error for SharedLinkSettingsError {
 }
 
+impl crate::DropboxError for SharedLinkSettingsError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        None
+    }
+}
+
 impl ::std::fmt::Display for SharedLinkSettingsError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         write!(f, "{:?}", *self)
@@ -18177,6 +18727,15 @@ impl ::serde::ser::Serialize for SharingFileAccessError {
 impl ::std::error::Error for SharingFileAccessError {
 }
 
+impl crate::DropboxError for SharingFileAccessError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        None
+    }
+}
+
 impl ::std::fmt::Display for SharingFileAccessError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -18249,6 +18808,15 @@ impl ::serde::ser::Serialize for SharingUserError {
 }
 
 impl ::std::error::Error for SharingUserError {
+}
+
+impl crate::DropboxError for SharingUserError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        None
+    }
 }
 
 impl ::std::fmt::Display for SharingUserError {
@@ -18619,6 +19187,25 @@ impl ::std::error::Error for TransferFolderError {
     }
 }
 
+impl crate::DropboxError for TransferFolderError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        match self {
+            TransferFolderError::AccessError(inner) => {
+                if <dyn std::any::Any>::type_id(inner) == id {
+                    Some(inner)
+                }
+                else {
+                    crate::DropboxError::downcast_id(inner, id)
+                }
+            }
+            _ => None,
+        }
+    }
+}
+
 impl ::std::fmt::Display for TransferFolderError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -18814,6 +19401,25 @@ impl ::std::error::Error for UnmountFolderError {
     }
 }
 
+impl crate::DropboxError for UnmountFolderError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        match self {
+            UnmountFolderError::AccessError(inner) => {
+                if <dyn std::any::Any>::type_id(inner) == id {
+                    Some(inner)
+                }
+                else {
+                    crate::DropboxError::downcast_id(inner, id)
+                }
+            }
+            _ => None,
+        }
+    }
+}
+
 impl ::std::fmt::Display for UnmountFolderError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -19000,6 +19606,33 @@ impl ::std::error::Error for UnshareFileError {
         match self {
             UnshareFileError::UserError(inner) => Some(inner),
             UnshareFileError::AccessError(inner) => Some(inner),
+            _ => None,
+        }
+    }
+}
+
+impl crate::DropboxError for UnshareFileError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        match self {
+            UnshareFileError::UserError(inner) => {
+                if <dyn std::any::Any>::type_id(inner) == id {
+                    Some(inner)
+                }
+                else {
+                    crate::DropboxError::downcast_id(inner, id)
+                }
+            }
+            UnshareFileError::AccessError(inner) => {
+                if <dyn std::any::Any>::type_id(inner) == id {
+                    Some(inner)
+                }
+                else {
+                    crate::DropboxError::downcast_id(inner, id)
+                }
+            }
             _ => None,
         }
     }
@@ -19223,6 +19856,25 @@ impl ::std::error::Error for UnshareFolderError {
     fn source(&self) -> Option<&(dyn ::std::error::Error + 'static)> {
         match self {
             UnshareFolderError::AccessError(inner) => Some(inner),
+            _ => None,
+        }
+    }
+}
+
+impl crate::DropboxError for UnshareFolderError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        match self {
+            UnshareFolderError::AccessError(inner) => {
+                if <dyn std::any::Any>::type_id(inner) == id {
+                    Some(inner)
+                }
+                else {
+                    crate::DropboxError::downcast_id(inner, id)
+                }
+            }
             _ => None,
         }
     }
@@ -19608,6 +20260,41 @@ impl ::std::error::Error for UpdateFolderMemberError {
     }
 }
 
+impl crate::DropboxError for UpdateFolderMemberError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        match self {
+            UpdateFolderMemberError::AccessError(inner) => {
+                if <dyn std::any::Any>::type_id(inner) == id {
+                    Some(inner)
+                }
+                else {
+                    crate::DropboxError::downcast_id(inner, id)
+                }
+            }
+            UpdateFolderMemberError::MemberError(inner) => {
+                if <dyn std::any::Any>::type_id(inner) == id {
+                    Some(inner)
+                }
+                else {
+                    crate::DropboxError::downcast_id(inner, id)
+                }
+            }
+            UpdateFolderMemberError::NoExplicitAccess(inner) => {
+                if <dyn std::any::Any>::type_id(inner) == id {
+                    Some(inner)
+                }
+                else {
+                    crate::DropboxError::downcast_id(inner, id)
+                }
+            }
+            _ => None,
+        }
+    }
+}
+
 impl ::std::fmt::Display for UpdateFolderMemberError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -19954,6 +20641,25 @@ impl ::std::error::Error for UpdateFolderPolicyError {
     fn source(&self) -> Option<&(dyn ::std::error::Error + 'static)> {
         match self {
             UpdateFolderPolicyError::AccessError(inner) => Some(inner),
+            _ => None,
+        }
+    }
+}
+
+impl crate::DropboxError for UpdateFolderPolicyError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        match self {
+            UpdateFolderPolicyError::AccessError(inner) => {
+                if <dyn std::any::Any>::type_id(inner) == id {
+                    Some(inner)
+                }
+                else {
+                    crate::DropboxError::downcast_id(inner, id)
+                }
+            }
             _ => None,
         }
     }

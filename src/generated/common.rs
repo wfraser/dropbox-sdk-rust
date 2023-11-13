@@ -189,6 +189,15 @@ impl ::serde::ser::Serialize for PathRootError {
 impl ::std::error::Error for PathRootError {
 }
 
+impl crate::DropboxError for PathRootError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        None
+    }
+}
+
 impl ::std::fmt::Display for PathRootError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {

@@ -199,6 +199,15 @@ impl ::serde::ser::Serialize for CountFileRequestsError {
 impl ::std::error::Error for CountFileRequestsError {
 }
 
+impl crate::DropboxError for CountFileRequestsError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        None
+    }
+}
+
 impl ::std::fmt::Display for CountFileRequestsError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -621,6 +630,15 @@ impl ::serde::ser::Serialize for CreateFileRequestError {
 impl ::std::error::Error for CreateFileRequestError {
 }
 
+impl crate::DropboxError for CreateFileRequestError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        None
+    }
+}
+
 impl ::std::fmt::Display for CreateFileRequestError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -773,6 +791,15 @@ impl ::serde::ser::Serialize for DeleteAllClosedFileRequestsError {
 }
 
 impl ::std::error::Error for DeleteAllClosedFileRequestsError {
+}
+
+impl crate::DropboxError for DeleteAllClosedFileRequestsError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        None
+    }
 }
 
 impl ::std::fmt::Display for DeleteAllClosedFileRequestsError {
@@ -1119,6 +1146,15 @@ impl ::serde::ser::Serialize for DeleteFileRequestError {
 }
 
 impl ::std::error::Error for DeleteFileRequestError {
+}
+
+impl crate::DropboxError for DeleteFileRequestError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        None
+    }
 }
 
 impl ::std::fmt::Display for DeleteFileRequestError {
@@ -1706,6 +1742,15 @@ impl ::serde::ser::Serialize for FileRequestError {
 impl ::std::error::Error for FileRequestError {
 }
 
+impl crate::DropboxError for FileRequestError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        None
+    }
+}
+
 impl ::std::fmt::Display for FileRequestError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -1786,6 +1831,15 @@ impl ::serde::ser::Serialize for GeneralFileRequestsError {
 }
 
 impl ::std::error::Error for GeneralFileRequestsError {
+}
+
+impl crate::DropboxError for GeneralFileRequestsError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        None
+    }
 }
 
 impl ::std::fmt::Display for GeneralFileRequestsError {
@@ -2010,6 +2064,15 @@ impl ::serde::ser::Serialize for GetFileRequestError {
 }
 
 impl ::std::error::Error for GetFileRequestError {
+}
+
+impl crate::DropboxError for GetFileRequestError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        None
+    }
 }
 
 impl ::std::fmt::Display for GetFileRequestError {
@@ -2381,6 +2444,15 @@ impl ::serde::ser::Serialize for ListFileRequestsContinueError {
 impl ::std::error::Error for ListFileRequestsContinueError {
 }
 
+impl crate::DropboxError for ListFileRequestsContinueError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        None
+    }
+}
+
 impl ::std::fmt::Display for ListFileRequestsContinueError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -2457,6 +2529,15 @@ impl ::serde::ser::Serialize for ListFileRequestsError {
 }
 
 impl ::std::error::Error for ListFileRequestsError {
+}
+
+impl crate::DropboxError for ListFileRequestsError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        None
+    }
 }
 
 impl ::std::fmt::Display for ListFileRequestsError {
@@ -3074,6 +3155,15 @@ impl ::serde::ser::Serialize for UpdateFileRequestError {
 }
 
 impl ::std::error::Error for UpdateFileRequestError {
+}
+
+impl crate::DropboxError for UpdateFileRequestError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        None
+    }
 }
 
 impl ::std::fmt::Display for UpdateFileRequestError {

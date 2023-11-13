@@ -1246,6 +1246,15 @@ impl ::serde::ser::Serialize for GetAccountBatchError {
 impl ::std::error::Error for GetAccountBatchError {
 }
 
+impl crate::DropboxError for GetAccountBatchError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        None
+    }
+}
+
 impl ::std::fmt::Display for GetAccountBatchError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -1311,6 +1320,15 @@ impl ::serde::ser::Serialize for GetAccountError {
 }
 
 impl ::std::error::Error for GetAccountError {
+}
+
+impl crate::DropboxError for GetAccountError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        None
+    }
 }
 
 impl ::std::fmt::Display for GetAccountError {
@@ -2348,6 +2366,15 @@ impl ::serde::ser::Serialize for UserFeaturesGetValuesBatchError {
 }
 
 impl ::std::error::Error for UserFeaturesGetValuesBatchError {
+}
+
+impl crate::DropboxError for UserFeaturesGetValuesBatchError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        None
+    }
 }
 
 impl ::std::fmt::Display for UserFeaturesGetValuesBatchError {

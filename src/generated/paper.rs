@@ -1062,6 +1062,15 @@ impl ::serde::ser::Serialize for DocLookupError {
 impl ::std::error::Error for DocLookupError {
 }
 
+impl crate::DropboxError for DocLookupError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        None
+    }
+}
+
 impl ::std::fmt::Display for DocLookupError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -1828,6 +1837,25 @@ impl ::std::error::Error for ListDocsCursorError {
     }
 }
 
+impl crate::DropboxError for ListDocsCursorError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        match self {
+            ListDocsCursorError::CursorError(inner) => {
+                if <dyn std::any::Any>::type_id(inner) == id {
+                    Some(inner)
+                }
+                else {
+                    crate::DropboxError::downcast_id(inner, id)
+                }
+            }
+            _ => None,
+        }
+    }
+}
+
 impl ::std::fmt::Display for ListDocsCursorError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -2496,6 +2524,25 @@ impl ::std::error::Error for ListUsersCursorError {
     fn source(&self) -> Option<&(dyn ::std::error::Error + 'static)> {
         match self {
             ListUsersCursorError::CursorError(inner) => Some(inner),
+            _ => None,
+        }
+    }
+}
+
+impl crate::DropboxError for ListUsersCursorError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        match self {
+            ListUsersCursorError::CursorError(inner) => {
+                if <dyn std::any::Any>::type_id(inner) == id {
+                    Some(inner)
+                }
+                else {
+                    crate::DropboxError::downcast_id(inner, id)
+                }
+            }
             _ => None,
         }
     }
@@ -3363,6 +3410,15 @@ impl ::serde::ser::Serialize for PaperApiBaseError {
 impl ::std::error::Error for PaperApiBaseError {
 }
 
+impl crate::DropboxError for PaperApiBaseError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        None
+    }
+}
+
 impl ::std::fmt::Display for PaperApiBaseError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         write!(f, "{:?}", *self)
@@ -3456,6 +3512,15 @@ impl ::serde::ser::Serialize for PaperApiCursorError {
 }
 
 impl ::std::error::Error for PaperApiCursorError {
+}
+
+impl crate::DropboxError for PaperApiCursorError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        None
+    }
 }
 
 impl ::std::fmt::Display for PaperApiCursorError {
@@ -3682,6 +3747,15 @@ impl ::serde::ser::Serialize for PaperDocCreateError {
 }
 
 impl ::std::error::Error for PaperDocCreateError {
+}
+
+impl crate::DropboxError for PaperDocCreateError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        None
+    }
 }
 
 impl ::std::fmt::Display for PaperDocCreateError {
@@ -4517,6 +4591,15 @@ impl ::serde::ser::Serialize for PaperDocUpdateError {
 impl ::std::error::Error for PaperDocUpdateError {
 }
 
+impl crate::DropboxError for PaperDocUpdateError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        None
+    }
+}
+
 impl ::std::fmt::Display for PaperDocUpdateError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -4832,6 +4915,15 @@ impl ::serde::ser::Serialize for PaperFolderCreateError {
 }
 
 impl ::std::error::Error for PaperFolderCreateError {
+}
+
+impl crate::DropboxError for PaperFolderCreateError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        None
+    }
 }
 
 impl ::std::fmt::Display for PaperFolderCreateError {

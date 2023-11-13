@@ -272,6 +272,15 @@ impl ::serde::ser::Serialize for SetProfilePhotoError {
 impl ::std::error::Error for SetProfilePhotoError {
 }
 
+impl crate::DropboxError for SetProfilePhotoError {
+    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
+        if <dyn std::any::Any>::type_id(self) == id {
+            return Some(self);
+        }
+        None
+    }
+}
+
 impl ::std::fmt::Display for SetProfilePhotoError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {

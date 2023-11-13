@@ -30,6 +30,8 @@ macro_rules! if_feature {
 
 #[macro_use] extern crate log;
 
+use std::any::{Any, TypeId};
+
 /// An error occurred in the process of making an API call.
 /// This is different from the case where your call succeeded, but the operation returned an error.
 #[derive(thiserror::Error, Debug)]
@@ -100,6 +102,22 @@ pub mod oauth2;
 
 mod generated; // You need to run the Stone generator to create this module.
 pub use generated::*;
+
+/// Extension methods for errors returned by the API.
+pub trait DropboxError: std::error::Error {
+    /// Look for an inner field with the given [`TypeId`] within this error.
+    /// This is mostly intended as an implementation detail used by [`DropboxError::downcast`],
+    /// which also casts to the relevant type.
+    fn downcast_id(&self, id: TypeId) -> Option<&dyn Any>;
+}
+
+impl dyn DropboxError {
+    /// Look for an inner field of the given error type within this error.
+    pub fn downcast<E: DropboxError + 'static>(&self) -> Option<&E> {
+        self.downcast_id(TypeId::of::<E>())
+            .and_then(|e| e.downcast_ref())
+    }
+}
 
 /// A special error type for a method that doesn't have any defined error return. You can't
 /// actually encounter a value of this type in real life; it's here to satisfy type requirements.
