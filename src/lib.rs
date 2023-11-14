@@ -113,7 +113,7 @@ pub trait DropboxError: std::error::Error {
 
 impl dyn DropboxError {
     /// Look for an inner field of the given error type within this error.
-    pub fn downcast<E: DropboxError + 'static>(&self) -> Option<&E> {
+    pub fn downcast<E: 'static>(&self) -> Option<&E> {
         // Implementation note: this is in an `impl dyn DropboxError` block and the trait's method
         // does checking by TypeId instead, because traits with generic methods aren't object-safe,
         // and that would defeat the whole point of this trait: the ability to box up and return
@@ -127,6 +127,18 @@ impl dyn DropboxError {
                 // for now, just use how that is implemented directly:
                 unsafe { &*(e as *const dyn Any as *const E) }
             })
+    }
+}
+
+impl DropboxError for Error {
+    fn downcast_id(&self, id: TypeId) -> Option<&dyn Any> {
+        match self {
+            Error::HttpClient(e) if Any::type_id(e) == id => Some(e),
+            Error::Json(e) if Any::type_id(e) == id => Some(e),
+            Error::Authentication(e) if Any::type_id(e) == id => Some(e),
+            Error::AccessDenied(e) if Any::type_id(e) == id => Some(e),
+            _ => None,
+        }
     }
 }
 
