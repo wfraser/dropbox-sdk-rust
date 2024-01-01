@@ -1,3 +1,4 @@
+use std::error::Error;
 use dropbox_sdk::DropboxError;
 use dropbox_sdk::files;
 
@@ -49,13 +50,35 @@ fn stuff(i: i32) -> Result<(), Box<dyn DropboxError>> {
     }
 }
 
+fn err_inner<'a, T: Error + 'static>(mut e: &'a (dyn Error + 'static)) -> Option<&'a T> {
+    loop {
+        if let Some(t) = e.downcast_ref() {
+            return Some(t);
+        }
+        if let Some(next) = e.source() {
+            if std::ptr::eq(e, next) {
+                // Cycle detected.
+                return None;
+            }
+            e = next;
+        } else {
+            return None;
+        }
+    }
+}
+
 #[test]
 fn test_err() {
-    let e = stuff(0).unwrap_err();
+    let mut e = stuff(0).unwrap_err();
     if let Some(e) = e.downcast::<files::LookupError>() {
         println!("{e}");
     } else {
         panic!("ope");
     }
 
+    if let Some(e) = err_inner::<files::LookupError>(e.as_ref()) {
+        println!("{e}");
+    } else {
+        panic!("ope");
+    }
 }

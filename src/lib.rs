@@ -109,6 +109,26 @@ pub trait DropboxError: std::error::Error {
     /// This is mostly intended as an implementation detail used by [`DropboxError::downcast`],
     /// which also casts to the relevant type.
     fn downcast_id(&self, id: TypeId) -> Option<&dyn Any>;
+
+    /*
+    /// Upcast this trait object to a [`std::error::Error`].
+    fn as_std(&self) -> &dyn std::error::Error
+        //where Self: Sized
+    {
+        &self
+    }*/
+}
+
+/// ...
+pub trait Upcast<T: ?Sized> {
+    /// ...
+    fn upcast(&self) -> &T;
+}
+
+impl<T: DropboxError + 'static> Upcast<dyn std::error::Error> for T {
+    fn upcast(&self) -> &(dyn std::error::Error + 'static) {
+        self
+    }
 }
 
 impl dyn DropboxError {
