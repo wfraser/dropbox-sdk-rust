@@ -547,25 +547,6 @@ impl ::std::error::Error for AddPropertiesError {
     }
 }
 
-impl crate::DropboxError for AddPropertiesError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            AddPropertiesError::Path(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            _ => None,
-        }
-    }
-}
-
 impl ::std::fmt::Display for AddPropertiesError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -1176,25 +1157,6 @@ impl ::std::error::Error for InvalidPropertyGroupError {
     }
 }
 
-impl crate::DropboxError for InvalidPropertyGroupError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            InvalidPropertyGroupError::Path(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            _ => None,
-        }
-    }
-}
-
 impl ::std::fmt::Display for InvalidPropertyGroupError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -1429,15 +1391,6 @@ impl ::serde::ser::Serialize for LookUpPropertiesError {
 impl ::std::error::Error for LookUpPropertiesError {
 }
 
-impl crate::DropboxError for LookUpPropertiesError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
-}
-
 impl ::std::fmt::Display for LookUpPropertiesError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -1550,15 +1503,6 @@ impl ::serde::ser::Serialize for LookupError {
 }
 
 impl ::std::error::Error for LookupError {
-}
-
-impl crate::DropboxError for LookupError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for LookupError {
@@ -1688,15 +1632,6 @@ impl ::serde::ser::Serialize for ModifyTemplateError {
 }
 
 impl ::std::error::Error for ModifyTemplateError {
-}
-
-impl crate::DropboxError for ModifyTemplateError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for ModifyTemplateError {
@@ -1930,25 +1865,6 @@ impl ::std::error::Error for PropertiesError {
     fn source(&self) -> Option<&(dyn ::std::error::Error + 'static)> {
         match self {
             PropertiesError::Path(inner) => Some(inner),
-            _ => None,
-        }
-    }
-}
-
-impl crate::DropboxError for PropertiesError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            PropertiesError::Path(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
             _ => None,
         }
     }
@@ -2238,15 +2154,6 @@ impl ::serde::ser::Serialize for PropertiesSearchContinueError {
 impl ::std::error::Error for PropertiesSearchContinueError {
 }
 
-impl crate::DropboxError for PropertiesSearchContinueError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
-}
-
 impl ::std::fmt::Display for PropertiesSearchContinueError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         write!(f, "{:?}", *self)
@@ -2318,25 +2225,6 @@ impl ::std::error::Error for PropertiesSearchError {
     fn source(&self) -> Option<&(dyn ::std::error::Error + 'static)> {
         match self {
             PropertiesSearchError::PropertyGroupLookup(inner) => Some(inner),
-            _ => None,
-        }
-    }
-}
-
-impl crate::DropboxError for PropertiesSearchError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            PropertiesSearchError::PropertyGroupLookup(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
             _ => None,
         }
     }
@@ -3657,33 +3545,6 @@ impl ::std::error::Error for RemovePropertiesError {
     }
 }
 
-impl crate::DropboxError for RemovePropertiesError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            RemovePropertiesError::Path(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            RemovePropertiesError::PropertyGroupLookup(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            _ => None,
-        }
-    }
-}
-
 impl ::std::fmt::Display for RemovePropertiesError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -3874,15 +3735,6 @@ impl ::serde::ser::Serialize for TemplateError {
 }
 
 impl ::std::error::Error for TemplateError {
-}
-
-impl crate::DropboxError for TemplateError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for TemplateError {
@@ -4358,33 +4210,6 @@ impl ::std::error::Error for UpdatePropertiesError {
         match self {
             UpdatePropertiesError::Path(inner) => Some(inner),
             UpdatePropertiesError::PropertyGroupLookup(inner) => Some(inner),
-            _ => None,
-        }
-    }
-}
-
-impl crate::DropboxError for UpdatePropertiesError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            UpdatePropertiesError::Path(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            UpdatePropertiesError::PropertyGroupLookup(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
             _ => None,
         }
     }

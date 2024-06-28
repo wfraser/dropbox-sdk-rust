@@ -1027,28 +1027,6 @@ class RustBackend(RustHelperBackend):
                             self.emit('_ => None,')
 
         self.emit()
-        with self.block(f'impl crate::DropboxError for {type_name}'):
-            with self.emit_rust_function_def(
-                    'downcast_id',
-                    ['&self', 'id: std::any::TypeId'],
-                    'Option<&dyn std::any::Any>'):
-                with self.block('if <dyn std::any::Any>::type_id(self) == id'):
-                    self.emit('return Some(self);')
-                if inners:
-                    with self.block('match self'):
-                        for variant in inners:
-                            variant_name = self.enum_variant_name(variant)
-                            with self.block(f'{type_name}::{variant_name}(inner) =>'):
-                                with self.block('if <dyn std::any::Any>::type_id(inner) == id'):
-                                    self.emit('Some(inner)')
-                                with self.block('else'):
-                                    self.emit('crate::DropboxError::downcast_id(inner, id)')
-                        if not self.is_closed_union(typ) or inners != variants:
-                            self.emit('_ => None,')
-                else:
-                    self.emit('None')
-
-        self.emit()
         self._impl_display(typ)
 
     def _impl_display(self, typ):

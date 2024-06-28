@@ -86,15 +86,6 @@ impl ::serde::ser::Serialize for OpenIdError {
 impl ::std::error::Error for OpenIdError {
 }
 
-impl crate::DropboxError for OpenIdError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
-}
-
 impl ::std::fmt::Display for OpenIdError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -213,25 +204,6 @@ impl ::std::error::Error for UserInfoError {
     fn source(&self) -> Option<&(dyn ::std::error::Error + 'static)> {
         match self {
             UserInfoError::OpenidError(inner) => Some(inner),
-            _ => None,
-        }
-    }
-}
-
-impl crate::DropboxError for UserInfoError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            UserInfoError::OpenidError(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
             _ => None,
         }
     }

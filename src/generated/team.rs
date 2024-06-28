@@ -2058,15 +2058,6 @@ impl ::serde::ser::Serialize for AddSecondaryEmailsError {
 impl ::std::error::Error for AddSecondaryEmailsError {
 }
 
-impl crate::DropboxError for AddSecondaryEmailsError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
-}
-
 impl ::std::fmt::Display for AddSecondaryEmailsError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -2624,41 +2615,6 @@ impl ::std::error::Error for BaseTeamFolderError {
     }
 }
 
-impl crate::DropboxError for BaseTeamFolderError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            BaseTeamFolderError::AccessError(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            BaseTeamFolderError::StatusError(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            BaseTeamFolderError::TeamSharedDropboxError(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            _ => None,
-        }
-    }
-}
-
 impl ::std::fmt::Display for BaseTeamFolderError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -2727,15 +2683,6 @@ impl ::serde::ser::Serialize for CustomQuotaError {
 }
 
 impl ::std::error::Error for CustomQuotaError {
-}
-
-impl crate::DropboxError for CustomQuotaError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for CustomQuotaError {
@@ -3058,15 +3005,6 @@ impl ::serde::ser::Serialize for DateRangeError {
 }
 
 impl ::std::error::Error for DateRangeError {
-}
-
-impl crate::DropboxError for DateRangeError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for DateRangeError {
@@ -4382,15 +4320,6 @@ impl ::serde::ser::Serialize for ExcludedUsersListContinueError {
 impl ::std::error::Error for ExcludedUsersListContinueError {
 }
 
-impl crate::DropboxError for ExcludedUsersListContinueError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
-}
-
 impl ::std::fmt::Display for ExcludedUsersListContinueError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -4457,15 +4386,6 @@ impl ::serde::ser::Serialize for ExcludedUsersListError {
 }
 
 impl ::std::error::Error for ExcludedUsersListError {
-}
-
-impl crate::DropboxError for ExcludedUsersListError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for ExcludedUsersListError {
@@ -4756,15 +4676,6 @@ impl ::serde::ser::Serialize for ExcludedUsersUpdateError {
 }
 
 impl ::std::error::Error for ExcludedUsersUpdateError {
-}
-
-impl crate::DropboxError for ExcludedUsersUpdateError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for ExcludedUsersUpdateError {
@@ -5271,15 +5182,6 @@ impl ::serde::ser::Serialize for FeaturesGetValuesBatchError {
 }
 
 impl ::std::error::Error for FeaturesGetValuesBatchError {
-}
-
-impl crate::DropboxError for FeaturesGetValuesBatchError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for FeaturesGetValuesBatchError {
@@ -6476,15 +6378,6 @@ impl ::serde::ser::Serialize for GroupCreateError {
 impl ::std::error::Error for GroupCreateError {
 }
 
-impl crate::DropboxError for GroupCreateError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
-}
-
 impl ::std::fmt::Display for GroupCreateError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -6573,15 +6466,6 @@ impl ::serde::ser::Serialize for GroupDeleteError {
 }
 
 impl ::std::error::Error for GroupDeleteError {
-}
-
-impl crate::DropboxError for GroupDeleteError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for GroupDeleteError {
@@ -7101,15 +6985,6 @@ impl ::serde::ser::Serialize for GroupMemberSelectorError {
 impl ::std::error::Error for GroupMemberSelectorError {
 }
 
-impl crate::DropboxError for GroupMemberSelectorError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
-}
-
 impl ::std::fmt::Display for GroupMemberSelectorError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -7217,15 +7092,6 @@ impl ::serde::ser::Serialize for GroupMemberSetAccessTypeError {
 }
 
 impl ::std::error::Error for GroupMemberSetAccessTypeError {
-}
-
-impl crate::DropboxError for GroupMemberSetAccessTypeError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for GroupMemberSetAccessTypeError {
@@ -7536,15 +7402,6 @@ impl ::serde::ser::Serialize for GroupMembersAddError {
 }
 
 impl ::std::error::Error for GroupMembersAddError {
-}
-
-impl crate::DropboxError for GroupMembersAddError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for GroupMembersAddError {
@@ -7937,15 +7794,6 @@ impl ::serde::ser::Serialize for GroupMembersRemoveError {
 impl ::std::error::Error for GroupMembersRemoveError {
 }
 
-impl crate::DropboxError for GroupMembersRemoveError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
-}
-
 impl ::std::fmt::Display for GroupMembersRemoveError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -8154,15 +8002,6 @@ impl ::serde::ser::Serialize for GroupMembersSelectorError {
 }
 
 impl ::std::error::Error for GroupMembersSelectorError {
-}
-
-impl crate::DropboxError for GroupMembersSelectorError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for GroupMembersSelectorError {
@@ -8467,15 +8306,6 @@ impl ::serde::ser::Serialize for GroupSelectorError {
 impl ::std::error::Error for GroupSelectorError {
 }
 
-impl crate::DropboxError for GroupSelectorError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
-}
-
 impl ::std::fmt::Display for GroupSelectorError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -8553,15 +8383,6 @@ impl ::serde::ser::Serialize for GroupSelectorWithTeamGroupError {
 }
 
 impl ::std::error::Error for GroupSelectorWithTeamGroupError {
-}
-
-impl crate::DropboxError for GroupSelectorWithTeamGroupError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for GroupSelectorWithTeamGroupError {
@@ -8869,15 +8690,6 @@ impl ::serde::ser::Serialize for GroupUpdateError {
 impl ::std::error::Error for GroupUpdateError {
 }
 
-impl crate::DropboxError for GroupUpdateError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
-}
-
 impl ::std::fmt::Display for GroupUpdateError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -8957,15 +8769,6 @@ impl ::serde::ser::Serialize for GroupsGetInfoError {
 }
 
 impl ::std::error::Error for GroupsGetInfoError {
-}
-
-impl crate::DropboxError for GroupsGetInfoError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for GroupsGetInfoError {
@@ -9282,15 +9085,6 @@ impl ::serde::ser::Serialize for GroupsListContinueError {
 }
 
 impl ::std::error::Error for GroupsListContinueError {
-}
-
-impl crate::DropboxError for GroupsListContinueError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for GroupsListContinueError {
@@ -9684,15 +9478,6 @@ impl ::serde::ser::Serialize for GroupsMembersListContinueError {
 impl ::std::error::Error for GroupsMembersListContinueError {
 }
 
-impl crate::DropboxError for GroupsMembersListContinueError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
-}
-
 impl ::std::fmt::Display for GroupsMembersListContinueError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -9897,15 +9682,6 @@ impl ::serde::ser::Serialize for GroupsPollError {
 }
 
 impl ::std::error::Error for GroupsPollError {
-}
-
-impl crate::DropboxError for GroupsPollError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for GroupsPollError {
@@ -10886,15 +10662,6 @@ impl ::serde::ser::Serialize for LegalHoldsError {
 impl ::std::error::Error for LegalHoldsError {
 }
 
-impl crate::DropboxError for LegalHoldsError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
-}
-
 impl ::std::fmt::Display for LegalHoldsError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -11072,15 +10839,6 @@ impl ::serde::ser::Serialize for LegalHoldsGetPolicyError {
 }
 
 impl ::std::error::Error for LegalHoldsGetPolicyError {
-}
-
-impl crate::DropboxError for LegalHoldsGetPolicyError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for LegalHoldsGetPolicyError {
@@ -11513,15 +11271,6 @@ impl ::serde::ser::Serialize for LegalHoldsListHeldRevisionsContinueError {
 impl ::std::error::Error for LegalHoldsListHeldRevisionsContinueError {
 }
 
-impl crate::DropboxError for LegalHoldsListHeldRevisionsContinueError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
-}
-
 impl ::std::fmt::Display for LegalHoldsListHeldRevisionsContinueError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -11628,15 +11377,6 @@ impl ::serde::ser::Serialize for LegalHoldsListHeldRevisionsError {
 }
 
 impl ::std::error::Error for LegalHoldsListHeldRevisionsError {
-}
-
-impl crate::DropboxError for LegalHoldsListHeldRevisionsError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for LegalHoldsListHeldRevisionsError {
@@ -11819,15 +11559,6 @@ impl ::serde::ser::Serialize for LegalHoldsListPoliciesError {
 }
 
 impl ::std::error::Error for LegalHoldsListPoliciesError {
-}
-
-impl crate::DropboxError for LegalHoldsListPoliciesError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for LegalHoldsListPoliciesError {
@@ -12253,15 +11984,6 @@ impl ::serde::ser::Serialize for LegalHoldsPolicyCreateError {
 impl ::std::error::Error for LegalHoldsPolicyCreateError {
 }
 
-impl crate::DropboxError for LegalHoldsPolicyCreateError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
-}
-
 impl ::std::fmt::Display for LegalHoldsPolicyCreateError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -12478,15 +12200,6 @@ impl ::serde::ser::Serialize for LegalHoldsPolicyReleaseError {
 }
 
 impl ::std::error::Error for LegalHoldsPolicyReleaseError {
-}
-
-impl crate::DropboxError for LegalHoldsPolicyReleaseError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for LegalHoldsPolicyReleaseError {
@@ -12811,15 +12524,6 @@ impl ::serde::ser::Serialize for LegalHoldsPolicyUpdateError {
 impl ::std::error::Error for LegalHoldsPolicyUpdateError {
 }
 
-impl crate::DropboxError for LegalHoldsPolicyUpdateError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
-}
-
 impl ::std::fmt::Display for LegalHoldsPolicyUpdateError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -12996,15 +12700,6 @@ impl ::serde::ser::Serialize for ListMemberAppsError {
 }
 
 impl ::std::error::Error for ListMemberAppsError {
-}
-
-impl crate::DropboxError for ListMemberAppsError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for ListMemberAppsError {
@@ -13316,15 +13011,6 @@ impl ::serde::ser::Serialize for ListMemberDevicesError {
 impl ::std::error::Error for ListMemberDevicesError {
 }
 
-impl crate::DropboxError for ListMemberDevicesError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
-}
-
 impl ::std::fmt::Display for ListMemberDevicesError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -13599,15 +13285,6 @@ impl ::serde::ser::Serialize for ListMembersAppsError {
 }
 
 impl ::std::error::Error for ListMembersAppsError {
-}
-
-impl crate::DropboxError for ListMembersAppsError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for ListMembersAppsError {
@@ -13958,15 +13635,6 @@ impl ::serde::ser::Serialize for ListMembersDevicesError {
 impl ::std::error::Error for ListMembersDevicesError {
 }
 
-impl crate::DropboxError for ListMembersDevicesError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
-}
-
 impl ::std::fmt::Display for ListMembersDevicesError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         write!(f, "{:?}", *self)
@@ -14244,15 +13912,6 @@ impl ::serde::ser::Serialize for ListTeamAppsError {
 }
 
 impl ::std::error::Error for ListTeamAppsError {
-}
-
-impl crate::DropboxError for ListTeamAppsError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for ListTeamAppsError {
@@ -14601,15 +14260,6 @@ impl ::serde::ser::Serialize for ListTeamDevicesError {
 }
 
 impl ::std::error::Error for ListTeamDevicesError {
-}
-
-impl crate::DropboxError for ListTeamDevicesError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for ListTeamDevicesError {
@@ -16936,15 +16586,6 @@ impl ::serde::ser::Serialize for MemberSelectorError {
 impl ::std::error::Error for MemberSelectorError {
 }
 
-impl crate::DropboxError for MemberSelectorError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
-}
-
 impl ::std::fmt::Display for MemberSelectorError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -18051,15 +17692,6 @@ impl ::serde::ser::Serialize for MembersDeactivateError {
 impl ::std::error::Error for MembersDeactivateError {
 }
 
-impl crate::DropboxError for MembersDeactivateError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
-}
-
 impl ::std::fmt::Display for MembersDeactivateError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -18246,15 +17878,6 @@ impl ::serde::ser::Serialize for MembersDeleteProfilePhotoError {
 }
 
 impl ::std::error::Error for MembersDeleteProfilePhotoError {
-}
-
-impl crate::DropboxError for MembersDeleteProfilePhotoError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for MembersDeleteProfilePhotoError {
@@ -18505,15 +18128,6 @@ impl ::serde::ser::Serialize for MembersGetInfoError {
 }
 
 impl ::std::error::Error for MembersGetInfoError {
-}
-
-impl crate::DropboxError for MembersGetInfoError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for MembersGetInfoError {
@@ -19294,15 +18908,6 @@ impl ::serde::ser::Serialize for MembersListContinueError {
 impl ::std::error::Error for MembersListContinueError {
 }
 
-impl crate::DropboxError for MembersListContinueError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
-}
-
 impl ::std::fmt::Display for MembersListContinueError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -19356,15 +18961,6 @@ impl ::serde::ser::Serialize for MembersListError {
 }
 
 impl ::std::error::Error for MembersListError {
-}
-
-impl crate::DropboxError for MembersListError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for MembersListError {
@@ -19791,15 +19387,6 @@ impl ::serde::ser::Serialize for MembersRecoverError {
 }
 
 impl ::std::error::Error for MembersRecoverError {
-}
-
-impl crate::DropboxError for MembersRecoverError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for MembersRecoverError {
@@ -20304,15 +19891,6 @@ impl ::serde::ser::Serialize for MembersRemoveError {
 impl ::std::error::Error for MembersRemoveError {
 }
 
-impl crate::DropboxError for MembersRemoveError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
-}
-
 impl ::std::fmt::Display for MembersRemoveError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -20427,15 +20005,6 @@ impl ::serde::ser::Serialize for MembersSendWelcomeError {
 }
 
 impl ::std::error::Error for MembersSendWelcomeError {
-}
-
-impl crate::DropboxError for MembersSendWelcomeError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for MembersSendWelcomeError {
@@ -20668,15 +20237,6 @@ impl ::serde::ser::Serialize for MembersSetPermissions2Error {
 }
 
 impl ::std::error::Error for MembersSetPermissions2Error {
-}
-
-impl crate::DropboxError for MembersSetPermissions2Error {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for MembersSetPermissions2Error {
@@ -21014,15 +20574,6 @@ impl ::serde::ser::Serialize for MembersSetPermissionsError {
 }
 
 impl ::std::error::Error for MembersSetPermissionsError {
-}
-
-impl crate::DropboxError for MembersSetPermissionsError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for MembersSetPermissionsError {
@@ -21525,15 +21076,6 @@ impl ::serde::ser::Serialize for MembersSetProfileError {
 impl ::std::error::Error for MembersSetProfileError {
 }
 
-impl crate::DropboxError for MembersSetProfileError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
-}
-
 impl ::std::fmt::Display for MembersSetProfileError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -21767,25 +21309,6 @@ impl ::std::error::Error for MembersSetProfilePhotoError {
     }
 }
 
-impl crate::DropboxError for MembersSetProfilePhotoError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            MembersSetProfilePhotoError::PhotoError(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            _ => None,
-        }
-    }
-}
-
 impl ::std::fmt::Display for MembersSetProfilePhotoError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -21904,15 +21427,6 @@ impl ::serde::ser::Serialize for MembersSuspendError {
 }
 
 impl ::std::error::Error for MembersSuspendError {
-}
-
-impl crate::DropboxError for MembersSuspendError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for MembersSuspendError {
@@ -22095,15 +21609,6 @@ impl ::serde::ser::Serialize for MembersTransferFilesError {
 }
 
 impl ::std::error::Error for MembersTransferFilesError {
-}
-
-impl crate::DropboxError for MembersTransferFilesError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for MembersTransferFilesError {
@@ -22334,15 +21839,6 @@ impl ::serde::ser::Serialize for MembersTransferFormerMembersFilesError {
 impl ::std::error::Error for MembersTransferFormerMembersFilesError {
 }
 
-impl crate::DropboxError for MembersTransferFormerMembersFilesError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
-}
-
 impl ::std::fmt::Display for MembersTransferFormerMembersFilesError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -22565,15 +22061,6 @@ impl ::serde::ser::Serialize for MembersUnsuspendError {
 }
 
 impl ::std::error::Error for MembersUnsuspendError {
-}
-
-impl crate::DropboxError for MembersUnsuspendError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for MembersUnsuspendError {
@@ -24002,15 +23489,6 @@ impl ::serde::ser::Serialize for RevokeDeviceSessionBatchError {
 impl ::std::error::Error for RevokeDeviceSessionBatchError {
 }
 
-impl crate::DropboxError for RevokeDeviceSessionBatchError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
-}
-
 impl ::std::fmt::Display for RevokeDeviceSessionBatchError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         write!(f, "{:?}", *self)
@@ -24173,15 +23651,6 @@ impl ::serde::ser::Serialize for RevokeDeviceSessionError {
 }
 
 impl ::std::error::Error for RevokeDeviceSessionError {
-}
-
-impl crate::DropboxError for RevokeDeviceSessionError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for RevokeDeviceSessionError {
@@ -24567,15 +24036,6 @@ impl ::serde::ser::Serialize for RevokeLinkedAppBatchError {
 impl ::std::error::Error for RevokeLinkedAppBatchError {
 }
 
-impl crate::DropboxError for RevokeLinkedAppBatchError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
-}
-
 impl ::std::fmt::Display for RevokeLinkedAppBatchError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         write!(f, "{:?}", *self)
@@ -24749,15 +24209,6 @@ impl ::serde::ser::Serialize for RevokeLinkedAppError {
 }
 
 impl ::std::error::Error for RevokeLinkedAppError {
-}
-
-impl crate::DropboxError for RevokeLinkedAppError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for RevokeLinkedAppError {
@@ -25042,15 +24493,6 @@ impl ::serde::ser::Serialize for SetCustomQuotaError {
 impl ::std::error::Error for SetCustomQuotaError {
 }
 
-impl crate::DropboxError for SetCustomQuotaError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
-}
-
 impl ::std::fmt::Display for SetCustomQuotaError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -25292,15 +24734,6 @@ impl ::serde::ser::Serialize for SharingAllowlistAddError {
 }
 
 impl ::std::error::Error for SharingAllowlistAddError {
-}
-
-impl crate::DropboxError for SharingAllowlistAddError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for SharingAllowlistAddError {
@@ -25602,15 +25035,6 @@ impl ::serde::ser::Serialize for SharingAllowlistListContinueError {
 impl ::std::error::Error for SharingAllowlistListContinueError {
 }
 
-impl crate::DropboxError for SharingAllowlistListContinueError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
-}
-
 impl ::std::fmt::Display for SharingAllowlistListContinueError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -25666,15 +25090,6 @@ impl ::serde::ser::Serialize for SharingAllowlistListError {
 }
 
 impl ::std::error::Error for SharingAllowlistListError {
-}
-
-impl crate::DropboxError for SharingAllowlistListError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for SharingAllowlistListError {
@@ -26041,15 +25456,6 @@ impl ::serde::ser::Serialize for SharingAllowlistRemoveError {
 impl ::std::error::Error for SharingAllowlistRemoveError {
 }
 
-impl crate::DropboxError for SharingAllowlistRemoveError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
-}
-
 impl ::std::fmt::Display for SharingAllowlistRemoveError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -26282,15 +25688,6 @@ impl ::serde::ser::Serialize for TeamFolderAccessError {
 impl ::std::error::Error for TeamFolderAccessError {
 }
 
-impl crate::DropboxError for TeamFolderAccessError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
-}
-
 impl ::std::fmt::Display for TeamFolderAccessError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -26401,41 +25798,6 @@ impl ::std::error::Error for TeamFolderActivateError {
             TeamFolderActivateError::AccessError(inner) => Some(inner),
             TeamFolderActivateError::StatusError(inner) => Some(inner),
             TeamFolderActivateError::TeamSharedDropboxError(inner) => Some(inner),
-            _ => None,
-        }
-    }
-}
-
-impl crate::DropboxError for TeamFolderActivateError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            TeamFolderActivateError::AccessError(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            TeamFolderActivateError::StatusError(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            TeamFolderActivateError::TeamSharedDropboxError(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
             _ => None,
         }
     }
@@ -26682,41 +26044,6 @@ impl ::std::error::Error for TeamFolderArchiveError {
             TeamFolderArchiveError::AccessError(inner) => Some(inner),
             TeamFolderArchiveError::StatusError(inner) => Some(inner),
             TeamFolderArchiveError::TeamSharedDropboxError(inner) => Some(inner),
-            _ => None,
-        }
-    }
-}
-
-impl crate::DropboxError for TeamFolderArchiveError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            TeamFolderArchiveError::AccessError(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            TeamFolderArchiveError::StatusError(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            TeamFolderArchiveError::TeamSharedDropboxError(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
             _ => None,
         }
     }
@@ -27118,25 +26445,6 @@ impl ::std::error::Error for TeamFolderCreateError {
     }
 }
 
-impl crate::DropboxError for TeamFolderCreateError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            TeamFolderCreateError::SyncSettingsError(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            _ => None,
-        }
-    }
-}
-
 impl ::std::fmt::Display for TeamFolderCreateError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -27477,15 +26785,6 @@ impl ::serde::ser::Serialize for TeamFolderInvalidStatusError {
 impl ::std::error::Error for TeamFolderInvalidStatusError {
 }
 
-impl crate::DropboxError for TeamFolderInvalidStatusError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
-}
-
 impl ::std::fmt::Display for TeamFolderInvalidStatusError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -27735,15 +27034,6 @@ impl ::serde::ser::Serialize for TeamFolderListContinueError {
 impl ::std::error::Error for TeamFolderListContinueError {
 }
 
-impl crate::DropboxError for TeamFolderListContinueError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
-}
-
 impl ::std::fmt::Display for TeamFolderListContinueError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -27844,15 +27134,6 @@ impl ::serde::ser::Serialize for TeamFolderListError {
 }
 
 impl ::std::error::Error for TeamFolderListError {
-}
-
-impl crate::DropboxError for TeamFolderListError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for TeamFolderListError {
@@ -28251,41 +27532,6 @@ impl ::std::error::Error for TeamFolderPermanentlyDeleteError {
     }
 }
 
-impl crate::DropboxError for TeamFolderPermanentlyDeleteError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            TeamFolderPermanentlyDeleteError::AccessError(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            TeamFolderPermanentlyDeleteError::StatusError(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            TeamFolderPermanentlyDeleteError::TeamSharedDropboxError(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            _ => None,
-        }
-    }
-}
-
 impl ::std::fmt::Display for TeamFolderPermanentlyDeleteError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -28554,41 +27800,6 @@ impl ::std::error::Error for TeamFolderRenameError {
     }
 }
 
-impl crate::DropboxError for TeamFolderRenameError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            TeamFolderRenameError::AccessError(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            TeamFolderRenameError::StatusError(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            TeamFolderRenameError::TeamSharedDropboxError(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            _ => None,
-        }
-    }
-}
-
 impl ::std::fmt::Display for TeamFolderRenameError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -28745,15 +27956,6 @@ impl ::serde::ser::Serialize for TeamFolderTeamSharedDropboxError {
 }
 
 impl ::std::error::Error for TeamFolderTeamSharedDropboxError {
-}
-
-impl crate::DropboxError for TeamFolderTeamSharedDropboxError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for TeamFolderTeamSharedDropboxError {
@@ -29025,49 +28227,6 @@ impl ::std::error::Error for TeamFolderUpdateSyncSettingsError {
             TeamFolderUpdateSyncSettingsError::StatusError(inner) => Some(inner),
             TeamFolderUpdateSyncSettingsError::TeamSharedDropboxError(inner) => Some(inner),
             TeamFolderUpdateSyncSettingsError::SyncSettingsError(inner) => Some(inner),
-            _ => None,
-        }
-    }
-}
-
-impl crate::DropboxError for TeamFolderUpdateSyncSettingsError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            TeamFolderUpdateSyncSettingsError::AccessError(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            TeamFolderUpdateSyncSettingsError::StatusError(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            TeamFolderUpdateSyncSettingsError::TeamSharedDropboxError(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            TeamFolderUpdateSyncSettingsError::SyncSettingsError(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
             _ => None,
         }
     }
@@ -30487,15 +29646,6 @@ impl ::serde::ser::Serialize for TeamNamespacesListContinueError {
 impl ::std::error::Error for TeamNamespacesListContinueError {
 }
 
-impl crate::DropboxError for TeamNamespacesListContinueError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
-}
-
 impl ::std::fmt::Display for TeamNamespacesListContinueError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -30571,15 +29721,6 @@ impl ::serde::ser::Serialize for TeamNamespacesListError {
 }
 
 impl ::std::error::Error for TeamNamespacesListError {
-}
-
-impl crate::DropboxError for TeamNamespacesListError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for TeamNamespacesListError {
@@ -30857,15 +29998,6 @@ impl ::serde::ser::Serialize for TokenGetAuthenticatedAdminError {
 }
 
 impl ::std::error::Error for TokenGetAuthenticatedAdminError {
-}
-
-impl crate::DropboxError for TokenGetAuthenticatedAdminError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for TokenGetAuthenticatedAdminError {
@@ -32070,15 +31202,6 @@ impl ::serde::ser::Serialize for UserSelectorError {
 }
 
 impl ::std::error::Error for UserSelectorError {
-}
-
-impl crate::DropboxError for UserSelectorError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for UserSelectorError {

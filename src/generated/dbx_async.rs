@@ -379,15 +379,6 @@ impl ::serde::ser::Serialize for PollError {
 impl ::std::error::Error for PollError {
 }
 
-impl crate::DropboxError for PollError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
-}
-
 impl ::std::fmt::Display for PollError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {

@@ -127,33 +127,6 @@ impl ::std::error::Error for AccessError {
     }
 }
 
-impl crate::DropboxError for AccessError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            AccessError::InvalidAccountType(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            AccessError::PaperAccessDenied(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            _ => None,
-        }
-    }
-}
-
 impl ::std::fmt::Display for AccessError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -284,15 +257,6 @@ impl ::serde::ser::Serialize for AuthError {
 impl ::std::error::Error for AuthError {
 }
 
-impl crate::DropboxError for AuthError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
-}
-
 impl ::std::fmt::Display for AuthError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -376,15 +340,6 @@ impl ::serde::ser::Serialize for InvalidAccountTypeError {
 impl ::std::error::Error for InvalidAccountTypeError {
 }
 
-impl crate::DropboxError for InvalidAccountTypeError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
-}
-
 impl ::std::fmt::Display for InvalidAccountTypeError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -461,15 +416,6 @@ impl ::serde::ser::Serialize for PaperAccessError {
 }
 
 impl ::std::error::Error for PaperAccessError {
-}
-
-impl crate::DropboxError for PaperAccessError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for PaperAccessError {
@@ -839,15 +785,6 @@ impl ::serde::ser::Serialize for TokenFromOAuth1Error {
 }
 
 impl ::std::error::Error for TokenFromOAuth1Error {
-}
-
-impl crate::DropboxError for TokenFromOAuth1Error {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for TokenFromOAuth1Error {

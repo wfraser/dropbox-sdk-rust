@@ -1566,25 +1566,6 @@ impl ::std::error::Error for AddTagError {
     }
 }
 
-impl crate::DropboxError for AddTagError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            AddTagError::Path(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            _ => None,
-        }
-    }
-}
-
 impl ::std::fmt::Display for AddTagError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -1897,32 +1878,6 @@ impl ::std::error::Error for AlphaGetMetadataError {
     }
 }
 
-impl crate::DropboxError for AlphaGetMetadataError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            AlphaGetMetadataError::Path(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            AlphaGetMetadataError::PropertiesError(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-        }
-    }
-}
-
 impl ::std::fmt::Display for AlphaGetMetadataError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -2005,25 +1960,6 @@ impl ::std::error::Error for BaseTagError {
     fn source(&self) -> Option<&(dyn ::std::error::Error + 'static)> {
         match self {
             BaseTagError::Path(inner) => Some(inner),
-            _ => None,
-        }
-    }
-}
-
-impl crate::DropboxError for BaseTagError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            BaseTagError::Path(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
             _ => None,
         }
     }
@@ -2773,15 +2709,6 @@ impl ::serde::ser::Serialize for CreateFolderBatchError {
 impl ::std::error::Error for CreateFolderBatchError {
 }
 
-impl crate::DropboxError for CreateFolderBatchError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
-}
-
 impl ::std::fmt::Display for CreateFolderBatchError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -3198,25 +3125,6 @@ impl ::std::error::Error for CreateFolderEntryError {
     }
 }
 
-impl crate::DropboxError for CreateFolderEntryError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            CreateFolderEntryError::Path(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            _ => None,
-        }
-    }
-}
-
 impl ::std::fmt::Display for CreateFolderEntryError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -3376,24 +3284,6 @@ impl ::std::error::Error for CreateFolderError {
     fn source(&self) -> Option<&(dyn ::std::error::Error + 'static)> {
         match self {
             CreateFolderError::Path(inner) => Some(inner),
-        }
-    }
-}
-
-impl crate::DropboxError for CreateFolderError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            CreateFolderError::Path(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
         }
     }
 }
@@ -3763,15 +3653,6 @@ impl ::serde::ser::Serialize for DeleteBatchError {
 }
 
 impl ::std::error::Error for DeleteBatchError {
-}
-
-impl crate::DropboxError for DeleteBatchError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for DeleteBatchError {
@@ -4310,33 +4191,6 @@ impl ::std::error::Error for DeleteError {
         match self {
             DeleteError::PathLookup(inner) => Some(inner),
             DeleteError::PathWrite(inner) => Some(inner),
-            _ => None,
-        }
-    }
-}
-
-impl crate::DropboxError for DeleteError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            DeleteError::PathLookup(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            DeleteError::PathWrite(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
             _ => None,
         }
     }
@@ -4932,25 +4786,6 @@ impl ::std::error::Error for DownloadError {
     }
 }
 
-impl crate::DropboxError for DownloadError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            DownloadError::Path(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            _ => None,
-        }
-    }
-}
-
 impl ::std::fmt::Display for DownloadError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -5136,25 +4971,6 @@ impl ::std::error::Error for DownloadZipError {
     fn source(&self) -> Option<&(dyn ::std::error::Error + 'static)> {
         match self {
             DownloadZipError::Path(inner) => Some(inner),
-            _ => None,
-        }
-    }
-}
-
-impl crate::DropboxError for DownloadZipError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            DownloadZipError::Path(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
             _ => None,
         }
     }
@@ -5469,25 +5285,6 @@ impl ::std::error::Error for ExportError {
     fn source(&self) -> Option<&(dyn ::std::error::Error + 'static)> {
         match self {
             ExportError::Path(inner) => Some(inner),
-            _ => None,
-        }
-    }
-}
-
-impl crate::DropboxError for ExportError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            ExportError::Path(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
             _ => None,
         }
     }
@@ -7598,25 +7395,6 @@ impl ::std::error::Error for GetCopyReferenceError {
     }
 }
 
-impl crate::DropboxError for GetCopyReferenceError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            GetCopyReferenceError::Path(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            _ => None,
-        }
-    }
-}
-
 impl ::std::fmt::Display for GetCopyReferenceError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -7984,24 +7762,6 @@ impl ::std::error::Error for GetMetadataError {
     fn source(&self) -> Option<&(dyn ::std::error::Error + 'static)> {
         match self {
             GetMetadataError::Path(inner) => Some(inner),
-        }
-    }
-}
-
-impl crate::DropboxError for GetMetadataError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            GetMetadataError::Path(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
         }
     }
 }
@@ -8386,25 +8146,6 @@ impl ::std::error::Error for GetTemporaryLinkError {
     fn source(&self) -> Option<&(dyn ::std::error::Error + 'static)> {
         match self {
             GetTemporaryLinkError::Path(inner) => Some(inner),
-            _ => None,
-        }
-    }
-}
-
-impl crate::DropboxError for GetTemporaryLinkError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            GetTemporaryLinkError::Path(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
             _ => None,
         }
     }
@@ -8875,15 +8616,6 @@ impl ::serde::ser::Serialize for GetThumbnailBatchError {
 }
 
 impl ::std::error::Error for GetThumbnailBatchError {
-}
-
-impl crate::DropboxError for GetThumbnailBatchError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for GetThumbnailBatchError {
@@ -9902,25 +9634,6 @@ impl ::std::error::Error for ListFolderContinueError {
     }
 }
 
-impl crate::DropboxError for ListFolderContinueError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            ListFolderContinueError::Path(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            _ => None,
-        }
-    }
-}
-
 impl ::std::fmt::Display for ListFolderContinueError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -10012,33 +9725,6 @@ impl ::std::error::Error for ListFolderError {
         match self {
             ListFolderError::Path(inner) => Some(inner),
             ListFolderError::TemplateError(inner) => Some(inner),
-            _ => None,
-        }
-    }
-}
-
-impl crate::DropboxError for ListFolderError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            ListFolderError::Path(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            ListFolderError::TemplateError(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
             _ => None,
         }
     }
@@ -10318,15 +10004,6 @@ impl ::serde::ser::Serialize for ListFolderLongpollError {
 }
 
 impl ::std::error::Error for ListFolderLongpollError {
-}
-
-impl crate::DropboxError for ListFolderLongpollError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for ListFolderLongpollError {
@@ -10763,25 +10440,6 @@ impl ::std::error::Error for ListRevisionsError {
     fn source(&self) -> Option<&(dyn ::std::error::Error + 'static)> {
         match self {
             ListRevisionsError::Path(inner) => Some(inner),
-            _ => None,
-        }
-    }
-}
-
-impl crate::DropboxError for ListRevisionsError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            ListRevisionsError::Path(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
             _ => None,
         }
     }
@@ -11502,25 +11160,6 @@ impl ::std::error::Error for LockFileError {
     }
 }
 
-impl crate::DropboxError for LockFileError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            LockFileError::PathLookup(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            _ => None,
-        }
-    }
-}
-
 impl ::std::fmt::Display for LockFileError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -11835,15 +11474,6 @@ impl ::serde::ser::Serialize for LookupError {
 }
 
 impl ::std::error::Error for LookupError {
-}
-
-impl crate::DropboxError for LookupError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for LookupError {
@@ -12456,15 +12086,6 @@ impl ::serde::ser::Serialize for MoveIntoFamilyError {
 impl ::std::error::Error for MoveIntoFamilyError {
 }
 
-impl crate::DropboxError for MoveIntoFamilyError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
-}
-
 impl ::std::fmt::Display for MoveIntoFamilyError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -12530,15 +12151,6 @@ impl ::serde::ser::Serialize for MoveIntoVaultError {
 }
 
 impl ::std::error::Error for MoveIntoVaultError {
-}
-
-impl crate::DropboxError for MoveIntoVaultError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for MoveIntoVaultError {
@@ -12637,15 +12249,6 @@ impl ::serde::ser::Serialize for PaperContentError {
 }
 
 impl ::std::error::Error for PaperContentError {
-}
-
-impl crate::DropboxError for PaperContentError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for PaperContentError {
@@ -12892,15 +12495,6 @@ impl ::serde::ser::Serialize for PaperCreateError {
 }
 
 impl ::std::error::Error for PaperCreateError {
-}
-
-impl crate::DropboxError for PaperCreateError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for PaperCreateError {
@@ -13426,25 +13020,6 @@ impl ::std::error::Error for PaperUpdateError {
     fn source(&self) -> Option<&(dyn ::std::error::Error + 'static)> {
         match self {
             PaperUpdateError::Path(inner) => Some(inner),
-            _ => None,
-        }
-    }
-}
-
-impl crate::DropboxError for PaperUpdateError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            PaperUpdateError::Path(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
             _ => None,
         }
     }
@@ -14071,25 +13646,6 @@ impl ::std::error::Error for PreviewError {
     fn source(&self) -> Option<&(dyn ::std::error::Error + 'static)> {
         match self {
             PreviewError::Path(inner) => Some(inner),
-            _ => None,
-        }
-    }
-}
-
-impl crate::DropboxError for PreviewError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            PreviewError::Path(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
             _ => None,
         }
     }
@@ -14896,57 +14452,6 @@ impl ::std::error::Error for RelocationBatchError {
             RelocationBatchError::To(inner) => Some(inner),
             RelocationBatchError::CantMoveIntoVault(inner) => Some(inner),
             RelocationBatchError::CantMoveIntoFamily(inner) => Some(inner),
-            _ => None,
-        }
-    }
-}
-
-impl crate::DropboxError for RelocationBatchError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            RelocationBatchError::FromLookup(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            RelocationBatchError::FromWrite(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            RelocationBatchError::To(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            RelocationBatchError::CantMoveIntoVault(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            RelocationBatchError::CantMoveIntoFamily(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
             _ => None,
         }
     }
@@ -15990,57 +15495,6 @@ impl ::std::error::Error for RelocationError {
     }
 }
 
-impl crate::DropboxError for RelocationError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            RelocationError::FromLookup(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            RelocationError::FromWrite(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            RelocationError::To(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            RelocationError::CantMoveIntoVault(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            RelocationError::CantMoveIntoFamily(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            _ => None,
-        }
-    }
-}
-
 impl ::std::fmt::Display for RelocationError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -16446,25 +15900,6 @@ impl ::std::error::Error for RemoveTagError {
     }
 }
 
-impl crate::DropboxError for RemoveTagError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            RemoveTagError::Path(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            _ => None,
-        }
-    }
-}
-
 impl ::std::fmt::Display for RemoveTagError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -16697,33 +16132,6 @@ impl ::std::error::Error for RestoreError {
     }
 }
 
-impl crate::DropboxError for RestoreError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            RestoreError::PathLookup(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            RestoreError::PathWrite(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            _ => None,
-        }
-    }
-}
-
 impl ::std::fmt::Display for RestoreError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -16946,25 +16354,6 @@ impl ::std::error::Error for SaveCopyReferenceError {
     fn source(&self) -> Option<&(dyn ::std::error::Error + 'static)> {
         match self {
             SaveCopyReferenceError::Path(inner) => Some(inner),
-            _ => None,
-        }
-    }
-}
-
-impl crate::DropboxError for SaveCopyReferenceError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            SaveCopyReferenceError::Path(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
             _ => None,
         }
     }
@@ -17274,25 +16663,6 @@ impl ::std::error::Error for SaveUrlError {
     fn source(&self) -> Option<&(dyn ::std::error::Error + 'static)> {
         match self {
             SaveUrlError::Path(inner) => Some(inner),
-            _ => None,
-        }
-    }
-}
-
-impl crate::DropboxError for SaveUrlError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            SaveUrlError::Path(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
             _ => None,
         }
     }
@@ -17731,25 +17101,6 @@ impl ::std::error::Error for SearchError {
     fn source(&self) -> Option<&(dyn ::std::error::Error + 'static)> {
         match self {
             SearchError::Path(inner) => Some(inner),
-            _ => None,
-        }
-    }
-}
-
-impl crate::DropboxError for SearchError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            SearchError::Path(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
             _ => None,
         }
     }
@@ -19882,25 +19233,6 @@ impl ::std::error::Error for SyncSettingsError {
     }
 }
 
-impl crate::DropboxError for SyncSettingsError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            SyncSettingsError::Path(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            _ => None,
-        }
-    }
-}
-
 impl ::std::fmt::Display for SyncSettingsError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -20211,25 +19543,6 @@ impl ::std::error::Error for ThumbnailError {
     fn source(&self) -> Option<&(dyn ::std::error::Error + 'static)> {
         match self {
             ThumbnailError::Path(inner) => Some(inner),
-            _ => None,
-        }
-    }
-}
-
-impl crate::DropboxError for ThumbnailError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            ThumbnailError::Path(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
             _ => None,
         }
     }
@@ -20770,25 +20083,6 @@ impl ::std::error::Error for ThumbnailV2Error {
     fn source(&self) -> Option<&(dyn ::std::error::Error + 'static)> {
         match self {
             ThumbnailV2Error::Path(inner) => Some(inner),
-            _ => None,
-        }
-    }
-}
-
-impl crate::DropboxError for ThumbnailV2Error {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            ThumbnailV2Error::Path(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
             _ => None,
         }
     }
@@ -21354,25 +20648,6 @@ impl ::std::error::Error for UploadError {
     }
 }
 
-impl crate::DropboxError for UploadError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            UploadError::PropertiesError(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            _ => None,
-        }
-    }
-}
-
 impl ::std::fmt::Display for UploadError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -21662,15 +20937,6 @@ impl ::serde::ser::Serialize for UploadSessionAppendError {
 }
 
 impl ::std::error::Error for UploadSessionAppendError {
-}
-
-impl crate::DropboxError for UploadSessionAppendError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for UploadSessionAppendError {
@@ -22518,41 +21784,6 @@ impl ::std::error::Error for UploadSessionFinishError {
     }
 }
 
-impl crate::DropboxError for UploadSessionFinishError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            UploadSessionFinishError::LookupFailed(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            UploadSessionFinishError::Path(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            UploadSessionFinishError::PropertiesError(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
-            _ => None,
-        }
-    }
-}
-
 impl ::std::fmt::Display for UploadSessionFinishError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -22703,15 +21934,6 @@ impl ::serde::ser::Serialize for UploadSessionLookupError {
 }
 
 impl ::std::error::Error for UploadSessionLookupError {
-}
-
-impl crate::DropboxError for UploadSessionLookupError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for UploadSessionLookupError {
@@ -23236,15 +22458,6 @@ impl ::serde::ser::Serialize for UploadSessionStartError {
 }
 
 impl ::std::error::Error for UploadSessionStartError {
-}
-
-impl crate::DropboxError for UploadSessionStartError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
 }
 
 impl ::std::fmt::Display for UploadSessionStartError {
@@ -23836,15 +23049,6 @@ impl ::serde::ser::Serialize for WriteConflictError {
 impl ::std::error::Error for WriteConflictError {
 }
 
-impl crate::DropboxError for WriteConflictError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        None
-    }
-}
-
 impl ::std::fmt::Display for WriteConflictError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
@@ -24004,25 +23208,6 @@ impl ::std::error::Error for WriteError {
     fn source(&self) -> Option<&(dyn ::std::error::Error + 'static)> {
         match self {
             WriteError::Conflict(inner) => Some(inner),
-            _ => None,
-        }
-    }
-}
-
-impl crate::DropboxError for WriteError {
-    fn downcast_id(&self, id: std::any::TypeId) -> Option<&dyn std::any::Any> {
-        if <dyn std::any::Any>::type_id(self) == id {
-            return Some(self);
-        }
-        match self {
-            WriteError::Conflict(inner) => {
-                if <dyn std::any::Any>::type_id(inner) == id {
-                    Some(inner)
-                }
-                else {
-                    crate::DropboxError::downcast_id(inner, id)
-                }
-            }
             _ => None,
         }
     }

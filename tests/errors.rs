@@ -33,11 +33,11 @@ fn error_downcast_test() {
     ];
 
     for e in errors {
-        assert_eq!(Some(&lookup_err), e.downcast());
+        assert_eq!(Some(&lookup_err), e.downcast_inner_ref());
     }
 
     // Make sure we can get it from itself.
-    assert_eq!(Some(&lookup_err), (&lookup_err as &dyn DropboxError).downcast::<files::LookupError>());
+    assert_eq!(Some(&lookup_err), (&lookup_err as &dyn DropboxError).downcast_inner_ref::<files::LookupError>());
 }
 
 fn stuff(i: i32) -> Result<(), Box<dyn DropboxError>> {
@@ -52,7 +52,7 @@ fn stuff(i: i32) -> Result<(), Box<dyn DropboxError>> {
 #[test]
 fn test_err() {
     let e = stuff(0).unwrap_err();
-    if let Some(e) = e.downcast::<files::LookupError>() {
+    if let Some(e) = e.downcast_inner_ref::<files::LookupError>() {
         println!("{e}");
     } else {
         panic!("ope");

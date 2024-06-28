@@ -30,8 +30,6 @@ macro_rules! if_feature {
 
 #[macro_use] extern crate log;
 
-use std::any::{Any, TypeId};
-
 /// An error occurred in the process of making an API call.
 /// This is different from the case where your call succeeded, but the operation returned an error.
 #[derive(thiserror::Error, Debug)]
@@ -103,42 +101,30 @@ pub mod oauth2;
 mod generated; // You need to run the Stone generator to create this module.
 pub use generated::*;
 
+
 /// Extension methods for errors returned by the API.
-pub trait DropboxError: std::error::Error {
-    /// Look for an inner field with the given [`TypeId`] within this error.
-    /// This is mostly intended as an implementation detail used by [`DropboxError::downcast`],
-    /// which also casts to the relevant type.
-    fn downcast_id(&self, id: TypeId) -> Option<&dyn Any>;
+pub trait DropboxError: std::error::Error + 'static {
+    /// Upcast this error to a `dyn std::error::Error`.
+    fn as_std_error(&self) -> &(dyn std::error::Error + 'static);
 }
 
-impl dyn DropboxError {
-    /// Look for an inner field of the given error type within this error.
-    pub fn downcast<E: 'static>(&self) -> Option<&E> {
-        // Implementation note: this is in an `impl dyn DropboxError` block and the trait's method
-        // does checking by TypeId instead, because traits with generic methods aren't object-safe,
-        // and that would defeat the whole point of this trait: the ability to box up and return
-        // heterogeneous errors from a single function, and then let callers downcast them back to
-        // a concrete type later during error handling.
-        self.downcast_id(TypeId::of::<E>())
-            .map(|e| {
-                // SAFETY: downcast_id() already ensured it'ss the right type
-                // use this once downcast_ref_unchecked is stable
-                //unsafe { e.downcast_ref_unchecked() }
-                // for now, just use how that is implemented directly:
-                unsafe { &*(e as *const dyn Any as *const E) }
-            })
+impl<T: std::error::Error + 'static> DropboxError for T {
+    fn as_std_error(&self) -> &(dyn std::error::Error + 'static) {
+        self
     }
 }
 
-impl DropboxError for Error {
-    fn downcast_id(&self, id: TypeId) -> Option<&dyn Any> {
-        match self {
-            Error::HttpClient(e) if Any::type_id(e) == id => Some(e),
-            Error::Json(e) if Any::type_id(e) == id => Some(e),
-            Error::Authentication(e) if Any::type_id(e) == id => Some(e),
-            Error::AccessDenied(e) if Any::type_id(e) == id => Some(e),
-            _ => None,
+impl dyn DropboxError {
+    /// Look for an inner error of the given type within this error.
+    pub fn downcast_inner_ref<E: DropboxError + 'static>(&self) -> Option<&E> {
+        let mut inner = Some(self.as_std_error());
+        while let Some(e) = inner {
+            if let Some(d) = e.downcast_ref() {
+                return Some(d);
+            }
+            inner = e.source();
         }
+        None
     }
 }
 
@@ -149,12 +135,6 @@ pub enum NoError {}
 
 impl std::cmp::PartialEq<NoError> for NoError {
     fn eq(&self, _: &NoError) -> bool {
-        unreachable(*self)
-    }
-}
-
-impl DropboxError for NoError {
-    fn downcast_id(&self, _id: TypeId) -> Option<&dyn Any> {
         unreachable(*self)
     }
 }
