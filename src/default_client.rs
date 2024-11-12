@@ -193,11 +193,11 @@ struct TokenUpdateClient<'a> {
     inner: &'a UreqClient,
 }
 
-impl<'a> HttpClient for TokenUpdateClient<'a> {
+impl HttpClient for TokenUpdateClient<'_> {
     forward_noauth_request! { self, self.inner, None }
 }
 
-impl<'a> NoauthClient for TokenUpdateClient<'a> {}
+impl NoauthClient for TokenUpdateClient<'_> {}
 
 #[derive(Debug, Default)]
 struct UreqClient {}
