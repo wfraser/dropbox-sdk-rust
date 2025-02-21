@@ -1,6 +1,6 @@
 // Copyright (c) 2019-2025 Dropbox, Inc.
 
-#![deny(missing_docs, rust_2018_idioms)]
+#![deny(missing_docs)]
 // Enable a nightly feature for docs.rs which enables decorating feature-gated items.
 // To enable this manually, run e.g. `cargo rustdoc --all-features -- --cfg docsrs`.
 #![cfg_attr(docsrs, feature(doc_cfg))]

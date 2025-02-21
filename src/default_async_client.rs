@@ -19,7 +19,7 @@ use crate::oauth2::{Authorization, TokenCache};
 use crate::Error;
 use bytes::Bytes;
 use futures::{FutureExt, TryFutureExt, TryStreamExt};
-use std::future::{ready, Future};
+use std::future::ready;
 use std::str::FromStr;
 use std::sync::Arc;
 

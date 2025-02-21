@@ -746,7 +746,7 @@ class RustBackend(RustHelperBackend):
                                     self.emit(f'let n = if x.is_some() {{ {num_fields + 1} }} else {{ 1 }};')
                                     self.emit(f'let mut s = serializer.serialize_struct("{union.name}", n)?;')
                                     self.emit(f's.serialize_field(".tag", "{field.name}")?;')
-                                    with self.block('if let Some(ref x) = x'):
+                                    with self.block('if let Some(x) = x'):
                                         if ir.is_primitive_type(ultimate_type):
                                             self.emit(f's.serialize_field("{field.name}", &x)?;')
                                         else:

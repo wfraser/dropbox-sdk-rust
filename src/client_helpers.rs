@@ -359,7 +359,6 @@ mod sync_helpers {
     use crate::client_trait as sync;
     use crate::Error;
     use futures::{AsyncRead, FutureExt};
-    use std::future::Future;
 
     /// Given an async HttpRequestResult which was created from a *sync* HttpClient, convert it to the
     /// sync HttpRequestResult by cracking open the SyncReadAdapter in the body.

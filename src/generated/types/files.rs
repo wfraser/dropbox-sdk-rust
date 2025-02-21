@@ -10092,7 +10092,7 @@ impl ::serde::ser::Serialize for LookupError {
                 let n = if x.is_some() { 2 } else { 1 };
                 let mut s = serializer.serialize_struct("LookupError", n)?;
                 s.serialize_field(".tag", "malformed_path")?;
-                if let Some(ref x) = x {
+                if let Some(x) = x {
                     s.serialize_field("malformed_path", &x)?;
                 }
                 s.end()
@@ -15748,7 +15748,7 @@ impl ::serde::ser::Serialize for SearchError {
                 let n = if x.is_some() { 2 } else { 1 };
                 let mut s = serializer.serialize_struct("SearchError", n)?;
                 s.serialize_field(".tag", "invalid_argument")?;
-                if let Some(ref x) = x {
+                if let Some(x) = x {
                     s.serialize_field("invalid_argument", &x)?;
                 }
                 s.end()
@@ -21822,7 +21822,7 @@ impl ::serde::ser::Serialize for WriteError {
                 let n = if x.is_some() { 2 } else { 1 };
                 let mut s = serializer.serialize_struct("WriteError", n)?;
                 s.serialize_field(".tag", "malformed_path")?;
-                if let Some(ref x) = x {
+                if let Some(x) = x {
                     s.serialize_field("malformed_path", &x)?;
                 }
                 s.end()
