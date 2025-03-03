@@ -4,7 +4,8 @@
 //! the contents of a folder recursively, and fetching a file given its path.
 
 use dropbox_sdk::default_client::{NoauthDefaultClient, UserAuthDefaultClient};
-use dropbox_sdk::files;
+use dropbox_sdk::Error;
+use dropbox_sdk::files::{self, DownloadError, ListFolderError, LookupError};
 
 use std::io;
 
@@ -96,6 +97,9 @@ fn main() {
                         }
                     }
                 }
+                Err(Error::Api(DownloadError::Path(LookupError::NotFound))) => {
+                    eprintln!("File not found.");
+                }
                 Err(e) => {
                     eprintln!("Error from files/download: {e}");
                 }
@@ -114,6 +118,14 @@ fn main() {
                 &files::ListFolderArg::new(path).with_recursive(true),
             ) {
                 Ok(result) => result,
+                Err(Error::Api(ListFolderError::Path(LookupError::NotFolder))) => {
+                    eprintln!("Found a file; expected a folder.");
+                    return;
+                }
+                Err(Error::Api(ListFolderError::Path(LookupError::NotFound))) => {
+                    eprintln!("Folder not found.");
+                    return;
+                }
                 Err(e) => {
                     eprintln!("Error from files/list_folder: {e}");
                     return;

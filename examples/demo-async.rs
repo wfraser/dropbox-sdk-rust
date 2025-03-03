@@ -3,8 +3,9 @@
 //! This example illustrates a few basic Dropbox API operations: getting an OAuth2 token, listing
 //! the contents of a folder recursively, and fetching a file given its path.
 
-use dropbox_sdk::async_routes::files;
+use dropbox_sdk::async_routes::files::{self, DownloadError, ListFolderError, LookupError};
 use dropbox_sdk::default_async_client::{NoauthDefaultClient, UserAuthDefaultClient};
+use dropbox_sdk::Error;
 use tokio_util::compat::FuturesAsyncReadCompatExt;
 
 enum Operation {
@@ -99,6 +100,9 @@ async fn main() {
                         }
                     }
                 }
+                Err(Error::Api(DownloadError::Path(LookupError::NotFound))) => {
+                    eprintln!("File not found.");
+                }
                 Err(e) => {
                     eprintln!("Error from files/download: {e}");
                 }
@@ -119,6 +123,14 @@ async fn main() {
             .await
             {
                 Ok(result) => result,
+                Err(Error::Api(ListFolderError::Path(LookupError::NotFolder))) => {
+                    eprintln!("Found a file; expected a folder.");
+                    return;
+                }
+                Err(Error::Api(ListFolderError::Path(LookupError::NotFound))) => {
+                    eprintln!("Folder not found.");
+                    return;
+                }
                 Err(e) => {
                     eprintln!("Error from files/list_folder: {e}");
                     return;
