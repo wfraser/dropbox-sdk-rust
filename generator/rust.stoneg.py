@@ -1,5 +1,6 @@
 import contextlib
 from contextlib import contextmanager
+import re
 from typing import Iterator, Optional, Sequence
 
 from rust import RustHelperBackend, EXTRA_DISPLAY_TYPES, REQUIRED_NAMESPACES
@@ -824,8 +825,13 @@ class RustBackend(RustHelperBackend):
                 if idx != 0:
                     self.emit(prefix)
                 docf = lambda tag, val: self._docf(tag, val)
+                text = self.process_doc(chunk, docf)
+                # Find bare URLs and wrap them in `<>`. This intentionlly only matches lowercase
+                # letters so it doesn't match a problematic API example with a token which is part
+                # of a curl command in files/get_temporary_upload_link :(
+                text = re.sub(r"(?<!\()https://(?>[a-z0-9./-]+)(?=\.?(\)|\n|$))", r"<\g<0>>", text)
                 self.emit_wrapped_text(
-                        self.process_doc(chunk, docf),
+                        text,
                         prefix=prefix + ' ', width=100)
 
     def _docf(self, tag: str, val: str) -> str:

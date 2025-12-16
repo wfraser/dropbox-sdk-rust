@@ -605,7 +605,8 @@ pub fn member_space_limits_excluded_users_remove(
 
 /// Get users custom quota. A maximum of 1000 members can be specified in a single call. Note: to
 /// apply a custom space limit, a team admin needs to set a member space limit for the team first.
-/// (the team admin can check the settings here: https://www.dropbox.com/team/admin/settings/space).
+/// (the team admin can check the settings here:
+/// <https://www.dropbox.com/team/admin/settings/space>).
 pub fn member_space_limits_get_custom_quota(
     client: &impl crate::client_trait::TeamAuthClient,
     arg: &CustomQuotaUsersArg,
@@ -623,7 +624,8 @@ pub fn member_space_limits_get_custom_quota(
 
 /// Remove users custom quota. A maximum of 1000 members can be specified in a single call. Note: to
 /// apply a custom space limit, a team admin needs to set a member space limit for the team first.
-/// (the team admin can check the settings here: https://www.dropbox.com/team/admin/settings/space).
+/// (the team admin can check the settings here:
+/// <https://www.dropbox.com/team/admin/settings/space>).
 pub fn member_space_limits_remove_custom_quota(
     client: &impl crate::client_trait::TeamAuthClient,
     arg: &CustomQuotaUsersArg,
@@ -642,7 +644,7 @@ pub fn member_space_limits_remove_custom_quota(
 /// Set users custom quota. Custom quota has to be at least 15GB. A maximum of 1000 members can be
 /// specified in a single call. Note: to apply a custom space limit, a team admin needs to set a
 /// member space limit for the team first. (the team admin can check the settings here:
-/// https://www.dropbox.com/team/admin/settings/space).
+/// <https://www.dropbox.com/team/admin/settings/space>).
 pub fn member_space_limits_set_custom_quota(
     client: &impl crate::client_trait::TeamAuthClient,
     arg: &SetCustomQuotaArg,

@@ -979,10 +979,10 @@ pub fn paper_update(
     )
 }
 
-/// Permanently delete the file or folder at a given path (see https://www.dropbox.com/en/help/40).
-/// If the given file or folder is not yet deleted, this route will first delete it. It is possible
-/// for this route to successfully delete, then fail to permanently delete. Note: This endpoint is
-/// only available for Dropbox Business apps.
+/// Permanently delete the file or folder at a given path (see
+/// <https://www.dropbox.com/en/help/40>). If the given file or folder is not yet deleted, this
+/// route will first delete it. It is possible for this route to successfully delete, then fail to
+/// permanently delete. Note: This endpoint is only available for Dropbox Business apps.
 pub fn permanently_delete(
     client: &impl crate::client_trait::UserAuthClient,
     arg: &DeleteArg,
