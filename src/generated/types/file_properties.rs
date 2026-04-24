@@ -6,38 +6,28 @@
     clippy::large_enum_variant,
     clippy::result_large_err,
     clippy::doc_markdown,
+    clippy::doc_lazy_continuation,
 )]
 
-//! This namespace contains helpers for property and template metadata endpoints.
-//!
-//! These endpoints enable you to tag arbitrary key/value data to Dropbox files.
-//!
-//! The most basic unit in this namespace is the [`PropertyField`]. These fields encapsulate the
-//! actual key/value data.
-//!
-//! Fields are added to a Dropbox file using a [`PropertyGroup`]. Property groups contain a
-//! reference to a Dropbox file and a [`PropertyGroupTemplate`]. Property groups are uniquely
-//! identified by the combination of their associated Dropbox file and template.
-//!
-//! The [`PropertyGroupTemplate`] is a way of restricting the possible key names and value types of
-//! the data within a property group. The possible key names and value types are explicitly
-//! enumerated using [`PropertyFieldTemplate`] objects.
-//!
-//! You can think of a property group template as a class definition for a particular key/value
-//! metadata object, and the property groups themselves as the instantiations of these objects.
-//!
-//! Templates are owned either by a user/app pair or team/app pair. Templates and their associated
-//! properties can't be accessed by any app other than the app that created them, and even then,
-//! only when the app is linked with the owner of the template (either a user or team).
-//!
+//! This namespace contains helpers for property and template metadata endpoints. These endpoints
+//! enable you to tag arbitrary key/value data to Dropbox files. The most basic unit in this
+//! namespace is the [`PropertyField`]. These fields encapsulate the actual key/value data. Fields
+//! are added to a Dropbox file using a [`PropertyGroup`]. Property groups contain a reference to a
+//! Dropbox file and a [`PropertyGroupTemplate`]. Property groups are uniquely identified by the
+//! combination of their associated Dropbox file and template. The [`PropertyGroupTemplate`] is a
+//! way of restricting the possible key names and value types of the data within a property group.
+//! The possible key names and value types are explicitly enumerated using [`PropertyFieldTemplate`]
+//! objects. You can think of a property group template as a class definition for a particular
+//! key/value metadata object, and the property groups themselves as the instantiations of these
+//! objects. Templates are owned either by a user/app pair or team/app pair. Templates and their
+//! associated properties can't be accessed by any app other than the app that created them, and
+//! even then, only when the app is linked with the owner of the template (either a user or team).
 //! User-owned templates are accessed via the user-auth file_properties/templates/*_for_user
 //! endpoints, while team-owned templates are accessed via the team-auth
 //! file_properties/templates/*_for_team endpoints. Properties associated with either type of
-//! template can be accessed via the user-auth properties/* endpoints.
-//!
-//! Finally, properties can be accessed from a number of endpoints that return metadata, including
-//! `files/get_metadata`, and `files/list_folder`. Properties can also be added during upload, using
-//! `files/upload`.
+//! template can be accessed via the user-auth properties/* endpoints. Finally, properties can be
+//! accessed from a number of endpoints that return metadata, including `files/get_metadata`, and
+//! `files/list_folder`. Properties can also be added during upload, using `files/upload`.
 
 pub type Id = String;
 pub type PathOrId = String;
@@ -50,7 +40,7 @@ pub struct AddPropertiesArg {
     /// A unique identifier for the file or folder.
     pub path: PathOrId,
     /// The property groups which are to be added to a Dropbox file. No two groups in the input
-    /// should  refer to the same template.
+    /// should refer to the same template.
     pub property_groups: Vec<PropertyGroup>,
 }
 
@@ -2539,8 +2529,6 @@ pub struct PropertyFieldTemplate {
     pub name: String,
     /// Description of the property field. Property field descriptions can be up to 1024 bytes.
     pub description: String,
-    /// Data type of the value of this property field. This type will be enforced upon property
-    /// creation and modifications.
     pub type_field: PropertyType,
 }
 
@@ -2877,13 +2865,15 @@ impl ::serde::ser::Serialize for PropertyGroupTemplate {
     }
 }
 
+/// Property routes
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[non_exhaustive] // structs may have more fields added in the future.
 pub struct PropertyGroupUpdate {
     /// A unique identifier for a property template.
     pub template_id: TemplateId,
     /// Property fields to update. If the property field already exists, it is updated. If the
-    /// property field doesn't exist, the property group is added.
+    /// property field doesn't exist, it will be created as long as the property group already
+    /// exists.
     pub add_or_update_fields: Option<Vec<PropertyField>>,
     /// Property fields to remove (by name), provided they exist.
     pub remove_fields: Option<Vec<String>>,

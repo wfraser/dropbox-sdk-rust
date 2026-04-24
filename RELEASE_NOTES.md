@@ -1,5 +1,6 @@
 # unreleased (v0.19.2)
 xxxx-yy-zz
+* spec update yyyy-mm-dd: lots of changes, see <https://github.com/dropbox/dropbox-api-spec/...commit-hash> for details
 * MSRV raised to 1.85.0
 * Rust edition switched to 2024
 * reqwest (default async HTTP client impl) updated from version 0.12 to 0.13
