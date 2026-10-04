@@ -1,3 +1,7 @@
+# unreleased changes
+* API spec updates up to 2026-10-03 (dropbox/dropbox-api-spec#135)
+    * breaking changes
+
 # v0.21.0
 2026-10-02
 * API spec updates up to 2026-10-02 (dropbox/dropbox-api-spec#134)

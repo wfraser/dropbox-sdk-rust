@@ -738,11 +738,12 @@ pub fn members_add_job_status_get_v2(
     )
 }
 
-/// Launch a bulk suspend job. The server enforces a maximum of 500 members.
+/// Deprecated compatibility alias for MembersSuspendBatch.
+#[deprecated]
 pub fn members_bulk_suspend(
     client: &impl crate::client_trait::TeamAuthClient,
-    arg: &BulkSuspendArg,
-) -> Result<crate::types::dbx_async::LaunchResultBase, crate::Error<BulkSuspendError>> {
+    arg: &MembersSuspendBatchArg,
+) -> Result<crate::types::dbx_async::LaunchResultBase, crate::Error<MembersSuspendBatchError>> {
     crate::client_helpers::unwrap_async(
         crate::client_helpers::request(
             client,
@@ -754,11 +755,12 @@ pub fn members_bulk_suspend(
     )
 }
 
-/// Poll a previously launched bulk suspend job.
+/// Deprecated compatibility alias for MembersSuspendBatchJobStatusCheck.
+#[deprecated]
 pub fn members_bulk_suspend_job_status_check(
     client: &impl crate::client_trait::TeamAuthClient,
     arg: &crate::types::dbx_async::PollArg,
-) -> Result<BulkSuspendJobStatus, crate::Error<crate::types::dbx_async::PollError>> {
+) -> Result<MembersSuspendBatchJobStatus, crate::Error<crate::types::dbx_async::PollError>> {
     crate::client_helpers::unwrap_async(
         crate::client_helpers::request(
             client,
