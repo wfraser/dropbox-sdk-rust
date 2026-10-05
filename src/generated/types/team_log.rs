@@ -31257,6 +31257,11 @@ pub enum EventDetails {
     ProtectActionRemoveDomainsDetails(ProtectActionRemoveDomainsDetails),
     ProtectActionRemoveLinkDetails(ProtectActionRemoveLinkDetails),
     ProtectActionStopSharingDetails(ProtectActionStopSharingDetails),
+    ProtectCustomDataTypeCreatedDetails(ProtectCustomDataTypeCreatedDetails),
+    ProtectCustomDataTypeDeletedDetails(ProtectCustomDataTypeDeletedDetails),
+    ProtectCustomDataTypeDisabledDetails(ProtectCustomDataTypeDisabledDetails),
+    ProtectCustomDataTypeEnabledDetails(ProtectCustomDataTypeEnabledDetails),
+    ProtectCustomDataTypeModifiedDetails(ProtectCustomDataTypeModifiedDetails),
     ProtectInternalDomainsChangedDetails(ProtectInternalDomainsChangedDetails),
     ProtectPolicyActivatedDetails(ProtectPolicyActivatedDetails),
     ProtectPolicyDeactivatedDetails(ProtectPolicyDeactivatedDetails),
@@ -31915,6 +31920,11 @@ impl<'de> ::serde::de::Deserialize<'de> for EventDetails {
                     "protect_action_remove_domains_details" => EventDetails::ProtectActionRemoveDomainsDetails(ProtectActionRemoveDomainsDetails::internal_deserialize(&mut map)?),
                     "protect_action_remove_link_details" => EventDetails::ProtectActionRemoveLinkDetails(ProtectActionRemoveLinkDetails::internal_deserialize(&mut map)?),
                     "protect_action_stop_sharing_details" => EventDetails::ProtectActionStopSharingDetails(ProtectActionStopSharingDetails::internal_deserialize(&mut map)?),
+                    "protect_custom_data_type_created_details" => EventDetails::ProtectCustomDataTypeCreatedDetails(ProtectCustomDataTypeCreatedDetails::internal_deserialize(&mut map)?),
+                    "protect_custom_data_type_deleted_details" => EventDetails::ProtectCustomDataTypeDeletedDetails(ProtectCustomDataTypeDeletedDetails::internal_deserialize(&mut map)?),
+                    "protect_custom_data_type_disabled_details" => EventDetails::ProtectCustomDataTypeDisabledDetails(ProtectCustomDataTypeDisabledDetails::internal_deserialize(&mut map)?),
+                    "protect_custom_data_type_enabled_details" => EventDetails::ProtectCustomDataTypeEnabledDetails(ProtectCustomDataTypeEnabledDetails::internal_deserialize(&mut map)?),
+                    "protect_custom_data_type_modified_details" => EventDetails::ProtectCustomDataTypeModifiedDetails(ProtectCustomDataTypeModifiedDetails::internal_deserialize(&mut map)?),
                     "protect_internal_domains_changed_details" => EventDetails::ProtectInternalDomainsChangedDetails(ProtectInternalDomainsChangedDetails::internal_deserialize(&mut map)?),
                     "protect_policy_activated_details" => EventDetails::ProtectPolicyActivatedDetails(ProtectPolicyActivatedDetails::internal_deserialize(&mut map)?),
                     "protect_policy_deactivated_details" => EventDetails::ProtectPolicyDeactivatedDetails(ProtectPolicyDeactivatedDetails::internal_deserialize(&mut map)?),
@@ -32557,6 +32567,11 @@ impl<'de> ::serde::de::Deserialize<'de> for EventDetails {
                                     "protect_action_remove_domains_details",
                                     "protect_action_remove_link_details",
                                     "protect_action_stop_sharing_details",
+                                    "protect_custom_data_type_created_details",
+                                    "protect_custom_data_type_deleted_details",
+                                    "protect_custom_data_type_disabled_details",
+                                    "protect_custom_data_type_enabled_details",
+                                    "protect_custom_data_type_modified_details",
                                     "protect_internal_domains_changed_details",
                                     "protect_policy_activated_details",
                                     "protect_policy_deactivated_details",
@@ -34850,6 +34865,41 @@ impl ::serde::ser::Serialize for EventDetails {
                 // struct
                 let mut s = serializer.serialize_struct("EventDetails", 2)?;
                 s.serialize_field(".tag", "protect_action_stop_sharing_details")?;
+                x.internal_serialize::<S>(&mut s)?;
+                s.end()
+            }
+            EventDetails::ProtectCustomDataTypeCreatedDetails(x) => {
+                // struct
+                let mut s = serializer.serialize_struct("EventDetails", 3)?;
+                s.serialize_field(".tag", "protect_custom_data_type_created_details")?;
+                x.internal_serialize::<S>(&mut s)?;
+                s.end()
+            }
+            EventDetails::ProtectCustomDataTypeDeletedDetails(x) => {
+                // struct
+                let mut s = serializer.serialize_struct("EventDetails", 3)?;
+                s.serialize_field(".tag", "protect_custom_data_type_deleted_details")?;
+                x.internal_serialize::<S>(&mut s)?;
+                s.end()
+            }
+            EventDetails::ProtectCustomDataTypeDisabledDetails(x) => {
+                // struct
+                let mut s = serializer.serialize_struct("EventDetails", 3)?;
+                s.serialize_field(".tag", "protect_custom_data_type_disabled_details")?;
+                x.internal_serialize::<S>(&mut s)?;
+                s.end()
+            }
+            EventDetails::ProtectCustomDataTypeEnabledDetails(x) => {
+                // struct
+                let mut s = serializer.serialize_struct("EventDetails", 3)?;
+                s.serialize_field(".tag", "protect_custom_data_type_enabled_details")?;
+                x.internal_serialize::<S>(&mut s)?;
+                s.end()
+            }
+            EventDetails::ProtectCustomDataTypeModifiedDetails(x) => {
+                // struct
+                let mut s = serializer.serialize_struct("EventDetails", 3)?;
+                s.serialize_field(".tag", "protect_custom_data_type_modified_details")?;
                 x.internal_serialize::<S>(&mut s)?;
                 s.end()
             }
@@ -37820,6 +37870,16 @@ pub enum EventType {
     ProtectActionRemoveLink(ProtectActionRemoveLinkType),
     /// (protect) Stopped sharing content via Dropbox Protect
     ProtectActionStopSharing(ProtectActionStopSharingType),
+    /// (protect) Created a Dropbox Protect custom data type
+    ProtectCustomDataTypeCreated(ProtectCustomDataTypeCreatedType),
+    /// (protect) Deleted a Dropbox Protect custom data type
+    ProtectCustomDataTypeDeleted(ProtectCustomDataTypeDeletedType),
+    /// (protect) Disabled a Dropbox Protect custom data type
+    ProtectCustomDataTypeDisabled(ProtectCustomDataTypeDisabledType),
+    /// (protect) Enabled a Dropbox Protect custom data type
+    ProtectCustomDataTypeEnabled(ProtectCustomDataTypeEnabledType),
+    /// (protect) Modified a Dropbox Protect custom data type
+    ProtectCustomDataTypeModified(ProtectCustomDataTypeModifiedType),
     /// (protect) Modified Protect internal domains list
     ProtectInternalDomainsChanged(ProtectInternalDomainsChangedType),
     /// (protect) Activated a Dropbox Protect policy
@@ -38849,6 +38909,11 @@ impl<'de> ::serde::de::Deserialize<'de> for EventType {
                     "protect_action_remove_domains" => EventType::ProtectActionRemoveDomains(ProtectActionRemoveDomainsType::internal_deserialize(&mut map)?),
                     "protect_action_remove_link" => EventType::ProtectActionRemoveLink(ProtectActionRemoveLinkType::internal_deserialize(&mut map)?),
                     "protect_action_stop_sharing" => EventType::ProtectActionStopSharing(ProtectActionStopSharingType::internal_deserialize(&mut map)?),
+                    "protect_custom_data_type_created" => EventType::ProtectCustomDataTypeCreated(ProtectCustomDataTypeCreatedType::internal_deserialize(&mut map)?),
+                    "protect_custom_data_type_deleted" => EventType::ProtectCustomDataTypeDeleted(ProtectCustomDataTypeDeletedType::internal_deserialize(&mut map)?),
+                    "protect_custom_data_type_disabled" => EventType::ProtectCustomDataTypeDisabled(ProtectCustomDataTypeDisabledType::internal_deserialize(&mut map)?),
+                    "protect_custom_data_type_enabled" => EventType::ProtectCustomDataTypeEnabled(ProtectCustomDataTypeEnabledType::internal_deserialize(&mut map)?),
+                    "protect_custom_data_type_modified" => EventType::ProtectCustomDataTypeModified(ProtectCustomDataTypeModifiedType::internal_deserialize(&mut map)?),
                     "protect_internal_domains_changed" => EventType::ProtectInternalDomainsChanged(ProtectInternalDomainsChangedType::internal_deserialize(&mut map)?),
                     "protect_policy_activated" => EventType::ProtectPolicyActivated(ProtectPolicyActivatedType::internal_deserialize(&mut map)?),
                     "protect_policy_deactivated" => EventType::ProtectPolicyDeactivated(ProtectPolicyDeactivatedType::internal_deserialize(&mut map)?),
@@ -39490,6 +39555,11 @@ impl<'de> ::serde::de::Deserialize<'de> for EventType {
                                     "protect_action_remove_domains",
                                     "protect_action_remove_link",
                                     "protect_action_stop_sharing",
+                                    "protect_custom_data_type_created",
+                                    "protect_custom_data_type_deleted",
+                                    "protect_custom_data_type_disabled",
+                                    "protect_custom_data_type_enabled",
+                                    "protect_custom_data_type_modified",
                                     "protect_internal_domains_changed",
                                     "protect_policy_activated",
                                     "protect_policy_deactivated",
@@ -41842,6 +41912,41 @@ impl ::serde::ser::Serialize for EventType {
                 // struct
                 let mut s = serializer.serialize_struct("EventType", 2)?;
                 s.serialize_field(".tag", "protect_action_stop_sharing")?;
+                x.internal_serialize::<S>(&mut s)?;
+                s.end()
+            }
+            EventType::ProtectCustomDataTypeCreated(x) => {
+                // struct
+                let mut s = serializer.serialize_struct("EventType", 2)?;
+                s.serialize_field(".tag", "protect_custom_data_type_created")?;
+                x.internal_serialize::<S>(&mut s)?;
+                s.end()
+            }
+            EventType::ProtectCustomDataTypeDeleted(x) => {
+                // struct
+                let mut s = serializer.serialize_struct("EventType", 2)?;
+                s.serialize_field(".tag", "protect_custom_data_type_deleted")?;
+                x.internal_serialize::<S>(&mut s)?;
+                s.end()
+            }
+            EventType::ProtectCustomDataTypeDisabled(x) => {
+                // struct
+                let mut s = serializer.serialize_struct("EventType", 2)?;
+                s.serialize_field(".tag", "protect_custom_data_type_disabled")?;
+                x.internal_serialize::<S>(&mut s)?;
+                s.end()
+            }
+            EventType::ProtectCustomDataTypeEnabled(x) => {
+                // struct
+                let mut s = serializer.serialize_struct("EventType", 2)?;
+                s.serialize_field(".tag", "protect_custom_data_type_enabled")?;
+                x.internal_serialize::<S>(&mut s)?;
+                s.end()
+            }
+            EventType::ProtectCustomDataTypeModified(x) => {
+                // struct
+                let mut s = serializer.serialize_struct("EventType", 2)?;
+                s.serialize_field(".tag", "protect_custom_data_type_modified")?;
                 x.internal_serialize::<S>(&mut s)?;
                 s.end()
             }
@@ -44875,6 +44980,16 @@ pub enum EventTypeArg {
     ProtectActionRemoveLink,
     /// (protect) Stopped sharing content via Dropbox Protect
     ProtectActionStopSharing,
+    /// (protect) Created a Dropbox Protect custom data type
+    ProtectCustomDataTypeCreated,
+    /// (protect) Deleted a Dropbox Protect custom data type
+    ProtectCustomDataTypeDeleted,
+    /// (protect) Disabled a Dropbox Protect custom data type
+    ProtectCustomDataTypeDisabled,
+    /// (protect) Enabled a Dropbox Protect custom data type
+    ProtectCustomDataTypeEnabled,
+    /// (protect) Modified a Dropbox Protect custom data type
+    ProtectCustomDataTypeModified,
     /// (protect) Modified Protect internal domains list
     ProtectInternalDomainsChanged,
     /// (protect) Activated a Dropbox Protect policy
@@ -45904,6 +46019,11 @@ impl<'de> ::serde::de::Deserialize<'de> for EventTypeArg {
                     "protect_action_remove_domains" => EventTypeArg::ProtectActionRemoveDomains,
                     "protect_action_remove_link" => EventTypeArg::ProtectActionRemoveLink,
                     "protect_action_stop_sharing" => EventTypeArg::ProtectActionStopSharing,
+                    "protect_custom_data_type_created" => EventTypeArg::ProtectCustomDataTypeCreated,
+                    "protect_custom_data_type_deleted" => EventTypeArg::ProtectCustomDataTypeDeleted,
+                    "protect_custom_data_type_disabled" => EventTypeArg::ProtectCustomDataTypeDisabled,
+                    "protect_custom_data_type_enabled" => EventTypeArg::ProtectCustomDataTypeEnabled,
+                    "protect_custom_data_type_modified" => EventTypeArg::ProtectCustomDataTypeModified,
                     "protect_internal_domains_changed" => EventTypeArg::ProtectInternalDomainsChanged,
                     "protect_policy_activated" => EventTypeArg::ProtectPolicyActivated,
                     "protect_policy_deactivated" => EventTypeArg::ProtectPolicyDeactivated,
@@ -46545,6 +46665,11 @@ impl<'de> ::serde::de::Deserialize<'de> for EventTypeArg {
                                     "protect_action_remove_domains",
                                     "protect_action_remove_link",
                                     "protect_action_stop_sharing",
+                                    "protect_custom_data_type_created",
+                                    "protect_custom_data_type_deleted",
+                                    "protect_custom_data_type_disabled",
+                                    "protect_custom_data_type_enabled",
+                                    "protect_custom_data_type_modified",
                                     "protect_internal_domains_changed",
                                     "protect_policy_activated",
                                     "protect_policy_deactivated",
@@ -48613,6 +48738,36 @@ impl ::serde::ser::Serialize for EventTypeArg {
                 // unit
                 let mut s = serializer.serialize_struct("EventTypeArg", 1)?;
                 s.serialize_field(".tag", "protect_action_stop_sharing")?;
+                s.end()
+            }
+            EventTypeArg::ProtectCustomDataTypeCreated => {
+                // unit
+                let mut s = serializer.serialize_struct("EventTypeArg", 1)?;
+                s.serialize_field(".tag", "protect_custom_data_type_created")?;
+                s.end()
+            }
+            EventTypeArg::ProtectCustomDataTypeDeleted => {
+                // unit
+                let mut s = serializer.serialize_struct("EventTypeArg", 1)?;
+                s.serialize_field(".tag", "protect_custom_data_type_deleted")?;
+                s.end()
+            }
+            EventTypeArg::ProtectCustomDataTypeDisabled => {
+                // unit
+                let mut s = serializer.serialize_struct("EventTypeArg", 1)?;
+                s.serialize_field(".tag", "protect_custom_data_type_disabled")?;
+                s.end()
+            }
+            EventTypeArg::ProtectCustomDataTypeEnabled => {
+                // unit
+                let mut s = serializer.serialize_struct("EventTypeArg", 1)?;
+                s.serialize_field(".tag", "protect_custom_data_type_enabled")?;
+                s.end()
+            }
+            EventTypeArg::ProtectCustomDataTypeModified => {
+                // unit
+                let mut s = serializer.serialize_struct("EventTypeArg", 1)?;
+                s.serialize_field(".tag", "protect_custom_data_type_modified")?;
                 s.end()
             }
             EventTypeArg::ProtectInternalDomainsChanged => {
@@ -103710,6 +103865,981 @@ impl ::serde::ser::Serialize for ProtectActionStopSharingType {
         // struct serializer
         use serde::ser::SerializeStruct;
         let mut s = serializer.serialize_struct("ProtectActionStopSharingType", 1)?;
+        self.internal_serialize::<S>(&mut s)?;
+        s.end()
+    }
+}
+
+/// Created a Dropbox Protect custom data type.
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[non_exhaustive] // structs may have more fields added in the future.
+pub struct ProtectCustomDataTypeCreatedDetails {
+    /// ID.
+    pub custom_data_type_id: String,
+    /// Name.
+    pub name: String,
+}
+
+impl ProtectCustomDataTypeCreatedDetails {
+    pub fn new(custom_data_type_id: String, name: String) -> Self {
+        ProtectCustomDataTypeCreatedDetails {
+            custom_data_type_id,
+            name,
+        }
+    }
+}
+
+const PROTECT_CUSTOM_DATA_TYPE_CREATED_DETAILS_FIELDS: &[&str] = &["custom_data_type_id",
+                                                                   "name"];
+impl ProtectCustomDataTypeCreatedDetails {
+    pub(crate) fn internal_deserialize<'de, V: ::serde::de::MapAccess<'de>>(
+        map: V,
+    ) -> Result<ProtectCustomDataTypeCreatedDetails, V::Error> {
+        Self::internal_deserialize_opt(map, false).map(Option::unwrap)
+    }
+
+    pub(crate) fn internal_deserialize_opt<'de, V: ::serde::de::MapAccess<'de>>(
+        mut map: V,
+        optional: bool,
+    ) -> Result<Option<ProtectCustomDataTypeCreatedDetails>, V::Error> {
+        let mut field_custom_data_type_id = None;
+        let mut field_name = None;
+        let mut nothing = true;
+        while let Some(key) = map.next_key::<&str>()? {
+            nothing = false;
+            match key {
+                "custom_data_type_id" => {
+                    if field_custom_data_type_id.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("custom_data_type_id"));
+                    }
+                    field_custom_data_type_id = Some(map.next_value()?);
+                }
+                "name" => {
+                    if field_name.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("name"));
+                    }
+                    field_name = Some(map.next_value()?);
+                }
+                _ => {
+                    // unknown field allowed and ignored
+                    map.next_value::<::serde_json::Value>()?;
+                }
+            }
+        }
+        if optional && nothing {
+            return Ok(None);
+        }
+        let result = ProtectCustomDataTypeCreatedDetails {
+            custom_data_type_id: field_custom_data_type_id.ok_or_else(|| ::serde::de::Error::missing_field("custom_data_type_id"))?,
+            name: field_name.ok_or_else(|| ::serde::de::Error::missing_field("name"))?,
+        };
+        Ok(Some(result))
+    }
+
+    pub(crate) fn internal_serialize<S: ::serde::ser::Serializer>(
+        &self,
+        s: &mut S::SerializeStruct,
+    ) -> Result<(), S::Error> {
+        use serde::ser::SerializeStruct;
+        s.serialize_field("custom_data_type_id", &self.custom_data_type_id)?;
+        s.serialize_field("name", &self.name)?;
+        Ok(())
+    }
+}
+
+impl<'de> ::serde::de::Deserialize<'de> for ProtectCustomDataTypeCreatedDetails {
+    fn deserialize<D: ::serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        // struct deserializer
+        use serde::de::{MapAccess, Visitor};
+        struct StructVisitor;
+        impl<'de> Visitor<'de> for StructVisitor {
+            type Value = ProtectCustomDataTypeCreatedDetails;
+            fn expecting(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+                f.write_str("a ProtectCustomDataTypeCreatedDetails struct")
+            }
+            fn visit_map<V: MapAccess<'de>>(self, map: V) -> Result<Self::Value, V::Error> {
+                ProtectCustomDataTypeCreatedDetails::internal_deserialize(map)
+            }
+        }
+        deserializer.deserialize_struct("ProtectCustomDataTypeCreatedDetails", PROTECT_CUSTOM_DATA_TYPE_CREATED_DETAILS_FIELDS, StructVisitor)
+    }
+}
+
+impl ::serde::ser::Serialize for ProtectCustomDataTypeCreatedDetails {
+    fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        // struct serializer
+        use serde::ser::SerializeStruct;
+        let mut s = serializer.serialize_struct("ProtectCustomDataTypeCreatedDetails", 2)?;
+        self.internal_serialize::<S>(&mut s)?;
+        s.end()
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[non_exhaustive] // structs may have more fields added in the future.
+pub struct ProtectCustomDataTypeCreatedType {
+    pub description: String,
+}
+
+impl ProtectCustomDataTypeCreatedType {
+    pub fn new(description: String) -> Self {
+        ProtectCustomDataTypeCreatedType {
+            description,
+        }
+    }
+}
+
+const PROTECT_CUSTOM_DATA_TYPE_CREATED_TYPE_FIELDS: &[&str] = &["description"];
+impl ProtectCustomDataTypeCreatedType {
+    pub(crate) fn internal_deserialize<'de, V: ::serde::de::MapAccess<'de>>(
+        map: V,
+    ) -> Result<ProtectCustomDataTypeCreatedType, V::Error> {
+        Self::internal_deserialize_opt(map, false).map(Option::unwrap)
+    }
+
+    pub(crate) fn internal_deserialize_opt<'de, V: ::serde::de::MapAccess<'de>>(
+        mut map: V,
+        optional: bool,
+    ) -> Result<Option<ProtectCustomDataTypeCreatedType>, V::Error> {
+        let mut field_description = None;
+        let mut nothing = true;
+        while let Some(key) = map.next_key::<&str>()? {
+            nothing = false;
+            match key {
+                "description" => {
+                    if field_description.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("description"));
+                    }
+                    field_description = Some(map.next_value()?);
+                }
+                _ => {
+                    // unknown field allowed and ignored
+                    map.next_value::<::serde_json::Value>()?;
+                }
+            }
+        }
+        if optional && nothing {
+            return Ok(None);
+        }
+        let result = ProtectCustomDataTypeCreatedType {
+            description: field_description.ok_or_else(|| ::serde::de::Error::missing_field("description"))?,
+        };
+        Ok(Some(result))
+    }
+
+    pub(crate) fn internal_serialize<S: ::serde::ser::Serializer>(
+        &self,
+        s: &mut S::SerializeStruct,
+    ) -> Result<(), S::Error> {
+        use serde::ser::SerializeStruct;
+        s.serialize_field("description", &self.description)?;
+        Ok(())
+    }
+}
+
+impl<'de> ::serde::de::Deserialize<'de> for ProtectCustomDataTypeCreatedType {
+    fn deserialize<D: ::serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        // struct deserializer
+        use serde::de::{MapAccess, Visitor};
+        struct StructVisitor;
+        impl<'de> Visitor<'de> for StructVisitor {
+            type Value = ProtectCustomDataTypeCreatedType;
+            fn expecting(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+                f.write_str("a ProtectCustomDataTypeCreatedType struct")
+            }
+            fn visit_map<V: MapAccess<'de>>(self, map: V) -> Result<Self::Value, V::Error> {
+                ProtectCustomDataTypeCreatedType::internal_deserialize(map)
+            }
+        }
+        deserializer.deserialize_struct("ProtectCustomDataTypeCreatedType", PROTECT_CUSTOM_DATA_TYPE_CREATED_TYPE_FIELDS, StructVisitor)
+    }
+}
+
+impl ::serde::ser::Serialize for ProtectCustomDataTypeCreatedType {
+    fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        // struct serializer
+        use serde::ser::SerializeStruct;
+        let mut s = serializer.serialize_struct("ProtectCustomDataTypeCreatedType", 1)?;
+        self.internal_serialize::<S>(&mut s)?;
+        s.end()
+    }
+}
+
+/// Deleted a Dropbox Protect custom data type.
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[non_exhaustive] // structs may have more fields added in the future.
+pub struct ProtectCustomDataTypeDeletedDetails {
+    /// ID.
+    pub custom_data_type_id: String,
+    /// Name.
+    pub name: String,
+}
+
+impl ProtectCustomDataTypeDeletedDetails {
+    pub fn new(custom_data_type_id: String, name: String) -> Self {
+        ProtectCustomDataTypeDeletedDetails {
+            custom_data_type_id,
+            name,
+        }
+    }
+}
+
+const PROTECT_CUSTOM_DATA_TYPE_DELETED_DETAILS_FIELDS: &[&str] = &["custom_data_type_id",
+                                                                   "name"];
+impl ProtectCustomDataTypeDeletedDetails {
+    pub(crate) fn internal_deserialize<'de, V: ::serde::de::MapAccess<'de>>(
+        map: V,
+    ) -> Result<ProtectCustomDataTypeDeletedDetails, V::Error> {
+        Self::internal_deserialize_opt(map, false).map(Option::unwrap)
+    }
+
+    pub(crate) fn internal_deserialize_opt<'de, V: ::serde::de::MapAccess<'de>>(
+        mut map: V,
+        optional: bool,
+    ) -> Result<Option<ProtectCustomDataTypeDeletedDetails>, V::Error> {
+        let mut field_custom_data_type_id = None;
+        let mut field_name = None;
+        let mut nothing = true;
+        while let Some(key) = map.next_key::<&str>()? {
+            nothing = false;
+            match key {
+                "custom_data_type_id" => {
+                    if field_custom_data_type_id.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("custom_data_type_id"));
+                    }
+                    field_custom_data_type_id = Some(map.next_value()?);
+                }
+                "name" => {
+                    if field_name.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("name"));
+                    }
+                    field_name = Some(map.next_value()?);
+                }
+                _ => {
+                    // unknown field allowed and ignored
+                    map.next_value::<::serde_json::Value>()?;
+                }
+            }
+        }
+        if optional && nothing {
+            return Ok(None);
+        }
+        let result = ProtectCustomDataTypeDeletedDetails {
+            custom_data_type_id: field_custom_data_type_id.ok_or_else(|| ::serde::de::Error::missing_field("custom_data_type_id"))?,
+            name: field_name.ok_or_else(|| ::serde::de::Error::missing_field("name"))?,
+        };
+        Ok(Some(result))
+    }
+
+    pub(crate) fn internal_serialize<S: ::serde::ser::Serializer>(
+        &self,
+        s: &mut S::SerializeStruct,
+    ) -> Result<(), S::Error> {
+        use serde::ser::SerializeStruct;
+        s.serialize_field("custom_data_type_id", &self.custom_data_type_id)?;
+        s.serialize_field("name", &self.name)?;
+        Ok(())
+    }
+}
+
+impl<'de> ::serde::de::Deserialize<'de> for ProtectCustomDataTypeDeletedDetails {
+    fn deserialize<D: ::serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        // struct deserializer
+        use serde::de::{MapAccess, Visitor};
+        struct StructVisitor;
+        impl<'de> Visitor<'de> for StructVisitor {
+            type Value = ProtectCustomDataTypeDeletedDetails;
+            fn expecting(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+                f.write_str("a ProtectCustomDataTypeDeletedDetails struct")
+            }
+            fn visit_map<V: MapAccess<'de>>(self, map: V) -> Result<Self::Value, V::Error> {
+                ProtectCustomDataTypeDeletedDetails::internal_deserialize(map)
+            }
+        }
+        deserializer.deserialize_struct("ProtectCustomDataTypeDeletedDetails", PROTECT_CUSTOM_DATA_TYPE_DELETED_DETAILS_FIELDS, StructVisitor)
+    }
+}
+
+impl ::serde::ser::Serialize for ProtectCustomDataTypeDeletedDetails {
+    fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        // struct serializer
+        use serde::ser::SerializeStruct;
+        let mut s = serializer.serialize_struct("ProtectCustomDataTypeDeletedDetails", 2)?;
+        self.internal_serialize::<S>(&mut s)?;
+        s.end()
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[non_exhaustive] // structs may have more fields added in the future.
+pub struct ProtectCustomDataTypeDeletedType {
+    pub description: String,
+}
+
+impl ProtectCustomDataTypeDeletedType {
+    pub fn new(description: String) -> Self {
+        ProtectCustomDataTypeDeletedType {
+            description,
+        }
+    }
+}
+
+const PROTECT_CUSTOM_DATA_TYPE_DELETED_TYPE_FIELDS: &[&str] = &["description"];
+impl ProtectCustomDataTypeDeletedType {
+    pub(crate) fn internal_deserialize<'de, V: ::serde::de::MapAccess<'de>>(
+        map: V,
+    ) -> Result<ProtectCustomDataTypeDeletedType, V::Error> {
+        Self::internal_deserialize_opt(map, false).map(Option::unwrap)
+    }
+
+    pub(crate) fn internal_deserialize_opt<'de, V: ::serde::de::MapAccess<'de>>(
+        mut map: V,
+        optional: bool,
+    ) -> Result<Option<ProtectCustomDataTypeDeletedType>, V::Error> {
+        let mut field_description = None;
+        let mut nothing = true;
+        while let Some(key) = map.next_key::<&str>()? {
+            nothing = false;
+            match key {
+                "description" => {
+                    if field_description.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("description"));
+                    }
+                    field_description = Some(map.next_value()?);
+                }
+                _ => {
+                    // unknown field allowed and ignored
+                    map.next_value::<::serde_json::Value>()?;
+                }
+            }
+        }
+        if optional && nothing {
+            return Ok(None);
+        }
+        let result = ProtectCustomDataTypeDeletedType {
+            description: field_description.ok_or_else(|| ::serde::de::Error::missing_field("description"))?,
+        };
+        Ok(Some(result))
+    }
+
+    pub(crate) fn internal_serialize<S: ::serde::ser::Serializer>(
+        &self,
+        s: &mut S::SerializeStruct,
+    ) -> Result<(), S::Error> {
+        use serde::ser::SerializeStruct;
+        s.serialize_field("description", &self.description)?;
+        Ok(())
+    }
+}
+
+impl<'de> ::serde::de::Deserialize<'de> for ProtectCustomDataTypeDeletedType {
+    fn deserialize<D: ::serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        // struct deserializer
+        use serde::de::{MapAccess, Visitor};
+        struct StructVisitor;
+        impl<'de> Visitor<'de> for StructVisitor {
+            type Value = ProtectCustomDataTypeDeletedType;
+            fn expecting(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+                f.write_str("a ProtectCustomDataTypeDeletedType struct")
+            }
+            fn visit_map<V: MapAccess<'de>>(self, map: V) -> Result<Self::Value, V::Error> {
+                ProtectCustomDataTypeDeletedType::internal_deserialize(map)
+            }
+        }
+        deserializer.deserialize_struct("ProtectCustomDataTypeDeletedType", PROTECT_CUSTOM_DATA_TYPE_DELETED_TYPE_FIELDS, StructVisitor)
+    }
+}
+
+impl ::serde::ser::Serialize for ProtectCustomDataTypeDeletedType {
+    fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        // struct serializer
+        use serde::ser::SerializeStruct;
+        let mut s = serializer.serialize_struct("ProtectCustomDataTypeDeletedType", 1)?;
+        self.internal_serialize::<S>(&mut s)?;
+        s.end()
+    }
+}
+
+/// Disabled a Dropbox Protect custom data type.
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[non_exhaustive] // structs may have more fields added in the future.
+pub struct ProtectCustomDataTypeDisabledDetails {
+    /// ID.
+    pub custom_data_type_id: String,
+    /// Name.
+    pub name: String,
+}
+
+impl ProtectCustomDataTypeDisabledDetails {
+    pub fn new(custom_data_type_id: String, name: String) -> Self {
+        ProtectCustomDataTypeDisabledDetails {
+            custom_data_type_id,
+            name,
+        }
+    }
+}
+
+const PROTECT_CUSTOM_DATA_TYPE_DISABLED_DETAILS_FIELDS: &[&str] = &["custom_data_type_id",
+                                                                    "name"];
+impl ProtectCustomDataTypeDisabledDetails {
+    pub(crate) fn internal_deserialize<'de, V: ::serde::de::MapAccess<'de>>(
+        map: V,
+    ) -> Result<ProtectCustomDataTypeDisabledDetails, V::Error> {
+        Self::internal_deserialize_opt(map, false).map(Option::unwrap)
+    }
+
+    pub(crate) fn internal_deserialize_opt<'de, V: ::serde::de::MapAccess<'de>>(
+        mut map: V,
+        optional: bool,
+    ) -> Result<Option<ProtectCustomDataTypeDisabledDetails>, V::Error> {
+        let mut field_custom_data_type_id = None;
+        let mut field_name = None;
+        let mut nothing = true;
+        while let Some(key) = map.next_key::<&str>()? {
+            nothing = false;
+            match key {
+                "custom_data_type_id" => {
+                    if field_custom_data_type_id.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("custom_data_type_id"));
+                    }
+                    field_custom_data_type_id = Some(map.next_value()?);
+                }
+                "name" => {
+                    if field_name.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("name"));
+                    }
+                    field_name = Some(map.next_value()?);
+                }
+                _ => {
+                    // unknown field allowed and ignored
+                    map.next_value::<::serde_json::Value>()?;
+                }
+            }
+        }
+        if optional && nothing {
+            return Ok(None);
+        }
+        let result = ProtectCustomDataTypeDisabledDetails {
+            custom_data_type_id: field_custom_data_type_id.ok_or_else(|| ::serde::de::Error::missing_field("custom_data_type_id"))?,
+            name: field_name.ok_or_else(|| ::serde::de::Error::missing_field("name"))?,
+        };
+        Ok(Some(result))
+    }
+
+    pub(crate) fn internal_serialize<S: ::serde::ser::Serializer>(
+        &self,
+        s: &mut S::SerializeStruct,
+    ) -> Result<(), S::Error> {
+        use serde::ser::SerializeStruct;
+        s.serialize_field("custom_data_type_id", &self.custom_data_type_id)?;
+        s.serialize_field("name", &self.name)?;
+        Ok(())
+    }
+}
+
+impl<'de> ::serde::de::Deserialize<'de> for ProtectCustomDataTypeDisabledDetails {
+    fn deserialize<D: ::serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        // struct deserializer
+        use serde::de::{MapAccess, Visitor};
+        struct StructVisitor;
+        impl<'de> Visitor<'de> for StructVisitor {
+            type Value = ProtectCustomDataTypeDisabledDetails;
+            fn expecting(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+                f.write_str("a ProtectCustomDataTypeDisabledDetails struct")
+            }
+            fn visit_map<V: MapAccess<'de>>(self, map: V) -> Result<Self::Value, V::Error> {
+                ProtectCustomDataTypeDisabledDetails::internal_deserialize(map)
+            }
+        }
+        deserializer.deserialize_struct("ProtectCustomDataTypeDisabledDetails", PROTECT_CUSTOM_DATA_TYPE_DISABLED_DETAILS_FIELDS, StructVisitor)
+    }
+}
+
+impl ::serde::ser::Serialize for ProtectCustomDataTypeDisabledDetails {
+    fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        // struct serializer
+        use serde::ser::SerializeStruct;
+        let mut s = serializer.serialize_struct("ProtectCustomDataTypeDisabledDetails", 2)?;
+        self.internal_serialize::<S>(&mut s)?;
+        s.end()
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[non_exhaustive] // structs may have more fields added in the future.
+pub struct ProtectCustomDataTypeDisabledType {
+    pub description: String,
+}
+
+impl ProtectCustomDataTypeDisabledType {
+    pub fn new(description: String) -> Self {
+        ProtectCustomDataTypeDisabledType {
+            description,
+        }
+    }
+}
+
+const PROTECT_CUSTOM_DATA_TYPE_DISABLED_TYPE_FIELDS: &[&str] = &["description"];
+impl ProtectCustomDataTypeDisabledType {
+    pub(crate) fn internal_deserialize<'de, V: ::serde::de::MapAccess<'de>>(
+        map: V,
+    ) -> Result<ProtectCustomDataTypeDisabledType, V::Error> {
+        Self::internal_deserialize_opt(map, false).map(Option::unwrap)
+    }
+
+    pub(crate) fn internal_deserialize_opt<'de, V: ::serde::de::MapAccess<'de>>(
+        mut map: V,
+        optional: bool,
+    ) -> Result<Option<ProtectCustomDataTypeDisabledType>, V::Error> {
+        let mut field_description = None;
+        let mut nothing = true;
+        while let Some(key) = map.next_key::<&str>()? {
+            nothing = false;
+            match key {
+                "description" => {
+                    if field_description.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("description"));
+                    }
+                    field_description = Some(map.next_value()?);
+                }
+                _ => {
+                    // unknown field allowed and ignored
+                    map.next_value::<::serde_json::Value>()?;
+                }
+            }
+        }
+        if optional && nothing {
+            return Ok(None);
+        }
+        let result = ProtectCustomDataTypeDisabledType {
+            description: field_description.ok_or_else(|| ::serde::de::Error::missing_field("description"))?,
+        };
+        Ok(Some(result))
+    }
+
+    pub(crate) fn internal_serialize<S: ::serde::ser::Serializer>(
+        &self,
+        s: &mut S::SerializeStruct,
+    ) -> Result<(), S::Error> {
+        use serde::ser::SerializeStruct;
+        s.serialize_field("description", &self.description)?;
+        Ok(())
+    }
+}
+
+impl<'de> ::serde::de::Deserialize<'de> for ProtectCustomDataTypeDisabledType {
+    fn deserialize<D: ::serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        // struct deserializer
+        use serde::de::{MapAccess, Visitor};
+        struct StructVisitor;
+        impl<'de> Visitor<'de> for StructVisitor {
+            type Value = ProtectCustomDataTypeDisabledType;
+            fn expecting(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+                f.write_str("a ProtectCustomDataTypeDisabledType struct")
+            }
+            fn visit_map<V: MapAccess<'de>>(self, map: V) -> Result<Self::Value, V::Error> {
+                ProtectCustomDataTypeDisabledType::internal_deserialize(map)
+            }
+        }
+        deserializer.deserialize_struct("ProtectCustomDataTypeDisabledType", PROTECT_CUSTOM_DATA_TYPE_DISABLED_TYPE_FIELDS, StructVisitor)
+    }
+}
+
+impl ::serde::ser::Serialize for ProtectCustomDataTypeDisabledType {
+    fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        // struct serializer
+        use serde::ser::SerializeStruct;
+        let mut s = serializer.serialize_struct("ProtectCustomDataTypeDisabledType", 1)?;
+        self.internal_serialize::<S>(&mut s)?;
+        s.end()
+    }
+}
+
+/// Enabled a Dropbox Protect custom data type.
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[non_exhaustive] // structs may have more fields added in the future.
+pub struct ProtectCustomDataTypeEnabledDetails {
+    /// ID.
+    pub custom_data_type_id: String,
+    /// Name.
+    pub name: String,
+}
+
+impl ProtectCustomDataTypeEnabledDetails {
+    pub fn new(custom_data_type_id: String, name: String) -> Self {
+        ProtectCustomDataTypeEnabledDetails {
+            custom_data_type_id,
+            name,
+        }
+    }
+}
+
+const PROTECT_CUSTOM_DATA_TYPE_ENABLED_DETAILS_FIELDS: &[&str] = &["custom_data_type_id",
+                                                                   "name"];
+impl ProtectCustomDataTypeEnabledDetails {
+    pub(crate) fn internal_deserialize<'de, V: ::serde::de::MapAccess<'de>>(
+        map: V,
+    ) -> Result<ProtectCustomDataTypeEnabledDetails, V::Error> {
+        Self::internal_deserialize_opt(map, false).map(Option::unwrap)
+    }
+
+    pub(crate) fn internal_deserialize_opt<'de, V: ::serde::de::MapAccess<'de>>(
+        mut map: V,
+        optional: bool,
+    ) -> Result<Option<ProtectCustomDataTypeEnabledDetails>, V::Error> {
+        let mut field_custom_data_type_id = None;
+        let mut field_name = None;
+        let mut nothing = true;
+        while let Some(key) = map.next_key::<&str>()? {
+            nothing = false;
+            match key {
+                "custom_data_type_id" => {
+                    if field_custom_data_type_id.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("custom_data_type_id"));
+                    }
+                    field_custom_data_type_id = Some(map.next_value()?);
+                }
+                "name" => {
+                    if field_name.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("name"));
+                    }
+                    field_name = Some(map.next_value()?);
+                }
+                _ => {
+                    // unknown field allowed and ignored
+                    map.next_value::<::serde_json::Value>()?;
+                }
+            }
+        }
+        if optional && nothing {
+            return Ok(None);
+        }
+        let result = ProtectCustomDataTypeEnabledDetails {
+            custom_data_type_id: field_custom_data_type_id.ok_or_else(|| ::serde::de::Error::missing_field("custom_data_type_id"))?,
+            name: field_name.ok_or_else(|| ::serde::de::Error::missing_field("name"))?,
+        };
+        Ok(Some(result))
+    }
+
+    pub(crate) fn internal_serialize<S: ::serde::ser::Serializer>(
+        &self,
+        s: &mut S::SerializeStruct,
+    ) -> Result<(), S::Error> {
+        use serde::ser::SerializeStruct;
+        s.serialize_field("custom_data_type_id", &self.custom_data_type_id)?;
+        s.serialize_field("name", &self.name)?;
+        Ok(())
+    }
+}
+
+impl<'de> ::serde::de::Deserialize<'de> for ProtectCustomDataTypeEnabledDetails {
+    fn deserialize<D: ::serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        // struct deserializer
+        use serde::de::{MapAccess, Visitor};
+        struct StructVisitor;
+        impl<'de> Visitor<'de> for StructVisitor {
+            type Value = ProtectCustomDataTypeEnabledDetails;
+            fn expecting(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+                f.write_str("a ProtectCustomDataTypeEnabledDetails struct")
+            }
+            fn visit_map<V: MapAccess<'de>>(self, map: V) -> Result<Self::Value, V::Error> {
+                ProtectCustomDataTypeEnabledDetails::internal_deserialize(map)
+            }
+        }
+        deserializer.deserialize_struct("ProtectCustomDataTypeEnabledDetails", PROTECT_CUSTOM_DATA_TYPE_ENABLED_DETAILS_FIELDS, StructVisitor)
+    }
+}
+
+impl ::serde::ser::Serialize for ProtectCustomDataTypeEnabledDetails {
+    fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        // struct serializer
+        use serde::ser::SerializeStruct;
+        let mut s = serializer.serialize_struct("ProtectCustomDataTypeEnabledDetails", 2)?;
+        self.internal_serialize::<S>(&mut s)?;
+        s.end()
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[non_exhaustive] // structs may have more fields added in the future.
+pub struct ProtectCustomDataTypeEnabledType {
+    pub description: String,
+}
+
+impl ProtectCustomDataTypeEnabledType {
+    pub fn new(description: String) -> Self {
+        ProtectCustomDataTypeEnabledType {
+            description,
+        }
+    }
+}
+
+const PROTECT_CUSTOM_DATA_TYPE_ENABLED_TYPE_FIELDS: &[&str] = &["description"];
+impl ProtectCustomDataTypeEnabledType {
+    pub(crate) fn internal_deserialize<'de, V: ::serde::de::MapAccess<'de>>(
+        map: V,
+    ) -> Result<ProtectCustomDataTypeEnabledType, V::Error> {
+        Self::internal_deserialize_opt(map, false).map(Option::unwrap)
+    }
+
+    pub(crate) fn internal_deserialize_opt<'de, V: ::serde::de::MapAccess<'de>>(
+        mut map: V,
+        optional: bool,
+    ) -> Result<Option<ProtectCustomDataTypeEnabledType>, V::Error> {
+        let mut field_description = None;
+        let mut nothing = true;
+        while let Some(key) = map.next_key::<&str>()? {
+            nothing = false;
+            match key {
+                "description" => {
+                    if field_description.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("description"));
+                    }
+                    field_description = Some(map.next_value()?);
+                }
+                _ => {
+                    // unknown field allowed and ignored
+                    map.next_value::<::serde_json::Value>()?;
+                }
+            }
+        }
+        if optional && nothing {
+            return Ok(None);
+        }
+        let result = ProtectCustomDataTypeEnabledType {
+            description: field_description.ok_or_else(|| ::serde::de::Error::missing_field("description"))?,
+        };
+        Ok(Some(result))
+    }
+
+    pub(crate) fn internal_serialize<S: ::serde::ser::Serializer>(
+        &self,
+        s: &mut S::SerializeStruct,
+    ) -> Result<(), S::Error> {
+        use serde::ser::SerializeStruct;
+        s.serialize_field("description", &self.description)?;
+        Ok(())
+    }
+}
+
+impl<'de> ::serde::de::Deserialize<'de> for ProtectCustomDataTypeEnabledType {
+    fn deserialize<D: ::serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        // struct deserializer
+        use serde::de::{MapAccess, Visitor};
+        struct StructVisitor;
+        impl<'de> Visitor<'de> for StructVisitor {
+            type Value = ProtectCustomDataTypeEnabledType;
+            fn expecting(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+                f.write_str("a ProtectCustomDataTypeEnabledType struct")
+            }
+            fn visit_map<V: MapAccess<'de>>(self, map: V) -> Result<Self::Value, V::Error> {
+                ProtectCustomDataTypeEnabledType::internal_deserialize(map)
+            }
+        }
+        deserializer.deserialize_struct("ProtectCustomDataTypeEnabledType", PROTECT_CUSTOM_DATA_TYPE_ENABLED_TYPE_FIELDS, StructVisitor)
+    }
+}
+
+impl ::serde::ser::Serialize for ProtectCustomDataTypeEnabledType {
+    fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        // struct serializer
+        use serde::ser::SerializeStruct;
+        let mut s = serializer.serialize_struct("ProtectCustomDataTypeEnabledType", 1)?;
+        self.internal_serialize::<S>(&mut s)?;
+        s.end()
+    }
+}
+
+/// Modified a Dropbox Protect custom data type.
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[non_exhaustive] // structs may have more fields added in the future.
+pub struct ProtectCustomDataTypeModifiedDetails {
+    /// ID.
+    pub custom_data_type_id: String,
+    /// Name.
+    pub name: String,
+}
+
+impl ProtectCustomDataTypeModifiedDetails {
+    pub fn new(custom_data_type_id: String, name: String) -> Self {
+        ProtectCustomDataTypeModifiedDetails {
+            custom_data_type_id,
+            name,
+        }
+    }
+}
+
+const PROTECT_CUSTOM_DATA_TYPE_MODIFIED_DETAILS_FIELDS: &[&str] = &["custom_data_type_id",
+                                                                    "name"];
+impl ProtectCustomDataTypeModifiedDetails {
+    pub(crate) fn internal_deserialize<'de, V: ::serde::de::MapAccess<'de>>(
+        map: V,
+    ) -> Result<ProtectCustomDataTypeModifiedDetails, V::Error> {
+        Self::internal_deserialize_opt(map, false).map(Option::unwrap)
+    }
+
+    pub(crate) fn internal_deserialize_opt<'de, V: ::serde::de::MapAccess<'de>>(
+        mut map: V,
+        optional: bool,
+    ) -> Result<Option<ProtectCustomDataTypeModifiedDetails>, V::Error> {
+        let mut field_custom_data_type_id = None;
+        let mut field_name = None;
+        let mut nothing = true;
+        while let Some(key) = map.next_key::<&str>()? {
+            nothing = false;
+            match key {
+                "custom_data_type_id" => {
+                    if field_custom_data_type_id.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("custom_data_type_id"));
+                    }
+                    field_custom_data_type_id = Some(map.next_value()?);
+                }
+                "name" => {
+                    if field_name.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("name"));
+                    }
+                    field_name = Some(map.next_value()?);
+                }
+                _ => {
+                    // unknown field allowed and ignored
+                    map.next_value::<::serde_json::Value>()?;
+                }
+            }
+        }
+        if optional && nothing {
+            return Ok(None);
+        }
+        let result = ProtectCustomDataTypeModifiedDetails {
+            custom_data_type_id: field_custom_data_type_id.ok_or_else(|| ::serde::de::Error::missing_field("custom_data_type_id"))?,
+            name: field_name.ok_or_else(|| ::serde::de::Error::missing_field("name"))?,
+        };
+        Ok(Some(result))
+    }
+
+    pub(crate) fn internal_serialize<S: ::serde::ser::Serializer>(
+        &self,
+        s: &mut S::SerializeStruct,
+    ) -> Result<(), S::Error> {
+        use serde::ser::SerializeStruct;
+        s.serialize_field("custom_data_type_id", &self.custom_data_type_id)?;
+        s.serialize_field("name", &self.name)?;
+        Ok(())
+    }
+}
+
+impl<'de> ::serde::de::Deserialize<'de> for ProtectCustomDataTypeModifiedDetails {
+    fn deserialize<D: ::serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        // struct deserializer
+        use serde::de::{MapAccess, Visitor};
+        struct StructVisitor;
+        impl<'de> Visitor<'de> for StructVisitor {
+            type Value = ProtectCustomDataTypeModifiedDetails;
+            fn expecting(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+                f.write_str("a ProtectCustomDataTypeModifiedDetails struct")
+            }
+            fn visit_map<V: MapAccess<'de>>(self, map: V) -> Result<Self::Value, V::Error> {
+                ProtectCustomDataTypeModifiedDetails::internal_deserialize(map)
+            }
+        }
+        deserializer.deserialize_struct("ProtectCustomDataTypeModifiedDetails", PROTECT_CUSTOM_DATA_TYPE_MODIFIED_DETAILS_FIELDS, StructVisitor)
+    }
+}
+
+impl ::serde::ser::Serialize for ProtectCustomDataTypeModifiedDetails {
+    fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        // struct serializer
+        use serde::ser::SerializeStruct;
+        let mut s = serializer.serialize_struct("ProtectCustomDataTypeModifiedDetails", 2)?;
+        self.internal_serialize::<S>(&mut s)?;
+        s.end()
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[non_exhaustive] // structs may have more fields added in the future.
+pub struct ProtectCustomDataTypeModifiedType {
+    pub description: String,
+}
+
+impl ProtectCustomDataTypeModifiedType {
+    pub fn new(description: String) -> Self {
+        ProtectCustomDataTypeModifiedType {
+            description,
+        }
+    }
+}
+
+const PROTECT_CUSTOM_DATA_TYPE_MODIFIED_TYPE_FIELDS: &[&str] = &["description"];
+impl ProtectCustomDataTypeModifiedType {
+    pub(crate) fn internal_deserialize<'de, V: ::serde::de::MapAccess<'de>>(
+        map: V,
+    ) -> Result<ProtectCustomDataTypeModifiedType, V::Error> {
+        Self::internal_deserialize_opt(map, false).map(Option::unwrap)
+    }
+
+    pub(crate) fn internal_deserialize_opt<'de, V: ::serde::de::MapAccess<'de>>(
+        mut map: V,
+        optional: bool,
+    ) -> Result<Option<ProtectCustomDataTypeModifiedType>, V::Error> {
+        let mut field_description = None;
+        let mut nothing = true;
+        while let Some(key) = map.next_key::<&str>()? {
+            nothing = false;
+            match key {
+                "description" => {
+                    if field_description.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("description"));
+                    }
+                    field_description = Some(map.next_value()?);
+                }
+                _ => {
+                    // unknown field allowed and ignored
+                    map.next_value::<::serde_json::Value>()?;
+                }
+            }
+        }
+        if optional && nothing {
+            return Ok(None);
+        }
+        let result = ProtectCustomDataTypeModifiedType {
+            description: field_description.ok_or_else(|| ::serde::de::Error::missing_field("description"))?,
+        };
+        Ok(Some(result))
+    }
+
+    pub(crate) fn internal_serialize<S: ::serde::ser::Serializer>(
+        &self,
+        s: &mut S::SerializeStruct,
+    ) -> Result<(), S::Error> {
+        use serde::ser::SerializeStruct;
+        s.serialize_field("description", &self.description)?;
+        Ok(())
+    }
+}
+
+impl<'de> ::serde::de::Deserialize<'de> for ProtectCustomDataTypeModifiedType {
+    fn deserialize<D: ::serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        // struct deserializer
+        use serde::de::{MapAccess, Visitor};
+        struct StructVisitor;
+        impl<'de> Visitor<'de> for StructVisitor {
+            type Value = ProtectCustomDataTypeModifiedType;
+            fn expecting(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+                f.write_str("a ProtectCustomDataTypeModifiedType struct")
+            }
+            fn visit_map<V: MapAccess<'de>>(self, map: V) -> Result<Self::Value, V::Error> {
+                ProtectCustomDataTypeModifiedType::internal_deserialize(map)
+            }
+        }
+        deserializer.deserialize_struct("ProtectCustomDataTypeModifiedType", PROTECT_CUSTOM_DATA_TYPE_MODIFIED_TYPE_FIELDS, StructVisitor)
+    }
+}
+
+impl ::serde::ser::Serialize for ProtectCustomDataTypeModifiedType {
+    fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        // struct serializer
+        use serde::ser::SerializeStruct;
+        let mut s = serializer.serialize_struct("ProtectCustomDataTypeModifiedType", 1)?;
         self.internal_serialize::<S>(&mut s)?;
         s.end()
     }
