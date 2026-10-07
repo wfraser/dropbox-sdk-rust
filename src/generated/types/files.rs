@@ -5462,6 +5462,11 @@ impl From<FileSharingInfo> for SharingInfo {
 #[non_exhaustive] // variants may be added in the future
 pub enum FileStatus {
     Active,
+    /// Field is deprecated. Deprecated. Deleted-file search does not work and should not be used.
+    /// Use [`list_folder()`](crate::files::list_folder) with
+    /// [`ListFolderArg::include_deleted`](ListFolderArg) set to `true` to enumerate deleted
+    /// entries; this does not provide equivalent full-text search.
+    #[deprecated]
     Deleted,
     /// Catch-all used for unrecognized values returned from the server. Encountering this value
     /// typically indicates that this SDK version is out of date.
@@ -5485,6 +5490,7 @@ impl<'de> ::serde::de::Deserialize<'de> for FileStatus {
                 };
                 let value = match tag {
                     "active" => FileStatus::Active,
+                    #[allow(deprecated)]
                     "deleted" => FileStatus::Deleted,
                     _ => FileStatus::Other,
                 };
@@ -5510,6 +5516,7 @@ impl ::serde::ser::Serialize for FileStatus {
                 s.serialize_field(".tag", "active")?;
                 s.end()
             }
+            #[allow(deprecated)]
             FileStatus::Deleted => {
                 // unit
                 let mut s = serializer.serialize_struct("FileStatus", 1)?;
@@ -16623,7 +16630,9 @@ pub struct SearchOptions {
     /// Specified property of the order of search results. By default, results are sorted by
     /// relevance.
     pub order_by: Option<SearchOrderBy>,
-    /// Restricts search to the given file status.
+    /// Restricts search to the given file status. The [`FileStatus::Deleted`] value is deprecated
+    /// and should not be used. This also applies to searches continued with
+    /// [`search_continue_v2()`](crate::files::search_continue_v2).
     pub file_status: FileStatus,
     /// Restricts search to only match on filenames.
     pub filename_only: bool,
