@@ -1,6 +1,5 @@
 digraph deps {
-    account -> { account_id common };
-    account_id;
+    account -> { common };
     async -> { common };
     auth -> { common };
     check -> { common };
@@ -9,16 +8,16 @@ digraph deps {
     file_properties -> { common };
     file_requests -> { common files };
     files -> { async common file_properties users_common };
-    openid -> { account_id common };
+    openid -> { common };
     paper -> { common files sharing };
     riviera -> { async common };
     secondary_emails -> { common };
     seen_state;
-    sharing -> { account_id async common files seen_state team_common team_policies users users_common };
+    sharing -> { async common files seen_state team_common team_policies users users_common };
     team -> { account async common file_properties files secondary_emails team_common team_policies users users_common };
     team_common -> { common };
     team_log -> { common file_requests files sharing team team_common team_policies users_common };
     team_policies;
     users -> { common team_common team_policies users_common };
-    users_common -> { account_id common };
+    users_common -> { common };
 }

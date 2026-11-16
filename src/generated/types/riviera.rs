@@ -2181,6 +2181,619 @@ impl ::serde::ser::Serialize for DownloadTransformOutputResult {
     }
 }
 
+/// Reason an extraction job failed. Returned in the `failed` variant of `ExtractAsyncCheckResult`.
+/// This is a semantic error union: the HTTP status of the poll request itself is unaffected (a poll
+/// that surfaces a failed job is still a normal successful poll response). Callers should branch on
+/// the variant.
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[non_exhaustive] // variants may be added in the future
+pub enum ExtractApiV2Error {
+    /// An unexpected, typically transient, server-side failure. The string is a human-readable
+    /// message; retrying with backoff may succeed.
+    ServerError(String),
+    /// The request could not be processed as supplied (a problem with the caller's input), for
+    /// example an out-of-range option. The string is a human-readable message; retrying the same
+    /// request will not help.
+    UserError(String),
+    /// The source file is not in a format the requested `extract_type` supports.
+    UnsupportedFormatError,
+    /// `FileIdOrUrl.url` referenced a Dropbox shared link whose owner has disabled downloads.
+    LinkDownloadDisabledError,
+    /// `FileIdOrUrl.url` referenced a password-protected Dropbox shared link. Riviera cannot supply
+    /// the password, so such links cannot be read.
+    SharedLinkPasswordProtected,
+    /// A resource limit was exceeded: the source file is larger than the requested `extract_type`
+    /// accepts, or the result would be too large to return. For `keyframes`, raise
+    /// `scene_change_threshold` or turn off `include_images`; for `markdown`, turn off
+    /// `embed_images`.
+    LimitExceededError,
+    /// The source file was readable but could not be processed, for example because it is corrupt.
+    ConversionFailureError,
+    /// The referenced file does not exist or is not accessible.
+    NotFoundError,
+    /// The target is a folder, not a file.
+    IsAFolderError,
+    /// `transcript` only: the source file has no audio track.
+    NoAudioError,
+    /// Catch-all used for unrecognized values returned from the server. Encountering this value
+    /// typically indicates that this SDK version is out of date.
+    Other,
+}
+
+impl<'de> ::serde::de::Deserialize<'de> for ExtractApiV2Error {
+    fn deserialize<D: ::serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        // union deserializer
+        use serde::de::{self, MapAccess, Visitor};
+        struct EnumVisitor;
+        impl<'de> Visitor<'de> for EnumVisitor {
+            type Value = ExtractApiV2Error;
+            fn expecting(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+                f.write_str("a ExtractApiV2Error structure")
+            }
+            fn visit_map<V: MapAccess<'de>>(self, mut map: V) -> Result<Self::Value, V::Error> {
+                let tag: &str = match map.next_key()? {
+                    Some(".tag") => map.next_value()?,
+                    _ => return Err(de::Error::missing_field(".tag"))
+                };
+                let value = match tag {
+                    "server_error" => {
+                        match map.next_key()? {
+                            Some("server_error") => ExtractApiV2Error::ServerError(map.next_value()?),
+                            None => return Err(de::Error::missing_field("server_error")),
+                            _ => return Err(de::Error::unknown_field(tag, VARIANTS))
+                        }
+                    }
+                    "user_error" => {
+                        match map.next_key()? {
+                            Some("user_error") => ExtractApiV2Error::UserError(map.next_value()?),
+                            None => return Err(de::Error::missing_field("user_error")),
+                            _ => return Err(de::Error::unknown_field(tag, VARIANTS))
+                        }
+                    }
+                    "unsupported_format_error" => ExtractApiV2Error::UnsupportedFormatError,
+                    "link_download_disabled_error" => ExtractApiV2Error::LinkDownloadDisabledError,
+                    "shared_link_password_protected" => ExtractApiV2Error::SharedLinkPasswordProtected,
+                    "limit_exceeded_error" => ExtractApiV2Error::LimitExceededError,
+                    "conversion_failure_error" => ExtractApiV2Error::ConversionFailureError,
+                    "not_found_error" => ExtractApiV2Error::NotFoundError,
+                    "is_a_folder_error" => ExtractApiV2Error::IsAFolderError,
+                    "no_audio_error" => ExtractApiV2Error::NoAudioError,
+                    _ => ExtractApiV2Error::Other,
+                };
+                crate::eat_json_fields(&mut map)?;
+                Ok(value)
+            }
+        }
+        const VARIANTS: &[&str] = &["server_error",
+                                    "user_error",
+                                    "unsupported_format_error",
+                                    "link_download_disabled_error",
+                                    "shared_link_password_protected",
+                                    "limit_exceeded_error",
+                                    "conversion_failure_error",
+                                    "not_found_error",
+                                    "is_a_folder_error",
+                                    "no_audio_error",
+                                    "other"];
+        deserializer.deserialize_struct("ExtractApiV2Error", VARIANTS, EnumVisitor)
+    }
+}
+
+impl ::serde::ser::Serialize for ExtractApiV2Error {
+    fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        // union serializer
+        use serde::ser::SerializeStruct;
+        match self {
+            ExtractApiV2Error::ServerError(x) => {
+                // primitive
+                let mut s = serializer.serialize_struct("ExtractApiV2Error", 2)?;
+                s.serialize_field(".tag", "server_error")?;
+                s.serialize_field("server_error", x)?;
+                s.end()
+            }
+            ExtractApiV2Error::UserError(x) => {
+                // primitive
+                let mut s = serializer.serialize_struct("ExtractApiV2Error", 2)?;
+                s.serialize_field(".tag", "user_error")?;
+                s.serialize_field("user_error", x)?;
+                s.end()
+            }
+            ExtractApiV2Error::UnsupportedFormatError => {
+                // unit
+                let mut s = serializer.serialize_struct("ExtractApiV2Error", 1)?;
+                s.serialize_field(".tag", "unsupported_format_error")?;
+                s.end()
+            }
+            ExtractApiV2Error::LinkDownloadDisabledError => {
+                // unit
+                let mut s = serializer.serialize_struct("ExtractApiV2Error", 1)?;
+                s.serialize_field(".tag", "link_download_disabled_error")?;
+                s.end()
+            }
+            ExtractApiV2Error::SharedLinkPasswordProtected => {
+                // unit
+                let mut s = serializer.serialize_struct("ExtractApiV2Error", 1)?;
+                s.serialize_field(".tag", "shared_link_password_protected")?;
+                s.end()
+            }
+            ExtractApiV2Error::LimitExceededError => {
+                // unit
+                let mut s = serializer.serialize_struct("ExtractApiV2Error", 1)?;
+                s.serialize_field(".tag", "limit_exceeded_error")?;
+                s.end()
+            }
+            ExtractApiV2Error::ConversionFailureError => {
+                // unit
+                let mut s = serializer.serialize_struct("ExtractApiV2Error", 1)?;
+                s.serialize_field(".tag", "conversion_failure_error")?;
+                s.end()
+            }
+            ExtractApiV2Error::NotFoundError => {
+                // unit
+                let mut s = serializer.serialize_struct("ExtractApiV2Error", 1)?;
+                s.serialize_field(".tag", "not_found_error")?;
+                s.end()
+            }
+            ExtractApiV2Error::IsAFolderError => {
+                // unit
+                let mut s = serializer.serialize_struct("ExtractApiV2Error", 1)?;
+                s.serialize_field(".tag", "is_a_folder_error")?;
+                s.end()
+            }
+            ExtractApiV2Error::NoAudioError => {
+                // unit
+                let mut s = serializer.serialize_struct("ExtractApiV2Error", 1)?;
+                s.serialize_field(".tag", "no_audio_error")?;
+                s.end()
+            }
+            ExtractApiV2Error::Other => Err(::serde::ser::Error::custom("cannot serialize 'Other' variant"))
+        }
+    }
+}
+
+impl ::std::error::Error for ExtractApiV2Error {
+}
+
+impl ::std::fmt::Display for ExtractApiV2Error {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match self {
+            ExtractApiV2Error::ServerError(inner) => write!(f, "An unexpected, typically transient, server-side failure. The string is a human-readable message; retrying with backoff may succeed: {:?}", inner),
+            ExtractApiV2Error::UserError(inner) => write!(f, "The request could not be processed as supplied (a problem with the caller's input), for example an out-of-range option. The string is a human-readable message; retrying the same request will not help: {:?}", inner),
+            ExtractApiV2Error::UnsupportedFormatError => f.write_str("The source file is not in a format the requested `extract_type` supports."),
+            ExtractApiV2Error::LinkDownloadDisabledError => f.write_str("`FileIdOrUrl.url` referenced a Dropbox shared link whose owner has disabled downloads."),
+            ExtractApiV2Error::SharedLinkPasswordProtected => f.write_str("`FileIdOrUrl.url` referenced a password-protected Dropbox shared link. Riviera cannot supply the password, so such links cannot be read."),
+            ExtractApiV2Error::LimitExceededError => f.write_str("A resource limit was exceeded: the source file is larger than the requested `extract_type` accepts, or the result would be too large to return. For `keyframes`, raise `scene_change_threshold` or turn off `include_images`; for `markdown`, turn off `embed_images`."),
+            ExtractApiV2Error::ConversionFailureError => f.write_str("The source file was readable but could not be processed, for example because it is corrupt."),
+            ExtractApiV2Error::NotFoundError => f.write_str("The referenced file does not exist or is not accessible."),
+            ExtractApiV2Error::IsAFolderError => f.write_str("The target is a folder, not a file."),
+            ExtractApiV2Error::NoAudioError => f.write_str("`transcript` only: the source file has no audio track."),
+            _ => write!(f, "{:?}", *self),
+        }
+    }
+}
+
+/// Arguments for the asynchronous `extract_async` route. Exactly one of `file_id`, `path`, or `url`
+/// must be supplied via `file_id_or_url` to identify the source file, and `extract_type` must say
+/// what to extract from it.
+#[derive(Debug, Clone, PartialEq)]
+#[non_exhaustive] // structs may have more fields added in the future.
+pub struct ExtractArgs {
+    /// What to extract, and that extraction's options. Required.
+    pub extract_type: ExtractType,
+    /// Identifier of the source file. Callers must set exactly one of the `FileIdOrUrl` variants.
+    /// The file must be in a format the requested `extract_type` supports; see `ExtractType` for
+    /// the per-type lists.
+    pub file_id_or_url: Option<FileIdOrUrl>,
+}
+
+impl ExtractArgs {
+    pub fn new(extract_type: ExtractType) -> Self {
+        ExtractArgs {
+            extract_type,
+            file_id_or_url: None,
+        }
+    }
+
+    pub fn with_file_id_or_url(mut self, value: FileIdOrUrl) -> Self {
+        self.file_id_or_url = Some(value);
+        self
+    }
+}
+
+const EXTRACT_ARGS_FIELDS: &[&str] = &["extract_type",
+                                       "file_id_or_url"];
+impl ExtractArgs {
+    pub(crate) fn internal_deserialize<'de, V: ::serde::de::MapAccess<'de>>(
+        map: V,
+    ) -> Result<ExtractArgs, V::Error> {
+        Self::internal_deserialize_opt(map, false).map(Option::unwrap)
+    }
+
+    pub(crate) fn internal_deserialize_opt<'de, V: ::serde::de::MapAccess<'de>>(
+        mut map: V,
+        optional: bool,
+    ) -> Result<Option<ExtractArgs>, V::Error> {
+        let mut field_extract_type = None;
+        let mut field_file_id_or_url = None;
+        let mut nothing = true;
+        while let Some(key) = map.next_key::<&str>()? {
+            nothing = false;
+            match key {
+                "extract_type" => {
+                    if field_extract_type.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("extract_type"));
+                    }
+                    field_extract_type = Some(map.next_value()?);
+                }
+                "file_id_or_url" => {
+                    if field_file_id_or_url.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("file_id_or_url"));
+                    }
+                    field_file_id_or_url = Some(map.next_value()?);
+                }
+                _ => {
+                    // unknown field allowed and ignored
+                    map.next_value::<::serde_json::Value>()?;
+                }
+            }
+        }
+        if optional && nothing {
+            return Ok(None);
+        }
+        let result = ExtractArgs {
+            extract_type: field_extract_type.ok_or_else(|| ::serde::de::Error::missing_field("extract_type"))?,
+            file_id_or_url: field_file_id_or_url.and_then(Option::flatten),
+        };
+        Ok(Some(result))
+    }
+
+    pub(crate) fn internal_serialize<S: ::serde::ser::Serializer>(
+        &self,
+        s: &mut S::SerializeStruct,
+    ) -> Result<(), S::Error> {
+        use serde::ser::SerializeStruct;
+        s.serialize_field("extract_type", &self.extract_type)?;
+        if let Some(val) = &self.file_id_or_url {
+            s.serialize_field("file_id_or_url", val)?;
+        }
+        Ok(())
+    }
+}
+
+impl<'de> ::serde::de::Deserialize<'de> for ExtractArgs {
+    fn deserialize<D: ::serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        // struct deserializer
+        use serde::de::{MapAccess, Visitor};
+        struct StructVisitor;
+        impl<'de> Visitor<'de> for StructVisitor {
+            type Value = ExtractArgs;
+            fn expecting(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+                f.write_str("a ExtractArgs struct")
+            }
+            fn visit_map<V: MapAccess<'de>>(self, map: V) -> Result<Self::Value, V::Error> {
+                ExtractArgs::internal_deserialize(map)
+            }
+        }
+        deserializer.deserialize_struct("ExtractArgs", EXTRACT_ARGS_FIELDS, StructVisitor)
+    }
+}
+
+impl ::serde::ser::Serialize for ExtractArgs {
+    fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        // struct serializer
+        use serde::ser::SerializeStruct;
+        let mut s = serializer.serialize_struct("ExtractArgs", 2)?;
+        self.internal_serialize::<S>(&mut s)?;
+        s.end()
+    }
+}
+
+/// Status of an extraction job started by `extract_async`, as returned by `extract_async/check`.
+#[derive(Debug, Clone, PartialEq)]
+#[non_exhaustive] // variants may be added in the future
+pub enum ExtractAsyncCheckResult {
+    /// The job has not finished yet. Poll again.
+    InProgress,
+    /// The job finished successfully.
+    Complete(ExtractResult),
+    /// The job finished unsuccessfully.
+    Failed(ExtractApiV2Error),
+    /// Catch-all used for unrecognized values returned from the server. Encountering this value
+    /// typically indicates that this SDK version is out of date.
+    Other,
+}
+
+impl<'de> ::serde::de::Deserialize<'de> for ExtractAsyncCheckResult {
+    fn deserialize<D: ::serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        // union deserializer
+        use serde::de::{self, MapAccess, Visitor};
+        struct EnumVisitor;
+        impl<'de> Visitor<'de> for EnumVisitor {
+            type Value = ExtractAsyncCheckResult;
+            fn expecting(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+                f.write_str("a ExtractAsyncCheckResult structure")
+            }
+            fn visit_map<V: MapAccess<'de>>(self, mut map: V) -> Result<Self::Value, V::Error> {
+                let tag: &str = match map.next_key()? {
+                    Some(".tag") => map.next_value()?,
+                    _ => return Err(de::Error::missing_field(".tag"))
+                };
+                let value = match tag {
+                    "in_progress" => ExtractAsyncCheckResult::InProgress,
+                    "complete" => {
+                        match map.next_key()? {
+                            Some("complete") => ExtractAsyncCheckResult::Complete(map.next_value()?),
+                            None => return Err(de::Error::missing_field("complete")),
+                            _ => return Err(de::Error::unknown_field(tag, VARIANTS))
+                        }
+                    }
+                    "failed" => {
+                        match map.next_key()? {
+                            Some("failed") => ExtractAsyncCheckResult::Failed(map.next_value()?),
+                            None => return Err(de::Error::missing_field("failed")),
+                            _ => return Err(de::Error::unknown_field(tag, VARIANTS))
+                        }
+                    }
+                    _ => ExtractAsyncCheckResult::Other,
+                };
+                crate::eat_json_fields(&mut map)?;
+                Ok(value)
+            }
+        }
+        const VARIANTS: &[&str] = &["in_progress",
+                                    "complete",
+                                    "failed",
+                                    "other"];
+        deserializer.deserialize_struct("ExtractAsyncCheckResult", VARIANTS, EnumVisitor)
+    }
+}
+
+impl ::serde::ser::Serialize for ExtractAsyncCheckResult {
+    fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        // union serializer
+        use serde::ser::SerializeStruct;
+        match self {
+            ExtractAsyncCheckResult::InProgress => {
+                // unit
+                let mut s = serializer.serialize_struct("ExtractAsyncCheckResult", 1)?;
+                s.serialize_field(".tag", "in_progress")?;
+                s.end()
+            }
+            ExtractAsyncCheckResult::Complete(x) => {
+                // union or polymporphic struct
+                let mut s = serializer.serialize_struct("ExtractAsyncCheckResult", 2)?;
+                s.serialize_field(".tag", "complete")?;
+                s.serialize_field("complete", x)?;
+                s.end()
+            }
+            ExtractAsyncCheckResult::Failed(x) => {
+                // union or polymporphic struct
+                let mut s = serializer.serialize_struct("ExtractAsyncCheckResult", 2)?;
+                s.serialize_field(".tag", "failed")?;
+                s.serialize_field("failed", x)?;
+                s.end()
+            }
+            ExtractAsyncCheckResult::Other => Err(::serde::ser::Error::custom("cannot serialize 'Other' variant"))
+        }
+    }
+}
+
+/// A completed extraction. The variant always matches the `ExtractType` that was requested.
+#[derive(Debug, Clone, PartialEq)]
+#[non_exhaustive] // variants may be added in the future
+pub enum ExtractResult {
+    /// The markdown the document was converted to. May be empty when the document has no
+    /// extractable text.
+    Markdown(GetMarkdownResult),
+    /// The plain text of the document. May be empty when no text is found.
+    Text(GetTextResult),
+    /// The OCR text and hOCR. Both may be empty when no text is detected.
+    Ocr(GetOcrResult),
+    /// The transcript. Its segments are empty when no speech is detected.
+    Transcript(GetTranscriptResult),
+    /// The keyframes. Empty when no scene changes are detected.
+    Keyframes(GetKeyframesResult),
+    /// Catch-all used for unrecognized values returned from the server. Encountering this value
+    /// typically indicates that this SDK version is out of date.
+    Other,
+}
+
+impl<'de> ::serde::de::Deserialize<'de> for ExtractResult {
+    fn deserialize<D: ::serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        // union deserializer
+        use serde::de::{self, MapAccess, Visitor};
+        struct EnumVisitor;
+        impl<'de> Visitor<'de> for EnumVisitor {
+            type Value = ExtractResult;
+            fn expecting(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+                f.write_str("a ExtractResult structure")
+            }
+            fn visit_map<V: MapAccess<'de>>(self, mut map: V) -> Result<Self::Value, V::Error> {
+                let tag: &str = match map.next_key()? {
+                    Some(".tag") => map.next_value()?,
+                    _ => return Err(de::Error::missing_field(".tag"))
+                };
+                let value = match tag {
+                    "markdown" => ExtractResult::Markdown(GetMarkdownResult::internal_deserialize(&mut map)?),
+                    "text" => ExtractResult::Text(GetTextResult::internal_deserialize(&mut map)?),
+                    "ocr" => ExtractResult::Ocr(GetOcrResult::internal_deserialize(&mut map)?),
+                    "transcript" => ExtractResult::Transcript(GetTranscriptResult::internal_deserialize(&mut map)?),
+                    "keyframes" => ExtractResult::Keyframes(GetKeyframesResult::internal_deserialize(&mut map)?),
+                    _ => ExtractResult::Other,
+                };
+                crate::eat_json_fields(&mut map)?;
+                Ok(value)
+            }
+        }
+        const VARIANTS: &[&str] = &["markdown",
+                                    "text",
+                                    "ocr",
+                                    "transcript",
+                                    "keyframes",
+                                    "other"];
+        deserializer.deserialize_struct("ExtractResult", VARIANTS, EnumVisitor)
+    }
+}
+
+impl ::serde::ser::Serialize for ExtractResult {
+    fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        // union serializer
+        use serde::ser::SerializeStruct;
+        match self {
+            ExtractResult::Markdown(x) => {
+                // struct
+                let mut s = serializer.serialize_struct("ExtractResult", 2)?;
+                s.serialize_field(".tag", "markdown")?;
+                x.internal_serialize::<S>(&mut s)?;
+                s.end()
+            }
+            ExtractResult::Text(x) => {
+                // struct
+                let mut s = serializer.serialize_struct("ExtractResult", 2)?;
+                s.serialize_field(".tag", "text")?;
+                x.internal_serialize::<S>(&mut s)?;
+                s.end()
+            }
+            ExtractResult::Ocr(x) => {
+                // struct
+                let mut s = serializer.serialize_struct("ExtractResult", 3)?;
+                s.serialize_field(".tag", "ocr")?;
+                x.internal_serialize::<S>(&mut s)?;
+                s.end()
+            }
+            ExtractResult::Transcript(x) => {
+                // struct
+                let mut s = serializer.serialize_struct("ExtractResult", 2)?;
+                s.serialize_field(".tag", "transcript")?;
+                x.internal_serialize::<S>(&mut s)?;
+                s.end()
+            }
+            ExtractResult::Keyframes(x) => {
+                // struct
+                let mut s = serializer.serialize_struct("ExtractResult", 2)?;
+                s.serialize_field(".tag", "keyframes")?;
+                x.internal_serialize::<S>(&mut s)?;
+                s.end()
+            }
+            ExtractResult::Other => Err(::serde::ser::Error::custom("cannot serialize 'Other' variant"))
+        }
+    }
+}
+
+/// What to extract from the source file, with that extraction's options. Exactly one variant must
+/// be set. Every variant carries an options message, so always send the object form -- for example
+/// `{".tag": "text"}` -- rather than a bare tag string. Option fields may be omitted to take their
+/// defaults.
+#[derive(Debug, Clone, PartialEq)]
+#[non_exhaustive] // variants may be added in the future
+pub enum ExtractType {
+    /// Convert a document to markdown, preserving structure such as headings, lists, and tables.
+    /// Supported formats: .binder, .docx, .html, .paper, .papert, .pptx, .xlsx, .gsheet, .ods,
+    /// .pdf. At most 50 MB.
+    Markdown(MarkdownExtractOptions),
+    /// Extract the plain text of a document. Supported formats: .doc, .docx, .docm, .rtf, .ppt,
+    /// .pptx, .pptm, .xls, .xlsx, .xlsm, .pdf, .paper, .papert, .binder, .gdoc, .gsheet, .gslides,
+    /// .txt, .vtt. At most 50 MB.
+    Text(TextExtractOptions),
+    /// Run OCR on an image or a scanned PDF, returning reading-ordered text plus hOCR with per-word
+    /// coordinates. Supported formats: .bmp, .gif, .heic, .jpeg, .jpg, .png, .tif, .tiff, .webp,
+    /// .pdf. A PDF that already has a text layer is not OCRed and yields an empty result; use
+    /// `text` for it. External (non-Dropbox) URLs are not supported.
+    Ocr(OcrExtractOptions),
+    /// Transcribe the audio of an audio or video file into timestamped segments. Supported audio
+    /// formats: .aac, .aif, .aiff, .flac, .m4a, .m4r, .mp3, .oga, .ogg, .wav, .wma; video formats
+    /// as for `keyframes`. At most 10 GB, with at most 1 hour of audio. A file with no audio track
+    /// fails with `no_audio_error`.
+    Transcript(TranscriptExtractOptions),
+    /// Detect scene changes in a video and return one keyframe per scene. Supported formats: .3gp,
+    /// .3gpp, .3gpp2, .asf, .avi, .dv, .flv, .m2t, .m2ts, .m4v, .mkv, .mov, .mp4, .mpeg, .mpg,
+    /// .mts, .mxf, .oggtheora, .ogv, .rm, .ts, .vob, .webm, .wmv. At most 10 GB.
+    Keyframes(KeyframesExtractOptions),
+    /// Catch-all used for unrecognized values returned from the server. Encountering this value
+    /// typically indicates that this SDK version is out of date.
+    Other,
+}
+
+impl<'de> ::serde::de::Deserialize<'de> for ExtractType {
+    fn deserialize<D: ::serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        // union deserializer
+        use serde::de::{self, MapAccess, Visitor};
+        struct EnumVisitor;
+        impl<'de> Visitor<'de> for EnumVisitor {
+            type Value = ExtractType;
+            fn expecting(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+                f.write_str("a ExtractType structure")
+            }
+            fn visit_map<V: MapAccess<'de>>(self, mut map: V) -> Result<Self::Value, V::Error> {
+                let tag: &str = match map.next_key()? {
+                    Some(".tag") => map.next_value()?,
+                    _ => return Err(de::Error::missing_field(".tag"))
+                };
+                let value = match tag {
+                    "markdown" => ExtractType::Markdown(MarkdownExtractOptions::internal_deserialize(&mut map)?),
+                    "text" => ExtractType::Text(TextExtractOptions::internal_deserialize(&mut map)?),
+                    "ocr" => ExtractType::Ocr(OcrExtractOptions::internal_deserialize(&mut map)?),
+                    "transcript" => ExtractType::Transcript(TranscriptExtractOptions::internal_deserialize(&mut map)?),
+                    "keyframes" => ExtractType::Keyframes(KeyframesExtractOptions::internal_deserialize(&mut map)?),
+                    _ => ExtractType::Other,
+                };
+                crate::eat_json_fields(&mut map)?;
+                Ok(value)
+            }
+        }
+        const VARIANTS: &[&str] = &["markdown",
+                                    "text",
+                                    "ocr",
+                                    "transcript",
+                                    "keyframes",
+                                    "other"];
+        deserializer.deserialize_struct("ExtractType", VARIANTS, EnumVisitor)
+    }
+}
+
+impl ::serde::ser::Serialize for ExtractType {
+    fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        // union serializer
+        use serde::ser::SerializeStruct;
+        match self {
+            ExtractType::Markdown(x) => {
+                // struct
+                let mut s = serializer.serialize_struct("ExtractType", 3)?;
+                s.serialize_field(".tag", "markdown")?;
+                x.internal_serialize::<S>(&mut s)?;
+                s.end()
+            }
+            ExtractType::Text(_) => {
+                // struct
+                let mut s = serializer.serialize_struct("ExtractType", 1)?;
+                s.serialize_field(".tag", "text")?;
+                s.end()
+            }
+            ExtractType::Ocr(_) => {
+                // struct
+                let mut s = serializer.serialize_struct("ExtractType", 1)?;
+                s.serialize_field(".tag", "ocr")?;
+                s.end()
+            }
+            ExtractType::Transcript(x) => {
+                // struct
+                let mut s = serializer.serialize_struct("ExtractType", 4)?;
+                s.serialize_field(".tag", "transcript")?;
+                x.internal_serialize::<S>(&mut s)?;
+                s.end()
+            }
+            ExtractType::Keyframes(x) => {
+                // struct
+                let mut s = serializer.serialize_struct("ExtractType", 3)?;
+                s.serialize_field(".tag", "keyframes")?;
+                x.internal_serialize::<S>(&mut s)?;
+                s.end()
+            }
+            ExtractType::Other => Err(::serde::ser::Error::custom("cannot serialize 'Other' variant"))
+        }
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[non_exhaustive] // variants may be added in the future
 pub enum FileIdOrUrl {
@@ -4219,6 +4832,112 @@ impl ::serde::ser::Serialize for ImageOptions {
     }
 }
 
+/// Options for `ExtractType.keyframes`.
+#[derive(Debug, Clone, PartialEq, Default)]
+#[non_exhaustive] // structs may have more fields added in the future.
+pub struct KeyframesExtractOptions {
+    /// Sensitivity of scene-change detection. A keyframe is emitted whenever the frame-to-frame
+    /// scene score crosses this threshold, so a LOWER value yields MORE keyframes. When omitted
+    /// (0.0) the service uses 0.3, a good starting point for most videos. Values above 1.0 fail
+    /// with `user_error`.
+    pub scene_change_threshold: f64,
+    /// When true, each keyframe carries its JPEG image, base64-encoded, in
+    /// `ApiKeyframe.image_base64`. When false (the default), only timestamps and scene scores are
+    /// returned, which keeps the result small.
+    pub include_images: bool,
+}
+
+impl KeyframesExtractOptions {
+    pub fn with_scene_change_threshold(mut self, value: f64) -> Self {
+        self.scene_change_threshold = value;
+        self
+    }
+
+    pub fn with_include_images(mut self, value: bool) -> Self {
+        self.include_images = value;
+        self
+    }
+}
+
+const KEYFRAMES_EXTRACT_OPTIONS_FIELDS: &[&str] = &["scene_change_threshold",
+                                                    "include_images"];
+impl KeyframesExtractOptions {
+    // no _opt deserializer
+    pub(crate) fn internal_deserialize<'de, V: ::serde::de::MapAccess<'de>>(
+        mut map: V,
+    ) -> Result<KeyframesExtractOptions, V::Error> {
+        let mut field_scene_change_threshold = None;
+        let mut field_include_images = None;
+        while let Some(key) = map.next_key::<&str>()? {
+            match key {
+                "scene_change_threshold" => {
+                    if field_scene_change_threshold.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("scene_change_threshold"));
+                    }
+                    field_scene_change_threshold = Some(map.next_value()?);
+                }
+                "include_images" => {
+                    if field_include_images.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("include_images"));
+                    }
+                    field_include_images = Some(map.next_value()?);
+                }
+                _ => {
+                    // unknown field allowed and ignored
+                    map.next_value::<::serde_json::Value>()?;
+                }
+            }
+        }
+        let result = KeyframesExtractOptions {
+            scene_change_threshold: field_scene_change_threshold.unwrap_or(0.0),
+            include_images: field_include_images.unwrap_or(false),
+        };
+        Ok(result)
+    }
+
+    pub(crate) fn internal_serialize<S: ::serde::ser::Serializer>(
+        &self,
+        s: &mut S::SerializeStruct,
+    ) -> Result<(), S::Error> {
+        use serde::ser::SerializeStruct;
+        if self.scene_change_threshold != 0.0 {
+            s.serialize_field("scene_change_threshold", &self.scene_change_threshold)?;
+        }
+        if self.include_images {
+            s.serialize_field("include_images", &self.include_images)?;
+        }
+        Ok(())
+    }
+}
+
+impl<'de> ::serde::de::Deserialize<'de> for KeyframesExtractOptions {
+    fn deserialize<D: ::serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        // struct deserializer
+        use serde::de::{MapAccess, Visitor};
+        struct StructVisitor;
+        impl<'de> Visitor<'de> for StructVisitor {
+            type Value = KeyframesExtractOptions;
+            fn expecting(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+                f.write_str("a KeyframesExtractOptions struct")
+            }
+            fn visit_map<V: MapAccess<'de>>(self, map: V) -> Result<Self::Value, V::Error> {
+                KeyframesExtractOptions::internal_deserialize(map)
+            }
+        }
+        deserializer.deserialize_struct("KeyframesExtractOptions", KEYFRAMES_EXTRACT_OPTIONS_FIELDS, StructVisitor)
+    }
+}
+
+impl ::serde::ser::Serialize for KeyframesExtractOptions {
+    fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        // struct serializer
+        use serde::ser::SerializeStruct;
+        let mut s = serializer.serialize_struct("KeyframesExtractOptions", 2)?;
+        self.internal_serialize::<S>(&mut s)?;
+        s.end()
+    }
+}
+
 /// Reason a keyframe extraction job failed. Returned in the `failed` variant of
 /// `GetKeyframesAsyncCheckResult`. This is a semantic error union: the HTTP status of the poll
 /// request itself is unaffected (a poll that surfaces a failed job is still a normal successful
@@ -4567,6 +5286,109 @@ impl ::std::fmt::Display for MarkdownConversionApiV2Error {
             MarkdownConversionApiV2Error::IsAFolderError => f.write_str("The target is a folder, not a file."),
             _ => write!(f, "{:?}", *self),
         }
+    }
+}
+
+/// Options for `ExtractType.markdown`.
+#[derive(Debug, Clone, PartialEq, Eq, Default)]
+#[non_exhaustive] // structs may have more fields added in the future.
+pub struct MarkdownExtractOptions {
+    /// Run OCR on PDF documents, so that scanned pages contribute text. Processing is slower when
+    /// enabled.
+    pub enable_ocr: bool,
+    /// Embed images as base64 data URIs in the markdown. This can significantly increase the size
+    /// of the result.
+    pub embed_images: bool,
+}
+
+impl MarkdownExtractOptions {
+    pub fn with_enable_ocr(mut self, value: bool) -> Self {
+        self.enable_ocr = value;
+        self
+    }
+
+    pub fn with_embed_images(mut self, value: bool) -> Self {
+        self.embed_images = value;
+        self
+    }
+}
+
+const MARKDOWN_EXTRACT_OPTIONS_FIELDS: &[&str] = &["enable_ocr",
+                                                   "embed_images"];
+impl MarkdownExtractOptions {
+    // no _opt deserializer
+    pub(crate) fn internal_deserialize<'de, V: ::serde::de::MapAccess<'de>>(
+        mut map: V,
+    ) -> Result<MarkdownExtractOptions, V::Error> {
+        let mut field_enable_ocr = None;
+        let mut field_embed_images = None;
+        while let Some(key) = map.next_key::<&str>()? {
+            match key {
+                "enable_ocr" => {
+                    if field_enable_ocr.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("enable_ocr"));
+                    }
+                    field_enable_ocr = Some(map.next_value()?);
+                }
+                "embed_images" => {
+                    if field_embed_images.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("embed_images"));
+                    }
+                    field_embed_images = Some(map.next_value()?);
+                }
+                _ => {
+                    // unknown field allowed and ignored
+                    map.next_value::<::serde_json::Value>()?;
+                }
+            }
+        }
+        let result = MarkdownExtractOptions {
+            enable_ocr: field_enable_ocr.unwrap_or(false),
+            embed_images: field_embed_images.unwrap_or(false),
+        };
+        Ok(result)
+    }
+
+    pub(crate) fn internal_serialize<S: ::serde::ser::Serializer>(
+        &self,
+        s: &mut S::SerializeStruct,
+    ) -> Result<(), S::Error> {
+        use serde::ser::SerializeStruct;
+        if self.enable_ocr {
+            s.serialize_field("enable_ocr", &self.enable_ocr)?;
+        }
+        if self.embed_images {
+            s.serialize_field("embed_images", &self.embed_images)?;
+        }
+        Ok(())
+    }
+}
+
+impl<'de> ::serde::de::Deserialize<'de> for MarkdownExtractOptions {
+    fn deserialize<D: ::serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        // struct deserializer
+        use serde::de::{MapAccess, Visitor};
+        struct StructVisitor;
+        impl<'de> Visitor<'de> for StructVisitor {
+            type Value = MarkdownExtractOptions;
+            fn expecting(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+                f.write_str("a MarkdownExtractOptions struct")
+            }
+            fn visit_map<V: MapAccess<'de>>(self, map: V) -> Result<Self::Value, V::Error> {
+                MarkdownExtractOptions::internal_deserialize(map)
+            }
+        }
+        deserializer.deserialize_struct("MarkdownExtractOptions", MARKDOWN_EXTRACT_OPTIONS_FIELDS, StructVisitor)
+    }
+}
+
+impl ::serde::ser::Serialize for MarkdownExtractOptions {
+    fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        // struct serializer
+        use serde::ser::SerializeStruct;
+        let mut s = serializer.serialize_struct("MarkdownExtractOptions", 2)?;
+        self.internal_serialize::<S>(&mut s)?;
+        s.end()
     }
 }
 
@@ -4929,6 +5751,51 @@ impl ::serde::ser::Serialize for MetadataType {
     }
 }
 
+/// Options for `ExtractType.ocr`. There are none yet; the variant carries a message so that options
+/// can be added later without changing its shape.
+#[derive(Debug, Clone, PartialEq, Eq, Default)]
+#[non_exhaustive] // structs may have more fields added in the future.
+pub struct OcrExtractOptions {
+}
+
+const OCR_EXTRACT_OPTIONS_FIELDS: &[&str] = &[];
+impl OcrExtractOptions {
+    // no _opt deserializer
+    pub(crate) fn internal_deserialize<'de, V: ::serde::de::MapAccess<'de>>(
+        mut map: V,
+    ) -> Result<OcrExtractOptions, V::Error> {
+        // ignore any fields found; none are presently recognized
+        crate::eat_json_fields(&mut map)?;
+        Ok(OcrExtractOptions {})
+    }
+}
+
+impl<'de> ::serde::de::Deserialize<'de> for OcrExtractOptions {
+    fn deserialize<D: ::serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        // struct deserializer
+        use serde::de::{MapAccess, Visitor};
+        struct StructVisitor;
+        impl<'de> Visitor<'de> for StructVisitor {
+            type Value = OcrExtractOptions;
+            fn expecting(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+                f.write_str("a OcrExtractOptions struct")
+            }
+            fn visit_map<V: MapAccess<'de>>(self, map: V) -> Result<Self::Value, V::Error> {
+                OcrExtractOptions::internal_deserialize(map)
+            }
+        }
+        deserializer.deserialize_struct("OcrExtractOptions", OCR_EXTRACT_OPTIONS_FIELDS, StructVisitor)
+    }
+}
+
+impl ::serde::ser::Serialize for OcrExtractOptions {
+    fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        // struct serializer
+        use serde::ser::SerializeStruct;
+        serializer.serialize_struct("OcrExtractOptions", 0)?.end()
+    }
+}
+
 /// Reason an OCR extraction job failed. Returned in the `failed` variant of
 /// `GetOcrAsyncCheckResult`. This is a semantic error union: the HTTP status of the poll request
 /// itself is unaffected (a poll that surfaces a failed job is still a normal successful poll
@@ -5182,6 +6049,51 @@ impl ::serde::ser::Serialize for OfficeFileType {
             }
             OfficeFileType::Other => Err(::serde::ser::Error::custom("cannot serialize 'Other' variant"))
         }
+    }
+}
+
+/// Options for `ExtractType.text`. There are none yet; the variant carries a message so that
+/// options can be added later without changing its shape.
+#[derive(Debug, Clone, PartialEq, Eq, Default)]
+#[non_exhaustive] // structs may have more fields added in the future.
+pub struct TextExtractOptions {
+}
+
+const TEXT_EXTRACT_OPTIONS_FIELDS: &[&str] = &[];
+impl TextExtractOptions {
+    // no _opt deserializer
+    pub(crate) fn internal_deserialize<'de, V: ::serde::de::MapAccess<'de>>(
+        mut map: V,
+    ) -> Result<TextExtractOptions, V::Error> {
+        // ignore any fields found; none are presently recognized
+        crate::eat_json_fields(&mut map)?;
+        Ok(TextExtractOptions {})
+    }
+}
+
+impl<'de> ::serde::de::Deserialize<'de> for TextExtractOptions {
+    fn deserialize<D: ::serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        // struct deserializer
+        use serde::de::{MapAccess, Visitor};
+        struct StructVisitor;
+        impl<'de> Visitor<'de> for StructVisitor {
+            type Value = TextExtractOptions;
+            fn expecting(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+                f.write_str("a TextExtractOptions struct")
+            }
+            fn visit_map<V: MapAccess<'de>>(self, map: V) -> Result<Self::Value, V::Error> {
+                TextExtractOptions::internal_deserialize(map)
+            }
+        }
+        deserializer.deserialize_struct("TextExtractOptions", TEXT_EXTRACT_OPTIONS_FIELDS, StructVisitor)
+    }
+}
+
+impl ::serde::ser::Serialize for TextExtractOptions {
+    fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        // struct serializer
+        use serde::ser::SerializeStruct;
+        serializer.serialize_struct("TextExtractOptions", 0)?.end()
     }
 }
 
@@ -5859,6 +6771,140 @@ impl ::serde::ser::Serialize for TimestampLevel {
             }
             TimestampLevel::Other => Err(::serde::ser::Error::custom("cannot serialize 'Other' variant"))
         }
+    }
+}
+
+/// Options for `ExtractType.transcript`.
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[non_exhaustive] // structs may have more fields added in the future.
+pub struct TranscriptExtractOptions {
+    /// Granularity of the time offsets returned for each transcript segment. Defaults to
+    /// `sentence`.
+    pub timestamp_level: TimestampLevel,
+    /// Comma-delimited list of non-lexical filler words to keep in the transcript, e.g. "uh, ah,
+    /// uhm". By default these fillers are stripped. Unrecognized tokens are ignored.
+    pub included_special_words: String,
+    /// Hint for the spoken language of the audio, as an ISO 639-1 code such as "en" or "ja". When
+    /// empty, the service detects the language. A language the service does not support fails with
+    /// `user_error`.
+    pub audio_language: String,
+}
+
+impl Default for TranscriptExtractOptions {
+    fn default() -> Self {
+        TranscriptExtractOptions {
+            timestamp_level: TimestampLevel::Sentence,
+            included_special_words: String::new(),
+            audio_language: String::new(),
+        }
+    }
+}
+
+impl TranscriptExtractOptions {
+    pub fn with_timestamp_level(mut self, value: TimestampLevel) -> Self {
+        self.timestamp_level = value;
+        self
+    }
+
+    pub fn with_included_special_words(mut self, value: String) -> Self {
+        self.included_special_words = value;
+        self
+    }
+
+    pub fn with_audio_language(mut self, value: String) -> Self {
+        self.audio_language = value;
+        self
+    }
+}
+
+const TRANSCRIPT_EXTRACT_OPTIONS_FIELDS: &[&str] = &["timestamp_level",
+                                                     "included_special_words",
+                                                     "audio_language"];
+impl TranscriptExtractOptions {
+    // no _opt deserializer
+    pub(crate) fn internal_deserialize<'de, V: ::serde::de::MapAccess<'de>>(
+        mut map: V,
+    ) -> Result<TranscriptExtractOptions, V::Error> {
+        let mut field_timestamp_level = None;
+        let mut field_included_special_words = None;
+        let mut field_audio_language = None;
+        while let Some(key) = map.next_key::<&str>()? {
+            match key {
+                "timestamp_level" => {
+                    if field_timestamp_level.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("timestamp_level"));
+                    }
+                    field_timestamp_level = Some(map.next_value()?);
+                }
+                "included_special_words" => {
+                    if field_included_special_words.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("included_special_words"));
+                    }
+                    field_included_special_words = Some(map.next_value()?);
+                }
+                "audio_language" => {
+                    if field_audio_language.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("audio_language"));
+                    }
+                    field_audio_language = Some(map.next_value()?);
+                }
+                _ => {
+                    // unknown field allowed and ignored
+                    map.next_value::<::serde_json::Value>()?;
+                }
+            }
+        }
+        let result = TranscriptExtractOptions {
+            timestamp_level: field_timestamp_level.unwrap_or(TimestampLevel::Sentence),
+            included_special_words: field_included_special_words.unwrap_or_default(),
+            audio_language: field_audio_language.unwrap_or_default(),
+        };
+        Ok(result)
+    }
+
+    pub(crate) fn internal_serialize<S: ::serde::ser::Serializer>(
+        &self,
+        s: &mut S::SerializeStruct,
+    ) -> Result<(), S::Error> {
+        use serde::ser::SerializeStruct;
+        if self.timestamp_level != TimestampLevel::Sentence {
+            s.serialize_field("timestamp_level", &self.timestamp_level)?;
+        }
+        if !self.included_special_words.is_empty() {
+            s.serialize_field("included_special_words", &self.included_special_words)?;
+        }
+        if !self.audio_language.is_empty() {
+            s.serialize_field("audio_language", &self.audio_language)?;
+        }
+        Ok(())
+    }
+}
+
+impl<'de> ::serde::de::Deserialize<'de> for TranscriptExtractOptions {
+    fn deserialize<D: ::serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        // struct deserializer
+        use serde::de::{MapAccess, Visitor};
+        struct StructVisitor;
+        impl<'de> Visitor<'de> for StructVisitor {
+            type Value = TranscriptExtractOptions;
+            fn expecting(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+                f.write_str("a TranscriptExtractOptions struct")
+            }
+            fn visit_map<V: MapAccess<'de>>(self, map: V) -> Result<Self::Value, V::Error> {
+                TranscriptExtractOptions::internal_deserialize(map)
+            }
+        }
+        deserializer.deserialize_struct("TranscriptExtractOptions", TRANSCRIPT_EXTRACT_OPTIONS_FIELDS, StructVisitor)
+    }
+}
+
+impl ::serde::ser::Serialize for TranscriptExtractOptions {
+    fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        // struct serializer
+        use serde::ser::SerializeStruct;
+        let mut s = serializer.serialize_struct("TranscriptExtractOptions", 3)?;
+        self.internal_serialize::<S>(&mut s)?;
+        s.end()
     }
 }
 

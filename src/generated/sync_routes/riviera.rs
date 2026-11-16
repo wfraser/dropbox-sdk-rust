@@ -74,22 +74,129 @@ pub fn download_transform_output_app_auth(
     )
 }
 
-/// Asynchronous scene-change keyframe extraction for video files. Detects scene changes in the
-/// source video and returns one representative keyframe per detected scene, each tagged with its
-/// timestamp (seconds from the start of the video) and scene-change score. Set `include_images =
-/// true` to also receive each frame as a base64-encoded JPEG; when the field is omitted the
-/// response carries keyframe metadata only. Supported video formats: .3gp, .3gpp, .3gpp2, .asf,
-/// .avi, .dv, .flv, .m2t, .m2ts, .m4v, .mkv, .mov, .mp4, .mpeg, .mpg, .mts, .mxf, .oggtheora, .ogv,
-/// .rm, .ts, .vob, .webm, .wmv. Unsupported formats return an `unsupported_format_error`. Limits:
-/// the source file must be at most 10 GB. To keep responses within service limits the number of
-/// keyframes and the total image payload are bounded; requests that would exceed these limits
-/// return a `limit_exceeded_error` -- raise `scene_change_threshold` or set `include_images =
-/// false` to stay within bounds.
+/// Asynchronous content extraction from a single file. One route covers every Riviera extraction.
+/// Name the source file in `file_id_or_url`, and say what to extract in `extract_type`, whose
+/// variant carries that extraction's options: - `markdown`: a document, converted to markdown that
+/// preserves its structure. - `text`: the plain text of a document. - `ocr`: the text of an image
+/// or scanned PDF, plus hOCR with per-word coordinates. - `transcript`: the timestamped transcript
+/// of an audio or video file. - `keyframes`: one keyframe per scene change in a video. The accepted
+/// formats and size limits differ per extraction; see `ExtractType`. Formats the requested
+/// extraction does not support fail with `unsupported_format_error`, and files over its size limit
+/// fail with `limit_exceeded_error`. The result is not returned by this route. Poll
+/// `extract_async/check` with the returned async job ID until it reports `complete` or `failed`. A
+/// `complete` result is an `ExtractResult` whose variant matches the requested `extract_type`.
 ///
 /// # Stability
 /// *PREVIEW*: This function may change or disappear without notice.
 #[cfg(feature = "unstable")]
 #[cfg_attr(docsrs, doc(cfg(feature = "unstable")))]
+pub fn extract_async(
+    client: &impl crate::client_trait::UserAuthClient,
+    arg: &ExtractArgs,
+) -> Result<crate::types::dbx_async::LaunchResultBase, crate::Error<crate::NoError>> {
+    crate::client_helpers::unwrap_async(
+        crate::client_helpers::request(
+            client,
+            crate::client_trait_common::Endpoint::Api,
+            crate::client_trait_common::Style::Rpc,
+            "riviera/extract_async",
+            arg,
+            None)
+    )
+}
+
+/// Asynchronous content extraction from a single file. One route covers every Riviera extraction.
+/// Name the source file in `file_id_or_url`, and say what to extract in `extract_type`, whose
+/// variant carries that extraction's options: - `markdown`: a document, converted to markdown that
+/// preserves its structure. - `text`: the plain text of a document. - `ocr`: the text of an image
+/// or scanned PDF, plus hOCR with per-word coordinates. - `transcript`: the timestamped transcript
+/// of an audio or video file. - `keyframes`: one keyframe per scene change in a video. The accepted
+/// formats and size limits differ per extraction; see `ExtractType`. Formats the requested
+/// extraction does not support fail with `unsupported_format_error`, and files over its size limit
+/// fail with `limit_exceeded_error`. The result is not returned by this route. Poll
+/// `extract_async/check` with the returned async job ID until it reports `complete` or `failed`. A
+/// `complete` result is an `ExtractResult` whose variant matches the requested `extract_type`.
+///
+/// # Stability
+/// *PREVIEW*: This function may change or disappear without notice.
+#[cfg(feature = "unstable")]
+#[cfg_attr(docsrs, doc(cfg(feature = "unstable")))]
+pub fn extract_async_app_auth(
+    client: &impl crate::client_trait::AppAuthClient,
+    arg: &ExtractArgs,
+) -> Result<crate::types::dbx_async::LaunchResultBase, crate::Error<crate::NoError>> {
+    crate::client_helpers::unwrap_async(
+        crate::client_helpers::request(
+            client,
+            crate::client_trait_common::Endpoint::Api,
+            crate::client_trait_common::Style::Rpc,
+            "riviera/extract_async",
+            arg,
+            None)
+    )
+}
+
+/// Returns the status or result of specified extract_async task.
+///
+/// # Stability
+/// *PREVIEW*: This function may change or disappear without notice.
+#[cfg(feature = "unstable")]
+#[cfg_attr(docsrs, doc(cfg(feature = "unstable")))]
+pub fn extract_async_check(
+    client: &impl crate::client_trait::UserAuthClient,
+    arg: &crate::types::dbx_async::PollArg,
+) -> Result<ExtractAsyncCheckResult, crate::Error<crate::types::dbx_async::PollError>> {
+    crate::client_helpers::unwrap_async(
+        crate::client_helpers::request(
+            client,
+            crate::client_trait_common::Endpoint::Api,
+            crate::client_trait_common::Style::Rpc,
+            "riviera/extract_async/check",
+            arg,
+            None)
+    )
+}
+
+/// Returns the status or result of specified extract_async task.
+///
+/// # Stability
+/// *PREVIEW*: This function may change or disappear without notice.
+#[cfg(feature = "unstable")]
+#[cfg_attr(docsrs, doc(cfg(feature = "unstable")))]
+pub fn extract_async_check_app_auth(
+    client: &impl crate::client_trait::AppAuthClient,
+    arg: &crate::types::dbx_async::PollArg,
+) -> Result<ExtractAsyncCheckResult, crate::Error<crate::types::dbx_async::PollError>> {
+    crate::client_helpers::unwrap_async(
+        crate::client_helpers::request(
+            client,
+            crate::client_trait_common::Endpoint::Api,
+            crate::client_trait_common::Style::Rpc,
+            "riviera/extract_async/check",
+            arg,
+            None)
+    )
+}
+
+/// Deprecated: use [`extract_async()`](crate::riviera::extract_async) with `extract_type` set to
+/// [`ExtractType::Keyframes`] instead, which takes the same options. This route will be turned off
+/// by December 31, 2026. Asynchronous scene-change keyframe extraction for video files. Detects
+/// scene changes in the source video and returns one representative keyframe per detected scene,
+/// each tagged with its timestamp (seconds from the start of the video) and scene-change score. Set
+/// `include_images = true` to also receive each frame as a base64-encoded JPEG; when the field is
+/// omitted the response carries keyframe metadata only. Supported video formats: .3gp, .3gpp,
+/// .3gpp2, .asf, .avi, .dv, .flv, .m2t, .m2ts, .m4v, .mkv, .mov, .mp4, .mpeg, .mpg, .mts, .mxf,
+/// .oggtheora, .ogv, .rm, .ts, .vob, .webm, .wmv. Unsupported formats return an
+/// `unsupported_format_error`. Limits: the source file must be at most 10 GB. To keep responses
+/// within service limits the number of keyframes and the total image payload are bounded; requests
+/// that would exceed these limits return a `limit_exceeded_error` -- raise `scene_change_threshold`
+/// or set `include_images = false` to stay within bounds.
+///
+/// # Stability
+/// *PREVIEW*: This function may change or disappear without notice.
+#[cfg(feature = "unstable")]
+#[cfg_attr(docsrs, doc(cfg(feature = "unstable")))]
+#[deprecated]
 pub fn get_keyframes_async(
     client: &impl crate::client_trait::UserAuthClient,
     arg: &GetKeyframesArgs,
@@ -105,22 +212,25 @@ pub fn get_keyframes_async(
     )
 }
 
-/// Asynchronous scene-change keyframe extraction for video files. Detects scene changes in the
-/// source video and returns one representative keyframe per detected scene, each tagged with its
-/// timestamp (seconds from the start of the video) and scene-change score. Set `include_images =
-/// true` to also receive each frame as a base64-encoded JPEG; when the field is omitted the
-/// response carries keyframe metadata only. Supported video formats: .3gp, .3gpp, .3gpp2, .asf,
-/// .avi, .dv, .flv, .m2t, .m2ts, .m4v, .mkv, .mov, .mp4, .mpeg, .mpg, .mts, .mxf, .oggtheora, .ogv,
-/// .rm, .ts, .vob, .webm, .wmv. Unsupported formats return an `unsupported_format_error`. Limits:
-/// the source file must be at most 10 GB. To keep responses within service limits the number of
-/// keyframes and the total image payload are bounded; requests that would exceed these limits
-/// return a `limit_exceeded_error` -- raise `scene_change_threshold` or set `include_images =
-/// false` to stay within bounds.
+/// Deprecated: use [`extract_async()`](crate::riviera::extract_async) with `extract_type` set to
+/// [`ExtractType::Keyframes`] instead, which takes the same options. This route will be turned off
+/// by December 31, 2026. Asynchronous scene-change keyframe extraction for video files. Detects
+/// scene changes in the source video and returns one representative keyframe per detected scene,
+/// each tagged with its timestamp (seconds from the start of the video) and scene-change score. Set
+/// `include_images = true` to also receive each frame as a base64-encoded JPEG; when the field is
+/// omitted the response carries keyframe metadata only. Supported video formats: .3gp, .3gpp,
+/// .3gpp2, .asf, .avi, .dv, .flv, .m2t, .m2ts, .m4v, .mkv, .mov, .mp4, .mpeg, .mpg, .mts, .mxf,
+/// .oggtheora, .ogv, .rm, .ts, .vob, .webm, .wmv. Unsupported formats return an
+/// `unsupported_format_error`. Limits: the source file must be at most 10 GB. To keep responses
+/// within service limits the number of keyframes and the total image payload are bounded; requests
+/// that would exceed these limits return a `limit_exceeded_error` -- raise `scene_change_threshold`
+/// or set `include_images = false` to stay within bounds.
 ///
 /// # Stability
 /// *PREVIEW*: This function may change or disappear without notice.
 #[cfg(feature = "unstable")]
 #[cfg_attr(docsrs, doc(cfg(feature = "unstable")))]
+#[deprecated]
 pub fn get_keyframes_async_app_auth(
     client: &impl crate::client_trait::AppAuthClient,
     arg: &GetKeyframesArgs,
@@ -142,6 +252,7 @@ pub fn get_keyframes_async_app_auth(
 /// *PREVIEW*: This function may change or disappear without notice.
 #[cfg(feature = "unstable")]
 #[cfg_attr(docsrs, doc(cfg(feature = "unstable")))]
+#[deprecated]
 pub fn get_keyframes_async_check(
     client: &impl crate::client_trait::UserAuthClient,
     arg: &crate::types::dbx_async::PollArg,
@@ -163,6 +274,7 @@ pub fn get_keyframes_async_check(
 /// *PREVIEW*: This function may change or disappear without notice.
 #[cfg(feature = "unstable")]
 #[cfg_attr(docsrs, doc(cfg(feature = "unstable")))]
+#[deprecated]
 pub fn get_keyframes_async_check_app_auth(
     client: &impl crate::client_trait::AppAuthClient,
     arg: &crate::types::dbx_async::PollArg,
@@ -178,11 +290,13 @@ pub fn get_keyframes_async_check_app_auth(
     )
 }
 
-/// Asynchronous document-to-markdown conversion for supported file formats. Supported formats:
-/// .binder, .docx, .html, .paper, .papert, .pptx, .xlsx, .gsheet, .ods, .pdf. Files in other
-/// formats fail with [`MarkdownConversionApiV2Error::UserError`]. Size limit: the source file must
-/// be at most 50 MB. Larger files fail with [`MarkdownConversionApiV2Error::UserError`]. The
-/// markdown is not returned by this route. Poll
+/// Deprecated: use [`extract_async()`](crate::riviera::extract_async) with `extract_type` set to
+/// [`ExtractType::Markdown`] instead, which takes the same options. This route will be turned off
+/// by December 31, 2026. Asynchronous document-to-markdown conversion for supported file formats.
+/// Supported formats: .binder, .docx, .html, .paper, .papert, .pptx, .xlsx, .gsheet, .ods, .pdf.
+/// Files in other formats fail with [`MarkdownConversionApiV2Error::UserError`]. Size limit: the
+/// source file must be at most 50 MB. Larger files fail with
+/// [`MarkdownConversionApiV2Error::UserError`]. The markdown is not returned by this route. Poll
 /// [`get_markdown_async_check()`](crate::riviera::get_markdown_async_check) with the returned async
 /// job ID until it reports [`GetMarkdownAsyncCheckResult::Complete`] or
 /// [`GetMarkdownAsyncCheckResult::Failed`].
@@ -191,6 +305,7 @@ pub fn get_keyframes_async_check_app_auth(
 /// *PREVIEW*: This function may change or disappear without notice.
 #[cfg(feature = "unstable")]
 #[cfg_attr(docsrs, doc(cfg(feature = "unstable")))]
+#[deprecated]
 pub fn get_markdown_async(
     client: &impl crate::client_trait::UserAuthClient,
     arg: &GetMarkdownArgs,
@@ -206,11 +321,13 @@ pub fn get_markdown_async(
     )
 }
 
-/// Asynchronous document-to-markdown conversion for supported file formats. Supported formats:
-/// .binder, .docx, .html, .paper, .papert, .pptx, .xlsx, .gsheet, .ods, .pdf. Files in other
-/// formats fail with [`MarkdownConversionApiV2Error::UserError`]. Size limit: the source file must
-/// be at most 50 MB. Larger files fail with [`MarkdownConversionApiV2Error::UserError`]. The
-/// markdown is not returned by this route. Poll
+/// Deprecated: use [`extract_async()`](crate::riviera::extract_async) with `extract_type` set to
+/// [`ExtractType::Markdown`] instead, which takes the same options. This route will be turned off
+/// by December 31, 2026. Asynchronous document-to-markdown conversion for supported file formats.
+/// Supported formats: .binder, .docx, .html, .paper, .papert, .pptx, .xlsx, .gsheet, .ods, .pdf.
+/// Files in other formats fail with [`MarkdownConversionApiV2Error::UserError`]. Size limit: the
+/// source file must be at most 50 MB. Larger files fail with
+/// [`MarkdownConversionApiV2Error::UserError`]. The markdown is not returned by this route. Poll
 /// [`get_markdown_async_check()`](crate::riviera::get_markdown_async_check) with the returned async
 /// job ID until it reports [`GetMarkdownAsyncCheckResult::Complete`] or
 /// [`GetMarkdownAsyncCheckResult::Failed`].
@@ -219,6 +336,7 @@ pub fn get_markdown_async(
 /// *PREVIEW*: This function may change or disappear without notice.
 #[cfg(feature = "unstable")]
 #[cfg_attr(docsrs, doc(cfg(feature = "unstable")))]
+#[deprecated]
 pub fn get_markdown_async_app_auth(
     client: &impl crate::client_trait::AppAuthClient,
     arg: &GetMarkdownArgs,
@@ -240,6 +358,7 @@ pub fn get_markdown_async_app_auth(
 /// *PREVIEW*: This function may change or disappear without notice.
 #[cfg(feature = "unstable")]
 #[cfg_attr(docsrs, doc(cfg(feature = "unstable")))]
+#[deprecated]
 pub fn get_markdown_async_check(
     client: &impl crate::client_trait::UserAuthClient,
     arg: &crate::types::dbx_async::PollArg,
@@ -261,6 +380,7 @@ pub fn get_markdown_async_check(
 /// *PREVIEW*: This function may change or disappear without notice.
 #[cfg(feature = "unstable")]
 #[cfg_attr(docsrs, doc(cfg(feature = "unstable")))]
+#[deprecated]
 pub fn get_markdown_async_check_app_auth(
     client: &impl crate::client_trait::AppAuthClient,
     arg: &crate::types::dbx_async::PollArg,
@@ -388,9 +508,11 @@ pub fn get_metadata_async_check_app_auth(
     )
 }
 
-/// Asynchronous OCR (optical character recognition) text extraction for images and PDFs, including
-/// scanned / non-text PDFs. Supported formats: - Image formats: .bmp, .gif, .heic, .jpeg, .jpg,
-/// .png, .tif, .tiff, .webp. - PDF format: .pdf. Unsupported formats return an
+/// Deprecated: use [`extract_async()`](crate::riviera::extract_async) with `extract_type` set to
+/// [`ExtractType::Ocr`] instead, which takes the same options. This route will be turned off by
+/// December 31, 2026. Asynchronous OCR (optical character recognition) text extraction for images
+/// and PDFs, including scanned / non-text PDFs. Supported formats: - Image formats: .bmp, .gif,
+/// .heic, .jpeg, .jpg, .png, .tif, .tiff, .webp. - PDF format: .pdf. Unsupported formats return an
 /// `unsupported_format_error`. For the `url` variant only Dropbox shared links are supported;
 /// external URLs return `unsupported_format_error`. Text-based PDFs already carry a text layer, so
 /// OCR is not run against them and the result is empty; use `get_text_async` to read the embedded
@@ -401,6 +523,7 @@ pub fn get_metadata_async_check_app_auth(
 /// *PREVIEW*: This function may change or disappear without notice.
 #[cfg(feature = "unstable")]
 #[cfg_attr(docsrs, doc(cfg(feature = "unstable")))]
+#[deprecated]
 pub fn get_ocr_async(
     client: &impl crate::client_trait::UserAuthClient,
     arg: &GetOcrArgs,
@@ -416,9 +539,11 @@ pub fn get_ocr_async(
     )
 }
 
-/// Asynchronous OCR (optical character recognition) text extraction for images and PDFs, including
-/// scanned / non-text PDFs. Supported formats: - Image formats: .bmp, .gif, .heic, .jpeg, .jpg,
-/// .png, .tif, .tiff, .webp. - PDF format: .pdf. Unsupported formats return an
+/// Deprecated: use [`extract_async()`](crate::riviera::extract_async) with `extract_type` set to
+/// [`ExtractType::Ocr`] instead, which takes the same options. This route will be turned off by
+/// December 31, 2026. Asynchronous OCR (optical character recognition) text extraction for images
+/// and PDFs, including scanned / non-text PDFs. Supported formats: - Image formats: .bmp, .gif,
+/// .heic, .jpeg, .jpg, .png, .tif, .tiff, .webp. - PDF format: .pdf. Unsupported formats return an
 /// `unsupported_format_error`. For the `url` variant only Dropbox shared links are supported;
 /// external URLs return `unsupported_format_error`. Text-based PDFs already carry a text layer, so
 /// OCR is not run against them and the result is empty; use `get_text_async` to read the embedded
@@ -429,6 +554,7 @@ pub fn get_ocr_async(
 /// *PREVIEW*: This function may change or disappear without notice.
 #[cfg(feature = "unstable")]
 #[cfg_attr(docsrs, doc(cfg(feature = "unstable")))]
+#[deprecated]
 pub fn get_ocr_async_app_auth(
     client: &impl crate::client_trait::AppAuthClient,
     arg: &GetOcrArgs,
@@ -450,6 +576,7 @@ pub fn get_ocr_async_app_auth(
 /// *PREVIEW*: This function may change or disappear without notice.
 #[cfg(feature = "unstable")]
 #[cfg_attr(docsrs, doc(cfg(feature = "unstable")))]
+#[deprecated]
 pub fn get_ocr_async_check(
     client: &impl crate::client_trait::UserAuthClient,
     arg: &crate::types::dbx_async::PollArg,
@@ -471,6 +598,7 @@ pub fn get_ocr_async_check(
 /// *PREVIEW*: This function may change or disappear without notice.
 #[cfg(feature = "unstable")]
 #[cfg_attr(docsrs, doc(cfg(feature = "unstable")))]
+#[deprecated]
 pub fn get_ocr_async_check_app_auth(
     client: &impl crate::client_trait::AppAuthClient,
     arg: &crate::types::dbx_async::PollArg,
@@ -486,17 +614,20 @@ pub fn get_ocr_async_check_app_auth(
     )
 }
 
-/// Asynchronous plain-text extraction from documents. Supported formats include: - Word processing:
-/// .doc, .docx, .docm, .rtf. - Presentations: .ppt, .pptx, .pptm. - Spreadsheets: .xls, .xlsx,
-/// .xlsm. - PDF: .pdf. - Dropbox document types: .paper, .papert, .binder, .gdoc, .gsheet,
-/// .gslides. - Plain text / subtitles: .txt, .vtt. Unsupported formats return an
-/// `unsupported_format_error`. For the `url` variant only Dropbox shared links are supported;
-/// external URLs return `unsupported_format_error`.
+/// Deprecated: use [`extract_async()`](crate::riviera::extract_async) with `extract_type` set to
+/// [`ExtractType::Text`] instead, which takes the same options. This route will be turned off by
+/// December 31, 2026. Asynchronous plain-text extraction from documents. Supported formats include:
+/// - Word processing: .doc, .docx, .docm, .rtf. - Presentations: .ppt, .pptx, .pptm. -
+/// Spreadsheets: .xls, .xlsx, .xlsm. - PDF: .pdf. - Dropbox document types: .paper, .papert,
+/// .binder, .gdoc, .gsheet, .gslides. - Plain text / subtitles: .txt, .vtt. Unsupported formats
+/// return an `unsupported_format_error`. For the `url` variant only Dropbox shared links are
+/// supported; external URLs return `unsupported_format_error`.
 ///
 /// # Stability
 /// *PREVIEW*: This function may change or disappear without notice.
 #[cfg(feature = "unstable")]
 #[cfg_attr(docsrs, doc(cfg(feature = "unstable")))]
+#[deprecated]
 pub fn get_text_async(
     client: &impl crate::client_trait::UserAuthClient,
     arg: &GetTextArgs,
@@ -512,17 +643,20 @@ pub fn get_text_async(
     )
 }
 
-/// Asynchronous plain-text extraction from documents. Supported formats include: - Word processing:
-/// .doc, .docx, .docm, .rtf. - Presentations: .ppt, .pptx, .pptm. - Spreadsheets: .xls, .xlsx,
-/// .xlsm. - PDF: .pdf. - Dropbox document types: .paper, .papert, .binder, .gdoc, .gsheet,
-/// .gslides. - Plain text / subtitles: .txt, .vtt. Unsupported formats return an
-/// `unsupported_format_error`. For the `url` variant only Dropbox shared links are supported;
-/// external URLs return `unsupported_format_error`.
+/// Deprecated: use [`extract_async()`](crate::riviera::extract_async) with `extract_type` set to
+/// [`ExtractType::Text`] instead, which takes the same options. This route will be turned off by
+/// December 31, 2026. Asynchronous plain-text extraction from documents. Supported formats include:
+/// - Word processing: .doc, .docx, .docm, .rtf. - Presentations: .ppt, .pptx, .pptm. -
+/// Spreadsheets: .xls, .xlsx, .xlsm. - PDF: .pdf. - Dropbox document types: .paper, .papert,
+/// .binder, .gdoc, .gsheet, .gslides. - Plain text / subtitles: .txt, .vtt. Unsupported formats
+/// return an `unsupported_format_error`. For the `url` variant only Dropbox shared links are
+/// supported; external URLs return `unsupported_format_error`.
 ///
 /// # Stability
 /// *PREVIEW*: This function may change or disappear without notice.
 #[cfg(feature = "unstable")]
 #[cfg_attr(docsrs, doc(cfg(feature = "unstable")))]
+#[deprecated]
 pub fn get_text_async_app_auth(
     client: &impl crate::client_trait::AppAuthClient,
     arg: &GetTextArgs,
@@ -544,6 +678,7 @@ pub fn get_text_async_app_auth(
 /// *PREVIEW*: This function may change or disappear without notice.
 #[cfg(feature = "unstable")]
 #[cfg_attr(docsrs, doc(cfg(feature = "unstable")))]
+#[deprecated]
 pub fn get_text_async_check(
     client: &impl crate::client_trait::UserAuthClient,
     arg: &crate::types::dbx_async::PollArg,
@@ -565,6 +700,7 @@ pub fn get_text_async_check(
 /// *PREVIEW*: This function may change or disappear without notice.
 #[cfg(feature = "unstable")]
 #[cfg_attr(docsrs, doc(cfg(feature = "unstable")))]
+#[deprecated]
 pub fn get_text_async_check_app_auth(
     client: &impl crate::client_trait::AppAuthClient,
     arg: &crate::types::dbx_async::PollArg,
@@ -580,12 +716,14 @@ pub fn get_text_async_check_app_auth(
     )
 }
 
-/// Asynchronous transcript generation for audio and video files. Supported audio formats: .aac,
-/// .aif, .aiff, .flac, .m4a, .m4r, .mp3, .oga, .ogg, .wav, .wma. Supported video formats: .3gp,
-/// .3gpp, .3gpp2, .asf, .avi, .dv, .flv, .m2t, .m2ts, .m4v, .mkv, .mov, .mp4, .mpeg, .mpg, .mts,
-/// .mxf, .oggtheora, .ogv, .rm, .ts, .vob, .webm, .wmv. Files in other formats fail with
-/// [`ContentApiV2Error::UserError`]. Size limits: the source file must be at most 10 GB and its
-/// audio track at most 1 hour in duration. Files exceeding either limit fail with
+/// Deprecated: use [`extract_async()`](crate::riviera::extract_async) with `extract_type` set to
+/// [`ExtractType::Transcript`] instead, which takes the same options. This route will be turned off
+/// by December 31, 2026. Asynchronous transcript generation for audio and video files. Supported
+/// audio formats: .aac, .aif, .aiff, .flac, .m4a, .m4r, .mp3, .oga, .ogg, .wav, .wma. Supported
+/// video formats: .3gp, .3gpp, .3gpp2, .asf, .avi, .dv, .flv, .m2t, .m2ts, .m4v, .mkv, .mov, .mp4,
+/// .mpeg, .mpg, .mts, .mxf, .oggtheora, .ogv, .rm, .ts, .vob, .webm, .wmv. Files in other formats
+/// fail with [`ContentApiV2Error::UserError`]. Size limits: the source file must be at most 10 GB
+/// and its audio track at most 1 hour in duration. Files exceeding either limit fail with
 /// [`ContentApiV2Error::UserError`]. The transcript is not returned by this route. Poll
 /// [`get_transcript_async_check()`](crate::riviera::get_transcript_async_check) with the returned
 /// async job ID until it reports [`GetTranscriptAsyncCheckResult::Complete`] or
@@ -595,6 +733,7 @@ pub fn get_text_async_check_app_auth(
 /// *PREVIEW*: This function may change or disappear without notice.
 #[cfg(feature = "unstable")]
 #[cfg_attr(docsrs, doc(cfg(feature = "unstable")))]
+#[deprecated]
 pub fn get_transcript_async(
     client: &impl crate::client_trait::UserAuthClient,
     arg: &GetTranscriptArgs,
@@ -610,12 +749,14 @@ pub fn get_transcript_async(
     )
 }
 
-/// Asynchronous transcript generation for audio and video files. Supported audio formats: .aac,
-/// .aif, .aiff, .flac, .m4a, .m4r, .mp3, .oga, .ogg, .wav, .wma. Supported video formats: .3gp,
-/// .3gpp, .3gpp2, .asf, .avi, .dv, .flv, .m2t, .m2ts, .m4v, .mkv, .mov, .mp4, .mpeg, .mpg, .mts,
-/// .mxf, .oggtheora, .ogv, .rm, .ts, .vob, .webm, .wmv. Files in other formats fail with
-/// [`ContentApiV2Error::UserError`]. Size limits: the source file must be at most 10 GB and its
-/// audio track at most 1 hour in duration. Files exceeding either limit fail with
+/// Deprecated: use [`extract_async()`](crate::riviera::extract_async) with `extract_type` set to
+/// [`ExtractType::Transcript`] instead, which takes the same options. This route will be turned off
+/// by December 31, 2026. Asynchronous transcript generation for audio and video files. Supported
+/// audio formats: .aac, .aif, .aiff, .flac, .m4a, .m4r, .mp3, .oga, .ogg, .wav, .wma. Supported
+/// video formats: .3gp, .3gpp, .3gpp2, .asf, .avi, .dv, .flv, .m2t, .m2ts, .m4v, .mkv, .mov, .mp4,
+/// .mpeg, .mpg, .mts, .mxf, .oggtheora, .ogv, .rm, .ts, .vob, .webm, .wmv. Files in other formats
+/// fail with [`ContentApiV2Error::UserError`]. Size limits: the source file must be at most 10 GB
+/// and its audio track at most 1 hour in duration. Files exceeding either limit fail with
 /// [`ContentApiV2Error::UserError`]. The transcript is not returned by this route. Poll
 /// [`get_transcript_async_check()`](crate::riviera::get_transcript_async_check) with the returned
 /// async job ID until it reports [`GetTranscriptAsyncCheckResult::Complete`] or
@@ -625,6 +766,7 @@ pub fn get_transcript_async(
 /// *PREVIEW*: This function may change or disappear without notice.
 #[cfg(feature = "unstable")]
 #[cfg_attr(docsrs, doc(cfg(feature = "unstable")))]
+#[deprecated]
 pub fn get_transcript_async_app_auth(
     client: &impl crate::client_trait::AppAuthClient,
     arg: &GetTranscriptArgs,
@@ -646,6 +788,7 @@ pub fn get_transcript_async_app_auth(
 /// *PREVIEW*: This function may change or disappear without notice.
 #[cfg(feature = "unstable")]
 #[cfg_attr(docsrs, doc(cfg(feature = "unstable")))]
+#[deprecated]
 pub fn get_transcript_async_check(
     client: &impl crate::client_trait::UserAuthClient,
     arg: &crate::types::dbx_async::PollArg,
@@ -667,6 +810,7 @@ pub fn get_transcript_async_check(
 /// *PREVIEW*: This function may change or disappear without notice.
 #[cfg(feature = "unstable")]
 #[cfg_attr(docsrs, doc(cfg(feature = "unstable")))]
+#[deprecated]
 pub fn get_transcript_async_check_app_auth(
     client: &impl crate::client_trait::AppAuthClient,
     arg: &crate::types::dbx_async::PollArg,

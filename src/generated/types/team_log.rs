@@ -20099,6 +20099,268 @@ impl ::serde::ser::Serialize for DefaultLinkExpirationDaysPolicy {
     }
 }
 
+/// Default sync setting for newly created team folders.
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[non_exhaustive] // variants may be added in the future
+pub enum DefaultTeamFolderSyncPolicy {
+    DoNotSync,
+    Sync,
+    /// Catch-all used for unrecognized values returned from the server. Encountering this value
+    /// typically indicates that this SDK version is out of date.
+    Other,
+}
+
+impl<'de> ::serde::de::Deserialize<'de> for DefaultTeamFolderSyncPolicy {
+    fn deserialize<D: ::serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        // union deserializer
+        use serde::de::{self, MapAccess, Visitor};
+        struct EnumVisitor;
+        impl<'de> Visitor<'de> for EnumVisitor {
+            type Value = DefaultTeamFolderSyncPolicy;
+            fn expecting(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+                f.write_str("a DefaultTeamFolderSyncPolicy structure")
+            }
+            fn visit_map<V: MapAccess<'de>>(self, mut map: V) -> Result<Self::Value, V::Error> {
+                let tag: &str = match map.next_key()? {
+                    Some(".tag") => map.next_value()?,
+                    _ => return Err(de::Error::missing_field(".tag"))
+                };
+                let value = match tag {
+                    "do_not_sync" => DefaultTeamFolderSyncPolicy::DoNotSync,
+                    "sync" => DefaultTeamFolderSyncPolicy::Sync,
+                    _ => DefaultTeamFolderSyncPolicy::Other,
+                };
+                crate::eat_json_fields(&mut map)?;
+                Ok(value)
+            }
+        }
+        const VARIANTS: &[&str] = &["do_not_sync",
+                                    "sync",
+                                    "other"];
+        deserializer.deserialize_struct("DefaultTeamFolderSyncPolicy", VARIANTS, EnumVisitor)
+    }
+}
+
+impl ::serde::ser::Serialize for DefaultTeamFolderSyncPolicy {
+    fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        // union serializer
+        use serde::ser::SerializeStruct;
+        match self {
+            DefaultTeamFolderSyncPolicy::DoNotSync => {
+                // unit
+                let mut s = serializer.serialize_struct("DefaultTeamFolderSyncPolicy", 1)?;
+                s.serialize_field(".tag", "do_not_sync")?;
+                s.end()
+            }
+            DefaultTeamFolderSyncPolicy::Sync => {
+                // unit
+                let mut s = serializer.serialize_struct("DefaultTeamFolderSyncPolicy", 1)?;
+                s.serialize_field(".tag", "sync")?;
+                s.end()
+            }
+            DefaultTeamFolderSyncPolicy::Other => Err(::serde::ser::Error::custom("cannot serialize 'Other' variant"))
+        }
+    }
+}
+
+/// Changed the default sync setting for new team folders.
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[non_exhaustive] // structs may have more fields added in the future.
+pub struct DefaultTeamFolderSyncPolicyChangedDetails {
+    /// New default sync setting for team folders.
+    pub new_value: DefaultTeamFolderSyncPolicy,
+    /// Previous default sync setting for team folders.
+    pub previous_value: DefaultTeamFolderSyncPolicy,
+}
+
+impl DefaultTeamFolderSyncPolicyChangedDetails {
+    pub fn new(
+        new_value: DefaultTeamFolderSyncPolicy,
+        previous_value: DefaultTeamFolderSyncPolicy,
+    ) -> Self {
+        DefaultTeamFolderSyncPolicyChangedDetails {
+            new_value,
+            previous_value,
+        }
+    }
+}
+
+const DEFAULT_TEAM_FOLDER_SYNC_POLICY_CHANGED_DETAILS_FIELDS: &[&str] = &["new_value",
+                                                                          "previous_value"];
+impl DefaultTeamFolderSyncPolicyChangedDetails {
+    pub(crate) fn internal_deserialize<'de, V: ::serde::de::MapAccess<'de>>(
+        map: V,
+    ) -> Result<DefaultTeamFolderSyncPolicyChangedDetails, V::Error> {
+        Self::internal_deserialize_opt(map, false).map(Option::unwrap)
+    }
+
+    pub(crate) fn internal_deserialize_opt<'de, V: ::serde::de::MapAccess<'de>>(
+        mut map: V,
+        optional: bool,
+    ) -> Result<Option<DefaultTeamFolderSyncPolicyChangedDetails>, V::Error> {
+        let mut field_new_value = None;
+        let mut field_previous_value = None;
+        let mut nothing = true;
+        while let Some(key) = map.next_key::<&str>()? {
+            nothing = false;
+            match key {
+                "new_value" => {
+                    if field_new_value.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("new_value"));
+                    }
+                    field_new_value = Some(map.next_value()?);
+                }
+                "previous_value" => {
+                    if field_previous_value.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("previous_value"));
+                    }
+                    field_previous_value = Some(map.next_value()?);
+                }
+                _ => {
+                    // unknown field allowed and ignored
+                    map.next_value::<::serde_json::Value>()?;
+                }
+            }
+        }
+        if optional && nothing {
+            return Ok(None);
+        }
+        let result = DefaultTeamFolderSyncPolicyChangedDetails {
+            new_value: field_new_value.ok_or_else(|| ::serde::de::Error::missing_field("new_value"))?,
+            previous_value: field_previous_value.ok_or_else(|| ::serde::de::Error::missing_field("previous_value"))?,
+        };
+        Ok(Some(result))
+    }
+
+    pub(crate) fn internal_serialize<S: ::serde::ser::Serializer>(
+        &self,
+        s: &mut S::SerializeStruct,
+    ) -> Result<(), S::Error> {
+        use serde::ser::SerializeStruct;
+        s.serialize_field("new_value", &self.new_value)?;
+        s.serialize_field("previous_value", &self.previous_value)?;
+        Ok(())
+    }
+}
+
+impl<'de> ::serde::de::Deserialize<'de> for DefaultTeamFolderSyncPolicyChangedDetails {
+    fn deserialize<D: ::serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        // struct deserializer
+        use serde::de::{MapAccess, Visitor};
+        struct StructVisitor;
+        impl<'de> Visitor<'de> for StructVisitor {
+            type Value = DefaultTeamFolderSyncPolicyChangedDetails;
+            fn expecting(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+                f.write_str("a DefaultTeamFolderSyncPolicyChangedDetails struct")
+            }
+            fn visit_map<V: MapAccess<'de>>(self, map: V) -> Result<Self::Value, V::Error> {
+                DefaultTeamFolderSyncPolicyChangedDetails::internal_deserialize(map)
+            }
+        }
+        deserializer.deserialize_struct("DefaultTeamFolderSyncPolicyChangedDetails", DEFAULT_TEAM_FOLDER_SYNC_POLICY_CHANGED_DETAILS_FIELDS, StructVisitor)
+    }
+}
+
+impl ::serde::ser::Serialize for DefaultTeamFolderSyncPolicyChangedDetails {
+    fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        // struct serializer
+        use serde::ser::SerializeStruct;
+        let mut s = serializer.serialize_struct("DefaultTeamFolderSyncPolicyChangedDetails", 2)?;
+        self.internal_serialize::<S>(&mut s)?;
+        s.end()
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[non_exhaustive] // structs may have more fields added in the future.
+pub struct DefaultTeamFolderSyncPolicyChangedType {
+    pub description: String,
+}
+
+impl DefaultTeamFolderSyncPolicyChangedType {
+    pub fn new(description: String) -> Self {
+        DefaultTeamFolderSyncPolicyChangedType {
+            description,
+        }
+    }
+}
+
+const DEFAULT_TEAM_FOLDER_SYNC_POLICY_CHANGED_TYPE_FIELDS: &[&str] = &["description"];
+impl DefaultTeamFolderSyncPolicyChangedType {
+    pub(crate) fn internal_deserialize<'de, V: ::serde::de::MapAccess<'de>>(
+        map: V,
+    ) -> Result<DefaultTeamFolderSyncPolicyChangedType, V::Error> {
+        Self::internal_deserialize_opt(map, false).map(Option::unwrap)
+    }
+
+    pub(crate) fn internal_deserialize_opt<'de, V: ::serde::de::MapAccess<'de>>(
+        mut map: V,
+        optional: bool,
+    ) -> Result<Option<DefaultTeamFolderSyncPolicyChangedType>, V::Error> {
+        let mut field_description = None;
+        let mut nothing = true;
+        while let Some(key) = map.next_key::<&str>()? {
+            nothing = false;
+            match key {
+                "description" => {
+                    if field_description.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("description"));
+                    }
+                    field_description = Some(map.next_value()?);
+                }
+                _ => {
+                    // unknown field allowed and ignored
+                    map.next_value::<::serde_json::Value>()?;
+                }
+            }
+        }
+        if optional && nothing {
+            return Ok(None);
+        }
+        let result = DefaultTeamFolderSyncPolicyChangedType {
+            description: field_description.ok_or_else(|| ::serde::de::Error::missing_field("description"))?,
+        };
+        Ok(Some(result))
+    }
+
+    pub(crate) fn internal_serialize<S: ::serde::ser::Serializer>(
+        &self,
+        s: &mut S::SerializeStruct,
+    ) -> Result<(), S::Error> {
+        use serde::ser::SerializeStruct;
+        s.serialize_field("description", &self.description)?;
+        Ok(())
+    }
+}
+
+impl<'de> ::serde::de::Deserialize<'de> for DefaultTeamFolderSyncPolicyChangedType {
+    fn deserialize<D: ::serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        // struct deserializer
+        use serde::de::{MapAccess, Visitor};
+        struct StructVisitor;
+        impl<'de> Visitor<'de> for StructVisitor {
+            type Value = DefaultTeamFolderSyncPolicyChangedType;
+            fn expecting(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+                f.write_str("a DefaultTeamFolderSyncPolicyChangedType struct")
+            }
+            fn visit_map<V: MapAccess<'de>>(self, map: V) -> Result<Self::Value, V::Error> {
+                DefaultTeamFolderSyncPolicyChangedType::internal_deserialize(map)
+            }
+        }
+        deserializer.deserialize_struct("DefaultTeamFolderSyncPolicyChangedType", DEFAULT_TEAM_FOLDER_SYNC_POLICY_CHANGED_TYPE_FIELDS, StructVisitor)
+    }
+}
+
+impl ::serde::ser::Serialize for DefaultTeamFolderSyncPolicyChangedType {
+    fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        // struct serializer
+        use serde::ser::SerializeStruct;
+        let mut s = serializer.serialize_struct("DefaultTeamFolderSyncPolicyChangedType", 1)?;
+        self.internal_serialize::<S>(&mut s)?;
+        s.end()
+    }
+}
+
 /// Deleted team invite link.
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[non_exhaustive] // structs may have more fields added in the future.
@@ -30432,6 +30694,282 @@ impl ::serde::ser::Serialize for EnforceLinkPasswordPolicy {
     }
 }
 
+/// Enterprise managed authorization policy
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[non_exhaustive] // variants may be added in the future
+pub enum EnterpriseManagedAuthPolicy {
+    Default,
+    Disabled,
+    Enabled,
+    /// Catch-all used for unrecognized values returned from the server. Encountering this value
+    /// typically indicates that this SDK version is out of date.
+    Other,
+}
+
+impl<'de> ::serde::de::Deserialize<'de> for EnterpriseManagedAuthPolicy {
+    fn deserialize<D: ::serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        // union deserializer
+        use serde::de::{self, MapAccess, Visitor};
+        struct EnumVisitor;
+        impl<'de> Visitor<'de> for EnumVisitor {
+            type Value = EnterpriseManagedAuthPolicy;
+            fn expecting(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+                f.write_str("a EnterpriseManagedAuthPolicy structure")
+            }
+            fn visit_map<V: MapAccess<'de>>(self, mut map: V) -> Result<Self::Value, V::Error> {
+                let tag: &str = match map.next_key()? {
+                    Some(".tag") => map.next_value()?,
+                    _ => return Err(de::Error::missing_field(".tag"))
+                };
+                let value = match tag {
+                    "default" => EnterpriseManagedAuthPolicy::Default,
+                    "disabled" => EnterpriseManagedAuthPolicy::Disabled,
+                    "enabled" => EnterpriseManagedAuthPolicy::Enabled,
+                    _ => EnterpriseManagedAuthPolicy::Other,
+                };
+                crate::eat_json_fields(&mut map)?;
+                Ok(value)
+            }
+        }
+        const VARIANTS: &[&str] = &["default",
+                                    "disabled",
+                                    "enabled",
+                                    "other"];
+        deserializer.deserialize_struct("EnterpriseManagedAuthPolicy", VARIANTS, EnumVisitor)
+    }
+}
+
+impl ::serde::ser::Serialize for EnterpriseManagedAuthPolicy {
+    fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        // union serializer
+        use serde::ser::SerializeStruct;
+        match self {
+            EnterpriseManagedAuthPolicy::Default => {
+                // unit
+                let mut s = serializer.serialize_struct("EnterpriseManagedAuthPolicy", 1)?;
+                s.serialize_field(".tag", "default")?;
+                s.end()
+            }
+            EnterpriseManagedAuthPolicy::Disabled => {
+                // unit
+                let mut s = serializer.serialize_struct("EnterpriseManagedAuthPolicy", 1)?;
+                s.serialize_field(".tag", "disabled")?;
+                s.end()
+            }
+            EnterpriseManagedAuthPolicy::Enabled => {
+                // unit
+                let mut s = serializer.serialize_struct("EnterpriseManagedAuthPolicy", 1)?;
+                s.serialize_field(".tag", "enabled")?;
+                s.end()
+            }
+            EnterpriseManagedAuthPolicy::Other => Err(::serde::ser::Error::custom("cannot serialize 'Other' variant"))
+        }
+    }
+}
+
+/// Changed enterprise managed authorization policy for team.
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[non_exhaustive] // structs may have more fields added in the future.
+pub struct EnterpriseManagedAuthPolicyChangedDetails {
+    /// New enterprise managed authorization policy.
+    pub new_value: EnterpriseManagedAuthPolicy,
+    /// Previous enterprise managed authorization policy. Might be missing due to historical data
+    /// gap.
+    pub previous_value: Option<EnterpriseManagedAuthPolicy>,
+}
+
+impl EnterpriseManagedAuthPolicyChangedDetails {
+    pub fn new(new_value: EnterpriseManagedAuthPolicy) -> Self {
+        EnterpriseManagedAuthPolicyChangedDetails {
+            new_value,
+            previous_value: None,
+        }
+    }
+
+    pub fn with_previous_value(mut self, value: EnterpriseManagedAuthPolicy) -> Self {
+        self.previous_value = Some(value);
+        self
+    }
+}
+
+const ENTERPRISE_MANAGED_AUTH_POLICY_CHANGED_DETAILS_FIELDS: &[&str] = &["new_value",
+                                                                         "previous_value"];
+impl EnterpriseManagedAuthPolicyChangedDetails {
+    pub(crate) fn internal_deserialize<'de, V: ::serde::de::MapAccess<'de>>(
+        map: V,
+    ) -> Result<EnterpriseManagedAuthPolicyChangedDetails, V::Error> {
+        Self::internal_deserialize_opt(map, false).map(Option::unwrap)
+    }
+
+    pub(crate) fn internal_deserialize_opt<'de, V: ::serde::de::MapAccess<'de>>(
+        mut map: V,
+        optional: bool,
+    ) -> Result<Option<EnterpriseManagedAuthPolicyChangedDetails>, V::Error> {
+        let mut field_new_value = None;
+        let mut field_previous_value = None;
+        let mut nothing = true;
+        while let Some(key) = map.next_key::<&str>()? {
+            nothing = false;
+            match key {
+                "new_value" => {
+                    if field_new_value.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("new_value"));
+                    }
+                    field_new_value = Some(map.next_value()?);
+                }
+                "previous_value" => {
+                    if field_previous_value.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("previous_value"));
+                    }
+                    field_previous_value = Some(map.next_value()?);
+                }
+                _ => {
+                    // unknown field allowed and ignored
+                    map.next_value::<::serde_json::Value>()?;
+                }
+            }
+        }
+        if optional && nothing {
+            return Ok(None);
+        }
+        let result = EnterpriseManagedAuthPolicyChangedDetails {
+            new_value: field_new_value.ok_or_else(|| ::serde::de::Error::missing_field("new_value"))?,
+            previous_value: field_previous_value.and_then(Option::flatten),
+        };
+        Ok(Some(result))
+    }
+
+    pub(crate) fn internal_serialize<S: ::serde::ser::Serializer>(
+        &self,
+        s: &mut S::SerializeStruct,
+    ) -> Result<(), S::Error> {
+        use serde::ser::SerializeStruct;
+        s.serialize_field("new_value", &self.new_value)?;
+        if let Some(val) = &self.previous_value {
+            s.serialize_field("previous_value", val)?;
+        }
+        Ok(())
+    }
+}
+
+impl<'de> ::serde::de::Deserialize<'de> for EnterpriseManagedAuthPolicyChangedDetails {
+    fn deserialize<D: ::serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        // struct deserializer
+        use serde::de::{MapAccess, Visitor};
+        struct StructVisitor;
+        impl<'de> Visitor<'de> for StructVisitor {
+            type Value = EnterpriseManagedAuthPolicyChangedDetails;
+            fn expecting(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+                f.write_str("a EnterpriseManagedAuthPolicyChangedDetails struct")
+            }
+            fn visit_map<V: MapAccess<'de>>(self, map: V) -> Result<Self::Value, V::Error> {
+                EnterpriseManagedAuthPolicyChangedDetails::internal_deserialize(map)
+            }
+        }
+        deserializer.deserialize_struct("EnterpriseManagedAuthPolicyChangedDetails", ENTERPRISE_MANAGED_AUTH_POLICY_CHANGED_DETAILS_FIELDS, StructVisitor)
+    }
+}
+
+impl ::serde::ser::Serialize for EnterpriseManagedAuthPolicyChangedDetails {
+    fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        // struct serializer
+        use serde::ser::SerializeStruct;
+        let mut s = serializer.serialize_struct("EnterpriseManagedAuthPolicyChangedDetails", 2)?;
+        self.internal_serialize::<S>(&mut s)?;
+        s.end()
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[non_exhaustive] // structs may have more fields added in the future.
+pub struct EnterpriseManagedAuthPolicyChangedType {
+    pub description: String,
+}
+
+impl EnterpriseManagedAuthPolicyChangedType {
+    pub fn new(description: String) -> Self {
+        EnterpriseManagedAuthPolicyChangedType {
+            description,
+        }
+    }
+}
+
+const ENTERPRISE_MANAGED_AUTH_POLICY_CHANGED_TYPE_FIELDS: &[&str] = &["description"];
+impl EnterpriseManagedAuthPolicyChangedType {
+    pub(crate) fn internal_deserialize<'de, V: ::serde::de::MapAccess<'de>>(
+        map: V,
+    ) -> Result<EnterpriseManagedAuthPolicyChangedType, V::Error> {
+        Self::internal_deserialize_opt(map, false).map(Option::unwrap)
+    }
+
+    pub(crate) fn internal_deserialize_opt<'de, V: ::serde::de::MapAccess<'de>>(
+        mut map: V,
+        optional: bool,
+    ) -> Result<Option<EnterpriseManagedAuthPolicyChangedType>, V::Error> {
+        let mut field_description = None;
+        let mut nothing = true;
+        while let Some(key) = map.next_key::<&str>()? {
+            nothing = false;
+            match key {
+                "description" => {
+                    if field_description.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("description"));
+                    }
+                    field_description = Some(map.next_value()?);
+                }
+                _ => {
+                    // unknown field allowed and ignored
+                    map.next_value::<::serde_json::Value>()?;
+                }
+            }
+        }
+        if optional && nothing {
+            return Ok(None);
+        }
+        let result = EnterpriseManagedAuthPolicyChangedType {
+            description: field_description.ok_or_else(|| ::serde::de::Error::missing_field("description"))?,
+        };
+        Ok(Some(result))
+    }
+
+    pub(crate) fn internal_serialize<S: ::serde::ser::Serializer>(
+        &self,
+        s: &mut S::SerializeStruct,
+    ) -> Result<(), S::Error> {
+        use serde::ser::SerializeStruct;
+        s.serialize_field("description", &self.description)?;
+        Ok(())
+    }
+}
+
+impl<'de> ::serde::de::Deserialize<'de> for EnterpriseManagedAuthPolicyChangedType {
+    fn deserialize<D: ::serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        // struct deserializer
+        use serde::de::{MapAccess, Visitor};
+        struct StructVisitor;
+        impl<'de> Visitor<'de> for StructVisitor {
+            type Value = EnterpriseManagedAuthPolicyChangedType;
+            fn expecting(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+                f.write_str("a EnterpriseManagedAuthPolicyChangedType struct")
+            }
+            fn visit_map<V: MapAccess<'de>>(self, map: V) -> Result<Self::Value, V::Error> {
+                EnterpriseManagedAuthPolicyChangedType::internal_deserialize(map)
+            }
+        }
+        deserializer.deserialize_struct("EnterpriseManagedAuthPolicyChangedType", ENTERPRISE_MANAGED_AUTH_POLICY_CHANGED_TYPE_FIELDS, StructVisitor)
+    }
+}
+
+impl ::serde::ser::Serialize for EnterpriseManagedAuthPolicyChangedType {
+    fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        // struct serializer
+        use serde::ser::SerializeStruct;
+        let mut s = serializer.serialize_struct("EnterpriseManagedAuthPolicyChangedType", 1)?;
+        self.internal_serialize::<S>(&mut s)?;
+        s.end()
+    }
+}
+
 /// Changed who can update a setting.
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[non_exhaustive] // structs may have more fields added in the future.
@@ -31374,6 +31912,7 @@ pub enum EventDetails {
     SharedFolderDeclineInvitationDetails(SharedFolderDeclineInvitationDetails),
     SharedFolderMountDetails(SharedFolderMountDetails),
     SharedFolderNestDetails(SharedFolderNestDetails),
+    SharedFolderTransferMembershipDetails(SharedFolderTransferMembershipDetails),
     SharedFolderTransferOwnershipDetails(SharedFolderTransferOwnershipDetails),
     SharedFolderUnmountDetails(SharedFolderUnmountDetails),
     SharedLinkAddExpiryDetails(SharedLinkAddExpiryDetails),
@@ -31469,6 +32008,7 @@ pub enum EventDetails {
     DashExternalSharingPolicyChangedDetails(DashExternalSharingPolicyChangedDetails),
     DataPlacementRestrictionChangePolicyDetails(DataPlacementRestrictionChangePolicyDetails),
     DataPlacementRestrictionSatisfyPolicyDetails(DataPlacementRestrictionSatisfyPolicyDetails),
+    DefaultTeamFolderSyncPolicyChangedDetails(DefaultTeamFolderSyncPolicyChangedDetails),
     DeviceApprovalsAddExceptionDetails(DeviceApprovalsAddExceptionDetails),
     DeviceApprovalsChangeDesktopPolicyDetails(DeviceApprovalsChangeDesktopPolicyDetails),
     DeviceApprovalsChangeMobilePolicyDetails(DeviceApprovalsChangeMobilePolicyDetails),
@@ -31482,6 +32022,7 @@ pub enum EventDetails {
     EmmAddExceptionDetails(EmmAddExceptionDetails),
     EmmChangePolicyDetails(EmmChangePolicyDetails),
     EmmRemoveExceptionDetails(EmmRemoveExceptionDetails),
+    EnterpriseManagedAuthPolicyChangedDetails(EnterpriseManagedAuthPolicyChangedDetails),
     ExtendedVersionHistoryChangePolicyDetails(ExtendedVersionHistoryChangePolicyDetails),
     ExternalDriveBackupPolicyChangedDetails(ExternalDriveBackupPolicyChangedDetails),
     FileCommentsChangePolicyDetails(FileCommentsChangePolicyDetails),
@@ -32037,6 +32578,7 @@ impl<'de> ::serde::de::Deserialize<'de> for EventDetails {
                     "shared_folder_decline_invitation_details" => EventDetails::SharedFolderDeclineInvitationDetails(SharedFolderDeclineInvitationDetails::internal_deserialize(&mut map)?),
                     "shared_folder_mount_details" => EventDetails::SharedFolderMountDetails(SharedFolderMountDetails::internal_deserialize(&mut map)?),
                     "shared_folder_nest_details" => EventDetails::SharedFolderNestDetails(SharedFolderNestDetails::internal_deserialize(&mut map)?),
+                    "shared_folder_transfer_membership_details" => EventDetails::SharedFolderTransferMembershipDetails(SharedFolderTransferMembershipDetails::internal_deserialize(&mut map)?),
                     "shared_folder_transfer_ownership_details" => EventDetails::SharedFolderTransferOwnershipDetails(SharedFolderTransferOwnershipDetails::internal_deserialize(&mut map)?),
                     "shared_folder_unmount_details" => EventDetails::SharedFolderUnmountDetails(SharedFolderUnmountDetails::internal_deserialize(&mut map)?),
                     "shared_link_add_expiry_details" => EventDetails::SharedLinkAddExpiryDetails(SharedLinkAddExpiryDetails::internal_deserialize(&mut map)?),
@@ -32132,6 +32674,7 @@ impl<'de> ::serde::de::Deserialize<'de> for EventDetails {
                     "dash_external_sharing_policy_changed_details" => EventDetails::DashExternalSharingPolicyChangedDetails(DashExternalSharingPolicyChangedDetails::internal_deserialize(&mut map)?),
                     "data_placement_restriction_change_policy_details" => EventDetails::DataPlacementRestrictionChangePolicyDetails(DataPlacementRestrictionChangePolicyDetails::internal_deserialize(&mut map)?),
                     "data_placement_restriction_satisfy_policy_details" => EventDetails::DataPlacementRestrictionSatisfyPolicyDetails(DataPlacementRestrictionSatisfyPolicyDetails::internal_deserialize(&mut map)?),
+                    "default_team_folder_sync_policy_changed_details" => EventDetails::DefaultTeamFolderSyncPolicyChangedDetails(DefaultTeamFolderSyncPolicyChangedDetails::internal_deserialize(&mut map)?),
                     "device_approvals_add_exception_details" => EventDetails::DeviceApprovalsAddExceptionDetails(DeviceApprovalsAddExceptionDetails::internal_deserialize(&mut map)?),
                     "device_approvals_change_desktop_policy_details" => EventDetails::DeviceApprovalsChangeDesktopPolicyDetails(DeviceApprovalsChangeDesktopPolicyDetails::internal_deserialize(&mut map)?),
                     "device_approvals_change_mobile_policy_details" => EventDetails::DeviceApprovalsChangeMobilePolicyDetails(DeviceApprovalsChangeMobilePolicyDetails::internal_deserialize(&mut map)?),
@@ -32145,6 +32688,7 @@ impl<'de> ::serde::de::Deserialize<'de> for EventDetails {
                     "emm_add_exception_details" => EventDetails::EmmAddExceptionDetails(EmmAddExceptionDetails::internal_deserialize(&mut map)?),
                     "emm_change_policy_details" => EventDetails::EmmChangePolicyDetails(EmmChangePolicyDetails::internal_deserialize(&mut map)?),
                     "emm_remove_exception_details" => EventDetails::EmmRemoveExceptionDetails(EmmRemoveExceptionDetails::internal_deserialize(&mut map)?),
+                    "enterprise_managed_auth_policy_changed_details" => EventDetails::EnterpriseManagedAuthPolicyChangedDetails(EnterpriseManagedAuthPolicyChangedDetails::internal_deserialize(&mut map)?),
                     "extended_version_history_change_policy_details" => EventDetails::ExtendedVersionHistoryChangePolicyDetails(ExtendedVersionHistoryChangePolicyDetails::internal_deserialize(&mut map)?),
                     "external_drive_backup_policy_changed_details" => EventDetails::ExternalDriveBackupPolicyChangedDetails(ExternalDriveBackupPolicyChangedDetails::internal_deserialize(&mut map)?),
                     "file_comments_change_policy_details" => EventDetails::FileCommentsChangePolicyDetails(FileCommentsChangePolicyDetails::internal_deserialize(&mut map)?),
@@ -32684,6 +33228,7 @@ impl<'de> ::serde::de::Deserialize<'de> for EventDetails {
                                     "shared_folder_decline_invitation_details",
                                     "shared_folder_mount_details",
                                     "shared_folder_nest_details",
+                                    "shared_folder_transfer_membership_details",
                                     "shared_folder_transfer_ownership_details",
                                     "shared_folder_unmount_details",
                                     "shared_link_add_expiry_details",
@@ -32779,6 +33324,7 @@ impl<'de> ::serde::de::Deserialize<'de> for EventDetails {
                                     "dash_external_sharing_policy_changed_details",
                                     "data_placement_restriction_change_policy_details",
                                     "data_placement_restriction_satisfy_policy_details",
+                                    "default_team_folder_sync_policy_changed_details",
                                     "device_approvals_add_exception_details",
                                     "device_approvals_change_desktop_policy_details",
                                     "device_approvals_change_mobile_policy_details",
@@ -32792,6 +33338,7 @@ impl<'de> ::serde::de::Deserialize<'de> for EventDetails {
                                     "emm_add_exception_details",
                                     "emm_change_policy_details",
                                     "emm_remove_exception_details",
+                                    "enterprise_managed_auth_policy_changed_details",
                                     "extended_version_history_change_policy_details",
                                     "external_drive_backup_policy_changed_details",
                                     "file_comments_change_policy_details",
@@ -35657,6 +36204,13 @@ impl ::serde::ser::Serialize for EventDetails {
                 x.internal_serialize::<S>(&mut s)?;
                 s.end()
             }
+            EventDetails::SharedFolderTransferMembershipDetails(x) => {
+                // struct
+                let mut s = serializer.serialize_struct("EventDetails", 4)?;
+                s.serialize_field(".tag", "shared_folder_transfer_membership_details")?;
+                x.internal_serialize::<S>(&mut s)?;
+                s.end()
+            }
             EventDetails::SharedFolderTransferOwnershipDetails(x) => {
                 // struct
                 let mut s = serializer.serialize_struct("EventDetails", 3)?;
@@ -35700,7 +36254,7 @@ impl ::serde::ser::Serialize for EventDetails {
             }
             EventDetails::SharedLinkCreateDetails(x) => {
                 // struct
-                let mut s = serializer.serialize_struct("EventDetails", 2)?;
+                let mut s = serializer.serialize_struct("EventDetails", 3)?;
                 s.serialize_field(".tag", "shared_link_create_details")?;
                 x.internal_serialize::<S>(&mut s)?;
                 s.end()
@@ -35804,7 +36358,7 @@ impl ::serde::ser::Serialize for EventDetails {
             }
             EventDetails::SharedLinkViewDetails(x) => {
                 // struct
-                let mut s = serializer.serialize_struct("EventDetails", 2)?;
+                let mut s = serializer.serialize_struct("EventDetails", 3)?;
                 s.serialize_field(".tag", "shared_link_view_details")?;
                 x.internal_serialize::<S>(&mut s)?;
                 s.end()
@@ -36313,6 +36867,13 @@ impl ::serde::ser::Serialize for EventDetails {
                 x.internal_serialize::<S>(&mut s)?;
                 s.end()
             }
+            EventDetails::DefaultTeamFolderSyncPolicyChangedDetails(x) => {
+                // struct
+                let mut s = serializer.serialize_struct("EventDetails", 3)?;
+                s.serialize_field(".tag", "default_team_folder_sync_policy_changed_details")?;
+                x.internal_serialize::<S>(&mut s)?;
+                s.end()
+            }
             EventDetails::DeviceApprovalsAddExceptionDetails(_) => {
                 // struct
                 let mut s = serializer.serialize_struct("EventDetails", 1)?;
@@ -36396,6 +36957,13 @@ impl ::serde::ser::Serialize for EventDetails {
                 // struct
                 let mut s = serializer.serialize_struct("EventDetails", 1)?;
                 s.serialize_field(".tag", "emm_remove_exception_details")?;
+                s.end()
+            }
+            EventDetails::EnterpriseManagedAuthPolicyChangedDetails(x) => {
+                // struct
+                let mut s = serializer.serialize_struct("EventDetails", 3)?;
+                s.serialize_field(".tag", "enterprise_managed_auth_policy_changed_details")?;
+                x.internal_serialize::<S>(&mut s)?;
                 s.end()
             }
             EventDetails::ExtendedVersionHistoryChangePolicyDetails(x) => {
@@ -38110,6 +38678,8 @@ pub enum EventType {
     SharedFolderMount(SharedFolderMountType),
     /// (sharing) Changed parent of shared folder
     SharedFolderNest(SharedFolderNestType),
+    /// (sharing) Transferred shared folder membership to another member
+    SharedFolderTransferMembership(SharedFolderTransferMembershipType),
     /// (sharing) Transferred ownership of shared folder to another member
     SharedFolderTransferOwnership(SharedFolderTransferOwnershipType),
     /// (sharing) Deleted shared folder from Dropbox
@@ -38300,6 +38870,8 @@ pub enum EventType {
     DataPlacementRestrictionChangePolicy(DataPlacementRestrictionChangePolicyType),
     /// (team_policies) Completed restrictions on data center locations where team data resides
     DataPlacementRestrictionSatisfyPolicy(DataPlacementRestrictionSatisfyPolicyType),
+    /// (team_policies) Changed the default sync setting for new team folders
+    DefaultTeamFolderSyncPolicyChanged(DefaultTeamFolderSyncPolicyChangedType),
     /// (team_policies) Added members to device approvals exception list
     DeviceApprovalsAddException(DeviceApprovalsAddExceptionType),
     /// (team_policies) Set/removed limit on number of computers member can link to team Dropbox
@@ -38328,6 +38900,8 @@ pub enum EventType {
     EmmChangePolicy(EmmChangePolicyType),
     /// (team_policies) Removed members from EMM exception list
     EmmRemoveException(EmmRemoveExceptionType),
+    /// (team_policies) Changed enterprise managed authorization policy for team
+    EnterpriseManagedAuthPolicyChanged(EnterpriseManagedAuthPolicyChangedType),
     /// (team_policies) Accepted/opted out of extended version history
     ExtendedVersionHistoryChangePolicy(ExtendedVersionHistoryChangePolicyType),
     /// (team_policies) Changed external drive backup policy for team
@@ -39026,6 +39600,7 @@ impl<'de> ::serde::de::Deserialize<'de> for EventType {
                     "shared_folder_decline_invitation" => EventType::SharedFolderDeclineInvitation(SharedFolderDeclineInvitationType::internal_deserialize(&mut map)?),
                     "shared_folder_mount" => EventType::SharedFolderMount(SharedFolderMountType::internal_deserialize(&mut map)?),
                     "shared_folder_nest" => EventType::SharedFolderNest(SharedFolderNestType::internal_deserialize(&mut map)?),
+                    "shared_folder_transfer_membership" => EventType::SharedFolderTransferMembership(SharedFolderTransferMembershipType::internal_deserialize(&mut map)?),
                     "shared_folder_transfer_ownership" => EventType::SharedFolderTransferOwnership(SharedFolderTransferOwnershipType::internal_deserialize(&mut map)?),
                     "shared_folder_unmount" => EventType::SharedFolderUnmount(SharedFolderUnmountType::internal_deserialize(&mut map)?),
                     "shared_link_add_expiry" => EventType::SharedLinkAddExpiry(SharedLinkAddExpiryType::internal_deserialize(&mut map)?),
@@ -39121,6 +39696,7 @@ impl<'de> ::serde::de::Deserialize<'de> for EventType {
                     "dash_external_sharing_policy_changed" => EventType::DashExternalSharingPolicyChanged(DashExternalSharingPolicyChangedType::internal_deserialize(&mut map)?),
                     "data_placement_restriction_change_policy" => EventType::DataPlacementRestrictionChangePolicy(DataPlacementRestrictionChangePolicyType::internal_deserialize(&mut map)?),
                     "data_placement_restriction_satisfy_policy" => EventType::DataPlacementRestrictionSatisfyPolicy(DataPlacementRestrictionSatisfyPolicyType::internal_deserialize(&mut map)?),
+                    "default_team_folder_sync_policy_changed" => EventType::DefaultTeamFolderSyncPolicyChanged(DefaultTeamFolderSyncPolicyChangedType::internal_deserialize(&mut map)?),
                     "device_approvals_add_exception" => EventType::DeviceApprovalsAddException(DeviceApprovalsAddExceptionType::internal_deserialize(&mut map)?),
                     "device_approvals_change_desktop_policy" => EventType::DeviceApprovalsChangeDesktopPolicy(DeviceApprovalsChangeDesktopPolicyType::internal_deserialize(&mut map)?),
                     "device_approvals_change_mobile_policy" => EventType::DeviceApprovalsChangeMobilePolicy(DeviceApprovalsChangeMobilePolicyType::internal_deserialize(&mut map)?),
@@ -39134,6 +39710,7 @@ impl<'de> ::serde::de::Deserialize<'de> for EventType {
                     "emm_add_exception" => EventType::EmmAddException(EmmAddExceptionType::internal_deserialize(&mut map)?),
                     "emm_change_policy" => EventType::EmmChangePolicy(EmmChangePolicyType::internal_deserialize(&mut map)?),
                     "emm_remove_exception" => EventType::EmmRemoveException(EmmRemoveExceptionType::internal_deserialize(&mut map)?),
+                    "enterprise_managed_auth_policy_changed" => EventType::EnterpriseManagedAuthPolicyChanged(EnterpriseManagedAuthPolicyChangedType::internal_deserialize(&mut map)?),
                     "extended_version_history_change_policy" => EventType::ExtendedVersionHistoryChangePolicy(ExtendedVersionHistoryChangePolicyType::internal_deserialize(&mut map)?),
                     "external_drive_backup_policy_changed" => EventType::ExternalDriveBackupPolicyChanged(ExternalDriveBackupPolicyChangedType::internal_deserialize(&mut map)?),
                     "file_comments_change_policy" => EventType::FileCommentsChangePolicy(FileCommentsChangePolicyType::internal_deserialize(&mut map)?),
@@ -39672,6 +40249,7 @@ impl<'de> ::serde::de::Deserialize<'de> for EventType {
                                     "shared_folder_decline_invitation",
                                     "shared_folder_mount",
                                     "shared_folder_nest",
+                                    "shared_folder_transfer_membership",
                                     "shared_folder_transfer_ownership",
                                     "shared_folder_unmount",
                                     "shared_link_add_expiry",
@@ -39767,6 +40345,7 @@ impl<'de> ::serde::de::Deserialize<'de> for EventType {
                                     "dash_external_sharing_policy_changed",
                                     "data_placement_restriction_change_policy",
                                     "data_placement_restriction_satisfy_policy",
+                                    "default_team_folder_sync_policy_changed",
                                     "device_approvals_add_exception",
                                     "device_approvals_change_desktop_policy",
                                     "device_approvals_change_mobile_policy",
@@ -39780,6 +40359,7 @@ impl<'de> ::serde::de::Deserialize<'de> for EventType {
                                     "emm_add_exception",
                                     "emm_change_policy",
                                     "emm_remove_exception",
+                                    "enterprise_managed_auth_policy_changed",
                                     "extended_version_history_change_policy",
                                     "external_drive_backup_policy_changed",
                                     "file_comments_change_policy",
@@ -42734,6 +43314,13 @@ impl ::serde::ser::Serialize for EventType {
                 x.internal_serialize::<S>(&mut s)?;
                 s.end()
             }
+            EventType::SharedFolderTransferMembership(x) => {
+                // struct
+                let mut s = serializer.serialize_struct("EventType", 2)?;
+                s.serialize_field(".tag", "shared_folder_transfer_membership")?;
+                x.internal_serialize::<S>(&mut s)?;
+                s.end()
+            }
             EventType::SharedFolderTransferOwnership(x) => {
                 // struct
                 let mut s = serializer.serialize_struct("EventType", 2)?;
@@ -43399,6 +43986,13 @@ impl ::serde::ser::Serialize for EventType {
                 x.internal_serialize::<S>(&mut s)?;
                 s.end()
             }
+            EventType::DefaultTeamFolderSyncPolicyChanged(x) => {
+                // struct
+                let mut s = serializer.serialize_struct("EventType", 2)?;
+                s.serialize_field(".tag", "default_team_folder_sync_policy_changed")?;
+                x.internal_serialize::<S>(&mut s)?;
+                s.end()
+            }
             EventType::DeviceApprovalsAddException(x) => {
                 // struct
                 let mut s = serializer.serialize_struct("EventType", 2)?;
@@ -43487,6 +44081,13 @@ impl ::serde::ser::Serialize for EventType {
                 // struct
                 let mut s = serializer.serialize_struct("EventType", 2)?;
                 s.serialize_field(".tag", "emm_remove_exception")?;
+                x.internal_serialize::<S>(&mut s)?;
+                s.end()
+            }
+            EventType::EnterpriseManagedAuthPolicyChanged(x) => {
+                // struct
+                let mut s = serializer.serialize_struct("EventType", 2)?;
+                s.serialize_field(".tag", "enterprise_managed_auth_policy_changed")?;
                 x.internal_serialize::<S>(&mut s)?;
                 s.end()
             }
@@ -45220,6 +45821,8 @@ pub enum EventTypeArg {
     SharedFolderMount,
     /// (sharing) Changed parent of shared folder
     SharedFolderNest,
+    /// (sharing) Transferred shared folder membership to another member
+    SharedFolderTransferMembership,
     /// (sharing) Transferred ownership of shared folder to another member
     SharedFolderTransferOwnership,
     /// (sharing) Deleted shared folder from Dropbox
@@ -45410,6 +46013,8 @@ pub enum EventTypeArg {
     DataPlacementRestrictionChangePolicy,
     /// (team_policies) Completed restrictions on data center locations where team data resides
     DataPlacementRestrictionSatisfyPolicy,
+    /// (team_policies) Changed the default sync setting for new team folders
+    DefaultTeamFolderSyncPolicyChanged,
     /// (team_policies) Added members to device approvals exception list
     DeviceApprovalsAddException,
     /// (team_policies) Set/removed limit on number of computers member can link to team Dropbox
@@ -45438,6 +46043,8 @@ pub enum EventTypeArg {
     EmmChangePolicy,
     /// (team_policies) Removed members from EMM exception list
     EmmRemoveException,
+    /// (team_policies) Changed enterprise managed authorization policy for team
+    EnterpriseManagedAuthPolicyChanged,
     /// (team_policies) Accepted/opted out of extended version history
     ExtendedVersionHistoryChangePolicy,
     /// (team_policies) Changed external drive backup policy for team
@@ -46136,6 +46743,7 @@ impl<'de> ::serde::de::Deserialize<'de> for EventTypeArg {
                     "shared_folder_decline_invitation" => EventTypeArg::SharedFolderDeclineInvitation,
                     "shared_folder_mount" => EventTypeArg::SharedFolderMount,
                     "shared_folder_nest" => EventTypeArg::SharedFolderNest,
+                    "shared_folder_transfer_membership" => EventTypeArg::SharedFolderTransferMembership,
                     "shared_folder_transfer_ownership" => EventTypeArg::SharedFolderTransferOwnership,
                     "shared_folder_unmount" => EventTypeArg::SharedFolderUnmount,
                     "shared_link_add_expiry" => EventTypeArg::SharedLinkAddExpiry,
@@ -46231,6 +46839,7 @@ impl<'de> ::serde::de::Deserialize<'de> for EventTypeArg {
                     "dash_external_sharing_policy_changed" => EventTypeArg::DashExternalSharingPolicyChanged,
                     "data_placement_restriction_change_policy" => EventTypeArg::DataPlacementRestrictionChangePolicy,
                     "data_placement_restriction_satisfy_policy" => EventTypeArg::DataPlacementRestrictionSatisfyPolicy,
+                    "default_team_folder_sync_policy_changed" => EventTypeArg::DefaultTeamFolderSyncPolicyChanged,
                     "device_approvals_add_exception" => EventTypeArg::DeviceApprovalsAddException,
                     "device_approvals_change_desktop_policy" => EventTypeArg::DeviceApprovalsChangeDesktopPolicy,
                     "device_approvals_change_mobile_policy" => EventTypeArg::DeviceApprovalsChangeMobilePolicy,
@@ -46244,6 +46853,7 @@ impl<'de> ::serde::de::Deserialize<'de> for EventTypeArg {
                     "emm_add_exception" => EventTypeArg::EmmAddException,
                     "emm_change_policy" => EventTypeArg::EmmChangePolicy,
                     "emm_remove_exception" => EventTypeArg::EmmRemoveException,
+                    "enterprise_managed_auth_policy_changed" => EventTypeArg::EnterpriseManagedAuthPolicyChanged,
                     "extended_version_history_change_policy" => EventTypeArg::ExtendedVersionHistoryChangePolicy,
                     "external_drive_backup_policy_changed" => EventTypeArg::ExternalDriveBackupPolicyChanged,
                     "file_comments_change_policy" => EventTypeArg::FileCommentsChangePolicy,
@@ -46782,6 +47392,7 @@ impl<'de> ::serde::de::Deserialize<'de> for EventTypeArg {
                                     "shared_folder_decline_invitation",
                                     "shared_folder_mount",
                                     "shared_folder_nest",
+                                    "shared_folder_transfer_membership",
                                     "shared_folder_transfer_ownership",
                                     "shared_folder_unmount",
                                     "shared_link_add_expiry",
@@ -46877,6 +47488,7 @@ impl<'de> ::serde::de::Deserialize<'de> for EventTypeArg {
                                     "dash_external_sharing_policy_changed",
                                     "data_placement_restriction_change_policy",
                                     "data_placement_restriction_satisfy_policy",
+                                    "default_team_folder_sync_policy_changed",
                                     "device_approvals_add_exception",
                                     "device_approvals_change_desktop_policy",
                                     "device_approvals_change_mobile_policy",
@@ -46890,6 +47502,7 @@ impl<'de> ::serde::de::Deserialize<'de> for EventTypeArg {
                                     "emm_add_exception",
                                     "emm_change_policy",
                                     "emm_remove_exception",
+                                    "enterprise_managed_auth_policy_changed",
                                     "extended_version_history_change_policy",
                                     "external_drive_backup_policy_changed",
                                     "file_comments_change_policy",
@@ -49442,6 +50055,12 @@ impl ::serde::ser::Serialize for EventTypeArg {
                 s.serialize_field(".tag", "shared_folder_nest")?;
                 s.end()
             }
+            EventTypeArg::SharedFolderTransferMembership => {
+                // unit
+                let mut s = serializer.serialize_struct("EventTypeArg", 1)?;
+                s.serialize_field(".tag", "shared_folder_transfer_membership")?;
+                s.end()
+            }
             EventTypeArg::SharedFolderTransferOwnership => {
                 // unit
                 let mut s = serializer.serialize_struct("EventTypeArg", 1)?;
@@ -50012,6 +50631,12 @@ impl ::serde::ser::Serialize for EventTypeArg {
                 s.serialize_field(".tag", "data_placement_restriction_satisfy_policy")?;
                 s.end()
             }
+            EventTypeArg::DefaultTeamFolderSyncPolicyChanged => {
+                // unit
+                let mut s = serializer.serialize_struct("EventTypeArg", 1)?;
+                s.serialize_field(".tag", "default_team_folder_sync_policy_changed")?;
+                s.end()
+            }
             EventTypeArg::DeviceApprovalsAddException => {
                 // unit
                 let mut s = serializer.serialize_struct("EventTypeArg", 1)?;
@@ -50088,6 +50713,12 @@ impl ::serde::ser::Serialize for EventTypeArg {
                 // unit
                 let mut s = serializer.serialize_struct("EventTypeArg", 1)?;
                 s.serialize_field(".tag", "emm_remove_exception")?;
+                s.end()
+            }
+            EventTypeArg::EnterpriseManagedAuthPolicyChanged => {
+                // unit
+                let mut s = serializer.serialize_struct("EventTypeArg", 1)?;
+                s.serialize_field(".tag", "enterprise_managed_auth_policy_changed")?;
                 s.end()
             }
             EventTypeArg::ExtendedVersionHistoryChangePolicy => {
@@ -122733,6 +123364,219 @@ impl ::serde::ser::Serialize for SharedFolderNestType {
     }
 }
 
+/// Transferred shared folder membership to another member.
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[non_exhaustive] // structs may have more fields added in the future.
+pub struct SharedFolderTransferMembershipDetails {
+    /// The account that previously held the access being transferred.
+    pub previous_member_account_id: crate::types::users_common::AccountId,
+    /// The account that received the transferred access.
+    pub new_member_account_id: crate::types::users_common::AccountId,
+    /// The shared folder access level that was transferred. This is the level at the time of the
+    /// transfer and does not change if the member's access is updated later.
+    pub shared_content_access_level: crate::types::sharing::AccessLevel,
+}
+
+impl SharedFolderTransferMembershipDetails {
+    pub fn new(
+        previous_member_account_id: crate::types::users_common::AccountId,
+        new_member_account_id: crate::types::users_common::AccountId,
+        shared_content_access_level: crate::types::sharing::AccessLevel,
+    ) -> Self {
+        SharedFolderTransferMembershipDetails {
+            previous_member_account_id,
+            new_member_account_id,
+            shared_content_access_level,
+        }
+    }
+}
+
+const SHARED_FOLDER_TRANSFER_MEMBERSHIP_DETAILS_FIELDS: &[&str] = &["previous_member_account_id",
+                                                                    "new_member_account_id",
+                                                                    "shared_content_access_level"];
+impl SharedFolderTransferMembershipDetails {
+    pub(crate) fn internal_deserialize<'de, V: ::serde::de::MapAccess<'de>>(
+        map: V,
+    ) -> Result<SharedFolderTransferMembershipDetails, V::Error> {
+        Self::internal_deserialize_opt(map, false).map(Option::unwrap)
+    }
+
+    pub(crate) fn internal_deserialize_opt<'de, V: ::serde::de::MapAccess<'de>>(
+        mut map: V,
+        optional: bool,
+    ) -> Result<Option<SharedFolderTransferMembershipDetails>, V::Error> {
+        let mut field_previous_member_account_id = None;
+        let mut field_new_member_account_id = None;
+        let mut field_shared_content_access_level = None;
+        let mut nothing = true;
+        while let Some(key) = map.next_key::<&str>()? {
+            nothing = false;
+            match key {
+                "previous_member_account_id" => {
+                    if field_previous_member_account_id.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("previous_member_account_id"));
+                    }
+                    field_previous_member_account_id = Some(map.next_value()?);
+                }
+                "new_member_account_id" => {
+                    if field_new_member_account_id.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("new_member_account_id"));
+                    }
+                    field_new_member_account_id = Some(map.next_value()?);
+                }
+                "shared_content_access_level" => {
+                    if field_shared_content_access_level.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("shared_content_access_level"));
+                    }
+                    field_shared_content_access_level = Some(map.next_value()?);
+                }
+                _ => {
+                    // unknown field allowed and ignored
+                    map.next_value::<::serde_json::Value>()?;
+                }
+            }
+        }
+        if optional && nothing {
+            return Ok(None);
+        }
+        let result = SharedFolderTransferMembershipDetails {
+            previous_member_account_id: field_previous_member_account_id.ok_or_else(|| ::serde::de::Error::missing_field("previous_member_account_id"))?,
+            new_member_account_id: field_new_member_account_id.ok_or_else(|| ::serde::de::Error::missing_field("new_member_account_id"))?,
+            shared_content_access_level: field_shared_content_access_level.ok_or_else(|| ::serde::de::Error::missing_field("shared_content_access_level"))?,
+        };
+        Ok(Some(result))
+    }
+
+    pub(crate) fn internal_serialize<S: ::serde::ser::Serializer>(
+        &self,
+        s: &mut S::SerializeStruct,
+    ) -> Result<(), S::Error> {
+        use serde::ser::SerializeStruct;
+        s.serialize_field("previous_member_account_id", &self.previous_member_account_id)?;
+        s.serialize_field("new_member_account_id", &self.new_member_account_id)?;
+        s.serialize_field("shared_content_access_level", &self.shared_content_access_level)?;
+        Ok(())
+    }
+}
+
+impl<'de> ::serde::de::Deserialize<'de> for SharedFolderTransferMembershipDetails {
+    fn deserialize<D: ::serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        // struct deserializer
+        use serde::de::{MapAccess, Visitor};
+        struct StructVisitor;
+        impl<'de> Visitor<'de> for StructVisitor {
+            type Value = SharedFolderTransferMembershipDetails;
+            fn expecting(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+                f.write_str("a SharedFolderTransferMembershipDetails struct")
+            }
+            fn visit_map<V: MapAccess<'de>>(self, map: V) -> Result<Self::Value, V::Error> {
+                SharedFolderTransferMembershipDetails::internal_deserialize(map)
+            }
+        }
+        deserializer.deserialize_struct("SharedFolderTransferMembershipDetails", SHARED_FOLDER_TRANSFER_MEMBERSHIP_DETAILS_FIELDS, StructVisitor)
+    }
+}
+
+impl ::serde::ser::Serialize for SharedFolderTransferMembershipDetails {
+    fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        // struct serializer
+        use serde::ser::SerializeStruct;
+        let mut s = serializer.serialize_struct("SharedFolderTransferMembershipDetails", 3)?;
+        self.internal_serialize::<S>(&mut s)?;
+        s.end()
+    }
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[non_exhaustive] // structs may have more fields added in the future.
+pub struct SharedFolderTransferMembershipType {
+    pub description: String,
+}
+
+impl SharedFolderTransferMembershipType {
+    pub fn new(description: String) -> Self {
+        SharedFolderTransferMembershipType {
+            description,
+        }
+    }
+}
+
+const SHARED_FOLDER_TRANSFER_MEMBERSHIP_TYPE_FIELDS: &[&str] = &["description"];
+impl SharedFolderTransferMembershipType {
+    pub(crate) fn internal_deserialize<'de, V: ::serde::de::MapAccess<'de>>(
+        map: V,
+    ) -> Result<SharedFolderTransferMembershipType, V::Error> {
+        Self::internal_deserialize_opt(map, false).map(Option::unwrap)
+    }
+
+    pub(crate) fn internal_deserialize_opt<'de, V: ::serde::de::MapAccess<'de>>(
+        mut map: V,
+        optional: bool,
+    ) -> Result<Option<SharedFolderTransferMembershipType>, V::Error> {
+        let mut field_description = None;
+        let mut nothing = true;
+        while let Some(key) = map.next_key::<&str>()? {
+            nothing = false;
+            match key {
+                "description" => {
+                    if field_description.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("description"));
+                    }
+                    field_description = Some(map.next_value()?);
+                }
+                _ => {
+                    // unknown field allowed and ignored
+                    map.next_value::<::serde_json::Value>()?;
+                }
+            }
+        }
+        if optional && nothing {
+            return Ok(None);
+        }
+        let result = SharedFolderTransferMembershipType {
+            description: field_description.ok_or_else(|| ::serde::de::Error::missing_field("description"))?,
+        };
+        Ok(Some(result))
+    }
+
+    pub(crate) fn internal_serialize<S: ::serde::ser::Serializer>(
+        &self,
+        s: &mut S::SerializeStruct,
+    ) -> Result<(), S::Error> {
+        use serde::ser::SerializeStruct;
+        s.serialize_field("description", &self.description)?;
+        Ok(())
+    }
+}
+
+impl<'de> ::serde::de::Deserialize<'de> for SharedFolderTransferMembershipType {
+    fn deserialize<D: ::serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        // struct deserializer
+        use serde::de::{MapAccess, Visitor};
+        struct StructVisitor;
+        impl<'de> Visitor<'de> for StructVisitor {
+            type Value = SharedFolderTransferMembershipType;
+            fn expecting(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+                f.write_str("a SharedFolderTransferMembershipType struct")
+            }
+            fn visit_map<V: MapAccess<'de>>(self, map: V) -> Result<Self::Value, V::Error> {
+                SharedFolderTransferMembershipType::internal_deserialize(map)
+            }
+        }
+        deserializer.deserialize_struct("SharedFolderTransferMembershipType", SHARED_FOLDER_TRANSFER_MEMBERSHIP_TYPE_FIELDS, StructVisitor)
+    }
+}
+
+impl ::serde::ser::Serialize for SharedFolderTransferMembershipType {
+    fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        // struct serializer
+        use serde::ser::SerializeStruct;
+        let mut s = serializer.serialize_struct("SharedFolderTransferMembershipType", 1)?;
+        self.internal_serialize::<S>(&mut s)?;
+        s.end()
+    }
+}
+
 /// Transferred ownership of shared folder to another member.
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[non_exhaustive] // structs may have more fields added in the future.
@@ -124270,6 +125114,8 @@ impl ::serde::ser::Serialize for SharedLinkCopyType {
 pub struct SharedLinkCreateDetails {
     /// Defines who can access the shared link. Might be missing due to historical data gap.
     pub shared_link_access_level: Option<SharedLinkAccessLevel>,
+    /// Team subdomain associated with this shared-link action.
+    pub subdomain: Option<String>,
 }
 
 impl SharedLinkCreateDetails {
@@ -124277,15 +125123,22 @@ impl SharedLinkCreateDetails {
         self.shared_link_access_level = Some(value);
         self
     }
+
+    pub fn with_subdomain(mut self, value: String) -> Self {
+        self.subdomain = Some(value);
+        self
+    }
 }
 
-const SHARED_LINK_CREATE_DETAILS_FIELDS: &[&str] = &["shared_link_access_level"];
+const SHARED_LINK_CREATE_DETAILS_FIELDS: &[&str] = &["shared_link_access_level",
+                                                     "subdomain"];
 impl SharedLinkCreateDetails {
     // no _opt deserializer
     pub(crate) fn internal_deserialize<'de, V: ::serde::de::MapAccess<'de>>(
         mut map: V,
     ) -> Result<SharedLinkCreateDetails, V::Error> {
         let mut field_shared_link_access_level = None;
+        let mut field_subdomain = None;
         while let Some(key) = map.next_key::<&str>()? {
             match key {
                 "shared_link_access_level" => {
@@ -124293,6 +125146,12 @@ impl SharedLinkCreateDetails {
                         return Err(::serde::de::Error::duplicate_field("shared_link_access_level"));
                     }
                     field_shared_link_access_level = Some(map.next_value()?);
+                }
+                "subdomain" => {
+                    if field_subdomain.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("subdomain"));
+                    }
+                    field_subdomain = Some(map.next_value()?);
                 }
                 _ => {
                     // unknown field allowed and ignored
@@ -124302,6 +125161,7 @@ impl SharedLinkCreateDetails {
         }
         let result = SharedLinkCreateDetails {
             shared_link_access_level: field_shared_link_access_level.and_then(Option::flatten),
+            subdomain: field_subdomain.and_then(Option::flatten),
         };
         Ok(result)
     }
@@ -124313,6 +125173,9 @@ impl SharedLinkCreateDetails {
         use serde::ser::SerializeStruct;
         if let Some(val) = &self.shared_link_access_level {
             s.serialize_field("shared_link_access_level", val)?;
+        }
+        if let Some(val) = &self.subdomain {
+            s.serialize_field("subdomain", val)?;
         }
         Ok(())
     }
@@ -124340,7 +125203,7 @@ impl ::serde::ser::Serialize for SharedLinkCreateDetails {
     fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         // struct serializer
         use serde::ser::SerializeStruct;
-        let mut s = serializer.serialize_struct("SharedLinkCreateDetails", 1)?;
+        let mut s = serializer.serialize_struct("SharedLinkCreateDetails", 2)?;
         self.internal_serialize::<S>(&mut s)?;
         s.end()
     }
@@ -127488,6 +128351,8 @@ impl ::serde::ser::Serialize for SharedLinkShareType {
 pub struct SharedLinkViewDetails {
     /// Shared link owner details. Might be missing due to historical data gap.
     pub shared_link_owner: Option<UserLogInfo>,
+    /// Team subdomain used to access the shared link.
+    pub subdomain: Option<String>,
 }
 
 impl SharedLinkViewDetails {
@@ -127495,15 +128360,22 @@ impl SharedLinkViewDetails {
         self.shared_link_owner = Some(value);
         self
     }
+
+    pub fn with_subdomain(mut self, value: String) -> Self {
+        self.subdomain = Some(value);
+        self
+    }
 }
 
-const SHARED_LINK_VIEW_DETAILS_FIELDS: &[&str] = &["shared_link_owner"];
+const SHARED_LINK_VIEW_DETAILS_FIELDS: &[&str] = &["shared_link_owner",
+                                                   "subdomain"];
 impl SharedLinkViewDetails {
     // no _opt deserializer
     pub(crate) fn internal_deserialize<'de, V: ::serde::de::MapAccess<'de>>(
         mut map: V,
     ) -> Result<SharedLinkViewDetails, V::Error> {
         let mut field_shared_link_owner = None;
+        let mut field_subdomain = None;
         while let Some(key) = map.next_key::<&str>()? {
             match key {
                 "shared_link_owner" => {
@@ -127511,6 +128383,12 @@ impl SharedLinkViewDetails {
                         return Err(::serde::de::Error::duplicate_field("shared_link_owner"));
                     }
                     field_shared_link_owner = Some(map.next_value()?);
+                }
+                "subdomain" => {
+                    if field_subdomain.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("subdomain"));
+                    }
+                    field_subdomain = Some(map.next_value()?);
                 }
                 _ => {
                     // unknown field allowed and ignored
@@ -127520,6 +128398,7 @@ impl SharedLinkViewDetails {
         }
         let result = SharedLinkViewDetails {
             shared_link_owner: field_shared_link_owner.and_then(Option::flatten),
+            subdomain: field_subdomain.and_then(Option::flatten),
         };
         Ok(result)
     }
@@ -127531,6 +128410,9 @@ impl SharedLinkViewDetails {
         use serde::ser::SerializeStruct;
         if let Some(val) = &self.shared_link_owner {
             s.serialize_field("shared_link_owner", val)?;
+        }
+        if let Some(val) = &self.subdomain {
+            s.serialize_field("subdomain", val)?;
         }
         Ok(())
     }
@@ -127558,7 +128440,7 @@ impl ::serde::ser::Serialize for SharedLinkViewDetails {
     fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         // struct serializer
         use serde::ser::SerializeStruct;
-        let mut s = serializer.serialize_struct("SharedLinkViewDetails", 1)?;
+        let mut s = serializer.serialize_struct("SharedLinkViewDetails", 2)?;
         self.internal_serialize::<S>(&mut s)?;
         s.end()
     }

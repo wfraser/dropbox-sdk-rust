@@ -2905,6 +2905,11 @@ pub struct FileLinkMetadata {
     /// content's owner is a team member and the content's owner team is different from the link's
     /// owner team.
     pub content_owner_team_info: Option<TeamInfo>,
+    /// The preview type is determined by the file extension of the shared link. It will be null if
+    /// the file cannot be previewed by the file viewer.
+    pub preview_type: Option<String>,
+    /// The time the shared link was created.
+    pub created_timestamp: Option<crate::types::common::DropboxTimestamp>,
 }
 
 impl FileLinkMetadata {
@@ -2930,6 +2935,8 @@ impl FileLinkMetadata {
             path_lower: None,
             team_member_info: None,
             content_owner_team_info: None,
+            preview_type: None,
+            created_timestamp: None,
         }
     }
 
@@ -2957,6 +2964,19 @@ impl FileLinkMetadata {
         self.content_owner_team_info = Some(value);
         self
     }
+
+    pub fn with_preview_type(mut self, value: String) -> Self {
+        self.preview_type = Some(value);
+        self
+    }
+
+    pub fn with_created_timestamp(
+        mut self,
+        value: crate::types::common::DropboxTimestamp,
+    ) -> Self {
+        self.created_timestamp = Some(value);
+        self
+    }
 }
 
 const FILE_LINK_METADATA_FIELDS: &[&str] = &["url",
@@ -2970,7 +2990,9 @@ const FILE_LINK_METADATA_FIELDS: &[&str] = &["url",
                                              "expires",
                                              "path_lower",
                                              "team_member_info",
-                                             "content_owner_team_info"];
+                                             "content_owner_team_info",
+                                             "preview_type",
+                                             "created_timestamp"];
 impl FileLinkMetadata {
     pub(crate) fn internal_deserialize<'de, V: ::serde::de::MapAccess<'de>>(
         map: V,
@@ -2994,6 +3016,8 @@ impl FileLinkMetadata {
         let mut field_path_lower = None;
         let mut field_team_member_info = None;
         let mut field_content_owner_team_info = None;
+        let mut field_preview_type = None;
+        let mut field_created_timestamp = None;
         let mut nothing = true;
         while let Some(key) = map.next_key::<&str>()? {
             nothing = false;
@@ -3070,6 +3094,18 @@ impl FileLinkMetadata {
                     }
                     field_content_owner_team_info = Some(map.next_value()?);
                 }
+                "preview_type" => {
+                    if field_preview_type.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("preview_type"));
+                    }
+                    field_preview_type = Some(map.next_value()?);
+                }
+                "created_timestamp" => {
+                    if field_created_timestamp.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("created_timestamp"));
+                    }
+                    field_created_timestamp = Some(map.next_value()?);
+                }
                 _ => {
                     // unknown field allowed and ignored
                     map.next_value::<::serde_json::Value>()?;
@@ -3092,6 +3128,8 @@ impl FileLinkMetadata {
             path_lower: field_path_lower.and_then(Option::flatten),
             team_member_info: field_team_member_info.and_then(Option::flatten),
             content_owner_team_info: field_content_owner_team_info.and_then(Option::flatten),
+            preview_type: field_preview_type.and_then(Option::flatten),
+            created_timestamp: field_created_timestamp.and_then(Option::flatten),
         };
         Ok(Some(result))
     }
@@ -3123,6 +3161,12 @@ impl FileLinkMetadata {
         if let Some(val) = &self.content_owner_team_info {
             s.serialize_field("content_owner_team_info", val)?;
         }
+        if let Some(val) = &self.preview_type {
+            s.serialize_field("preview_type", val)?;
+        }
+        if let Some(val) = &self.created_timestamp {
+            s.serialize_field("created_timestamp", val)?;
+        }
         Ok(())
     }
 }
@@ -3149,7 +3193,7 @@ impl ::serde::ser::Serialize for FileLinkMetadata {
     fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         // struct serializer
         use serde::ser::SerializeStruct;
-        let mut s = serializer.serialize_struct("FileLinkMetadata", 12)?;
+        let mut s = serializer.serialize_struct("FileLinkMetadata", 14)?;
         self.internal_serialize::<S>(&mut s)?;
         s.end()
     }
@@ -3935,6 +3979,11 @@ pub struct FolderLinkMetadata {
     /// content's owner is a team member and the content's owner team is different from the link's
     /// owner team.
     pub content_owner_team_info: Option<TeamInfo>,
+    /// The preview type is determined by the file extension of the shared link. It will be null if
+    /// the file cannot be previewed by the file viewer.
+    pub preview_type: Option<String>,
+    /// The time the shared link was created.
+    pub created_timestamp: Option<crate::types::common::DropboxTimestamp>,
 }
 
 impl FolderLinkMetadata {
@@ -3948,6 +3997,8 @@ impl FolderLinkMetadata {
             path_lower: None,
             team_member_info: None,
             content_owner_team_info: None,
+            preview_type: None,
+            created_timestamp: None,
         }
     }
 
@@ -3975,6 +4026,19 @@ impl FolderLinkMetadata {
         self.content_owner_team_info = Some(value);
         self
     }
+
+    pub fn with_preview_type(mut self, value: String) -> Self {
+        self.preview_type = Some(value);
+        self
+    }
+
+    pub fn with_created_timestamp(
+        mut self,
+        value: crate::types::common::DropboxTimestamp,
+    ) -> Self {
+        self.created_timestamp = Some(value);
+        self
+    }
 }
 
 const FOLDER_LINK_METADATA_FIELDS: &[&str] = &["url",
@@ -3984,7 +4048,9 @@ const FOLDER_LINK_METADATA_FIELDS: &[&str] = &["url",
                                                "expires",
                                                "path_lower",
                                                "team_member_info",
-                                               "content_owner_team_info"];
+                                               "content_owner_team_info",
+                                               "preview_type",
+                                               "created_timestamp"];
 impl FolderLinkMetadata {
     pub(crate) fn internal_deserialize<'de, V: ::serde::de::MapAccess<'de>>(
         map: V,
@@ -4004,6 +4070,8 @@ impl FolderLinkMetadata {
         let mut field_path_lower = None;
         let mut field_team_member_info = None;
         let mut field_content_owner_team_info = None;
+        let mut field_preview_type = None;
+        let mut field_created_timestamp = None;
         let mut nothing = true;
         while let Some(key) = map.next_key::<&str>()? {
             nothing = false;
@@ -4056,6 +4124,18 @@ impl FolderLinkMetadata {
                     }
                     field_content_owner_team_info = Some(map.next_value()?);
                 }
+                "preview_type" => {
+                    if field_preview_type.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("preview_type"));
+                    }
+                    field_preview_type = Some(map.next_value()?);
+                }
+                "created_timestamp" => {
+                    if field_created_timestamp.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("created_timestamp"));
+                    }
+                    field_created_timestamp = Some(map.next_value()?);
+                }
                 _ => {
                     // unknown field allowed and ignored
                     map.next_value::<::serde_json::Value>()?;
@@ -4074,6 +4154,8 @@ impl FolderLinkMetadata {
             path_lower: field_path_lower.and_then(Option::flatten),
             team_member_info: field_team_member_info.and_then(Option::flatten),
             content_owner_team_info: field_content_owner_team_info.and_then(Option::flatten),
+            preview_type: field_preview_type.and_then(Option::flatten),
+            created_timestamp: field_created_timestamp.and_then(Option::flatten),
         };
         Ok(Some(result))
     }
@@ -4101,6 +4183,12 @@ impl FolderLinkMetadata {
         if let Some(val) = &self.content_owner_team_info {
             s.serialize_field("content_owner_team_info", val)?;
         }
+        if let Some(val) = &self.preview_type {
+            s.serialize_field("preview_type", val)?;
+        }
+        if let Some(val) = &self.created_timestamp {
+            s.serialize_field("created_timestamp", val)?;
+        }
         Ok(())
     }
 }
@@ -4127,7 +4215,7 @@ impl ::serde::ser::Serialize for FolderLinkMetadata {
     fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         // struct serializer
         use serde::ser::SerializeStruct;
-        let mut s = serializer.serialize_struct("FolderLinkMetadata", 8)?;
+        let mut s = serializer.serialize_struct("FolderLinkMetadata", 10)?;
         self.internal_serialize::<S>(&mut s)?;
         s.end()
     }
@@ -5808,6 +5896,8 @@ pub struct GroupMembershipInfo {
     pub initials: Option<String>,
     /// True if the member has access on a parent folder.
     pub is_inherited: bool,
+    /// The access type from parent folder for this member.
+    pub inherited_access_type: Option<AccessLevel>,
 }
 
 impl GroupMembershipInfo {
@@ -5818,6 +5908,7 @@ impl GroupMembershipInfo {
             permissions: None,
             #[allow(deprecated)] initials: None,
             is_inherited: false,
+            inherited_access_type: None,
         }
     }
 
@@ -5837,13 +5928,19 @@ impl GroupMembershipInfo {
         self.is_inherited = value;
         self
     }
+
+    pub fn with_inherited_access_type(mut self, value: AccessLevel) -> Self {
+        self.inherited_access_type = Some(value);
+        self
+    }
 }
 
 const GROUP_MEMBERSHIP_INFO_FIELDS: &[&str] = &["access_type",
                                                 "group",
                                                 "permissions",
                                                 "initials",
-                                                "is_inherited"];
+                                                "is_inherited",
+                                                "inherited_access_type"];
 impl GroupMembershipInfo {
     pub(crate) fn internal_deserialize<'de, V: ::serde::de::MapAccess<'de>>(
         map: V,
@@ -5860,6 +5957,7 @@ impl GroupMembershipInfo {
         let mut field_permissions = None;
         let mut field_initials = None;
         let mut field_is_inherited = None;
+        let mut field_inherited_access_type = None;
         let mut nothing = true;
         while let Some(key) = map.next_key::<&str>()? {
             nothing = false;
@@ -5894,6 +5992,12 @@ impl GroupMembershipInfo {
                     }
                     field_is_inherited = Some(map.next_value()?);
                 }
+                "inherited_access_type" => {
+                    if field_inherited_access_type.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("inherited_access_type"));
+                    }
+                    field_inherited_access_type = Some(map.next_value()?);
+                }
                 _ => {
                     // unknown field allowed and ignored
                     map.next_value::<::serde_json::Value>()?;
@@ -5909,6 +6013,7 @@ impl GroupMembershipInfo {
             permissions: field_permissions.and_then(Option::flatten),
             #[allow(deprecated)] initials: field_initials.and_then(Option::flatten),
             is_inherited: field_is_inherited.unwrap_or(false),
+            inherited_access_type: field_inherited_access_type.and_then(Option::flatten),
         };
         Ok(Some(result))
     }
@@ -5929,6 +6034,9 @@ impl GroupMembershipInfo {
         }
         if self.is_inherited {
             s.serialize_field("is_inherited", &self.is_inherited)?;
+        }
+        if let Some(val) = &self.inherited_access_type {
+            s.serialize_field("inherited_access_type", val)?;
         }
         Ok(())
     }
@@ -5956,7 +6064,7 @@ impl ::serde::ser::Serialize for GroupMembershipInfo {
     fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         // struct serializer
         use serde::ser::SerializeStruct;
-        let mut s = serializer.serialize_struct("GroupMembershipInfo", 5)?;
+        let mut s = serializer.serialize_struct("GroupMembershipInfo", 6)?;
         self.internal_serialize::<S>(&mut s)?;
         s.end()
     }
@@ -5970,6 +6078,7 @@ impl From<GroupMembershipInfo> for MembershipInfo {
             permissions: subtype.permissions,
             #[allow(deprecated)] initials: subtype.initials,
             is_inherited: subtype.is_inherited,
+            inherited_access_type: subtype.inherited_access_type,
         }
     }
 }
@@ -6283,6 +6392,8 @@ pub struct InviteeMembershipInfo {
     pub initials: Option<String>,
     /// True if the member has access on a parent folder.
     pub is_inherited: bool,
+    /// The access type from parent folder for this member.
+    pub inherited_access_type: Option<AccessLevel>,
     /// The user this invitation is tied to, if available.
     pub user: Option<UserInfo>,
 }
@@ -6295,6 +6406,7 @@ impl InviteeMembershipInfo {
             permissions: None,
             #[allow(deprecated)] initials: None,
             is_inherited: false,
+            inherited_access_type: None,
             user: None,
         }
     }
@@ -6316,6 +6428,11 @@ impl InviteeMembershipInfo {
         self
     }
 
+    pub fn with_inherited_access_type(mut self, value: AccessLevel) -> Self {
+        self.inherited_access_type = Some(value);
+        self
+    }
+
     pub fn with_user(mut self, value: UserInfo) -> Self {
         self.user = Some(value);
         self
@@ -6327,6 +6444,7 @@ const INVITEE_MEMBERSHIP_INFO_FIELDS: &[&str] = &["access_type",
                                                   "permissions",
                                                   "initials",
                                                   "is_inherited",
+                                                  "inherited_access_type",
                                                   "user"];
 impl InviteeMembershipInfo {
     pub(crate) fn internal_deserialize<'de, V: ::serde::de::MapAccess<'de>>(
@@ -6344,6 +6462,7 @@ impl InviteeMembershipInfo {
         let mut field_permissions = None;
         let mut field_initials = None;
         let mut field_is_inherited = None;
+        let mut field_inherited_access_type = None;
         let mut field_user = None;
         let mut nothing = true;
         while let Some(key) = map.next_key::<&str>()? {
@@ -6379,6 +6498,12 @@ impl InviteeMembershipInfo {
                     }
                     field_is_inherited = Some(map.next_value()?);
                 }
+                "inherited_access_type" => {
+                    if field_inherited_access_type.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("inherited_access_type"));
+                    }
+                    field_inherited_access_type = Some(map.next_value()?);
+                }
                 "user" => {
                     if field_user.is_some() {
                         return Err(::serde::de::Error::duplicate_field("user"));
@@ -6400,6 +6525,7 @@ impl InviteeMembershipInfo {
             permissions: field_permissions.and_then(Option::flatten),
             #[allow(deprecated)] initials: field_initials.and_then(Option::flatten),
             is_inherited: field_is_inherited.unwrap_or(false),
+            inherited_access_type: field_inherited_access_type.and_then(Option::flatten),
             user: field_user.and_then(Option::flatten),
         };
         Ok(Some(result))
@@ -6421,6 +6547,9 @@ impl InviteeMembershipInfo {
         }
         if self.is_inherited {
             s.serialize_field("is_inherited", &self.is_inherited)?;
+        }
+        if let Some(val) = &self.inherited_access_type {
+            s.serialize_field("inherited_access_type", val)?;
         }
         if let Some(val) = &self.user {
             s.serialize_field("user", val)?;
@@ -6451,7 +6580,7 @@ impl ::serde::ser::Serialize for InviteeMembershipInfo {
     fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         // struct serializer
         use serde::ser::SerializeStruct;
-        let mut s = serializer.serialize_struct("InviteeMembershipInfo", 6)?;
+        let mut s = serializer.serialize_struct("InviteeMembershipInfo", 7)?;
         self.internal_serialize::<S>(&mut s)?;
         s.end()
     }
@@ -6465,6 +6594,7 @@ impl From<InviteeMembershipInfo> for MembershipInfo {
             permissions: subtype.permissions,
             #[allow(deprecated)] initials: subtype.initials,
             is_inherited: subtype.is_inherited,
+            inherited_access_type: subtype.inherited_access_type,
         }
     }
 }
@@ -10451,6 +10581,8 @@ pub enum ListSharedLinksError {
     /// Indicates that the cursor has been invalidated. Call
     /// [`list_shared_links()`](crate::sharing::list_shared_links) to obtain a new cursor.
     Reset,
+    /// The user does not have permissions to list links to the content.
+    PermissionDenied,
     /// Catch-all used for unrecognized values returned from the server. Encountering this value
     /// typically indicates that this SDK version is out of date.
     Other,
@@ -10480,6 +10612,7 @@ impl<'de> ::serde::de::Deserialize<'de> for ListSharedLinksError {
                         }
                     }
                     "reset" => ListSharedLinksError::Reset,
+                    "permission_denied" => ListSharedLinksError::PermissionDenied,
                     _ => ListSharedLinksError::Other,
                 };
                 crate::eat_json_fields(&mut map)?;
@@ -10488,6 +10621,7 @@ impl<'de> ::serde::de::Deserialize<'de> for ListSharedLinksError {
         }
         const VARIANTS: &[&str] = &["path",
                                     "reset",
+                                    "permission_denied",
                                     "other"];
         deserializer.deserialize_struct("ListSharedLinksError", VARIANTS, EnumVisitor)
     }
@@ -10511,6 +10645,12 @@ impl ::serde::ser::Serialize for ListSharedLinksError {
                 s.serialize_field(".tag", "reset")?;
                 s.end()
             }
+            ListSharedLinksError::PermissionDenied => {
+                // unit
+                let mut s = serializer.serialize_struct("ListSharedLinksError", 1)?;
+                s.serialize_field(".tag", "permission_denied")?;
+                s.end()
+            }
             ListSharedLinksError::Other => Err(::serde::ser::Error::custom("cannot serialize 'Other' variant"))
         }
     }
@@ -10529,6 +10669,7 @@ impl ::std::fmt::Display for ListSharedLinksError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
             ListSharedLinksError::Path(inner) => write!(f, "ListSharedLinksError: {}", inner),
+            ListSharedLinksError::PermissionDenied => f.write_str("The user does not have permissions to list links to the content."),
             _ => write!(f, "{:?}", *self),
         }
     }
@@ -11185,6 +11326,8 @@ pub struct MembershipInfo {
     pub initials: Option<String>,
     /// True if the member has access on a parent folder.
     pub is_inherited: bool,
+    /// The access type from parent folder for this member.
+    pub inherited_access_type: Option<AccessLevel>,
 }
 
 impl MembershipInfo {
@@ -11194,6 +11337,7 @@ impl MembershipInfo {
             permissions: None,
             #[allow(deprecated)] initials: None,
             is_inherited: false,
+            inherited_access_type: None,
         }
     }
 
@@ -11213,12 +11357,18 @@ impl MembershipInfo {
         self.is_inherited = value;
         self
     }
+
+    pub fn with_inherited_access_type(mut self, value: AccessLevel) -> Self {
+        self.inherited_access_type = Some(value);
+        self
+    }
 }
 
 const MEMBERSHIP_INFO_FIELDS: &[&str] = &["access_type",
                                           "permissions",
                                           "initials",
-                                          "is_inherited"];
+                                          "is_inherited",
+                                          "inherited_access_type"];
 impl MembershipInfo {
     pub(crate) fn internal_deserialize<'de, V: ::serde::de::MapAccess<'de>>(
         map: V,
@@ -11234,6 +11384,7 @@ impl MembershipInfo {
         let mut field_permissions = None;
         let mut field_initials = None;
         let mut field_is_inherited = None;
+        let mut field_inherited_access_type = None;
         let mut nothing = true;
         while let Some(key) = map.next_key::<&str>()? {
             nothing = false;
@@ -11262,6 +11413,12 @@ impl MembershipInfo {
                     }
                     field_is_inherited = Some(map.next_value()?);
                 }
+                "inherited_access_type" => {
+                    if field_inherited_access_type.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("inherited_access_type"));
+                    }
+                    field_inherited_access_type = Some(map.next_value()?);
+                }
                 _ => {
                     // unknown field allowed and ignored
                     map.next_value::<::serde_json::Value>()?;
@@ -11276,6 +11433,7 @@ impl MembershipInfo {
             permissions: field_permissions.and_then(Option::flatten),
             #[allow(deprecated)] initials: field_initials.and_then(Option::flatten),
             is_inherited: field_is_inherited.unwrap_or(false),
+            inherited_access_type: field_inherited_access_type.and_then(Option::flatten),
         };
         Ok(Some(result))
     }
@@ -11295,6 +11453,9 @@ impl MembershipInfo {
         }
         if self.is_inherited {
             s.serialize_field("is_inherited", &self.is_inherited)?;
+        }
+        if let Some(val) = &self.inherited_access_type {
+            s.serialize_field("inherited_access_type", val)?;
         }
         Ok(())
     }
@@ -11322,7 +11483,7 @@ impl ::serde::ser::Serialize for MembershipInfo {
     fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         // struct serializer
         use serde::ser::SerializeStruct;
-        let mut s = serializer.serialize_struct("MembershipInfo", 4)?;
+        let mut s = serializer.serialize_struct("MembershipInfo", 5)?;
         self.internal_serialize::<S>(&mut s)?;
         s.end()
     }
@@ -11709,6 +11870,8 @@ pub enum MountFolderError {
     /// The shared folder is not mountable by directly call APIs, instead the automounter is
     /// responsible for mounting it.
     MustAutomount,
+    /// User will have too many mounts after this operation.
+    TooManyMounts(TooManyMountsError),
     /// Catch-all used for unrecognized values returned from the server. Encountering this value
     /// typically indicates that this SDK version is out of date.
     Other,
@@ -11743,6 +11906,13 @@ impl<'de> ::serde::de::Deserialize<'de> for MountFolderError {
                     "no_permission" => MountFolderError::NoPermission,
                     "not_mountable" => MountFolderError::NotMountable,
                     "must_automount" => MountFolderError::MustAutomount,
+                    "too_many_mounts" => {
+                        match map.next_key()? {
+                            Some("too_many_mounts") => MountFolderError::TooManyMounts(map.next_value()?),
+                            None => return Err(de::Error::missing_field("too_many_mounts")),
+                            _ => return Err(de::Error::unknown_field(tag, VARIANTS))
+                        }
+                    }
                     _ => MountFolderError::Other,
                 };
                 crate::eat_json_fields(&mut map)?;
@@ -11756,6 +11926,7 @@ impl<'de> ::serde::de::Deserialize<'de> for MountFolderError {
                                     "no_permission",
                                     "not_mountable",
                                     "must_automount",
+                                    "too_many_mounts",
                                     "other"];
         deserializer.deserialize_struct("MountFolderError", VARIANTS, EnumVisitor)
     }
@@ -11810,6 +11981,13 @@ impl ::serde::ser::Serialize for MountFolderError {
                 s.serialize_field(".tag", "must_automount")?;
                 s.end()
             }
+            MountFolderError::TooManyMounts(x) => {
+                // union or polymporphic struct
+                let mut s = serializer.serialize_struct("MountFolderError", 2)?;
+                s.serialize_field(".tag", "too_many_mounts")?;
+                s.serialize_field("too_many_mounts", x)?;
+                s.end()
+            }
             MountFolderError::Other => Err(::serde::ser::Error::custom("cannot serialize 'Other' variant"))
         }
     }
@@ -11819,6 +11997,7 @@ impl ::std::error::Error for MountFolderError {
     fn source(&self) -> Option<&(dyn ::std::error::Error + 'static)> {
         match self {
             MountFolderError::AccessError(inner) => Some(inner),
+            MountFolderError::TooManyMounts(inner) => Some(inner),
             _ => None,
         }
     }
@@ -11834,8 +12013,128 @@ impl ::std::fmt::Display for MountFolderError {
             MountFolderError::NoPermission => f.write_str("The current user does not have permission to perform this action."),
             MountFolderError::NotMountable => f.write_str("The shared folder is not mountable. One example where this can occur is when the shared folder belongs within a team folder in the user's Dropbox."),
             MountFolderError::MustAutomount => f.write_str("The shared folder is not mountable by directly call APIs, instead the automounter is responsible for mounting it."),
+            MountFolderError::TooManyMounts(inner) => write!(f, "User will have too many mounts after this operation: {}", inner),
             _ => write!(f, "{:?}", *self),
         }
+    }
+}
+
+/// Information about the mount limit that the operation would exceed.
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[non_exhaustive] // structs may have more fields added in the future.
+pub struct MountLimitsInfo {
+    /// The maximum number allowed for this limit.
+    pub limit: u64,
+    /// The current number of mounts for the user, or of namespaces in the folder tree.
+    pub current_count: u64,
+    /// The number of mounts for the user, or of namespaces in the folder tree, if the operation
+    /// were completed.
+    pub new_count: u64,
+}
+
+impl MountLimitsInfo {
+    pub fn new(limit: u64, current_count: u64, new_count: u64) -> Self {
+        MountLimitsInfo {
+            limit,
+            current_count,
+            new_count,
+        }
+    }
+}
+
+const MOUNT_LIMITS_INFO_FIELDS: &[&str] = &["limit",
+                                            "current_count",
+                                            "new_count"];
+impl MountLimitsInfo {
+    pub(crate) fn internal_deserialize<'de, V: ::serde::de::MapAccess<'de>>(
+        map: V,
+    ) -> Result<MountLimitsInfo, V::Error> {
+        Self::internal_deserialize_opt(map, false).map(Option::unwrap)
+    }
+
+    pub(crate) fn internal_deserialize_opt<'de, V: ::serde::de::MapAccess<'de>>(
+        mut map: V,
+        optional: bool,
+    ) -> Result<Option<MountLimitsInfo>, V::Error> {
+        let mut field_limit = None;
+        let mut field_current_count = None;
+        let mut field_new_count = None;
+        let mut nothing = true;
+        while let Some(key) = map.next_key::<&str>()? {
+            nothing = false;
+            match key {
+                "limit" => {
+                    if field_limit.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("limit"));
+                    }
+                    field_limit = Some(map.next_value()?);
+                }
+                "current_count" => {
+                    if field_current_count.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("current_count"));
+                    }
+                    field_current_count = Some(map.next_value()?);
+                }
+                "new_count" => {
+                    if field_new_count.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("new_count"));
+                    }
+                    field_new_count = Some(map.next_value()?);
+                }
+                _ => {
+                    // unknown field allowed and ignored
+                    map.next_value::<::serde_json::Value>()?;
+                }
+            }
+        }
+        if optional && nothing {
+            return Ok(None);
+        }
+        let result = MountLimitsInfo {
+            limit: field_limit.ok_or_else(|| ::serde::de::Error::missing_field("limit"))?,
+            current_count: field_current_count.ok_or_else(|| ::serde::de::Error::missing_field("current_count"))?,
+            new_count: field_new_count.ok_or_else(|| ::serde::de::Error::missing_field("new_count"))?,
+        };
+        Ok(Some(result))
+    }
+
+    pub(crate) fn internal_serialize<S: ::serde::ser::Serializer>(
+        &self,
+        s: &mut S::SerializeStruct,
+    ) -> Result<(), S::Error> {
+        use serde::ser::SerializeStruct;
+        s.serialize_field("limit", &self.limit)?;
+        s.serialize_field("current_count", &self.current_count)?;
+        s.serialize_field("new_count", &self.new_count)?;
+        Ok(())
+    }
+}
+
+impl<'de> ::serde::de::Deserialize<'de> for MountLimitsInfo {
+    fn deserialize<D: ::serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        // struct deserializer
+        use serde::de::{MapAccess, Visitor};
+        struct StructVisitor;
+        impl<'de> Visitor<'de> for StructVisitor {
+            type Value = MountLimitsInfo;
+            fn expecting(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+                f.write_str("a MountLimitsInfo struct")
+            }
+            fn visit_map<V: MapAccess<'de>>(self, map: V) -> Result<Self::Value, V::Error> {
+                MountLimitsInfo::internal_deserialize(map)
+            }
+        }
+        deserializer.deserialize_struct("MountLimitsInfo", MOUNT_LIMITS_INFO_FIELDS, StructVisitor)
+    }
+}
+
+impl ::serde::ser::Serialize for MountLimitsInfo {
+    fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        // struct serializer
+        use serde::ser::SerializeStruct;
+        let mut s = serializer.serialize_struct("MountLimitsInfo", 3)?;
+        self.internal_serialize::<S>(&mut s)?;
+        s.end()
     }
 }
 
@@ -14881,6 +15180,8 @@ pub enum ShareFolderError {
     /// The current user's account is not allowed to select the specified
     /// [`ShareFolderArg::shared_link_policy`](ShareFolderArg).
     DisallowedSharedLinkPolicy,
+    /// User will have too many mounts after the operation.
+    TooManyMounts(TooManyMountsError),
     /// The current user does not have permission to perform this action.
     NoPermission,
     /// Catch-all used for unrecognized values returned from the server. Encountering this value
@@ -14914,6 +15215,13 @@ impl<'de> ::serde::de::Deserialize<'de> for ShareFolderError {
                     }
                     "team_policy_disallows_member_policy" => ShareFolderError::TeamPolicyDisallowsMemberPolicy,
                     "disallowed_shared_link_policy" => ShareFolderError::DisallowedSharedLinkPolicy,
+                    "too_many_mounts" => {
+                        match map.next_key()? {
+                            Some("too_many_mounts") => ShareFolderError::TooManyMounts(map.next_value()?),
+                            None => return Err(de::Error::missing_field("too_many_mounts")),
+                            _ => return Err(de::Error::unknown_field(tag, VARIANTS))
+                        }
+                    }
                     "no_permission" => ShareFolderError::NoPermission,
                     _ => ShareFolderError::Other,
                 };
@@ -14925,6 +15233,7 @@ impl<'de> ::serde::de::Deserialize<'de> for ShareFolderError {
                                     "bad_path",
                                     "team_policy_disallows_member_policy",
                                     "disallowed_shared_link_policy",
+                                    "too_many_mounts",
                                     "other",
                                     "no_permission"];
         deserializer.deserialize_struct("ShareFolderError", VARIANTS, EnumVisitor)
@@ -14961,6 +15270,13 @@ impl ::serde::ser::Serialize for ShareFolderError {
                 s.serialize_field(".tag", "disallowed_shared_link_policy")?;
                 s.end()
             }
+            ShareFolderError::TooManyMounts(x) => {
+                // union or polymporphic struct
+                let mut s = serializer.serialize_struct("ShareFolderError", 2)?;
+                s.serialize_field(".tag", "too_many_mounts")?;
+                s.serialize_field("too_many_mounts", x)?;
+                s.end()
+            }
             ShareFolderError::NoPermission => {
                 // unit
                 let mut s = serializer.serialize_struct("ShareFolderError", 1)?;
@@ -14976,6 +15292,7 @@ impl ::std::error::Error for ShareFolderError {
     fn source(&self) -> Option<&(dyn ::std::error::Error + 'static)> {
         match self {
             ShareFolderError::BadPath(inner) => Some(inner),
+            ShareFolderError::TooManyMounts(inner) => Some(inner),
             _ => None,
         }
     }
@@ -14985,6 +15302,7 @@ impl ::std::fmt::Display for ShareFolderError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
             ShareFolderError::BadPath(inner) => write!(f, "ShareFolderError: {}", inner),
+            ShareFolderError::TooManyMounts(inner) => write!(f, "User will have too many mounts after the operation: {}", inner),
             ShareFolderError::NoPermission => f.write_str("The current user does not have permission to perform this action."),
             _ => write!(f, "{:?}", *self),
         }
@@ -14999,6 +15317,7 @@ impl From<ShareFolderErrorBase> for ShareFolderError {
             ShareFolderErrorBase::BadPath(x) => ShareFolderError::BadPath(x),
             ShareFolderErrorBase::TeamPolicyDisallowsMemberPolicy => ShareFolderError::TeamPolicyDisallowsMemberPolicy,
             ShareFolderErrorBase::DisallowedSharedLinkPolicy => ShareFolderError::DisallowedSharedLinkPolicy,
+            ShareFolderErrorBase::TooManyMounts(x) => ShareFolderError::TooManyMounts(x),
             ShareFolderErrorBase::Other => ShareFolderError::Other,
         }
     }
@@ -15019,6 +15338,8 @@ pub enum ShareFolderErrorBase {
     /// The current user's account is not allowed to select the specified
     /// [`ShareFolderArg::shared_link_policy`](ShareFolderArg).
     DisallowedSharedLinkPolicy,
+    /// User will have too many mounts after the operation.
+    TooManyMounts(TooManyMountsError),
     /// Catch-all used for unrecognized values returned from the server. Encountering this value
     /// typically indicates that this SDK version is out of date.
     Other,
@@ -15050,6 +15371,13 @@ impl<'de> ::serde::de::Deserialize<'de> for ShareFolderErrorBase {
                     }
                     "team_policy_disallows_member_policy" => ShareFolderErrorBase::TeamPolicyDisallowsMemberPolicy,
                     "disallowed_shared_link_policy" => ShareFolderErrorBase::DisallowedSharedLinkPolicy,
+                    "too_many_mounts" => {
+                        match map.next_key()? {
+                            Some("too_many_mounts") => ShareFolderErrorBase::TooManyMounts(map.next_value()?),
+                            None => return Err(de::Error::missing_field("too_many_mounts")),
+                            _ => return Err(de::Error::unknown_field(tag, VARIANTS))
+                        }
+                    }
                     _ => ShareFolderErrorBase::Other,
                 };
                 crate::eat_json_fields(&mut map)?;
@@ -15060,6 +15388,7 @@ impl<'de> ::serde::de::Deserialize<'de> for ShareFolderErrorBase {
                                     "bad_path",
                                     "team_policy_disallows_member_policy",
                                     "disallowed_shared_link_policy",
+                                    "too_many_mounts",
                                     "other"];
         deserializer.deserialize_struct("ShareFolderErrorBase", VARIANTS, EnumVisitor)
     }
@@ -15093,6 +15422,13 @@ impl ::serde::ser::Serialize for ShareFolderErrorBase {
                 // unit
                 let mut s = serializer.serialize_struct("ShareFolderErrorBase", 1)?;
                 s.serialize_field(".tag", "disallowed_shared_link_policy")?;
+                s.end()
+            }
+            ShareFolderErrorBase::TooManyMounts(x) => {
+                // union or polymporphic struct
+                let mut s = serializer.serialize_struct("ShareFolderErrorBase", 2)?;
+                s.serialize_field(".tag", "too_many_mounts")?;
+                s.serialize_field("too_many_mounts", x)?;
                 s.end()
             }
             ShareFolderErrorBase::Other => Err(::serde::ser::Error::custom("cannot serialize 'Other' variant"))
@@ -18392,13 +18728,13 @@ impl ::serde::ser::Serialize for SharedLinkMetadata {
         use serde::ser::SerializeStruct;
         match self {
             SharedLinkMetadata::File(x) => {
-                let mut s = serializer.serialize_struct("SharedLinkMetadata", 13)?;
+                let mut s = serializer.serialize_struct("SharedLinkMetadata", 15)?;
                 s.serialize_field(".tag", "file")?;
                 x.internal_serialize::<S>(&mut s)?;
                 s.end()
             }
             SharedLinkMetadata::Folder(x) => {
-                let mut s = serializer.serialize_struct("SharedLinkMetadata", 9)?;
+                let mut s = serializer.serialize_struct("SharedLinkMetadata", 11)?;
                 s.serialize_field(".tag", "folder")?;
                 x.internal_serialize::<S>(&mut s)?;
                 s.end()
@@ -19179,6 +19515,101 @@ impl ::serde::ser::Serialize for TeamMemberInfo {
         let mut s = serializer.serialize_struct("TeamMemberInfo", 3)?;
         self.internal_serialize::<S>(&mut s)?;
         s.end()
+    }
+}
+
+/// This operation would exceed the maximum number of mounts allowed.
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[non_exhaustive] // variants may be added in the future
+pub enum TooManyMountsError {
+    /// The user can't add more mounts because it would exceed the maximum number of mounts allowed.
+    TotalMountsExceeded(MountLimitsInfo),
+    /// The user can't add more mounts because it would exceed the mount limit for their home
+    /// namespace.
+    HomeMountsExceeded(MountLimitsInfo),
+    /// The user can't create a new nested share because doing so would exceed the maximum number of
+    /// namespaces allowed in the folder tree.
+    TreeSizeExceeded(MountLimitsInfo),
+    /// Catch-all used for unrecognized values returned from the server. Encountering this value
+    /// typically indicates that this SDK version is out of date.
+    Other,
+}
+
+impl<'de> ::serde::de::Deserialize<'de> for TooManyMountsError {
+    fn deserialize<D: ::serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        // union deserializer
+        use serde::de::{self, MapAccess, Visitor};
+        struct EnumVisitor;
+        impl<'de> Visitor<'de> for EnumVisitor {
+            type Value = TooManyMountsError;
+            fn expecting(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+                f.write_str("a TooManyMountsError structure")
+            }
+            fn visit_map<V: MapAccess<'de>>(self, mut map: V) -> Result<Self::Value, V::Error> {
+                let tag: &str = match map.next_key()? {
+                    Some(".tag") => map.next_value()?,
+                    _ => return Err(de::Error::missing_field(".tag"))
+                };
+                let value = match tag {
+                    "total_mounts_exceeded" => TooManyMountsError::TotalMountsExceeded(MountLimitsInfo::internal_deserialize(&mut map)?),
+                    "home_mounts_exceeded" => TooManyMountsError::HomeMountsExceeded(MountLimitsInfo::internal_deserialize(&mut map)?),
+                    "tree_size_exceeded" => TooManyMountsError::TreeSizeExceeded(MountLimitsInfo::internal_deserialize(&mut map)?),
+                    _ => TooManyMountsError::Other,
+                };
+                crate::eat_json_fields(&mut map)?;
+                Ok(value)
+            }
+        }
+        const VARIANTS: &[&str] = &["total_mounts_exceeded",
+                                    "home_mounts_exceeded",
+                                    "tree_size_exceeded",
+                                    "other"];
+        deserializer.deserialize_struct("TooManyMountsError", VARIANTS, EnumVisitor)
+    }
+}
+
+impl ::serde::ser::Serialize for TooManyMountsError {
+    fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        // union serializer
+        use serde::ser::SerializeStruct;
+        match self {
+            TooManyMountsError::TotalMountsExceeded(x) => {
+                // struct
+                let mut s = serializer.serialize_struct("TooManyMountsError", 4)?;
+                s.serialize_field(".tag", "total_mounts_exceeded")?;
+                x.internal_serialize::<S>(&mut s)?;
+                s.end()
+            }
+            TooManyMountsError::HomeMountsExceeded(x) => {
+                // struct
+                let mut s = serializer.serialize_struct("TooManyMountsError", 4)?;
+                s.serialize_field(".tag", "home_mounts_exceeded")?;
+                x.internal_serialize::<S>(&mut s)?;
+                s.end()
+            }
+            TooManyMountsError::TreeSizeExceeded(x) => {
+                // struct
+                let mut s = serializer.serialize_struct("TooManyMountsError", 4)?;
+                s.serialize_field(".tag", "tree_size_exceeded")?;
+                x.internal_serialize::<S>(&mut s)?;
+                s.end()
+            }
+            TooManyMountsError::Other => Err(::serde::ser::Error::custom("cannot serialize 'Other' variant"))
+        }
+    }
+}
+
+impl ::std::error::Error for TooManyMountsError {
+}
+
+impl ::std::fmt::Display for TooManyMountsError {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match self {
+            TooManyMountsError::TotalMountsExceeded(inner) => write!(f, "The user can't add more mounts because it would exceed the maximum number of mounts allowed: {:?}", inner),
+            TooManyMountsError::HomeMountsExceeded(inner) => write!(f, "The user can't add more mounts because it would exceed the mount limit for their home namespace: {:?}", inner),
+            TooManyMountsError::TreeSizeExceeded(inner) => write!(f, "The user can't create a new nested share because doing so would exceed the maximum number of namespaces allowed in the folder tree: {:?}", inner),
+            _ => write!(f, "{:?}", *self),
+        }
     }
 }
 
@@ -21049,6 +21480,8 @@ pub struct UserFileMembershipInfo {
     pub initials: Option<String>,
     /// True if the member has access on a parent folder.
     pub is_inherited: bool,
+    /// The access type from parent folder for this member.
+    pub inherited_access_type: Option<AccessLevel>,
     /// The UTC timestamp of when the user has last seen the content. Only populated if the user has
     /// seen the content and the caller has a plan that includes viewer history.
     pub time_last_seen: Option<crate::types::common::DropboxTimestamp>,
@@ -21064,6 +21497,7 @@ impl UserFileMembershipInfo {
             permissions: None,
             #[allow(deprecated)] initials: None,
             is_inherited: false,
+            inherited_access_type: None,
             time_last_seen: None,
             platform_type: None,
         }
@@ -21086,6 +21520,11 @@ impl UserFileMembershipInfo {
         self
     }
 
+    pub fn with_inherited_access_type(mut self, value: AccessLevel) -> Self {
+        self.inherited_access_type = Some(value);
+        self
+    }
+
     pub fn with_time_last_seen(mut self, value: crate::types::common::DropboxTimestamp) -> Self {
         self.time_last_seen = Some(value);
         self
@@ -21102,6 +21541,7 @@ const USER_FILE_MEMBERSHIP_INFO_FIELDS: &[&str] = &["access_type",
                                                     "permissions",
                                                     "initials",
                                                     "is_inherited",
+                                                    "inherited_access_type",
                                                     "time_last_seen",
                                                     "platform_type"];
 impl UserFileMembershipInfo {
@@ -21120,6 +21560,7 @@ impl UserFileMembershipInfo {
         let mut field_permissions = None;
         let mut field_initials = None;
         let mut field_is_inherited = None;
+        let mut field_inherited_access_type = None;
         let mut field_time_last_seen = None;
         let mut field_platform_type = None;
         let mut nothing = true;
@@ -21156,6 +21597,12 @@ impl UserFileMembershipInfo {
                     }
                     field_is_inherited = Some(map.next_value()?);
                 }
+                "inherited_access_type" => {
+                    if field_inherited_access_type.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("inherited_access_type"));
+                    }
+                    field_inherited_access_type = Some(map.next_value()?);
+                }
                 "time_last_seen" => {
                     if field_time_last_seen.is_some() {
                         return Err(::serde::de::Error::duplicate_field("time_last_seen"));
@@ -21183,6 +21630,7 @@ impl UserFileMembershipInfo {
             permissions: field_permissions.and_then(Option::flatten),
             #[allow(deprecated)] initials: field_initials.and_then(Option::flatten),
             is_inherited: field_is_inherited.unwrap_or(false),
+            inherited_access_type: field_inherited_access_type.and_then(Option::flatten),
             time_last_seen: field_time_last_seen.and_then(Option::flatten),
             platform_type: field_platform_type.and_then(Option::flatten),
         };
@@ -21205,6 +21653,9 @@ impl UserFileMembershipInfo {
         }
         if self.is_inherited {
             s.serialize_field("is_inherited", &self.is_inherited)?;
+        }
+        if let Some(val) = &self.inherited_access_type {
+            s.serialize_field("inherited_access_type", val)?;
         }
         if let Some(val) = &self.time_last_seen {
             s.serialize_field("time_last_seen", val)?;
@@ -21238,7 +21689,7 @@ impl ::serde::ser::Serialize for UserFileMembershipInfo {
     fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         // struct serializer
         use serde::ser::SerializeStruct;
-        let mut s = serializer.serialize_struct("UserFileMembershipInfo", 7)?;
+        let mut s = serializer.serialize_struct("UserFileMembershipInfo", 8)?;
         self.internal_serialize::<S>(&mut s)?;
         s.end()
     }
@@ -21253,6 +21704,7 @@ impl From<UserFileMembershipInfo> for UserMembershipInfo {
             permissions: subtype.permissions,
             #[allow(deprecated)] initials: subtype.initials,
             is_inherited: subtype.is_inherited,
+            inherited_access_type: subtype.inherited_access_type,
         }
     }
 }
@@ -21432,6 +21884,8 @@ pub struct UserMembershipInfo {
     pub initials: Option<String>,
     /// True if the member has access on a parent folder.
     pub is_inherited: bool,
+    /// The access type from parent folder for this member.
+    pub inherited_access_type: Option<AccessLevel>,
 }
 
 impl UserMembershipInfo {
@@ -21442,6 +21896,7 @@ impl UserMembershipInfo {
             permissions: None,
             #[allow(deprecated)] initials: None,
             is_inherited: false,
+            inherited_access_type: None,
         }
     }
 
@@ -21461,13 +21916,19 @@ impl UserMembershipInfo {
         self.is_inherited = value;
         self
     }
+
+    pub fn with_inherited_access_type(mut self, value: AccessLevel) -> Self {
+        self.inherited_access_type = Some(value);
+        self
+    }
 }
 
 const USER_MEMBERSHIP_INFO_FIELDS: &[&str] = &["access_type",
                                                "user",
                                                "permissions",
                                                "initials",
-                                               "is_inherited"];
+                                               "is_inherited",
+                                               "inherited_access_type"];
 impl UserMembershipInfo {
     pub(crate) fn internal_deserialize<'de, V: ::serde::de::MapAccess<'de>>(
         map: V,
@@ -21484,6 +21945,7 @@ impl UserMembershipInfo {
         let mut field_permissions = None;
         let mut field_initials = None;
         let mut field_is_inherited = None;
+        let mut field_inherited_access_type = None;
         let mut nothing = true;
         while let Some(key) = map.next_key::<&str>()? {
             nothing = false;
@@ -21518,6 +21980,12 @@ impl UserMembershipInfo {
                     }
                     field_is_inherited = Some(map.next_value()?);
                 }
+                "inherited_access_type" => {
+                    if field_inherited_access_type.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("inherited_access_type"));
+                    }
+                    field_inherited_access_type = Some(map.next_value()?);
+                }
                 _ => {
                     // unknown field allowed and ignored
                     map.next_value::<::serde_json::Value>()?;
@@ -21533,6 +22001,7 @@ impl UserMembershipInfo {
             permissions: field_permissions.and_then(Option::flatten),
             #[allow(deprecated)] initials: field_initials.and_then(Option::flatten),
             is_inherited: field_is_inherited.unwrap_or(false),
+            inherited_access_type: field_inherited_access_type.and_then(Option::flatten),
         };
         Ok(Some(result))
     }
@@ -21553,6 +22022,9 @@ impl UserMembershipInfo {
         }
         if self.is_inherited {
             s.serialize_field("is_inherited", &self.is_inherited)?;
+        }
+        if let Some(val) = &self.inherited_access_type {
+            s.serialize_field("inherited_access_type", val)?;
         }
         Ok(())
     }
@@ -21580,7 +22052,7 @@ impl ::serde::ser::Serialize for UserMembershipInfo {
     fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
         // struct serializer
         use serde::ser::SerializeStruct;
-        let mut s = serializer.serialize_struct("UserMembershipInfo", 5)?;
+        let mut s = serializer.serialize_struct("UserMembershipInfo", 6)?;
         self.internal_serialize::<S>(&mut s)?;
         s.end()
     }
@@ -21594,6 +22066,7 @@ impl From<UserMembershipInfo> for MembershipInfo {
             permissions: subtype.permissions,
             #[allow(deprecated)] initials: subtype.initials,
             is_inherited: subtype.is_inherited,
+            inherited_access_type: subtype.inherited_access_type,
         }
     }
 }

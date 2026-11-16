@@ -26764,6 +26764,265 @@ impl ::serde::ser::Serialize for TeamFolderGetInfoItem {
     }
 }
 
+/// Errors for [`team_folder_space_limit_get()`](crate::team::team_folder_space_limit_get).
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[non_exhaustive] // variants may be added in the future
+pub enum TeamFolderGetSpaceLimitError {
+    AccessError(TeamFolderAccessError),
+    StatusError(TeamFolderInvalidStatusError),
+    TeamSharedDropboxError(TeamFolderTeamSharedDropboxError),
+    /// Catch-all used for unrecognized values returned from the server. Encountering this value
+    /// typically indicates that this SDK version is out of date.
+    Other,
+}
+
+impl<'de> ::serde::de::Deserialize<'de> for TeamFolderGetSpaceLimitError {
+    fn deserialize<D: ::serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        // union deserializer
+        use serde::de::{self, MapAccess, Visitor};
+        struct EnumVisitor;
+        impl<'de> Visitor<'de> for EnumVisitor {
+            type Value = TeamFolderGetSpaceLimitError;
+            fn expecting(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+                f.write_str("a TeamFolderGetSpaceLimitError structure")
+            }
+            fn visit_map<V: MapAccess<'de>>(self, mut map: V) -> Result<Self::Value, V::Error> {
+                let tag: &str = match map.next_key()? {
+                    Some(".tag") => map.next_value()?,
+                    _ => return Err(de::Error::missing_field(".tag"))
+                };
+                let value = match tag {
+                    "access_error" => {
+                        match map.next_key()? {
+                            Some("access_error") => TeamFolderGetSpaceLimitError::AccessError(map.next_value()?),
+                            None => return Err(de::Error::missing_field("access_error")),
+                            _ => return Err(de::Error::unknown_field(tag, VARIANTS))
+                        }
+                    }
+                    "status_error" => {
+                        match map.next_key()? {
+                            Some("status_error") => TeamFolderGetSpaceLimitError::StatusError(map.next_value()?),
+                            None => return Err(de::Error::missing_field("status_error")),
+                            _ => return Err(de::Error::unknown_field(tag, VARIANTS))
+                        }
+                    }
+                    "team_shared_dropbox_error" => {
+                        match map.next_key()? {
+                            Some("team_shared_dropbox_error") => TeamFolderGetSpaceLimitError::TeamSharedDropboxError(map.next_value()?),
+                            None => return Err(de::Error::missing_field("team_shared_dropbox_error")),
+                            _ => return Err(de::Error::unknown_field(tag, VARIANTS))
+                        }
+                    }
+                    _ => TeamFolderGetSpaceLimitError::Other,
+                };
+                crate::eat_json_fields(&mut map)?;
+                Ok(value)
+            }
+        }
+        const VARIANTS: &[&str] = &["access_error",
+                                    "status_error",
+                                    "team_shared_dropbox_error",
+                                    "other"];
+        deserializer.deserialize_struct("TeamFolderGetSpaceLimitError", VARIANTS, EnumVisitor)
+    }
+}
+
+impl ::serde::ser::Serialize for TeamFolderGetSpaceLimitError {
+    fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        // union serializer
+        use serde::ser::SerializeStruct;
+        match self {
+            TeamFolderGetSpaceLimitError::AccessError(x) => {
+                // union or polymporphic struct
+                let mut s = serializer.serialize_struct("TeamFolderGetSpaceLimitError", 2)?;
+                s.serialize_field(".tag", "access_error")?;
+                s.serialize_field("access_error", x)?;
+                s.end()
+            }
+            TeamFolderGetSpaceLimitError::StatusError(x) => {
+                // union or polymporphic struct
+                let mut s = serializer.serialize_struct("TeamFolderGetSpaceLimitError", 2)?;
+                s.serialize_field(".tag", "status_error")?;
+                s.serialize_field("status_error", x)?;
+                s.end()
+            }
+            TeamFolderGetSpaceLimitError::TeamSharedDropboxError(x) => {
+                // union or polymporphic struct
+                let mut s = serializer.serialize_struct("TeamFolderGetSpaceLimitError", 2)?;
+                s.serialize_field(".tag", "team_shared_dropbox_error")?;
+                s.serialize_field("team_shared_dropbox_error", x)?;
+                s.end()
+            }
+            TeamFolderGetSpaceLimitError::Other => Err(::serde::ser::Error::custom("cannot serialize 'Other' variant"))
+        }
+    }
+}
+
+impl ::std::error::Error for TeamFolderGetSpaceLimitError {
+    fn source(&self) -> Option<&(dyn ::std::error::Error + 'static)> {
+        match self {
+            TeamFolderGetSpaceLimitError::AccessError(inner) => Some(inner),
+            TeamFolderGetSpaceLimitError::StatusError(inner) => Some(inner),
+            TeamFolderGetSpaceLimitError::TeamSharedDropboxError(inner) => Some(inner),
+            _ => None,
+        }
+    }
+}
+
+impl ::std::fmt::Display for TeamFolderGetSpaceLimitError {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match self {
+            TeamFolderGetSpaceLimitError::AccessError(inner) => write!(f, "TeamFolderGetSpaceLimitError: {}", inner),
+            TeamFolderGetSpaceLimitError::StatusError(inner) => write!(f, "TeamFolderGetSpaceLimitError: {}", inner),
+            TeamFolderGetSpaceLimitError::TeamSharedDropboxError(inner) => write!(f, "TeamFolderGetSpaceLimitError: {}", inner),
+            _ => write!(f, "{:?}", *self),
+        }
+    }
+}
+
+// union extends BaseTeamFolderError
+impl From<BaseTeamFolderError> for TeamFolderGetSpaceLimitError {
+    fn from(parent: BaseTeamFolderError) -> Self {
+        match parent {
+            BaseTeamFolderError::AccessError(x) => TeamFolderGetSpaceLimitError::AccessError(x),
+            BaseTeamFolderError::StatusError(x) => TeamFolderGetSpaceLimitError::StatusError(x),
+            BaseTeamFolderError::TeamSharedDropboxError(x) => TeamFolderGetSpaceLimitError::TeamSharedDropboxError(x),
+            BaseTeamFolderError::Other => TeamFolderGetSpaceLimitError::Other,
+        }
+    }
+}
+
+/// The space limit configuration of a team folder. If no space limit has ever been set for the team
+/// folder, `space_limit_bytes` is 0, `caps_type` is [`TeamFolderSpaceLimitCapsType::Off`], and
+/// `notification_target` is [`TeamFolderSpaceLimitNotificationTarget::Admins`].
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[non_exhaustive] // structs may have more fields added in the future.
+pub struct TeamFolderGetSpaceLimitResponse {
+    /// The caps type currently applied to the team folder.
+    pub caps_type: TeamFolderSpaceLimitCapsType,
+    /// Who currently receives usage notifications for the team folder.
+    pub notification_target: TeamFolderSpaceLimitNotificationTarget,
+    /// The maximum total size, in bytes, of all content in the team folder and its subfolders. Only
+    /// meaningful when `caps_type` is not [`TeamFolderSpaceLimitCapsType::Off`].
+    pub space_limit_bytes: u64,
+}
+
+impl TeamFolderGetSpaceLimitResponse {
+    pub fn new(
+        caps_type: TeamFolderSpaceLimitCapsType,
+        notification_target: TeamFolderSpaceLimitNotificationTarget,
+    ) -> Self {
+        TeamFolderGetSpaceLimitResponse {
+            caps_type,
+            notification_target,
+            space_limit_bytes: 0,
+        }
+    }
+
+    pub fn with_space_limit_bytes(mut self, value: u64) -> Self {
+        self.space_limit_bytes = value;
+        self
+    }
+}
+
+const TEAM_FOLDER_GET_SPACE_LIMIT_RESPONSE_FIELDS: &[&str] = &["caps_type",
+                                                               "notification_target",
+                                                               "space_limit_bytes"];
+impl TeamFolderGetSpaceLimitResponse {
+    pub(crate) fn internal_deserialize<'de, V: ::serde::de::MapAccess<'de>>(
+        map: V,
+    ) -> Result<TeamFolderGetSpaceLimitResponse, V::Error> {
+        Self::internal_deserialize_opt(map, false).map(Option::unwrap)
+    }
+
+    pub(crate) fn internal_deserialize_opt<'de, V: ::serde::de::MapAccess<'de>>(
+        mut map: V,
+        optional: bool,
+    ) -> Result<Option<TeamFolderGetSpaceLimitResponse>, V::Error> {
+        let mut field_caps_type = None;
+        let mut field_notification_target = None;
+        let mut field_space_limit_bytes = None;
+        let mut nothing = true;
+        while let Some(key) = map.next_key::<&str>()? {
+            nothing = false;
+            match key {
+                "caps_type" => {
+                    if field_caps_type.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("caps_type"));
+                    }
+                    field_caps_type = Some(map.next_value()?);
+                }
+                "notification_target" => {
+                    if field_notification_target.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("notification_target"));
+                    }
+                    field_notification_target = Some(map.next_value()?);
+                }
+                "space_limit_bytes" => {
+                    if field_space_limit_bytes.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("space_limit_bytes"));
+                    }
+                    field_space_limit_bytes = Some(map.next_value()?);
+                }
+                _ => {
+                    // unknown field allowed and ignored
+                    map.next_value::<::serde_json::Value>()?;
+                }
+            }
+        }
+        if optional && nothing {
+            return Ok(None);
+        }
+        let result = TeamFolderGetSpaceLimitResponse {
+            caps_type: field_caps_type.ok_or_else(|| ::serde::de::Error::missing_field("caps_type"))?,
+            notification_target: field_notification_target.ok_or_else(|| ::serde::de::Error::missing_field("notification_target"))?,
+            space_limit_bytes: field_space_limit_bytes.unwrap_or(0),
+        };
+        Ok(Some(result))
+    }
+
+    pub(crate) fn internal_serialize<S: ::serde::ser::Serializer>(
+        &self,
+        s: &mut S::SerializeStruct,
+    ) -> Result<(), S::Error> {
+        use serde::ser::SerializeStruct;
+        s.serialize_field("caps_type", &self.caps_type)?;
+        s.serialize_field("notification_target", &self.notification_target)?;
+        if self.space_limit_bytes != 0 {
+            s.serialize_field("space_limit_bytes", &self.space_limit_bytes)?;
+        }
+        Ok(())
+    }
+}
+
+impl<'de> ::serde::de::Deserialize<'de> for TeamFolderGetSpaceLimitResponse {
+    fn deserialize<D: ::serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        // struct deserializer
+        use serde::de::{MapAccess, Visitor};
+        struct StructVisitor;
+        impl<'de> Visitor<'de> for StructVisitor {
+            type Value = TeamFolderGetSpaceLimitResponse;
+            fn expecting(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+                f.write_str("a TeamFolderGetSpaceLimitResponse struct")
+            }
+            fn visit_map<V: MapAccess<'de>>(self, map: V) -> Result<Self::Value, V::Error> {
+                TeamFolderGetSpaceLimitResponse::internal_deserialize(map)
+            }
+        }
+        deserializer.deserialize_struct("TeamFolderGetSpaceLimitResponse", TEAM_FOLDER_GET_SPACE_LIMIT_RESPONSE_FIELDS, StructVisitor)
+    }
+}
+
+impl ::serde::ser::Serialize for TeamFolderGetSpaceLimitResponse {
+    fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        // struct serializer
+        use serde::ser::SerializeStruct;
+        let mut s = serializer.serialize_struct("TeamFolderGetSpaceLimitResponse", 3)?;
+        self.internal_serialize::<S>(&mut s)?;
+        s.end()
+    }
+}
+
 #[derive(Debug, Clone, PartialEq, Eq)]
 #[non_exhaustive] // structs may have more fields added in the future.
 pub struct TeamFolderIdArg {
@@ -28222,6 +28481,482 @@ impl From<BaseTeamFolderError> for TeamFolderRestoreError {
             BaseTeamFolderError::StatusError(x) => TeamFolderRestoreError::StatusError(x),
             BaseTeamFolderError::TeamSharedDropboxError(x) => TeamFolderRestoreError::TeamSharedDropboxError(x),
             BaseTeamFolderError::Other => TeamFolderRestoreError::Other,
+        }
+    }
+}
+
+/// Arguments for [`team_folder_space_limit_set()`](crate::team::team_folder_space_limit_set).
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[non_exhaustive] // structs may have more fields added in the future.
+pub struct TeamFolderSetSpaceLimitArg {
+    /// The ID of the team folder.
+    pub team_folder_id: crate::types::common::SharedFolderId,
+    /// The maximum total size, in bytes, of all content in the team folder and its subfolders. When
+    /// `caps_type` is [`TeamFolderSpaceLimitCapsType::Soft`] or
+    /// [`TeamFolderSpaceLimitCapsType::Hard`], this must be at least 2 GB (2147483648 bytes). It
+    /// must never exceed the team's total storage capacity. When `caps_type` is
+    /// [`TeamFolderSpaceLimitCapsType::Off`], the value is stored but has no effect, and it may be
+    /// 0.
+    pub space_limit_bytes: u64,
+    /// The caps type to apply to the specified team folder.
+    pub caps_type: TeamFolderSpaceLimitCapsType,
+    /// Who receives usage notifications for the specified team folder.
+    pub notification_target: TeamFolderSpaceLimitNotificationTarget,
+}
+
+impl TeamFolderSetSpaceLimitArg {
+    pub fn new(
+        team_folder_id: crate::types::common::SharedFolderId,
+        space_limit_bytes: u64,
+        caps_type: TeamFolderSpaceLimitCapsType,
+        notification_target: TeamFolderSpaceLimitNotificationTarget,
+    ) -> Self {
+        TeamFolderSetSpaceLimitArg {
+            team_folder_id,
+            space_limit_bytes,
+            caps_type,
+            notification_target,
+        }
+    }
+}
+
+const TEAM_FOLDER_SET_SPACE_LIMIT_ARG_FIELDS: &[&str] = &["team_folder_id",
+                                                          "space_limit_bytes",
+                                                          "caps_type",
+                                                          "notification_target"];
+impl TeamFolderSetSpaceLimitArg {
+    pub(crate) fn internal_deserialize<'de, V: ::serde::de::MapAccess<'de>>(
+        map: V,
+    ) -> Result<TeamFolderSetSpaceLimitArg, V::Error> {
+        Self::internal_deserialize_opt(map, false).map(Option::unwrap)
+    }
+
+    pub(crate) fn internal_deserialize_opt<'de, V: ::serde::de::MapAccess<'de>>(
+        mut map: V,
+        optional: bool,
+    ) -> Result<Option<TeamFolderSetSpaceLimitArg>, V::Error> {
+        let mut field_team_folder_id = None;
+        let mut field_space_limit_bytes = None;
+        let mut field_caps_type = None;
+        let mut field_notification_target = None;
+        let mut nothing = true;
+        while let Some(key) = map.next_key::<&str>()? {
+            nothing = false;
+            match key {
+                "team_folder_id" => {
+                    if field_team_folder_id.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("team_folder_id"));
+                    }
+                    field_team_folder_id = Some(map.next_value()?);
+                }
+                "space_limit_bytes" => {
+                    if field_space_limit_bytes.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("space_limit_bytes"));
+                    }
+                    field_space_limit_bytes = Some(map.next_value()?);
+                }
+                "caps_type" => {
+                    if field_caps_type.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("caps_type"));
+                    }
+                    field_caps_type = Some(map.next_value()?);
+                }
+                "notification_target" => {
+                    if field_notification_target.is_some() {
+                        return Err(::serde::de::Error::duplicate_field("notification_target"));
+                    }
+                    field_notification_target = Some(map.next_value()?);
+                }
+                _ => {
+                    // unknown field allowed and ignored
+                    map.next_value::<::serde_json::Value>()?;
+                }
+            }
+        }
+        if optional && nothing {
+            return Ok(None);
+        }
+        let result = TeamFolderSetSpaceLimitArg {
+            team_folder_id: field_team_folder_id.ok_or_else(|| ::serde::de::Error::missing_field("team_folder_id"))?,
+            space_limit_bytes: field_space_limit_bytes.ok_or_else(|| ::serde::de::Error::missing_field("space_limit_bytes"))?,
+            caps_type: field_caps_type.ok_or_else(|| ::serde::de::Error::missing_field("caps_type"))?,
+            notification_target: field_notification_target.ok_or_else(|| ::serde::de::Error::missing_field("notification_target"))?,
+        };
+        Ok(Some(result))
+    }
+
+    pub(crate) fn internal_serialize<S: ::serde::ser::Serializer>(
+        &self,
+        s: &mut S::SerializeStruct,
+    ) -> Result<(), S::Error> {
+        use serde::ser::SerializeStruct;
+        s.serialize_field("team_folder_id", &self.team_folder_id)?;
+        s.serialize_field("space_limit_bytes", &self.space_limit_bytes)?;
+        s.serialize_field("caps_type", &self.caps_type)?;
+        s.serialize_field("notification_target", &self.notification_target)?;
+        Ok(())
+    }
+}
+
+impl<'de> ::serde::de::Deserialize<'de> for TeamFolderSetSpaceLimitArg {
+    fn deserialize<D: ::serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        // struct deserializer
+        use serde::de::{MapAccess, Visitor};
+        struct StructVisitor;
+        impl<'de> Visitor<'de> for StructVisitor {
+            type Value = TeamFolderSetSpaceLimitArg;
+            fn expecting(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+                f.write_str("a TeamFolderSetSpaceLimitArg struct")
+            }
+            fn visit_map<V: MapAccess<'de>>(self, map: V) -> Result<Self::Value, V::Error> {
+                TeamFolderSetSpaceLimitArg::internal_deserialize(map)
+            }
+        }
+        deserializer.deserialize_struct("TeamFolderSetSpaceLimitArg", TEAM_FOLDER_SET_SPACE_LIMIT_ARG_FIELDS, StructVisitor)
+    }
+}
+
+impl ::serde::ser::Serialize for TeamFolderSetSpaceLimitArg {
+    fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        // struct serializer
+        use serde::ser::SerializeStruct;
+        let mut s = serializer.serialize_struct("TeamFolderSetSpaceLimitArg", 4)?;
+        self.internal_serialize::<S>(&mut s)?;
+        s.end()
+    }
+}
+
+// struct extends TeamFolderIdArg
+impl From<TeamFolderSetSpaceLimitArg> for TeamFolderIdArg {
+    fn from(subtype: TeamFolderSetSpaceLimitArg) -> Self {
+        Self {
+            team_folder_id: subtype.team_folder_id,
+        }
+    }
+}
+
+/// Errors for [`team_folder_space_limit_set()`](crate::team::team_folder_space_limit_set).
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[non_exhaustive] // variants may be added in the future
+pub enum TeamFolderSetSpaceLimitError {
+    AccessError(TeamFolderAccessError),
+    StatusError(TeamFolderInvalidStatusError),
+    TeamSharedDropboxError(TeamFolderTeamSharedDropboxError),
+    /// [`TeamFolderSetSpaceLimitArg::space_limit_bytes`](TeamFolderSetSpaceLimitArg) is below the 2
+    /// GB minimum. Only returned when
+    /// [`TeamFolderSetSpaceLimitArg::caps_type`](TeamFolderSetSpaceLimitArg) is
+    /// [`TeamFolderSpaceLimitCapsType::Soft`] or [`TeamFolderSpaceLimitCapsType::Hard`].
+    LimitBelowMinimum,
+    /// [`TeamFolderSetSpaceLimitArg::space_limit_bytes`](TeamFolderSetSpaceLimitArg) exceeds the
+    /// team's total storage capacity.
+    LimitExceedsTeamQuota,
+    /// Catch-all used for unrecognized values returned from the server. Encountering this value
+    /// typically indicates that this SDK version is out of date.
+    Other,
+}
+
+impl<'de> ::serde::de::Deserialize<'de> for TeamFolderSetSpaceLimitError {
+    fn deserialize<D: ::serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        // union deserializer
+        use serde::de::{self, MapAccess, Visitor};
+        struct EnumVisitor;
+        impl<'de> Visitor<'de> for EnumVisitor {
+            type Value = TeamFolderSetSpaceLimitError;
+            fn expecting(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+                f.write_str("a TeamFolderSetSpaceLimitError structure")
+            }
+            fn visit_map<V: MapAccess<'de>>(self, mut map: V) -> Result<Self::Value, V::Error> {
+                let tag: &str = match map.next_key()? {
+                    Some(".tag") => map.next_value()?,
+                    _ => return Err(de::Error::missing_field(".tag"))
+                };
+                let value = match tag {
+                    "access_error" => {
+                        match map.next_key()? {
+                            Some("access_error") => TeamFolderSetSpaceLimitError::AccessError(map.next_value()?),
+                            None => return Err(de::Error::missing_field("access_error")),
+                            _ => return Err(de::Error::unknown_field(tag, VARIANTS))
+                        }
+                    }
+                    "status_error" => {
+                        match map.next_key()? {
+                            Some("status_error") => TeamFolderSetSpaceLimitError::StatusError(map.next_value()?),
+                            None => return Err(de::Error::missing_field("status_error")),
+                            _ => return Err(de::Error::unknown_field(tag, VARIANTS))
+                        }
+                    }
+                    "team_shared_dropbox_error" => {
+                        match map.next_key()? {
+                            Some("team_shared_dropbox_error") => TeamFolderSetSpaceLimitError::TeamSharedDropboxError(map.next_value()?),
+                            None => return Err(de::Error::missing_field("team_shared_dropbox_error")),
+                            _ => return Err(de::Error::unknown_field(tag, VARIANTS))
+                        }
+                    }
+                    "limit_below_minimum" => TeamFolderSetSpaceLimitError::LimitBelowMinimum,
+                    "limit_exceeds_team_quota" => TeamFolderSetSpaceLimitError::LimitExceedsTeamQuota,
+                    _ => TeamFolderSetSpaceLimitError::Other,
+                };
+                crate::eat_json_fields(&mut map)?;
+                Ok(value)
+            }
+        }
+        const VARIANTS: &[&str] = &["access_error",
+                                    "status_error",
+                                    "team_shared_dropbox_error",
+                                    "other",
+                                    "limit_below_minimum",
+                                    "limit_exceeds_team_quota"];
+        deserializer.deserialize_struct("TeamFolderSetSpaceLimitError", VARIANTS, EnumVisitor)
+    }
+}
+
+impl ::serde::ser::Serialize for TeamFolderSetSpaceLimitError {
+    fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        // union serializer
+        use serde::ser::SerializeStruct;
+        match self {
+            TeamFolderSetSpaceLimitError::AccessError(x) => {
+                // union or polymporphic struct
+                let mut s = serializer.serialize_struct("TeamFolderSetSpaceLimitError", 2)?;
+                s.serialize_field(".tag", "access_error")?;
+                s.serialize_field("access_error", x)?;
+                s.end()
+            }
+            TeamFolderSetSpaceLimitError::StatusError(x) => {
+                // union or polymporphic struct
+                let mut s = serializer.serialize_struct("TeamFolderSetSpaceLimitError", 2)?;
+                s.serialize_field(".tag", "status_error")?;
+                s.serialize_field("status_error", x)?;
+                s.end()
+            }
+            TeamFolderSetSpaceLimitError::TeamSharedDropboxError(x) => {
+                // union or polymporphic struct
+                let mut s = serializer.serialize_struct("TeamFolderSetSpaceLimitError", 2)?;
+                s.serialize_field(".tag", "team_shared_dropbox_error")?;
+                s.serialize_field("team_shared_dropbox_error", x)?;
+                s.end()
+            }
+            TeamFolderSetSpaceLimitError::LimitBelowMinimum => {
+                // unit
+                let mut s = serializer.serialize_struct("TeamFolderSetSpaceLimitError", 1)?;
+                s.serialize_field(".tag", "limit_below_minimum")?;
+                s.end()
+            }
+            TeamFolderSetSpaceLimitError::LimitExceedsTeamQuota => {
+                // unit
+                let mut s = serializer.serialize_struct("TeamFolderSetSpaceLimitError", 1)?;
+                s.serialize_field(".tag", "limit_exceeds_team_quota")?;
+                s.end()
+            }
+            TeamFolderSetSpaceLimitError::Other => Err(::serde::ser::Error::custom("cannot serialize 'Other' variant"))
+        }
+    }
+}
+
+impl ::std::error::Error for TeamFolderSetSpaceLimitError {
+    fn source(&self) -> Option<&(dyn ::std::error::Error + 'static)> {
+        match self {
+            TeamFolderSetSpaceLimitError::AccessError(inner) => Some(inner),
+            TeamFolderSetSpaceLimitError::StatusError(inner) => Some(inner),
+            TeamFolderSetSpaceLimitError::TeamSharedDropboxError(inner) => Some(inner),
+            _ => None,
+        }
+    }
+}
+
+impl ::std::fmt::Display for TeamFolderSetSpaceLimitError {
+    fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+        match self {
+            TeamFolderSetSpaceLimitError::AccessError(inner) => write!(f, "TeamFolderSetSpaceLimitError: {}", inner),
+            TeamFolderSetSpaceLimitError::StatusError(inner) => write!(f, "TeamFolderSetSpaceLimitError: {}", inner),
+            TeamFolderSetSpaceLimitError::TeamSharedDropboxError(inner) => write!(f, "TeamFolderSetSpaceLimitError: {}", inner),
+            _ => write!(f, "{:?}", *self),
+        }
+    }
+}
+
+// union extends BaseTeamFolderError
+impl From<BaseTeamFolderError> for TeamFolderSetSpaceLimitError {
+    fn from(parent: BaseTeamFolderError) -> Self {
+        match parent {
+            BaseTeamFolderError::AccessError(x) => TeamFolderSetSpaceLimitError::AccessError(x),
+            BaseTeamFolderError::StatusError(x) => TeamFolderSetSpaceLimitError::StatusError(x),
+            BaseTeamFolderError::TeamSharedDropboxError(x) => TeamFolderSetSpaceLimitError::TeamSharedDropboxError(x),
+            BaseTeamFolderError::Other => TeamFolderSetSpaceLimitError::Other,
+        }
+    }
+}
+
+/// How a team folder's space limit is enforced.
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[non_exhaustive] // variants may be added in the future
+pub enum TeamFolderSpaceLimitCapsType {
+    /// No space limit is enforced and no usage notifications are sent. Any stored space limit value
+    /// is ignored.
+    Off,
+    /// The space limit is advisory. Members can keep adding content after the team folder reaches
+    /// the limit, but usage notifications are sent as described in
+    /// [`TeamFolderSpaceLimitNotificationTarget`].
+    Soft,
+    /// The space limit is enforced. Once the total size of the team folder, including all of its
+    /// subfolders, reaches the limit, uploads and other writes that add content to the team folder
+    /// fail until space is freed or the limit is raised. Usage notifications are sent as for
+    /// [`Soft`](TeamFolderSpaceLimitCapsType::Soft).
+    Hard,
+    /// Catch-all used for unrecognized values returned from the server. Encountering this value
+    /// typically indicates that this SDK version is out of date.
+    Other,
+}
+
+impl<'de> ::serde::de::Deserialize<'de> for TeamFolderSpaceLimitCapsType {
+    fn deserialize<D: ::serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        // union deserializer
+        use serde::de::{self, MapAccess, Visitor};
+        struct EnumVisitor;
+        impl<'de> Visitor<'de> for EnumVisitor {
+            type Value = TeamFolderSpaceLimitCapsType;
+            fn expecting(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+                f.write_str("a TeamFolderSpaceLimitCapsType structure")
+            }
+            fn visit_map<V: MapAccess<'de>>(self, mut map: V) -> Result<Self::Value, V::Error> {
+                let tag: &str = match map.next_key()? {
+                    Some(".tag") => map.next_value()?,
+                    _ => return Err(de::Error::missing_field(".tag"))
+                };
+                let value = match tag {
+                    "off" => TeamFolderSpaceLimitCapsType::Off,
+                    "soft" => TeamFolderSpaceLimitCapsType::Soft,
+                    "hard" => TeamFolderSpaceLimitCapsType::Hard,
+                    _ => TeamFolderSpaceLimitCapsType::Other,
+                };
+                crate::eat_json_fields(&mut map)?;
+                Ok(value)
+            }
+        }
+        const VARIANTS: &[&str] = &["off",
+                                    "soft",
+                                    "hard",
+                                    "other"];
+        deserializer.deserialize_struct("TeamFolderSpaceLimitCapsType", VARIANTS, EnumVisitor)
+    }
+}
+
+impl ::serde::ser::Serialize for TeamFolderSpaceLimitCapsType {
+    fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        // union serializer
+        use serde::ser::SerializeStruct;
+        match self {
+            TeamFolderSpaceLimitCapsType::Off => {
+                // unit
+                let mut s = serializer.serialize_struct("TeamFolderSpaceLimitCapsType", 1)?;
+                s.serialize_field(".tag", "off")?;
+                s.end()
+            }
+            TeamFolderSpaceLimitCapsType::Soft => {
+                // unit
+                let mut s = serializer.serialize_struct("TeamFolderSpaceLimitCapsType", 1)?;
+                s.serialize_field(".tag", "soft")?;
+                s.end()
+            }
+            TeamFolderSpaceLimitCapsType::Hard => {
+                // unit
+                let mut s = serializer.serialize_struct("TeamFolderSpaceLimitCapsType", 1)?;
+                s.serialize_field(".tag", "hard")?;
+                s.end()
+            }
+            TeamFolderSpaceLimitCapsType::Other => Err(::serde::ser::Error::custom("cannot serialize 'Other' variant"))
+        }
+    }
+}
+
+/// Who receives email notifications when a team folder's usage reaches 80% of its space limit, and
+/// when usage reaches or exceeds the limit. These notifications are sent asynchronously, so they
+/// can arrive some time after usage crosses a threshold. They are only sent when the caps type is
+/// [`TeamFolderSpaceLimitCapsType::Soft`] or [`TeamFolderSpaceLimitCapsType::Hard`]. Regardless of
+/// this setting, team admins and all members with edit access to the team folder are notified when
+/// a space limit is added, changed, or removed.
+#[derive(Debug, Clone, PartialEq, Eq)]
+#[non_exhaustive] // variants may be added in the future
+pub enum TeamFolderSpaceLimitNotificationTarget {
+    /// Team admins who can manage team folders.
+    Admins,
+    /// Members with edit access to the team folder, excluding team admins.
+    Editors,
+    /// Both team admins who can manage team folders and members with edit access to the team
+    /// folder.
+    Both,
+    /// No usage notifications are sent.
+    Silent,
+    /// Catch-all used for unrecognized values returned from the server. Encountering this value
+    /// typically indicates that this SDK version is out of date.
+    Other,
+}
+
+impl<'de> ::serde::de::Deserialize<'de> for TeamFolderSpaceLimitNotificationTarget {
+    fn deserialize<D: ::serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
+        // union deserializer
+        use serde::de::{self, MapAccess, Visitor};
+        struct EnumVisitor;
+        impl<'de> Visitor<'de> for EnumVisitor {
+            type Value = TeamFolderSpaceLimitNotificationTarget;
+            fn expecting(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
+                f.write_str("a TeamFolderSpaceLimitNotificationTarget structure")
+            }
+            fn visit_map<V: MapAccess<'de>>(self, mut map: V) -> Result<Self::Value, V::Error> {
+                let tag: &str = match map.next_key()? {
+                    Some(".tag") => map.next_value()?,
+                    _ => return Err(de::Error::missing_field(".tag"))
+                };
+                let value = match tag {
+                    "admins" => TeamFolderSpaceLimitNotificationTarget::Admins,
+                    "editors" => TeamFolderSpaceLimitNotificationTarget::Editors,
+                    "both" => TeamFolderSpaceLimitNotificationTarget::Both,
+                    "silent" => TeamFolderSpaceLimitNotificationTarget::Silent,
+                    _ => TeamFolderSpaceLimitNotificationTarget::Other,
+                };
+                crate::eat_json_fields(&mut map)?;
+                Ok(value)
+            }
+        }
+        const VARIANTS: &[&str] = &["admins",
+                                    "editors",
+                                    "both",
+                                    "silent",
+                                    "other"];
+        deserializer.deserialize_struct("TeamFolderSpaceLimitNotificationTarget", VARIANTS, EnumVisitor)
+    }
+}
+
+impl ::serde::ser::Serialize for TeamFolderSpaceLimitNotificationTarget {
+    fn serialize<S: ::serde::ser::Serializer>(&self, serializer: S) -> Result<S::Ok, S::Error> {
+        // union serializer
+        use serde::ser::SerializeStruct;
+        match self {
+            TeamFolderSpaceLimitNotificationTarget::Admins => {
+                // unit
+                let mut s = serializer.serialize_struct("TeamFolderSpaceLimitNotificationTarget", 1)?;
+                s.serialize_field(".tag", "admins")?;
+                s.end()
+            }
+            TeamFolderSpaceLimitNotificationTarget::Editors => {
+                // unit
+                let mut s = serializer.serialize_struct("TeamFolderSpaceLimitNotificationTarget", 1)?;
+                s.serialize_field(".tag", "editors")?;
+                s.end()
+            }
+            TeamFolderSpaceLimitNotificationTarget::Both => {
+                // unit
+                let mut s = serializer.serialize_struct("TeamFolderSpaceLimitNotificationTarget", 1)?;
+                s.serialize_field(".tag", "both")?;
+                s.end()
+            }
+            TeamFolderSpaceLimitNotificationTarget::Silent => {
+                // unit
+                let mut s = serializer.serialize_struct("TeamFolderSpaceLimitNotificationTarget", 1)?;
+                s.serialize_field(".tag", "silent")?;
+                s.end()
+            }
+            TeamFolderSpaceLimitNotificationTarget::Other => Err(::serde::ser::Error::custom("cannot serialize 'Other' variant"))
         }
     }
 }

@@ -514,21 +514,6 @@ pub fn relinquish_folder_membership<'a>(
         None)
 }
 
-/// Identical to remove_file_member_2 but with less information returned.
-#[deprecated]
-pub fn remove_file_member<'a>(
-    client: &'a impl crate::async_client_trait::UserAuthClient,
-    arg: &'a RemoveFileMemberArg,
-) -> impl std::future::Future<Output=Result<FileMemberActionIndividualResult, crate::Error<RemoveFileMemberError>>> + Send + 'a {
-    crate::client_helpers::request(
-        client,
-        crate::client_trait_common::Endpoint::Api,
-        crate::client_trait_common::Style::Rpc,
-        "sharing/remove_file_member",
-        arg,
-        None)
-}
-
 /// Removes a specified member from the file.
 pub fn remove_file_member_2<'a>(
     client: &'a impl crate::async_client_trait::UserAuthClient,

@@ -636,6 +636,9 @@ pub enum DocLookupError {
     InsufficientPermissions,
     /// The required doc was not found.
     DocNotFound,
+    /// Cloud Docs do not have legacy Paper folders. Use the Dropbox filesystem APIs to look up
+    /// their containing folders.
+    FolderNotFound,
     /// Catch-all used for unrecognized values returned from the server. Encountering this value
     /// typically indicates that this SDK version is out of date.
     Other,
@@ -659,6 +662,7 @@ impl<'de> ::serde::de::Deserialize<'de> for DocLookupError {
                 let value = match tag {
                     "insufficient_permissions" => DocLookupError::InsufficientPermissions,
                     "doc_not_found" => DocLookupError::DocNotFound,
+                    "folder_not_found" => DocLookupError::FolderNotFound,
                     _ => DocLookupError::Other,
                 };
                 crate::eat_json_fields(&mut map)?;
@@ -667,7 +671,8 @@ impl<'de> ::serde::de::Deserialize<'de> for DocLookupError {
         }
         const VARIANTS: &[&str] = &["insufficient_permissions",
                                     "other",
-                                    "doc_not_found"];
+                                    "doc_not_found",
+                                    "folder_not_found"];
         deserializer.deserialize_struct("DocLookupError", VARIANTS, EnumVisitor)
     }
 }
@@ -689,6 +694,12 @@ impl ::serde::ser::Serialize for DocLookupError {
                 s.serialize_field(".tag", "doc_not_found")?;
                 s.end()
             }
+            DocLookupError::FolderNotFound => {
+                // unit
+                let mut s = serializer.serialize_struct("DocLookupError", 1)?;
+                s.serialize_field(".tag", "folder_not_found")?;
+                s.end()
+            }
             DocLookupError::Other => Err(::serde::ser::Error::custom("cannot serialize 'Other' variant"))
         }
     }
@@ -701,6 +712,7 @@ impl ::std::fmt::Display for DocLookupError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
             DocLookupError::DocNotFound => f.write_str("The required doc was not found."),
+            DocLookupError::FolderNotFound => f.write_str("Cloud Docs do not have legacy Paper folders. Use the Dropbox filesystem APIs to look up their containing folders."),
             _ => write!(f, "{:?}", *self),
         }
     }
@@ -4454,6 +4466,9 @@ pub enum PaperDocUpdateError {
     InsufficientPermissions,
     /// The required doc was not found.
     DocNotFound,
+    /// Cloud Docs do not have legacy Paper folders. Use the Dropbox filesystem APIs to look up
+    /// their containing folders.
+    FolderNotFound,
     /// The provided content was malformed and cannot be imported to Paper.
     ContentMalformed,
     /// The provided revision does not match the document head.
@@ -4490,6 +4505,7 @@ impl<'de> ::serde::de::Deserialize<'de> for PaperDocUpdateError {
                 let value = match tag {
                     "insufficient_permissions" => PaperDocUpdateError::InsufficientPermissions,
                     "doc_not_found" => PaperDocUpdateError::DocNotFound,
+                    "folder_not_found" => PaperDocUpdateError::FolderNotFound,
                     "content_malformed" => PaperDocUpdateError::ContentMalformed,
                     "revision_mismatch" => PaperDocUpdateError::RevisionMismatch,
                     "doc_length_exceeded" => PaperDocUpdateError::DocLengthExceeded,
@@ -4505,6 +4521,7 @@ impl<'de> ::serde::de::Deserialize<'de> for PaperDocUpdateError {
         const VARIANTS: &[&str] = &["insufficient_permissions",
                                     "other",
                                     "doc_not_found",
+                                    "folder_not_found",
                                     "content_malformed",
                                     "revision_mismatch",
                                     "doc_length_exceeded",
@@ -4530,6 +4547,12 @@ impl ::serde::ser::Serialize for PaperDocUpdateError {
                 // unit
                 let mut s = serializer.serialize_struct("PaperDocUpdateError", 1)?;
                 s.serialize_field(".tag", "doc_not_found")?;
+                s.end()
+            }
+            PaperDocUpdateError::FolderNotFound => {
+                // unit
+                let mut s = serializer.serialize_struct("PaperDocUpdateError", 1)?;
+                s.serialize_field(".tag", "folder_not_found")?;
                 s.end()
             }
             PaperDocUpdateError::ContentMalformed => {
@@ -4580,6 +4603,7 @@ impl ::std::fmt::Display for PaperDocUpdateError {
     fn fmt(&self, f: &mut ::std::fmt::Formatter<'_>) -> ::std::fmt::Result {
         match self {
             PaperDocUpdateError::DocNotFound => f.write_str("The required doc was not found."),
+            PaperDocUpdateError::FolderNotFound => f.write_str("Cloud Docs do not have legacy Paper folders. Use the Dropbox filesystem APIs to look up their containing folders."),
             PaperDocUpdateError::ContentMalformed => f.write_str("The provided content was malformed and cannot be imported to Paper."),
             PaperDocUpdateError::RevisionMismatch => f.write_str("The provided revision does not match the document head."),
             PaperDocUpdateError::DocLengthExceeded => f.write_str("The newly created Paper doc would be too large, split the content into multiple docs."),
@@ -4598,6 +4622,7 @@ impl From<DocLookupError> for PaperDocUpdateError {
             DocLookupError::InsufficientPermissions => PaperDocUpdateError::InsufficientPermissions,
             DocLookupError::Other => PaperDocUpdateError::Other,
             DocLookupError::DocNotFound => PaperDocUpdateError::DocNotFound,
+            DocLookupError::FolderNotFound => PaperDocUpdateError::FolderNotFound,
         }
     }
 }
